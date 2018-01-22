@@ -192,8 +192,6 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
                             }
                             dest_index += ret;
                         }
-                        LOG_WARN("unicode escape currently not supported:%.*s",
-                                 min_len - index, &src[index]);
                         break;
                     default:
                         LOG_WARN("invalid json escape:%.*s", min_len - index,

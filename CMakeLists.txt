@@ -73,7 +73,7 @@ ADD_SUBDIRECTORY(external)
 ADD_SUBDIRECTORY(samples)
 ADD_SUBDIRECTORY(src)
 
-# if(ENABLE_TESTING)
-    # ADD_SUBDIRECTORY(tests)
-# endif()
+if(ENABLE_TESTING)
+    ADD_SUBDIRECTORY(tests)
+endif()
 

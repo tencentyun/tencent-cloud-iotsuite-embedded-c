@@ -1,14 +1,8 @@
 #include "../src/common/tc_iot_base64.c"
-//#include "tc_iot_inc.h"
-#include "CppUTest/TestHarness.h"
+#include "tc_iot_unit_test.h"
 
 
-TEST_GROUP(testbase64)  
-{  
-
-};  
-
-TEST(testbase64, tc_base64_encode)  
+TEST(testbase64, test_base64_encode)  
 {  
     const char * base64_in = "I am tom.";
     const char * base64_out = "SSBhbSB0b20u";
@@ -28,7 +22,7 @@ TEST(testbase64, tc_base64_encode)
     STRCMP_EQUAL(output, base64_out);
 } 
 
-TEST(testbase64, tc_iot_base64_decode)  
+TEST(testbase64, test_base64_decode)  
 {  
     const unsigned char * base64_in = (const unsigned char *)"I am tom.";
     const char * base64_out = "SSBhbSB0b20u";

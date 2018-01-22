@@ -1,12 +1,8 @@
 #include "../src/common/tc_iot_ya_buffer.c"
-#include "CppUTest/TestHarness.h"
+#include "tc_iot_unit_test.h"
 
 
-TEST_GROUP(test_ya_buffer)  
-{  
-};  
-
-TEST(test_ya_buffer, all)  
+TEST(test_ya_buffer, test_ya_buffer_all)  
 {
     tc_iot_yabuffer_t ya_buffer;
     char buffer[255];
