@@ -87,9 +87,8 @@ cd bin
 如果下载 SDK 是通过 github 的 DownloadZip 功能；或者执行 git clone 时，忘记带上 --recursive 参数。
 external目录下，对应外部库目录会为空，找不到任何文件，此时也可通过如下两种方式来解决：
 #### 1. 通过git更新
-进入 external 目录下，执行 git submodule 操作，更新外部模块；
+进入 SDK 项目根目录下，执行 git submodule 操作，更新外部模块：
 ```
-cd external
 git submodule update --init --recursive
 ```
 
