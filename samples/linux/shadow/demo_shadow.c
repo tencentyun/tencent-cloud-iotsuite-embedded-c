@@ -17,9 +17,9 @@ void sig_handler(int sig) {
 
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
-    printf("->%.*s\t", md->topicName->lenstring.len,
-           md->topicName->lenstring.data);
-    printf("%.*s\n", (int)message->payloadlen, (char*)message->payload);
+    /* printf("->%.*s\t", md->topicName->lenstring.len, */
+           /* md->topicName->lenstring.data); */
+    printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
 
 tc_iot_shadow_config g_client_config = {
@@ -51,31 +51,46 @@ tc_iot_shadow_config g_client_config = {
 int main(int argc, char** argv) {
     tc_iot_shadow_client client;
     tc_iot_shadow_client* p_shadow_client = &client;
+    int ret = 0;
 
-    int ret = http_refresh_auth_token(
+    printf("requesting username and password for mqtt.\n");
+    ret = http_refresh_auth_token(
         TC_IOT_CONFIG_AUTH_API_URL, NULL,
         &g_client_config.mqtt_client_config.device_info);
     if (ret != TC_IOT_SUCCESS) {
-        printf("%s\n", "refresh auth token failed.");
+        printf("refresh token failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);
+        return 0;
+    }
+    printf("request username and password for mqtt success.\n");
+
+    printf("constructing mqtt shadow client.\n");
+    ret = tc_iot_shadow_construct(p_shadow_client, &g_client_config);
+    if (ret != TC_IOT_SUCCESS) {
+        printf("construct shadow failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);
         return 0;
     }
 
-    tc_iot_shadow_construct(p_shadow_client, &g_client_config);
+    printf("construct mqtt shadow client success.\n");
     int timeout = TC_IOT_CONFIG_COMMAND_TIMEOUT_MS;
+    printf("yield waiting for server push.\n");
     tc_iot_shadow_yield(p_shadow_client, timeout);
+    printf("yield waiting for server finished.\n");
 
+    printf("[c->s] shadow_get\n");
     tc_iot_shadow_get(p_shadow_client);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     char* action_update =
         "{\"method\":\"update\",\"state\":{\"reported\":{\"temperature\":1023,"
         "\"switch\":1023},\"desired\":{\"temperature\":1024,\"switch\":1024}}}";
+    printf("[c->s] shadow_update\n");
     tc_iot_shadow_update(p_shadow_client, action_update);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     char* action_delete =
         "{\"method\":\"delete\",\"state\":{\"reported\":{\"temperature\":null},"
         "\"desired\":null}}";
+    printf("[c->s] shadow_delete\n");
     tc_iot_shadow_delete(p_shadow_client, action_delete);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 

@@ -3,7 +3,7 @@ project (tencent-cloud-iotsuite-embedded-c)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-# add_definitions(-DENABLE_LOG_TRACE)
+add_definitions(-DENABLE_LOG_TRACE)
 add_definitions(-DENABLE_LOG_DEBUG)
 add_definitions(-DENABLE_LOG_WARN)
 add_definitions(-DENABLE_LOG_ERROR)

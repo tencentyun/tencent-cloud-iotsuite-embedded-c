@@ -32,14 +32,14 @@ static int _handle_reconnect(tc_iot_mqtt_client* c) {
     }
 
     if (!tc_iot_mqtt_get_auto_reconnect(c)) {
-        LOG_DEBUG("auto_reconnect not enabled.");
+        LOG_TRACE("auto_reconnect not enabled.");
         return TC_IOT_MQTT_NETWORK_UNAVAILABLE;
     }
 
-    LOG_DEBUG("trying to reconnect.");
+    LOG_TRACE("trying to reconnect.");
     int rc = tc_iot_mqtt_reconnect(c);
     if (rc == TC_IOT_SUCCESS) {
-        LOG_DEBUG("mqtt reconnect success.");
+        LOG_TRACE("mqtt reconnect success.");
         return TC_IOT_SUCCESS;
     } else {
         LOG_ERROR("attempt to reconnect failed, errCode: %d", rc);
@@ -52,12 +52,12 @@ static int _handle_reconnect(tc_iot_mqtt_client* c) {
     }
 
     if (TC_IOT_MAX_RECONNECT_WAIT_INTERVAL < c->reconnect_timeout_ms) {
-        LOG_DEBUG("mqtt reconnect timer set to %dms, out of range.",
+        LOG_TRACE("mqtt reconnect timer set to %dms, out of range.",
                   c->reconnect_timeout_ms);
         return TC_IOT_MQTT_RECONNECT_FAILED;
     }
 
-    LOG_DEBUG("mqtt reconnect timer set to %dms.", c->reconnect_timeout_ms);
+    LOG_TRACE("mqtt reconnect timer set to %dms.", c->reconnect_timeout_ms);
     tc_iot_hal_timer_countdown_ms(&(c->reconnect_timer),
                                   c->reconnect_timeout_ms);
 
@@ -142,7 +142,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     c->command_timeout_ms = p_client_config->command_timeout_ms;
     c->buf_size = TC_IOT_CLIENT_SEND_BUF_SIZE;
     c->readbuf_size = TC_IOT_CLIENT_READ_BUF_SIZE;
-    LOG_DEBUG("mqtt client buf_size=%ld,readbuf_size=%ld,", c->buf_size,
+    LOG_TRACE("mqtt client buf_size=%ld,readbuf_size=%ld,", c->buf_size,
               c->readbuf_size);
     c->auto_reconnect = p_client_config->auto_reconnect;
     c->clean_session = p_client_config->clean_session;
@@ -314,7 +314,7 @@ int keepalive(tc_iot_mqtt_client* c) {
         } else {
             tc_iot_timer timer;
             tc_iot_hal_timer_init(&timer);
-            tc_iot_hal_timer_countdown_ms(&timer, 1000);
+            tc_iot_hal_timer_countdown_ms(&timer, c->command_timeout_ms);
             int len = MQTTSerialize_pingreq(c->buf, c->buf_size);
             if (len > 0 &&
                 (rc = _send_packet(c, len, &timer)) == TC_IOT_SUCCESS) {
@@ -412,7 +412,7 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
             } else if ((rc = _send_packet(c, len, timer)) !=
                        TC_IOT_SUCCESS)  // send the PUBREL packet
             {
-                LOG_DEBUG("_send_packet failed, may network unstable.");
+                LOG_TRACE("_send_packet failed, may network unstable.");
                 rc = TC_IOT_FAILURE;  // there was a problem
             }
             if (rc == TC_IOT_FAILURE) {
@@ -432,7 +432,7 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         // check only keepalive TC_IOT_FAILURE status so that previous
         // TC_IOT_FAILURE status can be considered as FAULT
         rc = TC_IOT_FAILURE;
-        LOG_DEBUG("keepalive failed.");
+        LOG_TRACE("keepalive failed.");
     }
 
 exit:
@@ -527,7 +527,7 @@ int tc_iot_mqtt_reconnect(tc_iot_mqtt_client* c) {
         goto exit;
     }
     if ((rc = _send_packet(c, len, &connect_timer)) != TC_IOT_SUCCESS) {
-        LOG_DEBUG("_send_packet failed, may network unstable.");
+        LOG_TRACE("_send_packet failed, may network unstable.");
         goto exit;
     }
 
@@ -541,13 +541,13 @@ int tc_iot_mqtt_reconnect(tc_iot_mqtt_client* c) {
             rc = TC_IOT_FAILURE;
         }
     } else {
-        LOG_DEBUG("waitfor CONNACK timeout");
+        LOG_TRACE("waitfor CONNACK timeout");
         rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
     }
 
 exit:
     if (rc == TC_IOT_SUCCESS) {
-        LOG_DEBUG("mqtt client reconnect success.");
+        LOG_TRACE("mqtt client reconnect success.");
         tc_iot_mqtt_set_state(c, CLIENT_CONNECTED);
         c->ping_outstanding = 0;
     } else if (rc == TC_IOT_SEND_PACK_FAILED ||
@@ -590,7 +590,7 @@ int tc_iot_mqtt_connect_with_results(tc_iot_mqtt_client* c,
         goto exit;
     }
     if ((rc = _send_packet(c, len, &connect_timer)) != TC_IOT_SUCCESS) {
-        LOG_DEBUG("_send_packet failed, may network unstable.");
+        LOG_TRACE("_send_packet failed, may network unstable.");
         goto exit;
     }
 
@@ -604,7 +604,7 @@ int tc_iot_mqtt_connect_with_results(tc_iot_mqtt_client* c,
             rc = TC_IOT_FAILURE;
         }
     } else {
-        LOG_DEBUG("waitfor CONNACK timeout");
+        LOG_TRACE("waitfor CONNACK timeout");
         rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
     }
 
@@ -696,7 +696,7 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
         goto exit;
     }
     if ((rc = _send_packet(c, len, &timer)) != TC_IOT_SUCCESS) {
-        LOG_DEBUG("_send_packet failed, maybe network unstable.");
+        LOG_TRACE("_send_packet failed, maybe network unstable.");
         goto exit;
     }
 
@@ -713,7 +713,7 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
             }
         }
     } else {
-        LOG_DEBUG("waitfor SUBACK timeout");
+        LOG_TRACE("waitfor SUBACK timeout");
         rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
     }
 
@@ -766,7 +766,7 @@ int tc_iot_mqtt_unsubscribe(tc_iot_mqtt_client* c, const char* topicFilter) {
     }
 
     if ((rc = _send_packet(c, len, &timer)) != TC_IOT_SUCCESS) {
-        LOG_DEBUG("_send_packet failed, maybe network unstable.");
+        LOG_TRACE("_send_packet failed, maybe network unstable.");
         goto exit;
     }
 
@@ -777,7 +777,7 @@ int tc_iot_mqtt_unsubscribe(tc_iot_mqtt_client* c, const char* topicFilter) {
             tc_iot_mqtt_set_message_handler(c, topicFilter, NULL);
         }
     } else {
-        LOG_DEBUG("waitfor UNSUBACK timeout");
+        LOG_TRACE("waitfor UNSUBACK timeout");
         rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
     }
 
@@ -826,7 +826,7 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
         goto exit;
     }
     if ((rc = _send_packet(c, len, &timer)) != TC_IOT_SUCCESS) {
-        LOG_DEBUG("_send_packet failed, maybe network unstable.");
+        LOG_TRACE("_send_packet failed, maybe network unstable.");
         goto exit;
     }
 
@@ -839,7 +839,7 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
                 rc = TC_IOT_FAILURE;
             }
         } else {
-            LOG_DEBUG("waitfor PUBACK timeout");
+            LOG_TRACE("waitfor PUBACK timeout");
             rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
         }
     } else if (message->qos == QOS2) {
@@ -851,7 +851,7 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
                 rc = TC_IOT_FAILURE;
             }
         } else {
-            LOG_DEBUG("waitfor PUBCOMP timeout");
+            LOG_TRACE("waitfor PUBCOMP timeout");
             rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
         }
     }

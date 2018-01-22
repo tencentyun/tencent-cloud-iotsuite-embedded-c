@@ -4,11 +4,7 @@
 #define IF_NULL_RETURN(p, ret)                                             \
     do {                                                                   \
         if (!p) {                                                          \
-            if (ret < 0) {                                                 \
-                LOG_ERROR("%s is NULL, return %s(-0x%X)", #p, #ret, -ret); \
-            } else {                                                       \
-                LOG_ERROR("%s is NULL, return %s(0x%X)", #p, #ret, ret);   \
-            }                                                              \
+            LOG_ERROR("%s is NULL, return %s(%d)", #p, #ret, ret);         \
             return ret;                                                    \
         }                                                                  \
     } while (0)
@@ -24,12 +20,7 @@
 #define IF_EQUAL_RETURN(a, b, ret)                                             \
     do {                                                                       \
         if (a == b) {                                                          \
-            if (ret < 0) {                                                     \
-                LOG_ERROR("%s equals %s, return %s(-0x%X)", #a, #b, #ret,      \
-                          -ret);                                               \
-            } else {                                                           \
-                LOG_ERROR("%s equals %s, return %s(0x%X)", #a, #b, #ret, ret); \
-            }                                                                  \
+            LOG_ERROR("%s equals %s, return %s(%d)", #a, #b, #ret, ret);       \
             return ret;                                                        \
         }                                                                      \
     } while (0)
@@ -37,13 +28,8 @@
 #define IF_NOT_EQUAL_RETURN(a, b, ret)                                        \
     do {                                                                      \
         if (a != b) {                                                         \
-            if (ret < 0) {                                                    \
-                LOG_ERROR("%s not equals %s, return %s(-0x%X)", #a, #b, #ret, \
-                          -ret);                                              \
-            } else {                                                          \
-                LOG_ERROR("%s not equals %s, return %s(0x%X)", #a, #b, #ret,  \
+                LOG_ERROR("%s not equals %s, return %s(%d)", #a, #b, #ret,  \
                           ret);                                               \
-            }                                                                 \
             return ret;                                                       \
         }                                                                     \
     } while (0)
@@ -51,13 +37,8 @@
 #define IF_LESS_RETURN(a, b, ret)                                            \
     do {                                                                     \
         if (a < b) {                                                         \
-            if (ret < 0) {                                                   \
-                LOG_ERROR("%s less then %s, return %s(-0x%X)", #a, #b, #ret, \
-                          -ret);                                             \
-            } else {                                                         \
-                LOG_ERROR("%s less then %s, return %s(0x%X)", #a, #b, #ret,  \
+                LOG_ERROR("%s less then %s, return %s(%d)", #a, #b, #ret,  \
                           ret);                                              \
-            }                                                                \
             return ret;                                                      \
         }                                                                    \
     } while (0)

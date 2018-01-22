@@ -4,7 +4,7 @@
 
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
-    printf("%.*s", (int)message->payloadlen, (char*)message->payload);
+    printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
 
 static volatile int stop = 0;
@@ -46,7 +46,7 @@ int run_simple_mqtt_client(tc_iot_mqtt_client_config* p_client_config) {
         pubmsg.qos = QOS1;
         pubmsg.retained = 0;
         pubmsg.dup = 0;
-        printf("requesting with: %s\n", (char*)pubmsg.payload);
+        printf("[c->s] shadow_get\n");
         ret = tc_iot_mqtt_client_publish(p_client, pub_topic, &pubmsg);
         if (TC_IOT_SUCCESS != ret) {
             if (ret != TC_IOT_MQTT_RECONNECT_IN_PROGRESS) {

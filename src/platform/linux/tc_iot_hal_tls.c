@@ -32,7 +32,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             }
             char err_str[100];
             mbedtls_strerror(ret, err_str, sizeof(err_str));
-            LOG_TRACE("mbedtls_ssl_read returned -0x%x/%s", -ret, err_str);
+            LOG_TRACE("mbedtls_ssl_read returned %d/%s", ret, err_str);
             if (read_len > 0) {
                 IOT_FUNC_EXIT_RC(read_len);
             } else {
@@ -73,7 +73,7 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
             continue;
         } else if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
                    ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-            LOG_ERROR("mbedtls_ssl_write returned -0x%x", -ret);
+            LOG_ERROR("mbedtls_ssl_write returned %d", ret);
             IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_FAILED);
         } else {
             if (tc_iot_hal_timer_is_expired(&timer)) {
@@ -133,7 +133,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
     if ((ret =
              mbedtls_net_connect(&(tls_data->ssl_fd), network->net_context.host,
                                  port_str, MBEDTLS_NET_PROTO_TCP)) != 0) {
-        LOG_ERROR("mbedtls_net_connect returned -0x%x", -ret);
+        LOG_ERROR("mbedtls_net_connect returned %d", ret);
         switch (ret) {
             case MBEDTLS_ERR_NET_SOCKET_FAILED:
                 return TC_IOT_NET_SOCKET_FAILED;
@@ -148,7 +148,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
 
     ret = mbedtls_net_set_block(&(tls_data->ssl_fd));
     if (ret != 0) {
-        LOG_ERROR("net_set_block returned -0x%x", -ret);
+        LOG_ERROR("net_set_block returned %d", ret);
         return TC_IOT_TLS_NET_SET_BLOCK_FAILED;
     }
     LOG_TRACE("mbed tls connect ok");
@@ -157,7 +157,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
     if ((ret = mbedtls_ssl_config_defaults(
              &(tls_data->conf), MBEDTLS_SSL_IS_CLIENT,
              MBEDTLS_SSL_TRANSPORT_STREAM, MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
-        LOG_ERROR("mbedtls_ssl_config_defaults returned -0x%x", -ret);
+        LOG_ERROR("mbedtls_ssl_config_defaults returned %d", ret);
         return TC_IOT_TLS_SSL_CONFIG_DEFAULTS_FAILED;
     }
 
@@ -176,7 +176,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
     if ((ret = mbedtls_ssl_conf_own_cert(
              &(tls_data->conf), &(tls_data->clicert), &(tls_data->pkey))) !=
         0) {
-        LOG_ERROR("mbedtls_ssl_conf_own_cert returned -0x%x", -ret);
+        LOG_ERROR("mbedtls_ssl_conf_own_cert returned %d", ret);
         return TC_IOT_TLS_SSL_CONF_OWN_CERT_FAILED;
     }
 
@@ -184,13 +184,13 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
 
     if ((ret = mbedtls_ssl_setup(&(tls_data->ssl_context),
                                  &(tls_data->conf))) != 0) {
-        LOG_ERROR("mbedtls_ssl_setup returned -0x%x", -ret);
+        LOG_ERROR("mbedtls_ssl_setup returned %d", ret);
         return TC_IOT_TLS_SSL_SETUP_FAILED;
     }
 
     if ((ret = mbedtls_ssl_set_hostname(&(tls_data->ssl_context),
                                         network->net_context.host)) != 0) {
-        LOG_ERROR("mbedtls_ssl_set_hostname returned -0x%x", -ret);
+        LOG_ERROR("mbedtls_ssl_set_hostname returned %d", ret);
         return TC_IOT_TLS_SSL_SET_HOSTNAME_FAILED;
     }
     LOG_TRACE("SSL state: %d ", tls_data->ssl_context.state);
@@ -202,7 +202,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
     while ((ret = mbedtls_ssl_handshake(&(tls_data->ssl_context))) != 0) {
         if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
             ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-            LOG_ERROR("mbedtls_ssl_handshake returned -0x%x\n", -ret);
+            LOG_ERROR("mbedtls_ssl_handshake returned %d\n", ret);
             if (ret == MBEDTLS_ERR_X509_CERT_VERIFY_FAILED) {
                 LOG_ERROR(
                     "Unable to verify the server's certificate. "
@@ -329,7 +329,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     if ((ret = mbedtls_ctr_drbg_seed(
              &(tls_data->ctr_drbg), mbedtls_entropy_func, &(tls_data->entropy),
              (const unsigned char*)pers, strlen(pers))) != 0) {
-        LOG_ERROR("mbedtls_ctr_drbg_seed returned -0x%x", -ret);
+        LOG_ERROR("mbedtls_ctr_drbg_seed returned %d", ret);
         return TC_IOT_CTR_DRBG_SEED_FAILED;
     }
 
@@ -339,9 +339,9 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
                                           tls_config->root_ca_location);
         if (ret < 0) {
             LOG_ERROR(
-                "mbedtls_x509_crt_parse returned -0x%x while parsing root cert "
+                "mbedtls_x509_crt_parse returned %d while parsing root cert "
                 "file: %s",
-                -ret, tls_config->root_ca_location);
+                ret, tls_config->root_ca_location);
             return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
         }
         LOG_TRACE("root CA cert load success.");
@@ -353,9 +353,9 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
                                           tls_config->device_cert_location);
         if (ret != 0) {
             LOG_ERROR(
-                "mbedtls_x509_crt_parse returned -0x%x while parsing device "
+                "mbedtls_x509_crt_parse returned %d while parsing device "
                 "cert file: %s",
-                -ret, tls_config->device_cert_location);
+                ret, tls_config->device_cert_location);
             return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
         }
         LOG_TRACE("client cert and key load success.");
@@ -366,9 +366,9 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
             &(tls_data->pkey), tls_config->device_private_key_location, "");
         if (ret != 0) {
             LOG_ERROR(
-                "mbedtls_pk_parse_key returned -0x%x while parsing private key "
+                "mbedtls_pk_parse_key returned %d while parsing private key "
                 "file: %s",
-                -ret, tls_config->device_private_key_location);
+                ret, tls_config->device_private_key_location);
             return TC_IOT_PK_PARSE_KEYFILE_FAILED;
         }
     }

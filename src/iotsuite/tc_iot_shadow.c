@@ -33,7 +33,7 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
     int rc = tc_iot_mqtt_client_subscribe(p_mqtt_client, p_cfg->sub_topic, QOS1,
                                           msg_handler);
     if (TC_IOT_SUCCESS == rc) {
-        LOG_DEBUG("Subscribing to %s success.", p_cfg->sub_topic);
+        LOG_TRACE("Subscribing to %s success.", p_cfg->sub_topic);
     } else {
         LOG_ERROR("!!!Subscribing to %s failed, ret code=%d.", p_cfg->sub_topic,
                   rc);
@@ -68,12 +68,12 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c) {
     pubmsg.qos = QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
-    LOG_DEBUG("requesting with: %.*s", (int)pubmsg.payloadlen,
+    LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
               (char *)pubmsg.payload);
     char *pub_topic = c->p_shadow_config->pub_topic;
     int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
-        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=-0x%X", rc);
+        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
     return rc;
 }
@@ -89,12 +89,12 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char *p_json) {
     pubmsg.qos = QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
-    LOG_DEBUG("requesting with: %.*s", (int)pubmsg.payloadlen,
+    LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
               (char *)pubmsg.payload);
     char *pub_topic = c->p_shadow_config->pub_topic;
     int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
-        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=-0x%X", rc);
+        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
     return rc;
 }
@@ -109,12 +109,12 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char *p_json) {
     pubmsg.qos = QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
-    LOG_DEBUG("requesting with: %.*s", (int)pubmsg.payloadlen,
+    LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
               (char *)pubmsg.payload);
     char *pub_topic = c->p_shadow_config->pub_topic;
     int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
-        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=-0x%X", rc);
+        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
     return rc;
 }

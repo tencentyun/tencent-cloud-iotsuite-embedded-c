@@ -22,13 +22,16 @@ tc_iot_mqtt_client_config g_client_config = {
 };
 
 int main(int argc, char** argv) {
-    // 获取动态并更新username password
-    int ret = http_refresh_auth_token(TC_IOT_CONFIG_AUTH_API_URL, NULL,
-                                      &g_client_config.device_info);
+    int ret = 0;
+    printf("requesting username and password for mqtt.\n");
+    ret = http_refresh_auth_token(
+        TC_IOT_CONFIG_AUTH_API_URL, NULL,
+        &g_client_config.device_info);
     if (ret != TC_IOT_SUCCESS) {
-        printf("%s\n", "refresh auth token failed.");
+        printf("refresh token failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);
         return 0;
     }
+    printf("request username and password for mqtt success.\n");
 
     // 连接mqtt服务器
     run_simple_mqtt_client(&g_client_config);

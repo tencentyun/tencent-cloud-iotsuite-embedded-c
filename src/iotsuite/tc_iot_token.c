@@ -157,7 +157,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
                                                     sizeof(temp_buf));
         if (returnCodeIndex <= 0 || strlen(temp_buf) != 1 || temp_buf[0] != '0') {
             LOG_ERROR("failed to fetch token: %s", rsp_body);
-            return TC_IOT_JSON_PATH_NO_MATCH;
+            return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
         int username_index = tc_iot_json_find_token(rsp_body, t, r, "data.id",
@@ -165,7 +165,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
                                                     TC_IOT_MAX_USER_NAME_LEN);
         if (username_index <= 0) {
             LOG_TRACE("data.id not found in response.");
-            return TC_IOT_JSON_PATH_NO_MATCH;
+            return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
         int password_index = tc_iot_json_find_token(
@@ -173,7 +173,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
             TC_IOT_MAX_PASSWORD_LEN);
         if (password_index <= 0) {
             LOG_TRACE("data.secret not found in response.");
-            return TC_IOT_JSON_PATH_NO_MATCH;
+            return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
         char num_buf[25];
@@ -181,7 +181,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
                                                   num_buf, sizeof(num_buf));
         if (expire_index <= 0) {
             LOG_TRACE("data.expire not found in response.");
-            return TC_IOT_JSON_PATH_NO_MATCH;
+            return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
         long expire = atol(num_buf);
