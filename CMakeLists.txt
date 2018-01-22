@@ -3,7 +3,7 @@ project (tencent-cloud-iotsuite-embedded-c)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-add_definitions(-DENABLE_LOG_TRACE)
+# add_definitions(-DENABLE_LOG_TRACE)
 add_definitions(-DENABLE_LOG_DEBUG)
 add_definitions(-DENABLE_LOG_WARN)
 add_definitions(-DENABLE_LOG_ERROR)
@@ -28,7 +28,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-option(ENABLE_TLS "use mqtt/http over tls" OFF) 
+option(ENABLE_TLS "use mqtt/http over tls" ON) 
 option(ENABLE_TESTING "enable testting" OFF)
 
 # 

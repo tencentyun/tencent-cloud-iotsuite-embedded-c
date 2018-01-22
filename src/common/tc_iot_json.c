@@ -272,7 +272,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                         if (val_len < result_len) {
                             result[val_len] = 0;
                         }
-                        LOG_DEBUG("result=%.*s", val_len, result);
+                        LOG_TRACE("result=%.*s", val_len, result);
                         return tok_index;
                     }
                     break;

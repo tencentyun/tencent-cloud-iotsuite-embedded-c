@@ -17,9 +17,9 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
                                len - read_len);
         if (ret > 0) {
             read_len += ret;
-            // LOG_DEBUG("total read len = %d/%d", read_len, len);
+            // LOG_TRACE("total read len = %d/%d", read_len, len);
         } else if (ret == 0) {
-            LOG_DEBUG("server closed connection, read_len = %d", read_len);
+            LOG_TRACE("server closed connection, read_len = %d", read_len);
             if (read_len > 0) {
                 IOT_FUNC_EXIT_RC(read_len);
             } else {
@@ -32,7 +32,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             }
             char err_str[100];
             mbedtls_strerror(ret, err_str, sizeof(err_str));
-            LOG_DEBUG("mbedtls_ssl_read returned -0x%x/%s", -ret, err_str);
+            LOG_TRACE("mbedtls_ssl_read returned -0x%x/%s", -ret, err_str);
             if (read_len > 0) {
                 IOT_FUNC_EXIT_RC(read_len);
             } else {
@@ -42,10 +42,10 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     }
 
     if (read_len > 0) {
-        LOG_DEBUG("total read len = %d", read_len);
+        LOG_TRACE("total read len = %d", read_len);
         IOT_FUNC_EXIT_RC(read_len);
     } else {
-        LOG_DEBUG("ssl read timeout");
+        LOG_TRACE("ssl read timeout");
         IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_READ_TIMEOUT);
     }
 }
@@ -56,6 +56,12 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
     bool is_write_failed = false;
     int ret = 0;
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
+    tc_iot_timer timer;
+
+    IOT_FUNC_ENTRY;
+
+    tc_iot_hal_timer_init(&timer);
+    tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
 
     // TODO write timer
     while ((written_len < len) &&
@@ -68,9 +74,12 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
         } else if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
                    ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
             LOG_ERROR("mbedtls_ssl_write returned -0x%x", -ret);
-            return TC_IOT_TLS_SSL_WRITE_FAILED;
+            IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_FAILED);
         } else {
-            // TODO check timer or something else.
+            if (tc_iot_hal_timer_is_expired(&timer)) {
+                LOG_ERROR("mbedtls_ssl_write timeout");
+                IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_TIMEOUT);
+            }
         }
     }
 
@@ -119,7 +128,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
         return (ret);
     }
 
-    LOG_DEBUG("Connecting to %s/%s...", network->net_context.host, port_str);
+    LOG_TRACE("Connecting to %s/%s...", network->net_context.host, port_str);
 
     if ((ret =
              mbedtls_net_connect(&(tls_data->ssl_fd), network->net_context.host,
@@ -142,9 +151,9 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
         LOG_ERROR("net_set_block returned -0x%x", -ret);
         return TC_IOT_TLS_NET_SET_BLOCK_FAILED;
     }
-    LOG_DEBUG("mbed tls connect ok");
+    LOG_TRACE("mbed tls connect ok");
 
-    LOG_DEBUG("mbedtls_ssl_config_defaults configing...");
+    LOG_TRACE("mbedtls_ssl_config_defaults configing...");
     if ((ret = mbedtls_ssl_config_defaults(
              &(tls_data->conf), MBEDTLS_SSL_IS_CLIENT,
              MBEDTLS_SSL_TRANSPORT_STREAM, MBEDTLS_SSL_PRESET_DEFAULT)) != 0) {
@@ -184,12 +193,12 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
         LOG_ERROR("mbedtls_ssl_set_hostname returned -0x%x", -ret);
         return TC_IOT_TLS_SSL_SET_HOSTNAME_FAILED;
     }
-    LOG_DEBUG("SSL state: %d ", tls_data->ssl_context.state);
+    LOG_TRACE("SSL state: %d ", tls_data->ssl_context.state);
     mbedtls_ssl_set_bio(&(tls_data->ssl_context), &(tls_data->ssl_fd),
                         mbedtls_net_send, NULL, mbedtls_net_recv_timeout);
 
-    LOG_DEBUG("SSL state: %d ", tls_data->ssl_context.state);
-    LOG_DEBUG("Performing the SSL/TLS handshake...");
+    LOG_TRACE("SSL state: %d ", tls_data->ssl_context.state);
+    LOG_TRACE("Performing the SSL/TLS handshake...");
     while ((ret = mbedtls_ssl_handshake(&(tls_data->ssl_context))) != 0) {
         if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
             ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
@@ -207,13 +216,13 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
         }
     }
 
-    LOG_DEBUG(
+    LOG_TRACE(
         "Handshake success: protocol=%s,ciphersuite=%s,record_expansion=%d",
         mbedtls_ssl_get_version(&(tls_data->ssl_context)),
         mbedtls_ssl_get_ciphersuite(&(tls_data->ssl_context)),
         mbedtls_ssl_get_record_expansion(&(tls_data->ssl_context)));
 
-    LOG_DEBUG("Verifying peer X.509 certificate...");
+    LOG_TRACE("Verifying peer X.509 certificate...");
 
     char info_buf[512];
     if (tls_config->verify_server) {
@@ -225,21 +234,21 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
             LOG_ERROR("verify info:%s\n", info_buf);
             ret = TC_IOT_TLS_X509_CRT_VERIFY_FAILED;
         } else {
-            LOG_DEBUG("Server verification success\n");
+            LOG_TRACE("Server verification success\n");
             ret = TC_IOT_SUCCESS;
         }
     } else {
-        LOG_DEBUG(" Server verification skipped\n");
+        LOG_TRACE(" Server verification skipped\n");
         ret = TC_IOT_SUCCESS;
     }
 
-#ifdef ENABLE_LOG_DEBUG
+#ifdef ENABLE_LOG_TRACE
     if (mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context)) != NULL) {
         info_buf[sizeof(info_buf) - 1] = '\0';
         mbedtls_x509_crt_info(
             (char*)info_buf, sizeof(info_buf) - 1, "",
             mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context)));
-        LOG_DEBUG("peer cert info:%s\n", info_buf);
+        LOG_TRACE("peer cert info:%s\n", info_buf);
     }
 #endif
 
@@ -253,13 +262,13 @@ int tc_iot_hal_tls_is_connected(tc_iot_network_t* network) {
 int tc_iot_hal_tls_disconnect(tc_iot_network_t* network) {
     int ret = 0;
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
-    LOG_DEBUG("network disconnecting...");
+    LOG_TRACE("network disconnecting...");
     do {
         ret = mbedtls_ssl_close_notify(&(tls_data->ssl_context));
     } while (ret == MBEDTLS_ERR_SSL_WANT_WRITE);
 
     network->net_context.is_connected = 0;
-    LOG_DEBUG("network disconnected");
+    LOG_TRACE("network disconnected");
     return TC_IOT_SUCCESS;
 }
 
@@ -270,7 +279,7 @@ int tc_iot_hal_tls_destroy(tc_iot_network_t* network) {
         tc_iot_hal_tls_disconnect(network);
     }
 
-    LOG_DEBUG("network destroying...");
+    LOG_TRACE("network destroying...");
 
     mbedtls_net_free(&(tls_data->ssl_fd));
 
@@ -282,7 +291,7 @@ int tc_iot_hal_tls_destroy(tc_iot_network_t* network) {
     mbedtls_ctr_drbg_free(&(tls_data->ctr_drbg));
     mbedtls_entropy_free(&(tls_data->entropy));
 
-    LOG_DEBUG("network destroied...");
+    LOG_TRACE("network destroied...");
 }
 
 int tc_iot_hal_tls_init(tc_iot_network_t* network,
@@ -314,7 +323,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     mbedtls_pk_init(&(tls_data->pkey));
     mbedtls_entropy_init(&(tls_data->entropy));
 
-    LOG_DEBUG("mbedtls_ctr_drbg_seed running ...");
+    LOG_TRACE("mbedtls_ctr_drbg_seed running ...");
     int ret = 0;
     char* pers = "iot_client";
     if ((ret = mbedtls_ctr_drbg_seed(
@@ -325,7 +334,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     }
 
     if (tls_config->root_ca_location) {
-        LOG_DEBUG("Loading root CA cert...");
+        LOG_TRACE("Loading root CA cert...");
         ret = mbedtls_x509_crt_parse_file(&(tls_data->cacert),
                                           tls_config->root_ca_location);
         if (ret < 0) {
@@ -335,11 +344,11 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
                 -ret, tls_config->root_ca_location);
             return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
         }
-        LOG_DEBUG("root CA cert load success.");
+        LOG_TRACE("root CA cert load success.");
     }
 
     if (tls_config->device_cert_location) {
-        LOG_DEBUG("Loading the client cert and key...");
+        LOG_TRACE("Loading the client cert and key...");
         ret = mbedtls_x509_crt_parse_file(&(tls_data->clicert),
                                           tls_config->device_cert_location);
         if (ret != 0) {
@@ -349,7 +358,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
                 -ret, tls_config->device_cert_location);
             return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
         }
-        LOG_DEBUG("client cert and key load success.");
+        LOG_TRACE("client cert and key load success.");
     }
 
     if (tls_config->device_private_key_location) {
@@ -363,7 +372,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
             return TC_IOT_PK_PARSE_KEYFILE_FAILED;
         }
     }
-    LOG_DEBUG("init tls ok");
+    LOG_TRACE("init tls ok");
 
     return TC_IOT_SUCCESS;
 }

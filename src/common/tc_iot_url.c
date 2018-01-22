@@ -173,7 +173,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
             if (pos >= input_url_len) {
                 result->path_start = input_url[pos - 1];
                 result->path_len = 0;
-                LOG_DEBUG(
+                LOG_TRACE(
                     "host_start=%d,host_len=%d,path_start=%d,path_len=%d,port=%"
                     "d",
                     result->host_start, result->host_len, result->path_start,
@@ -195,7 +195,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
         }
     }
 
-    LOG_DEBUG("host_start=%d,host_len=%d,path_start=%d,path_len=%d,port=%d",
+    LOG_TRACE("host_start=%d,host_len=%d,path_start=%d,path_len=%d,port=%d",
               result->host_start, result->host_len, result->path_start,
               result->path_len, result->port);
 
