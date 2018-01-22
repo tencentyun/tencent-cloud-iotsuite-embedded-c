@@ -1,0 +1,12 @@
+[submodule "external/paho.mqtt.embedded-c"]
+	path = external/paho.mqtt.embedded-c
+	url = https://github.com/eclipse/paho.mqtt.embedded-c.git
+[submodule "external/cpputest"]
+	path = external/cpputest
+	url = https://github.com/cpputest/cpputest.git
+[submodule "external/mbedtls"]
+	path = external/mbedtls
+	url = https://github.com/ARMmbed/mbedtls.git
+[submodule "external/jsmn"]
+	path = external/jsmn
+	url = https://github.com/zserge/jsmn.git
