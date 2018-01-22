@@ -52,7 +52,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
 
 int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
                              int len, int timeout_ms) {
-    int written_len;
+    int written_len = 0;
     bool is_write_failed = false;
     int ret = 0;
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
