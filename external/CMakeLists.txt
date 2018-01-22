@@ -6,9 +6,6 @@ add_library(MQTTPacketClient
             ${path_pack_dir}/MQTTConnectClient.c ${path_pack_dir}/MQTTSubscribeClient.c ${path_pack_dir}/MQTTUnsubscribeClient.c)
 target_compile_definitions(MQTTPacketClient PRIVATE MQTT_CLIENT)
 
-if(ENABLE_TESTING)
-    ADD_SUBDIRECTORY(cpputest)
-endif()
 
 if(ENABLE_TLS)
     add_definitions(-DENABLE_TLS)
