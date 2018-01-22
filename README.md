@@ -5,9 +5,7 @@
 腾讯云 iotsuite C语言版 SDK的下载地址： [tencent-cloud-iotsuite-embedded-c.git](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git)
 
 ```shell
-# 由于SDK引用了外部git模块，git clone 一定要带上 --recursive 参数。
-
-git clone --recursive https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
+git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 ```
 
 
@@ -79,32 +77,6 @@ cd bin
 # or
 ./demo_shadow
 
-```
-
-
-## 常见问题
-### external下的 paho.mqtt.embedded-c、mbedtls、jsmn、cpputest 等外部库目录为空
-如果下载 SDK 是通过 github 的 DownloadZip 功能；或者执行 git clone 时，忘记带上 --recursive 参数。
-external目录下，对应外部库目录会为空，找不到任何文件，此时也可通过如下两种方式来解决：
-#### 1. 通过git更新
-进入 SDK 项目根目录下，执行 git submodule 操作，更新外部模块：
-```
-git submodule update --init --recursive
-```
-
-#### 2.手动下载
-或者根据下文所附源码地址，手动下载对应的库，放到external下。
-
-1. Paho MQTT C/C++ client 库源码地址：[paho.mqtt.embedded-c.git](https://github.com/eclipse/paho.mqtt.embedded-c.git)
-2. Mbed TLS 库源码地址：[mbedtls.git](https://github.com/ARMmbed/mbedtls.git)
-3. JSMN 库源码地址：[jsmn.git](https://github.com/zserge/jsmn.git)
-4. CppUTest 库文件地址：[cpputest.git](https://github.com/cpputest/cpputest.git)
-```shell
-cd external
-git clone https://github.com/eclipse/paho.mqtt.embedded-c.git
-git clone https://github.com/ARMmbed/mbedtls.git
-git clone https://github.com/zserge/jsmn.git
-git clone https://github.com/cpputest/cpputest.git
 ```
 
 
