@@ -63,13 +63,11 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
 
-    // TODO write timer
-    while ((written_len < len) &&
-           ((ret = mbedtls_ssl_write(&(tls_data->ssl_context),
-                                     buffer + written_len,
-                                     len - written_len)) <= 0)) {
+    while (written_len < len) {
+        ret = mbedtls_ssl_write(&(tls_data->ssl_context), buffer + written_len, len - written_len);
         if (ret > 0) {
             written_len += ret;
+            /* LOG_TRACE("current_write=%d/total_written=%d/total=%d", ret, written_len, len); */
             continue;
         } else if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
                    ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
@@ -79,6 +77,8 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
             if (tc_iot_hal_timer_is_expired(&timer)) {
                 LOG_ERROR("mbedtls_ssl_write timeout");
                 IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_TIMEOUT);
+            }else {
+                /* LOG_TRACE("ret=%d/written=%d/total=%d", ret, written_len, len); */
             }
         }
     }
