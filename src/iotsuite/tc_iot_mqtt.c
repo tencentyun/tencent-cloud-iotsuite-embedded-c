@@ -348,16 +348,16 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     int len = 0;
     int rc = TC_IOT_SUCCESS;
 
-    int packet_type =
-        readPacket(c, timer); /* read the socket, see what work is due */
+    int packet_type = readPacket(c, timer);
 
     switch (packet_type) {
         default:
-            /* no more data to read, unrecoverable. Or read packet fails due to
-             * unexpected network error */
             rc = packet_type;
+            if (errno > 0) {
+                LOG_TRACE("cycle rc=%d, errno=%d, errstr=%s", rc, errno, strerror(errno));
+            }
             goto exit;
-        case 0: /* timed out reading packet */
+        case 0:
             break;
         case CONNACK:
         case PUBACK:
@@ -368,8 +368,7 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
             MQTTString topicName;
             tc_iot_mqtt_message msg;
             int intQoS;
-            msg.payloadlen = 0; /* this is a size_t, but deserialize publish
-                                   sets this as int */
+            msg.payloadlen = 0;
             if (MQTTDeserialize_publish(
                     &msg.dup, &intQoS, &msg.retained, &msg.id, &topicName,
                     (unsigned char**)&msg.payload, (int*)&msg.payloadlen,
@@ -392,7 +391,7 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
                     rc = _send_packet(c, len, timer);
                 }
                 if (rc == TC_IOT_FAILURE) {
-                    goto exit;  // there was a problem
+                    goto exit;
                 }
             }
             break;
@@ -429,8 +428,6 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     }
 
     if (keepalive(c) != TC_IOT_SUCCESS) {
-        // check only keepalive TC_IOT_FAILURE status so that previous
-        // TC_IOT_FAILURE status can be considered as FAULT
         rc = TC_IOT_FAILURE;
         LOG_TRACE("keepalive failed.");
     }
@@ -901,6 +898,11 @@ int tc_iot_mqtt_disconnect(tc_iot_mqtt_client* c) {
     int rc = TC_IOT_FAILURE;
     tc_iot_timer timer;
     int len = 0;
+
+    if (!tc_iot_mqtt_is_connected(c)) {
+        LOG_TRACE("mqtt client already disconnected.");
+        return TC_IOT_SUCCESS;
+    }
 
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, c->command_timeout_ms);

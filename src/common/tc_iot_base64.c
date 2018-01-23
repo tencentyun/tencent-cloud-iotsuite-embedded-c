@@ -49,6 +49,10 @@ int tc_base64_encode(const unsigned char *data, int input_length,
         output_data[output_length - 1 - i] = '=';
     }
 
+    if (output_length < max_output_len-1) {
+        output_data[output_length] = '\0';
+    }
+
     return output_length;
 }
 
@@ -90,6 +94,9 @@ int tc_iot_base64_decode(const char *data, int input_length,
         if (j < output_length) {
             output_data[j++] = (triple >> 0 * 8) & 0xFF;
         }
+    }
+    if (output_length < max_output_len-1) {
+        output_data[output_length] = '\0';
     }
 
     return output_length;

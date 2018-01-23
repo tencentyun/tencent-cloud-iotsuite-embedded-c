@@ -3,7 +3,7 @@
 
 #include "tc_iot_inc.h"
 
-typedef struct tc_iot_timer { struct timeval end_time; } tc_iot_timer;
+typedef struct tc_iot_timer tc_iot_timer;
 
 void tc_iot_hal_timer_init(tc_iot_timer*);
 char tc_iot_hal_timer_is_expired(tc_iot_timer*);

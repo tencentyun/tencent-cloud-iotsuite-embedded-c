@@ -27,6 +27,8 @@
 #define tc_iot_hal_printf printf
 #define tc_iot_hal_snprintf snprintf
 
+typedef struct tc_iot_timer { struct timeval end_time; } tc_iot_timer;
+
 #ifdef ENABLE_TLS
 /* mbetls begin */
 #if !defined(MBEDTLS_CONFIG_FILE)
