@@ -23,6 +23,13 @@ tc_iot_mqtt_client_config g_client_config = {
 
 int main(int argc, char** argv) {
     int ret = 0;
+    tc_iot_set_log_level(TC_IOT_LOG_DEBUG);
+    LOG_DEBUG("debug logging");
+    LOG_INFO("info logging");
+    LOG_WARN("warn logging");
+    LOG_ERROR("error logging");
+    LOG_CRIT("crit logging");
+
     printf("requesting username and password for mqtt.\n");
     ret = http_refresh_auth_token(
         TC_IOT_CONFIG_AUTH_API_URL, NULL,

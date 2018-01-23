@@ -53,6 +53,8 @@ int main(int argc, char** argv) {
     tc_iot_shadow_client* p_shadow_client = &client;
     int ret = 0;
 
+    tc_iot_set_log_level(TC_IOT_LOG_DEBUG);
+
     printf("requesting username and password for mqtt.\n");
     ret = http_refresh_auth_token(
         TC_IOT_CONFIG_AUTH_API_URL, NULL,
