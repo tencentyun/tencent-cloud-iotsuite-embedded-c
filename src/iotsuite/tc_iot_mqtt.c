@@ -116,7 +116,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     int i;
 
     tc_iot_network_t* p_network = &(c->ipstack);
-    memset(p_network, sizeof(tc_iot_network_t), 0);
+    memset(p_network, 0, sizeof(tc_iot_network_t));
 
     tc_iot_net_context_t netcontext;
     netcontext.fd = -1;

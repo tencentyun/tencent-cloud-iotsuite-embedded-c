@@ -62,24 +62,6 @@ int tc_iot_yabuffer_n_append(tc_iot_yabuffer_t *yabuffer, const char *input,
     return copy_len;
 }
 
-int tc_iot_yabuffer_append_format(tc_iot_yabuffer_t *yabuffer,
-                                  const char *format, ...) {
-    IF_NULL_RETURN(yabuffer, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(format, TC_IOT_NULL_POINTER);
-    int space_left = tc_iot_yabuffer_left(yabuffer);
-
-    va_list args;
-    va_start(args, format);
-    int ret =
-        vsnprintf(tc_iot_yabuffer_current(yabuffer), space_left, format, args);
-    va_end(args);
-
-    IF_EQUAL_RETURN(space_left, ret, TC_IOT_BUFFER_OVERFLOW);
-
-    tc_iot_yabuffer_forward(yabuffer, ret);
-    return ret;
-}
-
 #ifdef __cplusplus
 }
 #endif

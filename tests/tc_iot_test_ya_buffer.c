@@ -24,12 +24,6 @@ TEST(test_ya_buffer, test_ya_buffer_all)
     ret = tc_iot_yabuffer_append(NULL,"");
     CHECK_EQUAL(TC_IOT_NULL_POINTER, ret);
 
-    ret = tc_iot_yabuffer_append_format(NULL,"",1);
-    CHECK_EQUAL(TC_IOT_NULL_POINTER, ret);
-
-    ret = tc_iot_yabuffer_append_format(&ya_buffer,(const char *)NULL,1);
-    CHECK_EQUAL(TC_IOT_NULL_POINTER, ret);
-
     ret =  tc_iot_yabuffer_init(&ya_buffer, buffer, 0);
     CHECK_EQUAL(TC_IOT_INVALID_PARAMETER, ret);
 
@@ -41,9 +35,6 @@ TEST(test_ya_buffer, test_ya_buffer_all)
     const char * test_str = "Some test";
     ret = tc_iot_yabuffer_append(&ya_buffer, test_str);
     CHECK_EQUAL(ret, strlen(test_str));
-
-    ret = tc_iot_yabuffer_append_format(&ya_buffer,"%s%d", ",",1234);
-    CHECK_EQUAL(ret, 5);
 
     ret = tc_iot_yabuffer_reset(&ya_buffer);
     CHECK_EQUAL(ret, TC_IOT_SUCCESS);

@@ -77,7 +77,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
 
     LOG_TRACE("signed request form:\n%.*s", sign_len, sign_out);
     tc_iot_network_t network;
-    memset(&network, sizeof(network), 0);
+    memset(&network, 0, sizeof(network));
 
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
 #ifdef ENABLE_TLS

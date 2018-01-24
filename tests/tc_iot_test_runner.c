@@ -1,7 +1,3 @@
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
-
 #include "tc_iot_inc.h"
 #include "tc_iot_unit_test.h"
 
@@ -20,6 +16,3 @@ int main(int ac, char **argv) {
     TC_IOT_UT_PRINT_STAT_FOOTER(g_tc_unit_test_state);
 }
 
-// #ifdef __cplusplus
-// }
-// #endif
