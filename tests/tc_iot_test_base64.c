@@ -1,4 +1,4 @@
-#include "../src/common/tc_iot_base64.c"
+#include "tc_iot_inc.h"
 #include "tc_iot_unit_test.h"
 
 

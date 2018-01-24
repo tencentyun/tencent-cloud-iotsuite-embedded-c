@@ -123,19 +123,17 @@ int tc_iot_unicode_to_utf8(char *output, int output_len, unsigned long code) {
     return 0;
 }
 
-int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
-                         int src_len) {
+int tc_iot_json_unescape(char *dest, int dest_len, const char *src, int src_len) {
     int index = 0;
     int ret;
     int dest_index = 0;
     bool valid_escaped = true;
     unsigned long temp_unicode;
-    int min_len = src_len < dest_len ? src_len : dest_len;
 
-    for (index = 0; src[index] && (index < min_len); index++) {
+    for (index = 0; src[index] && (index < src_len); index++) {
         if (src[index] == '\\') {
             valid_escaped = true;
-            if (index < (min_len - 1)) {
+            if (index < (src_len - 1)) {
                 switch (src[index + 1]) {
                     case '"':
                         dest[dest_index++] = '"';
@@ -170,13 +168,13 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
                         index++;
                         break;
                     case 'u':
-                        if (min_len - index >= 5) {
+                        if (src_len - index >= 5) {
                             ret = _unicode_char_to_long(&src[index + 2], 4,
                                                         &temp_unicode);
                             if (ret != TC_IOT_SUCCESS) {
                                 valid_escaped = false;
                                 LOG_WARN("unicode data invalid %.*s",
-                                         min_len - index, &src[index]);
+                                         src_len - index, &src[index]);
                                 break;
                             }
                             ret = tc_iot_unicode_to_utf8(&dest[dest_index],
@@ -191,10 +189,14 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
                                 break;
                             }
                             dest_index += ret;
+                            index += 5;
+                        } else {
+                            LOG_WARN("unicode data invalid %.*s",
+                                     src_len - index, &src[index]);
                         }
                         break;
                     default:
-                        LOG_WARN("invalid json escape:%.*s", min_len - index,
+                        LOG_WARN("invalid json escape:%.*s", src_len - index,
                                  &src[index]);
                         valid_escaped = false;
                         break;
@@ -207,9 +209,58 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
         }
         dest[dest_index++] = src[index];
     }
+
     if (index < dest_len) {
         dest[dest_index] = '\0';
     }
+
+    return dest_index;
+}
+
+int tc_iot_json_escape(char *dest, int dest_len, const char *src, int src_len) {
+    int ret;
+    int src_index;
+    int dest_index;
+    
+
+    for (src_index = 0, dest_index = 0 ; 
+            src[src_index] && (src_index < src_len) && (dest_index < dest_len); 
+            src_index++) {
+        switch (src[src_index]) {
+            case '\b':
+                dest[dest_index++] = '\\';
+                dest[dest_index++] = 'b';
+                break;
+            case '\f':
+                dest[dest_index++] = '\\';
+                dest[dest_index++] = 'f';
+                break;
+            case '\n':
+                dest[dest_index++] = '\\';
+                dest[dest_index++] = 'n';
+                break;
+            case '\r':
+                dest[dest_index++] = '\\';
+                dest[dest_index++] = 'r';
+                break;
+            case '\t':
+                dest[dest_index++] = '\\';
+                dest[dest_index++] = 't';
+                break;
+            case '"':
+            case '\\':
+            case '/':
+                dest[dest_index++] = '\\';
+            default:
+                dest[dest_index++] = src[src_index];
+                break;
+        }
+    }
+
+    if (dest_index <= (dest_len-1)) {
+        dest[dest_index] = '\0';
+    }
+    return dest_index;
 }
 
 int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
@@ -297,6 +348,21 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
         LOG_TRACE("searching sub path: %s", name_start);
     }
 }
+
+typedef enum _tc_iot_json_type_e{
+    TC_IOT_JSON_INT32,
+    TC_IOT_JSON_INT16,
+    TC_IOT_JSON_INT8,
+    TC_IOT_JSON_UINT32,
+    TC_IOT_JSON_UINT16,
+    TC_IOT_JSON_UINT8,
+    TC_IOT_JSON_FLOAT,
+    TC_IOT_JSON_DOUBLE,
+    TC_IOT_JSON_BOOL,
+    TC_IOT_JSON_STRING,
+    TC_IOT_JSON_OBJECT,
+}tc_iot_json_type_e;
+
 
 #ifdef __cplusplus
 }

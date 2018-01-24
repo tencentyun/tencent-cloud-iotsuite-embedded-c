@@ -29,7 +29,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 option(ENABLE_TLS "use mqtt/http over tls" ON) 
-option(ENABLE_TESTING "enable testting" OFF)
+option(ENABLE_TESTING "enable testting" ON)
 
 # 
 set(platform_name "linux")

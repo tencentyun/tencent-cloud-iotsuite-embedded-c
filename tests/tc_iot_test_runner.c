@@ -5,20 +5,19 @@
 #include "tc_iot_inc.h"
 #include "tc_iot_unit_test.h"
 
-int g_tc_iot_unit_test_success = 0;
-int g_tc_iot_unit_test_failed = 0;
+tc_unit_test_state_t g_tc_unit_test_state = {0,0,0,0};
 
 int main(int ac, char **argv) {
-    TC_IOT_UT_RUN_TEST(tc_base64, test_base64_encode);
-    TC_IOT_UT_RUN_TEST(tc_base64, test_base64_decode);
-    TC_IOT_UT_RUN_TEST(test_ya_buffer, test_ya_buffer_all);
-    TC_IOT_UT_RUN_TEST(testjson, test_json_unescape);
+    tc_iot_set_log_level(TC_IOT_LOG_CRIT);
 
-    int total = g_tc_iot_unit_test_success+g_tc_iot_unit_test_failed;
-    int success = g_tc_iot_unit_test_success;
-    int failed = g_tc_iot_unit_test_failed;
+    TC_IOT_UT_PRINT_STAT_HEADER();
+    TC_IOT_UT_RUN_TEST(tc_base64, test_base64_encode, g_tc_unit_test_state);
+    TC_IOT_UT_RUN_TEST(tc_base64, test_base64_decode, g_tc_unit_test_state);
+    TC_IOT_UT_RUN_TEST(test_ya_buffer, test_ya_buffer_all, g_tc_unit_test_state);
+    TC_IOT_UT_RUN_TEST(testjson, test_json_unescape, g_tc_unit_test_state);
+    TC_IOT_UT_RUN_TEST(testjson, test_json_escape, g_tc_unit_test_state);
 
-    printf("total: %d, success: %d, failed: %d\n", total, success, failed);
+    TC_IOT_UT_PRINT_STAT_FOOTER(g_tc_unit_test_state);
 }
 
 // #ifdef __cplusplus

@@ -80,11 +80,24 @@ int main(int argc, char** argv) {
     tc_iot_shadow_get(p_shadow_client);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    char* action_update =
+    char* action_update_all =
         "{\"method\":\"update\",\"state\":{\"reported\":{\"temperature\":1023,"
         "\"switch\":1023},\"desired\":{\"temperature\":1024,\"switch\":1024}}}";
-    tc_iot_hal_printf("[c->s] shadow_update\n");
-    tc_iot_shadow_update(p_shadow_client, action_update);
+    tc_iot_hal_printf("[c->s] shadow_update_all\n");
+    tc_iot_shadow_update(p_shadow_client, action_update_all);
+    tc_iot_shadow_yield(p_shadow_client, timeout);
+
+    char* action_update_reported =
+        "{\"method\":\"update\",\"state\":{\"reported\":{\"temperature\":1023,"
+        "\"switch\":1023}}}";
+    tc_iot_hal_printf("[c->s] shadow_update_reported\n");
+    tc_iot_shadow_update(p_shadow_client, action_update_reported);
+    tc_iot_shadow_yield(p_shadow_client, timeout);
+
+    char* action_update_desired =
+        "{\"method\":\"update\",\"state\":{\"desired\":{\"temperature\":1024,\"switch\":1024}}}";
+    tc_iot_hal_printf("[c->s] shadow_update_desired\n");
+    tc_iot_shadow_update(p_shadow_client, action_update_desired);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     char* action_delete =

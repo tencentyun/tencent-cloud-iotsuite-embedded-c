@@ -1,6 +1,5 @@
-#include "../src/common/tc_iot_ya_buffer.c"
+#include "tc_iot_inc.h"
 #include "tc_iot_unit_test.h"
-
 
 TEST(test_ya_buffer, test_ya_buffer_all)  
 {
