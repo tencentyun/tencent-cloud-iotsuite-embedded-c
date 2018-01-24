@@ -17,7 +17,6 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
                                len - read_len);
         if (ret > 0) {
             read_len += ret;
-            // LOG_TRACE("total read len = %d/%d", read_len, len);
         } else if (ret == 0) {
             LOG_TRACE("server closed connection, read_len = %d", read_len);
             if (read_len > 0) {
@@ -67,7 +66,6 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
         ret = mbedtls_ssl_write(&(tls_data->ssl_context), buffer + written_len, len - written_len);
         if (ret > 0) {
             written_len += ret;
-            /* LOG_TRACE("current_write=%d/total_written=%d/total=%d", ret, written_len, len); */
             continue;
         } else if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
                    ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
@@ -78,7 +76,6 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
                 LOG_ERROR("mbedtls_ssl_write timeout");
                 IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_TIMEOUT);
             }else {
-                /* LOG_TRACE("ret=%d/written=%d/total=%d", ret, written_len, len); */
             }
         }
     }
@@ -143,8 +140,8 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
             default:
                 return TC_IOT_NET_CONNECT_FAILED;
         };
-        network->net_context.is_connected = 1;
     }
+    network->net_context.is_connected = 1;
 
     ret = mbedtls_net_set_block(&(tls_data->ssl_fd));
     if (ret != 0) {
@@ -242,15 +239,15 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
         ret = TC_IOT_SUCCESS;
     }
 
-#ifdef ENABLE_LOG_TRACE
-    if (mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context)) != NULL) {
-        info_buf[sizeof(info_buf) - 1] = '\0';
-        mbedtls_x509_crt_info(
-            (char*)info_buf, sizeof(info_buf) - 1, "",
-            mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context)));
-        LOG_TRACE("peer cert info:%s\n", info_buf);
-    }
-#endif
+/* #ifdef ENABLE_LOG_TRACE */
+    /* if (mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context)) != NULL) { */
+        /* info_buf[sizeof(info_buf) - 1] = '\0'; */
+        /* mbedtls_x509_crt_info( */
+            /* (char*)info_buf, sizeof(info_buf) - 1, "", */
+            /* mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context))); */
+        /* LOG_TRACE("peer cert info:%s\n", info_buf); */
+    /* } */
+/* #endif */
 
     return ret;
 }

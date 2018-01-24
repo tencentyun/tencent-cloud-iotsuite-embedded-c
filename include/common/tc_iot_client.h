@@ -3,6 +3,7 @@
 
 #include "tc_iot_inc.h"
 
+
 int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* p_mqtt_client,
                                  tc_iot_mqtt_client_config* p_client_config);
 void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* p_mqtt_client);
@@ -17,5 +18,4 @@ int tc_iot_mqtt_client_subscribe(tc_iot_mqtt_client* p_mqtt_client,
 int tc_iot_mqtt_client_unsubscribe(tc_iot_mqtt_client* p_mqtt_client,
                                    const char* topic_filter);
 int tc_iot_mqtt_client_disconnect(tc_iot_mqtt_client* p_mqtt_client);
-
 #endif /* end of include guard */
