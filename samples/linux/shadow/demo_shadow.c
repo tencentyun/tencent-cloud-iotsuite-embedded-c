@@ -85,25 +85,15 @@ int main(int argc, char** argv) {
     tc_iot_shadow_get(p_shadow_client);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    /* snprintf(reported, sizeof(reported),  */
-            /* "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}", */
-            /* tc_iot_json_inline_escape(buffer, buffer_len, "A string \"\r\n"), */
-            /* 12345,3.14159, TC_IOT_JSON_TRUE, TC_IOT_JSON_NULL); */
-    /* snprintf(desired, sizeof(desired),  */
-            /* "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}", */
-            /* tc_iot_json_inline_escape(buffer, buffer_len, "Hello, world!"), */
-            /* 700,10000.1234, TC_IOT_JSON_FALSE, TC_IOT_JSON_NULL); */
-
     snprintf(reported, sizeof(reported), 
-            "{\"string\":\"%s\"}",
-            tc_iot_json_inline_escape(buffer, buffer_len, "A string")
-            );
+            "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}",
+            tc_iot_json_inline_escape(buffer, buffer_len, "A string \"\r\n"),
+            12345,3.14159, TC_IOT_JSON_TRUE, TC_IOT_JSON_NULL);
     snprintf(desired, sizeof(desired), 
-            "{\"string\":\"%s\"}",
-            tc_iot_json_inline_escape(buffer, buffer_len, "A string")
-            );
+            "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}",
+            tc_iot_json_inline_escape(buffer, buffer_len, "Hello, world!"),
+            700,10000.1234, TC_IOT_JSON_FALSE, TC_IOT_JSON_NULL);
 
-    
     ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, desired);
     tc_iot_hal_printf("[c->s] shadow_update_all\n%s\n", buffer);
     tc_iot_shadow_update(p_shadow_client, buffer);
