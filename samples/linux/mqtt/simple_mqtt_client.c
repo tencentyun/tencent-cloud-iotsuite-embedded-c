@@ -59,6 +59,7 @@ int run_simple_mqtt_client(tc_iot_mqtt_client_config* p_client_config) {
 
         timeout = 5000;
         tc_iot_mqtt_client_yield(p_client, timeout);
+        //tc_iot_hal_sleep_ms(timeout);
     }
 
     tc_iot_mqtt_client_disconnect(p_client);

@@ -117,7 +117,8 @@ C-SDK 中提供的 HAL 层是基于 Linux 等 POSIX 体系系统的参考实现�
 | 内存 | tc_iot_hal_free | 释放之前调用 tc_iot_hal_malloc 所分配的内存空间。 | 基础必选 |
 | 输入输出 | tc_iot_hal_printf | 发送格式化输出到标准输出 stdout。 | 基础必选 |
 | 输入输出 | tc_iot_hal_snprintf | 发送格式化输出到字符串。 | 基础必选 |
-| 时间日志 | tc_iot_hal_timestamp | 系统时间戳，格林威治时间 1970-1-1 00点起总秒数 | 基础必选 |
+| 时间日期 | tc_iot_hal_timestamp | 系统时间戳，格林威治时间 1970-1-1 00点起总秒数 | 基础必选 |
+| 定时器 | tc_iot_hal_sleep_ms | 睡眠挂起一定时长，单位：ms | 基础必选 |
 | 定时器 | tc_iot_hal_timer_init | 初始化或重置定时器 | 基础必选 |
 | 定时器 | tc_iot_hal_timer_is_expired | 判断定时器是否已经过期 | 基础必选 |
 | 定时器 | tc_iot_hal_timer_countdown_ms | 设定定时器时延，单位：ms | 基础必选 |

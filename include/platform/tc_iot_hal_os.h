@@ -9,5 +9,6 @@ void tc_iot_hal_free(void *ptr);
 int tc_iot_hal_printf(const char *format, ...);
 int tc_iot_hal_snprintf(char *str, size_t size, const char *format, ...);
 long tc_iot_hal_timestamp(void *);
+int tc_iot_hal_sleep_ms(long sleep_ms);
 
 #endif /* end of include guard */

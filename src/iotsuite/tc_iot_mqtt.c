@@ -211,6 +211,7 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         rem_len); /* put the original remaining length back into the buffer */
 
     if (rem_len > (c->readbuf_size - len)) {
+        LOG_ERROR("buffer not enough: rem_len=%d, readbuf_size, len=%d", rem_len ,c->readbuf_size, len);
         rc = TC_IOT_BUFFER_OVERFLOW;
         goto exit;
     }

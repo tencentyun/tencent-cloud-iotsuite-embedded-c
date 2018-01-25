@@ -7,11 +7,17 @@ int tc_iot_jsoneq(const char *json, jsmntok_t *tok, const char *s);
 int tc_iot_jsoneq_len(const char *json, const jsmntok_t *tok, const char *s,
                       int len);
 int tc_iot_json_unescape(char *dest, int dest_len, const char *src, int src_len);
+char * tc_iot_json_inline_escape(char *dest, int dest_len, const char *src);
+
 int tc_iot_json_escape(char *dest, int dest_len, const char *src, int src_len);
 
 int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                            int count, const char *path, char *result,
                            int result_len);
+
+#define TC_IOT_JSON_NULL "null"
+#define TC_IOT_JSON_TRUE "true"
+#define TC_IOT_JSON_FALSE "false"
 
 typedef enum _tc_iot_type_e{
     TC_IOT_UNKNOW_TYPE,
@@ -25,8 +31,8 @@ typedef enum _tc_iot_type_e{
     TC_IOT_FLOAT,
     TC_IOT_DOUBLE,
     TC_IOT_BOOL,
-    TC_IOT_STRING,
 
+    TC_IOT_STRING,
     TC_IOT_ARRAY,
     TC_IOT_OBJECT,
 }tc_iot_type_e;
@@ -43,7 +49,9 @@ typedef union _tc_iot_variant_data{
     bool     as_bool;
     float    as_float;
     double   as_double;
-    void *   as_string;
+    char *   as_string;
+    void *   as_array;
+    void *   as_object;
 }tc_iot_variant_data;
 
 typedef struct _tc_iot_property{
@@ -68,7 +76,7 @@ tc_iot_property tc_iot_property_ ## sys_type(const char * key, sys_type val) { \
 
 #define TC_IOT_PROPERTY(key,val,sys_type) tc_iot_property_ ## sys_type(key, val)
 
-#define TC_IOT_PROPERTY_REF(key,val,length) tc_iot_property_ref(key, val, length)
+#define TC_IOT_PROPERTY_REF(key,val,type,length) tc_iot_property_ref(key, val, type, length)
 
 DEFINE_TC_IOT_PROPERTY_FUNC_PROTO(int8_t,  TC_IOT_INT8);
 DEFINE_TC_IOT_PROPERTY_FUNC_PROTO(int16_t, TC_IOT_INT16);
@@ -80,6 +88,6 @@ DEFINE_TC_IOT_PROPERTY_FUNC_PROTO(bool, TC_IOT_BOOL);
 DEFINE_TC_IOT_PROPERTY_FUNC_PROTO(float, TC_IOT_FLOAT);
 DEFINE_TC_IOT_PROPERTY_FUNC_PROTO(double, TC_IOT_DOUBLE);
 
-tc_iot_property tc_iot_property_ref(const char * key, void * ptr, int length);
+tc_iot_property tc_iot_property_ref(const char * key, void * ptr, tc_iot_type_e type, int length);
 
 #endif /* end of include guard */

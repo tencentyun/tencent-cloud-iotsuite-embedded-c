@@ -119,6 +119,82 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char *p_json) {
     return rc;
 }
 
+int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shadow_client *c, const char * reported, const char * desired) {
+   int ret;
+   int buffer_used = 0;
+
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"delete\"");
+   buffer_used += ret;
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, ",\"state\":{");
+   buffer_used += ret;
+   if (reported && desired) {
+       ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "\"reported\":%s,\"desired\":%s", reported, desired);
+       buffer_used += ret;
+   } else if (reported) {
+       ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "\"reported\":%s", reported);
+       buffer_used += ret;
+   } else if (desired) {
+       ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "\"desired\":%s",  desired);
+       buffer_used += ret;
+   } else {
+       LOG_ERROR("both reported and desired not given.");
+        return TC_IOT_INVALID_PARAMETER;
+   }
+
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "}}");
+   buffer_used += ret;
+
+   if (buffer_used < buffer_len) {
+       buffer[buffer_used] = '\0';
+   }
+
+   return buffer_used;
+}
+
+int tc_iot_shadow_doc_pack_for_update(char * buffer, int buffer_len, tc_iot_shadow_client *c, const char * reported, const char * desired) {
+   int ret;
+   int buffer_used = 0;
+
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"update\"");
+   buffer_used += ret;
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, ",\"state\":{");
+   buffer_used += ret;
+   if (reported && desired) {
+       ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "\"reported\":%s,\"desired\":%s", reported, desired);
+       buffer_used += ret;
+   } else if (reported) {
+       ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "\"reported\":%s", reported);
+       buffer_used += ret;
+   } else if (desired) {
+       ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "\"desired\":%s",  desired);
+       buffer_used += ret;
+   } else {
+       LOG_ERROR("both reported and desired not given.");
+        return TC_IOT_INVALID_PARAMETER;
+   }
+
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "}}");
+   buffer_used += ret;
+   if (buffer_used < buffer_len) {
+       buffer[buffer_used] = '\0';
+   }
+
+   return buffer_used;
+}
+
+int tc_iot_shadow_doc_pack_for_get(char * buffer, int buffer_len, tc_iot_shadow_client *c) {
+   int ret;
+   int buffer_used = 0;
+
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"get\"}");
+   buffer_used += ret;
+   if (buffer_used < buffer_len) {
+       buffer[buffer_used] = '\0';
+   }
+
+   return buffer_used;
+}
+
 #ifdef __cplusplus
 }
 #endif

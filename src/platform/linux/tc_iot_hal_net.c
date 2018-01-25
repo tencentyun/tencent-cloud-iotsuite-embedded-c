@@ -14,6 +14,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
     }
 
     int socket_fd = network->net_context.fd;
+    LOG_TRACE("reading timeout=%d", timeout_ms);
 
     setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (char*)&interval,
                sizeof(struct timeval));
@@ -22,7 +23,10 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
     while (bytes < len) {
         int rc = recv(socket_fd, &buffer[bytes], (size_t)(len - bytes), 0);
         if (rc == -1) {
-            if (errno != EAGAIN && errno != EWOULDBLOCK) bytes = -1;
+            if (errno != EAGAIN && errno != EWOULDBLOCK) {
+                bytes = -1;
+            }
+            LOG_TRACE("recv errno=%d", errno);
             break;
         } else if (rc == 0) {
             bytes = 0;

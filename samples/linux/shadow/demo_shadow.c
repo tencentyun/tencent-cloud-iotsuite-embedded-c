@@ -48,10 +48,15 @@ tc_iot_shadow_config g_client_config = {
     _on_message_received,
 };
 
+tc_iot_shadow_client client;
+
 int main(int argc, char** argv) {
-    tc_iot_shadow_client client;
     tc_iot_shadow_client* p_shadow_client = &client;
     int ret = 0;
+    char buffer[512];
+    int buffer_len = sizeof(buffer);
+    char reported[256];
+    char desired[256];
 
     tc_iot_hal_printf("requesting username and password for mqtt.\n");
     ret = http_refresh_auth_token(
@@ -80,31 +85,43 @@ int main(int argc, char** argv) {
     tc_iot_shadow_get(p_shadow_client);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    char* action_update_all =
-        "{\"method\":\"update\",\"state\":{\"reported\":{\"temperature\":1023,"
-        "\"switch\":1023},\"desired\":{\"temperature\":1024,\"switch\":1024}}}";
-    tc_iot_hal_printf("[c->s] shadow_update_all\n");
-    tc_iot_shadow_update(p_shadow_client, action_update_all);
+    /* snprintf(reported, sizeof(reported),  */
+            /* "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}", */
+            /* tc_iot_json_inline_escape(buffer, buffer_len, "A string \"\r\n"), */
+            /* 12345,3.14159, TC_IOT_JSON_TRUE, TC_IOT_JSON_NULL); */
+    /* snprintf(desired, sizeof(desired),  */
+            /* "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}", */
+            /* tc_iot_json_inline_escape(buffer, buffer_len, "Hello, world!"), */
+            /* 700,10000.1234, TC_IOT_JSON_FALSE, TC_IOT_JSON_NULL); */
+
+    snprintf(reported, sizeof(reported), 
+            "{\"string\":\"%s\"}",
+            tc_iot_json_inline_escape(buffer, buffer_len, "A string")
+            );
+    snprintf(desired, sizeof(desired), 
+            "{\"string\":\"%s\"}",
+            tc_iot_json_inline_escape(buffer, buffer_len, "A string")
+            );
+
+    
+    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, desired);
+    tc_iot_hal_printf("[c->s] shadow_update_all\n%s\n", buffer);
+    tc_iot_shadow_update(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    char* action_update_reported =
-        "{\"method\":\"update\",\"state\":{\"reported\":{\"temperature\":1023,"
-        "\"switch\":1023}}}";
-    tc_iot_hal_printf("[c->s] shadow_update_reported\n");
-    tc_iot_shadow_update(p_shadow_client, action_update_reported);
+    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, NULL);
+    tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
+    tc_iot_shadow_update(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    char* action_update_desired =
-        "{\"method\":\"update\",\"state\":{\"desired\":{\"temperature\":1024,\"switch\":1024}}}";
-    tc_iot_hal_printf("[c->s] shadow_update_desired\n");
-    tc_iot_shadow_update(p_shadow_client, action_update_desired);
+    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, NULL, desired);
+    tc_iot_hal_printf("[c->s] shadow_update_desired\n%s\n", buffer);
+    tc_iot_shadow_update(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    char* action_delete =
-        "{\"method\":\"delete\",\"state\":{\"reported\":{\"temperature\":null},"
-        "\"desired\":null}}";
-    tc_iot_hal_printf("[c->s] shadow_delete\n");
-    tc_iot_shadow_delete(p_shadow_client, action_delete);
+    ret =  tc_iot_shadow_doc_pack_for_delete(buffer, buffer_len, p_shadow_client, TC_IOT_JSON_NULL, TC_IOT_JSON_NULL);
+    tc_iot_hal_printf("[c->s] shadow_delete\n%s\n",buffer);
+    tc_iot_shadow_delete(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     tc_iot_hal_printf("Stopping\n");

@@ -16,4 +16,8 @@ typedef struct _tc_iot_shadow_client {
     tc_iot_mqtt_client mqtt_client;
 } tc_iot_shadow_client;
 
+int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shadow_client *c, const char * reported, const char * desired);
+int tc_iot_shadow_doc_pack_for_update(char * buffer, int buffer_len, tc_iot_shadow_client *c, const char * reported, const char * desired);
+int tc_iot_shadow_doc_pack_for_get(char * buffer, int buffer_len, tc_iot_shadow_client *c);
+
 #endif /* end of include guard */

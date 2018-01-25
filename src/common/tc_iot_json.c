@@ -216,6 +216,11 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src, int src_len)
     return dest_index;
 }
 
+char * tc_iot_json_inline_escape(char *dest, int dest_len, const char *src) {
+    tc_iot_json_escape(dest, dest_len, src, strlen(src));
+    return dest;
+}
+
 int tc_iot_json_escape(char *dest, int dest_len, const char *src, int src_len) {
     int ret;
     int src_index;
@@ -357,12 +362,12 @@ DEFINE_TC_IOT_PROPERTY_FUNC(bool, TC_IOT_BOOL);
 DEFINE_TC_IOT_PROPERTY_FUNC(float, TC_IOT_FLOAT);
 DEFINE_TC_IOT_PROPERTY_FUNC(double, TC_IOT_DOUBLE);
 
-tc_iot_property tc_iot_property_ref(const char * key, void * ptr, int length) { 
+tc_iot_property tc_iot_property_ref(const char * key, void * ptr, tc_iot_type_e type, int length) { 
     tc_iot_property prop; 
     prop.key = key; 
     prop.length = length; 
     prop.data.as_string = ptr;
-    prop.type = TC_IOT_STRING; 
+    prop.type = type; 
     return prop;
 } 
 
@@ -374,15 +379,12 @@ int _tc_iot_shadow_req_construct(char * buffer, int len, tc_iot_shadow_client * 
 
 int tc_iot_json_property_printf(char * buffer, int len, int count, ... ) {
     int i ;
-
     va_list p_args;
     tc_iot_property * temp = NULL;
     va_start(p_args, count);
     int buffer_used;
-    int left_len;
     int ret ;
-    int intval ;
-    int uintval ;
+
     ret = tc_iot_hal_snprintf(buffer, len, "{");
     buffer_used = strlen(buffer);
     if (buffer_used >= len) {
@@ -425,37 +427,37 @@ int tc_iot_json_property_printf(char * buffer, int len, int count, ... ) {
                 ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
                         "\"%s\":%d", temp->key, (int)temp->data.as_int32_t);
                 break;
-                case TC_IOT_UINT8:
-                    ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                            "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint8_t);
-                    break;
-                case TC_IOT_UINT16:
-                    ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                            "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint16_t);
-                    break;
-                case TC_IOT_UINT32:
-                    ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                            "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint32_t);
-                    break;
-                case TC_IOT_FLOAT:
-                    ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                            "\"%s\":%f", temp->key, temp->data.as_float);
-                    break;
-                case TC_IOT_DOUBLE:
-                    ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                            "\"%s\":%f", temp->key, temp->data.as_double);
-                    break;
-                case TC_IOT_STRING:
-                    ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                            "\"%s\":\"%.*s\"", temp->key, temp->length, temp->data.as_string);
-                    break;
-                case TC_IOT_BOOL:
-                    ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                            "\"%s\":%s", temp->key, temp->data.as_bool? "true":"false");
-                    break;
-                default:
-                    LOG_WARN("unknown data type=%d", temp->type);
-                    return TC_IOT_FAILURE;
+            case TC_IOT_UINT8:
+                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
+                        "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint8_t);
+                break;
+            case TC_IOT_UINT16:
+                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
+                        "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint16_t);
+                break;
+            case TC_IOT_UINT32:
+                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
+                        "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint32_t);
+                break;
+            case TC_IOT_FLOAT:
+                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
+                        "\"%s\":%f", temp->key, temp->data.as_float);
+                break;
+            case TC_IOT_DOUBLE:
+                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
+                        "\"%s\":%f", temp->key, temp->data.as_double);
+                break;
+            case TC_IOT_STRING:
+                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
+                        "\"%s\":\"%.*s\"", temp->key, temp->length, temp->data.as_string);
+                break;
+            case TC_IOT_BOOL:
+                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
+                        "\"%s\":%s", temp->key, temp->data.as_bool? "true":"false");
+                break;
+            default:
+                LOG_WARN("unknown data type=%d", temp->type);
+                return TC_IOT_FAILURE;
         }
 
         buffer_used+=ret;
@@ -474,10 +476,6 @@ int tc_iot_json_property_printf(char * buffer, int len, int count, ... ) {
     }
 
     return buffer_used;
-}
-
-int tc_iot_shadow_add_desired_json(char * buffer, int len, const char * method) {
-    
 }
 
 

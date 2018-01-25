@@ -74,7 +74,7 @@ TEST(testjson, test_json_property)
     tc_iot_property prop_float = TC_IOT_PROPERTY("key_float", 10.111, float);
     tc_iot_property prop_double = TC_IOT_PROPERTY("key_double", 11112110.111, double);
     tc_iot_property prop_bool = TC_IOT_PROPERTY("key_bool", true, bool);
-    tc_iot_property prop_str = TC_IOT_PROPERTY_REF("key_string", test, strlen(test));
+    tc_iot_property prop_str = TC_IOT_PROPERTY_REF("key_string", test, TC_IOT_STRING, strlen(test));
 
     int ret = tc_iot_json_property_printf(buffer, sizeof(buffer), 10, 
         &prop_int8, &prop_int16, &prop_int32, &prop_uint8, &prop_uint16, &prop_uint32,
