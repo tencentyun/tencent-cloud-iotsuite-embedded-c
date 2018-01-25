@@ -123,7 +123,7 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
    int ret;
    int buffer_used = 0;
 
-   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"delete\"");
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"%s\"", TC_IOT_MQTT_METHOD_DELETE);
    buffer_used += ret;
    ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, ",\"state\":{");
    buffer_used += ret;
@@ -155,7 +155,7 @@ int tc_iot_shadow_doc_pack_for_update(char * buffer, int buffer_len, tc_iot_shad
    int ret;
    int buffer_used = 0;
 
-   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"update\"");
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"%s\"", TC_IOT_MQTT_METHOD_UPDATE);
    buffer_used += ret;
    ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, ",\"state\":{");
    buffer_used += ret;
@@ -186,7 +186,7 @@ int tc_iot_shadow_doc_pack_for_get(char * buffer, int buffer_len, tc_iot_shadow_
    int ret;
    int buffer_used = 0;
 
-   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"get\"}");
+   ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len, "{\"method\":\"%s\"}", TC_IOT_MQTT_METHOD_GET);
    buffer_used += ret;
    if (buffer_used < buffer_len) {
        buffer[buffer_used] = '\0';

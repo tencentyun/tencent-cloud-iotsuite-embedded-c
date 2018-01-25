@@ -6,10 +6,16 @@ extern "C" {
 
 int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
                             int len, int timeout_ms) {
-    IOT_FUNC_ENTRY
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
     int read_len = 0;
     int ret = 0;
+
+    tc_iot_timer timer;
+
+    IOT_FUNC_ENTRY;
+
+    tc_iot_hal_timer_init(&timer);
+    tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
 
     mbedtls_ssl_conf_read_timeout(&(tls_data->conf), timeout_ms);
     while (read_len < len) {
@@ -17,6 +23,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
                                len - read_len);
         if (ret > 0) {
             read_len += ret;
+            //LOG_TRACE("ret=%d, read_len=%d", ret, read_len);
         } else if (ret == 0) {
             LOG_TRACE("server closed connection, read_len = %d", read_len);
             if (read_len > 0) {
@@ -37,11 +44,19 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             } else {
                 IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_READ_FAILED);
             }
+        } else {
+            if (tc_iot_hal_timer_is_expired(&timer)) {
+                //LOG_TRACE("tls read timeout=%d", timeout_ms)
+                IOT_FUNC_EXIT_RC(read_len);
+            }else {
+                LOG_TRACE("tls_read unkownn ret=%d", ret);
+            }
         }
+
     }
 
     if (read_len > 0) {
-        LOG_TRACE("total read len = %d", read_len);
+        //LOG_TRACE("total read len = %d", read_len);
         IOT_FUNC_EXIT_RC(read_len);
     } else {
         LOG_TRACE("ssl read timeout");
@@ -80,7 +95,7 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
         }
     }
 
-    return written_len;
+    IOT_FUNC_EXIT_RC(written_len);
 }
 
 static int net_prepare(void) {
@@ -177,6 +192,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
         return TC_IOT_TLS_SSL_CONF_OWN_CERT_FAILED;
     }
 
+    LOG_TRACE("timeout_ms=%d", tls_config->timeout_ms);
     mbedtls_ssl_conf_read_timeout(&(tls_data->conf), tls_config->timeout_ms);
 
     if ((ret = mbedtls_ssl_setup(&(tls_data->ssl_context),

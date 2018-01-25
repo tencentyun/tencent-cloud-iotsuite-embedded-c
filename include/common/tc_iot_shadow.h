@@ -20,4 +20,10 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
 int tc_iot_shadow_doc_pack_for_update(char * buffer, int buffer_len, tc_iot_shadow_client *c, const char * reported, const char * desired);
 int tc_iot_shadow_doc_pack_for_get(char * buffer, int buffer_len, tc_iot_shadow_client *c);
 
+#define TC_IOT_MQTT_METHOD_GET       "get"
+#define TC_IOT_MQTT_METHOD_UPDATE    "update"
+#define TC_IOT_MQTT_METHOD_DELETE    "delete"
+#define TC_IOT_MQTT_METHOD_REPLY     "reply"
+#define TC_IOT_MQTT_METHOD_CONTROL   "control"
+
 #endif /* end of include guard */
