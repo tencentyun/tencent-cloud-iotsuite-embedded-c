@@ -124,6 +124,8 @@ C-SDK 中提供的 HAL 层是基于 Linux 等 POSIX 体系系统的参考实现�
 | 定时器 | tc_iot_hal_timer_countdown_ms | 设定定时器时延，单位：ms | 基础必选 |
 | 定时器 | tc_iot_hal_timer_countdown_second | 设定定时器时延，单位：s | 基础必选 |
 | 定时器 | tc_iot_hal_timer_left_ms | 检查定时器剩余时长，单位：ms | 基础必选 |
+| 随机数 | tc_iot_hal_srandom | 设置随机数种子值 | 基础必选 |
+| 随机数 | tc_iot_hal_random | 获取随机数 | 基础必选 |
 
 #### 网络功能（二选一或全选）
 根据实际连接方式选择，如是否走MQTT over TLS加密，是否通过HTTPS接口获取Token等，选择性实现 TCP 或 TLS 相关接口。

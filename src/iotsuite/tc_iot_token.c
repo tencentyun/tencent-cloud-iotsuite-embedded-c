@@ -81,10 +81,10 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
 	//netcontext.eth = eth;
 	
 	tc_iot_hal_srandom(timestamp);
-															
+
 	IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_device_info, TC_IOT_NULL_POINTER);
-															
+
     sign_len = tc_iot_create_auth_request_form(
         sign_out, sizeof(sign_out), p_device_info->secret,
         strlen(p_device_info->secret), p_device_info->client_id,
@@ -152,25 +152,23 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
 
         jsmn_parser p;
         jsmntok_t t[20];
-        
-
         jsmntok_t* temp;
+
         char temp_buf[256];
         int returnCodeIndex = 0;
         char num_buf[25];
         int expire_index ;
-			   long expire;
-			  int password_index;
-				int r ;
-				int username_index;
-					
-				jsmn_init(&p);
-				
+        long expire;
+        int password_index;
+        int r ;
+        int username_index;
+
+        jsmn_init(&p);
+
         rsp_body += 4;
         LOG_TRACE("\nbody:\n%s\n", rsp_body);
 			
-        r = jsmn_parse(&p, rsp_body, strlen(rsp_body), t,
-                           sizeof(t) / sizeof(t[0]));
+        r = jsmn_parse(&p, rsp_body, strlen(rsp_body), t, sizeof(t) / sizeof(t[0]));
         if (r < 0) {
             LOG_ERROR("Failed to parse JSON: %s", rsp_body);
             return TC_IOT_JSON_PARSE_FAILED;
@@ -186,7 +184,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
                                                     temp_buf,
                                                     sizeof(temp_buf));
         if (returnCodeIndex <= 0 || strlen(temp_buf) != 1 || temp_buf[0] != '0') {
-            LOG_ERROR("failed to fetch token: %s", rsp_body);
+            LOG_ERROR("failed to fetch token %d/%s: %s", returnCodeIndex, temp_buf, rsp_body);
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
