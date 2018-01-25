@@ -36,7 +36,7 @@ static int is_normal_url_char(char c) {
 }
 
 /* max_output_len nomally equals input_len*3+1 */
-int tc_iot_url_encode(const unsigned char *input, int input_len, char *output,
+int tc_iot_url_encode(const char *input, int input_len, char *output,
                       int max_output_len) {
     unsigned char ch;
     int pos = 0;
@@ -69,7 +69,7 @@ int tc_iot_url_encode(const unsigned char *input, int input_len, char *output,
     return pos;
 }
 
-int tc_iot_url_decode(const unsigned char *input, int input_len, char *output,
+int tc_iot_url_decode(const char *input, int input_len, char *output,
                       int max_output_len) {
     int pos = 0;
     const char *data = input;
@@ -118,6 +118,9 @@ int tc_iot_url_decode(const unsigned char *input, int input_len, char *output,
 int tc_iot_url_parse(const char *input_url, int input_url_len,
                      tc_iot_url_parse_result_t *result) {
     int pos = 0;
+		int prefix_len ;
+		int split_len;
+
     /* at least should be http://x */
     if (input_url_len <= URL_LEAST_LEN) {
         LOG_ERROR("url invalid: %.*s", input_url_len, input_url);
@@ -125,7 +128,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
     }
 
     /* check if prefix with 'http' */
-    int prefix_len = sizeof(HTTP_SCHEME_PREFIX) - 1;
+    prefix_len = sizeof(HTTP_SCHEME_PREFIX) - 1;
     if (strncmp(HTTP_SCHEME_PREFIX, &input_url[pos], prefix_len) != 0) {
         LOG_ERROR("url invalid: %.*s", input_url_len, input_url);
         return -1;
@@ -145,7 +148,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
     }
 
     /* check '://' */
-    int split_len = sizeof(SCHEME_SPLIT_STR) - 1;
+    split_len = sizeof(SCHEME_SPLIT_STR) - 1;
     if (strncmp(SCHEME_SPLIT_STR, &input_url[pos], split_len) != 0) {
         LOG_ERROR("url invalid: %.*s", input_url_len, input_url);
         return -1;
@@ -161,8 +164,9 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
     for (; pos < input_url_len; pos++) {
         /* meet custom port */
         if (':' == input_url[pos]) {
+						int temp_port = 0;
             result->host_len = pos - (result->host_start);
-            int temp_port = 0;
+            
             pos++;
             while ((input_url[pos] >= '0') && (input_url[pos] <= '9') &&
                    (pos < input_url_len)) {

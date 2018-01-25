@@ -11,4 +11,8 @@ int tc_iot_hal_snprintf(char *str, size_t size, const char *format, ...);
 long tc_iot_hal_timestamp(void *);
 int tc_iot_hal_sleep_ms(long sleep_ms);
 
+long int tc_iot_hal_random(void);
+
+void tc_iot_hal_srandom(unsigned int seed);
+
 #endif /* end of include guard */

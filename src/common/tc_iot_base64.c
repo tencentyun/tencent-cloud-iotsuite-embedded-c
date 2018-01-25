@@ -23,13 +23,13 @@ const static int mod_table[] = {0, 2, 1};
 
 int tc_base64_encode(const unsigned char *data, int input_length,
                      char *output_data, int max_output_len) {
-    IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(output_data, TC_IOT_NULL_POINTER);
 
     int i;
     int j;
     int output_length = 4 * ((input_length + 2) / 3);
 
+    IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(output_data, TC_IOT_NULL_POINTER);
     IF_LESS_RETURN(max_output_len, output_length, TC_IOT_INVALID_PARAMETER);
 
     for (i = 0, j = 0; i < input_length;) {
@@ -49,23 +49,19 @@ int tc_base64_encode(const unsigned char *data, int input_length,
         output_data[output_length - 1 - i] = '=';
     }
 
-    if (output_length < max_output_len-1) {
-        output_data[output_length] = '\0';
-    }
-
     return output_length;
 }
 
 int tc_iot_base64_decode(const char *data, int input_length,
                          unsigned char *output_data, int max_output_len) {
-    IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(output_data, TC_IOT_NULL_POINTER);
-    /*int input_length_mod = input_length % 4; */
-    IF_NOT_EQUAL_RETURN(input_length % 4, 0, TC_IOT_INVALID_PARAMETER);
 
     int output_length = input_length / 4 * 3;
     int i = 0;
     int j = 0;
+
+    IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(output_data, TC_IOT_NULL_POINTER);
+    IF_NOT_EQUAL_RETURN(input_length % 4, 0, TC_IOT_INVALID_PARAMETER);
 
     /* check if last 2 chars are '=' */
     for (i = 0; i < 2; i++) {

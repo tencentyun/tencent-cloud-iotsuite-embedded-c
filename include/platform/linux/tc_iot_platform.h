@@ -22,8 +22,8 @@
 #include <time.h>
 #include <unistd.h>
 
-/* #define tc_iot_hal_malloc malloc */
-/* #define tc_iot_hal_free free */
+#define tc_iot_hal_malloc malloc
+#define tc_iot_hal_free free
 #define tc_iot_hal_printf printf
 #define tc_iot_hal_snprintf snprintf
 

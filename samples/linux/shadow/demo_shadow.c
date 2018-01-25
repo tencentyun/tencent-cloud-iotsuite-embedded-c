@@ -17,9 +17,8 @@ void sig_handler(int sig) {
 
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
-    /* tc_iot_hal_printf("->%.*s\t", md->topicName->lenstring.len, */
-           /* md->topicName->lenstring.data); */
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+    
 }
 
 tc_iot_shadow_config g_client_config = {

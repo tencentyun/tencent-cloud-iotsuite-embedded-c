@@ -1,9 +1,9 @@
 #ifndef IOT_URL_01091046_H
 #define IOT_URL_01091046_H
 
-int tc_iot_url_encode(const unsigned char* input, int input_len, char* output,
+int tc_iot_url_encode(const char* input, int input_len, char* output,
                       int max_output_len);
-int tc_iot_url_decode(const unsigned char* input, int input_len, char* output,
+int tc_iot_url_decode(const char* input, int input_len, char* output,
                       int max_output_len);
 
 #define HTTP_DEFAULT_PORT 80

@@ -7,16 +7,19 @@ extern "C" {
 int tc_iot_http_request_init(tc_iot_http_request* request, const char* method,
                              const char* abs_path, int abs_path_len,
                              const char* http_version) {
+    char* current = NULL;
+    int buffer_left;
+    int ret;															 
+
     IF_NULL_RETURN(request, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(method, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(abs_path, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(http_version, TC_IOT_NULL_POINTER);
     tc_iot_yabuffer_reset(&(request->buf));
 
-    char* current = tc_iot_yabuffer_current(&(request->buf));
-    int buffer_left = tc_iot_yabuffer_left(&(request->buf));
-
-    int ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_REQUEST_LINE_FMT,
+    current = tc_iot_yabuffer_current(&(request->buf));
+    buffer_left = tc_iot_yabuffer_left(&(request->buf));
+    ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_REQUEST_LINE_FMT,
                                   method, abs_path, http_version);
     if (ret > 0) {
         tc_iot_yabuffer_forward(&(request->buf), ret);
@@ -26,14 +29,17 @@ int tc_iot_http_request_init(tc_iot_http_request* request, const char* method,
 
 int tc_iot_http_request_append_header(tc_iot_http_request* request,
                                       const char* header, const char* val) {
+
+    char* current;
+    int buffer_left , ret;
+
     IF_NULL_RETURN(request, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(header, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(val, TC_IOT_NULL_POINTER);
 
-    char* current = tc_iot_yabuffer_current(&(request->buf));
-    int buffer_left = tc_iot_yabuffer_left(&(request->buf));
-
-    int ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_HEADER_FMT, header,
+    current = tc_iot_yabuffer_current(&(request->buf));
+    buffer_left = tc_iot_yabuffer_left(&(request->buf));
+    ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_HEADER_FMT, header,
                                   (int)strlen(val), val);
     if (ret > 0) {
         tc_iot_yabuffer_forward(&(request->buf), ret);
@@ -45,14 +51,16 @@ int tc_iot_http_request_append_header(tc_iot_http_request* request,
 int tc_iot_http_request_n_append_header(tc_iot_http_request* request,
                                         const char* header, const char* val,
                                         int val_len) {
+    char* current    = NULL;
+    int buffer_left = 0;
+    int ret  = 0;
     IF_NULL_RETURN(request, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(header, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(val, TC_IOT_NULL_POINTER);
 
-    char* current = tc_iot_yabuffer_current(&(request->buf));
-    int buffer_left = tc_iot_yabuffer_left(&(request->buf));
-
-    int ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_HEADER_FMT, header,
+    current = tc_iot_yabuffer_current(&(request->buf));
+    buffer_left = tc_iot_yabuffer_left(&(request->buf));
+    ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_HEADER_FMT, header,
                                   val_len, val);
     if (ret > 0) {
         tc_iot_yabuffer_forward(&(request->buf), ret);
@@ -63,13 +71,14 @@ int tc_iot_http_request_n_append_header(tc_iot_http_request* request,
 
 int tc_iot_http_request_append_body(tc_iot_http_request* request,
                                     const char* body) {
-    IF_NULL_RETURN(request, TC_IOT_NULL_POINTER);
+    
 
     char* current = tc_iot_yabuffer_current(&(request->buf));
     int buffer_left = tc_iot_yabuffer_left(&(request->buf));
 
     int ret;
-
+    
+    IF_NULL_RETURN(request, TC_IOT_NULL_POINTER);
     if (body) {
         ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_BODY_FMT, body);
     } else {
@@ -142,6 +151,10 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
     char buf[4096];
     int buf_len = sizeof(buf);
     char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
+    int ret;
+    char b64_buf[1024];
+    int data_len;
+    int url_ret;
 
     IF_NULL_RETURN(sign_out, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(secret, TC_IOT_NULL_POINTER);
@@ -150,7 +163,7 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
     IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
     IF_EQUAL_RETURN(max_sign_len, 0, TC_IOT_INVALID_PARAMETER);
 
-    int data_len = tc_iot_hal_snprintf(
+    data_len = tc_iot_hal_snprintf(
         buf, buf_len,
         "clientId=%.*s&deviceName=%.*s&expire=%ld&nonce=%ld&productId=%.*s&"
         "timestamp=%ld",
@@ -164,12 +177,12 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
 
     tc_iot_hmac_sha256(buf, data_len, secret, secret_len, sha256_digest);
 
-    char b64_buf[1024];
-    int ret = tc_base64_encode(sha256_digest, sizeof(sha256_digest), b64_buf,
+    
+    ret = tc_base64_encode(sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
     /* LOG_DEBUG(" %.*s\n %.*s\n tc_base64_encoded sign\n %.*s\n", data_len,
      * buf, secret_len, secret, ret, b64_buf);*/
-    int url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
+    url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
     /*LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret,
      * sign_out, url_ret); */
     if (url_ret < max_sign_len) {
@@ -182,13 +195,18 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
 static int add_tc_iot_url_encoded_field(tc_iot_yabuffer_t* buffer,
                                         const char* prefix, const char* val,
                                         int val_len) {
+
+    int total = 0;
+    int ret =0;
+
     IF_NULL_RETURN(buffer, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(prefix, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(val, TC_IOT_NULL_POINTER);
-    int total = 0;
+
     total = tc_iot_yabuffer_append(buffer, prefix);
-    int ret = tc_iot_url_encode(val, val_len, tc_iot_yabuffer_current(buffer),
+    ret = tc_iot_url_encode(val, val_len, tc_iot_yabuffer_current(buffer),
                                 tc_iot_yabuffer_left(buffer));
+
     tc_iot_yabuffer_forward(buffer, ret);
     total += ret;
     return total;
@@ -196,15 +214,21 @@ static int add_tc_iot_url_encoded_field(tc_iot_yabuffer_t* buffer,
 
 static int add_url_long_field(tc_iot_yabuffer_t* buffer, const char* prefix,
                               long val) {
+
+    int total = 0;
+    int ret;
+    char* current;
+    int buffer_left;
+
     IF_NULL_RETURN(buffer, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(prefix, TC_IOT_NULL_POINTER);
 
-    int total = 0;
     total = tc_iot_yabuffer_append(buffer, prefix);
-    char* current = tc_iot_yabuffer_current(buffer);
-    int buffer_left = tc_iot_yabuffer_left(buffer);
+    current = tc_iot_yabuffer_current(buffer);
+    buffer_left = tc_iot_yabuffer_left(buffer);
 
-    int ret = tc_iot_hal_snprintf(current, buffer_left, "%ld", val);
+    ret = tc_iot_hal_snprintf(current, buffer_left, "%ld", val);
+
     if (ret > 0) {
         tc_iot_yabuffer_forward(buffer, ret);
         total += ret;
@@ -221,15 +245,15 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
                                     int device_name_len, long expire,
                                     long nonce, const char* product_id,
                                     int product_id_len, long timestamp) {
+    tc_iot_yabuffer_t form_buf;
+    int ret = 0;
+    int total = 0;
     IF_NULL_RETURN(form, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(secret, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(client_id, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(device_name, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
 
-    tc_iot_yabuffer_t form_buf;
-    int ret = 0;
-    int total = 0;
     tc_iot_yabuffer_init(&form_buf, form, max_form_len);
     total += add_tc_iot_url_encoded_field(&form_buf, "clientId=", client_id,
                                           client_id_len);

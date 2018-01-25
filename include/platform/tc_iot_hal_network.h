@@ -35,6 +35,10 @@ typedef struct {
     int fd;
     int is_connected;
 
+#ifdef STM32
+    sim800l_t *eth; //for STM32 porting
+#endif
+
 #ifdef ENABLE_TLS
     tc_iot_tls_config_t tls_config;
     tc_iot_tls_data_t tls_data;

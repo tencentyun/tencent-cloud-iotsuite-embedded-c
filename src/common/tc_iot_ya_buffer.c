@@ -24,8 +24,10 @@ int tc_iot_yabuffer_reset(tc_iot_yabuffer_t *yabuffer) {
 }
 
 int tc_iot_yabuffer_left(tc_iot_yabuffer_t *yabuffer) {
+    
+    int space_left ;
     IF_NULL_RETURN(yabuffer, TC_IOT_NULL_POINTER);
-    int space_left = yabuffer->len - yabuffer->pos;
+    space_left = yabuffer->len - yabuffer->pos;
     return space_left;
 }
 
@@ -49,13 +51,17 @@ int tc_iot_yabuffer_append(tc_iot_yabuffer_t *yabuffer, const char *input) {
 
 int tc_iot_yabuffer_n_append(tc_iot_yabuffer_t *yabuffer, const char *input,
                              int len) {
+    int copy_len;
+    int space_left;
+
     IF_NULL_RETURN(yabuffer, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(input, TC_IOT_NULL_POINTER);
 
-    int space_left = tc_iot_yabuffer_left(yabuffer);
+    space_left = tc_iot_yabuffer_left(yabuffer);
     IF_LESS_RETURN(space_left, len, TC_IOT_BUFFER_OVERFLOW);
 
-    int copy_len = space_left > len ? len : space_left;
+    copy_len = space_left > len ? len : space_left;
+
     memcpy((void *)(yabuffer->data + yabuffer->pos), (void *)input,
            (size_t)copy_len);
     yabuffer->pos += copy_len;

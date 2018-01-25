@@ -270,11 +270,6 @@ int tc_iot_json_escape(char *dest, int dest_len, const char *src, int src_len) {
 int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                            int count, const char *path, char *result,
                            int result_len) {
-    IF_NULL_RETURN(json, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(root_token, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(path, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(result, TC_IOT_NULL_POINTER);
-
     const char *name_start = path;
     int tok_index = 0;
     int parent_index = 0;
@@ -284,9 +279,15 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
     int token_name_len = 0;
     char is_last = 0;
     int val_len = 0;
+    const char * pos;
+
+    IF_NULL_RETURN(json, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(root_token, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(path, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(result, TC_IOT_NULL_POINTER);
 
     for (tok_index = 0; tok_index < count;) {
-        const char *pos = strstr(name_start, ".");
+        pos = strstr(name_start, ".");
         if (NULL != pos) {
             token_name_len = pos - path;
         } else {
@@ -381,9 +382,10 @@ int tc_iot_json_property_printf(char * buffer, int len, int count, ... ) {
     int i ;
     va_list p_args;
     tc_iot_property * temp = NULL;
-    va_start(p_args, count);
     int buffer_used;
     int ret ;
+
+    va_start(p_args, count);
 
     ret = tc_iot_hal_snprintf(buffer, len, "{");
     buffer_used = strlen(buffer);
