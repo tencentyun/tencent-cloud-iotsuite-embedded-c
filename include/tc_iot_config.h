@@ -2,9 +2,9 @@
 #define TC_IOT_CONFIG_01181534_H
 
 /* mqtt消息接收缓冲区长度 */
-#define TC_IOT_CLIENT_SEND_BUF_SIZE 512
+#define TC_IOT_CLIENT_SEND_BUF_SIZE 1024
 /* mqtt消息发送缓冲区长度 */
-#define TC_IOT_CLIENT_READ_BUF_SIZE 512
+#define TC_IOT_CLIENT_READ_BUF_SIZE 1024
 
 /* 网络异常或超时重连配置 */
 /* 最小等待时间 */

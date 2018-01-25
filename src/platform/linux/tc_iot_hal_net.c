@@ -14,7 +14,6 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
     }
 
     int socket_fd = network->net_context.fd;
-    LOG_TRACE("reading timeout=%d", timeout_ms);
 
     setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (char*)&interval,
                sizeof(struct timeval));
