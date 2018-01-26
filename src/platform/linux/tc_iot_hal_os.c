@@ -5,6 +5,8 @@ extern "C" {
 #include "tc_iot_inc.h"
 
 long tc_iot_hal_timestamp(void* zone) {
+    // TODO remove test
+    return 1999;
     return time(NULL);
 }
 
@@ -14,6 +16,8 @@ int tc_iot_hal_sleep_ms(long sleep_ms){
 
 long tc_iot_hal_random()
 {
+    // TODO remove test
+    return 1999;
     return random();
 }
 

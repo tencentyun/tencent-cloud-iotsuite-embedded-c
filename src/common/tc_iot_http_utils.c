@@ -180,8 +180,8 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
     
     ret = tc_base64_encode(sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
-    /* LOG_DEBUG(" %.*s\n %.*s\n tc_base64_encoded sign\n %.*s\n", data_len,
-     * buf, secret_len, secret, ret, b64_buf);*/
+    LOG_DEBUG(" %.*s\n %.*s\n tc_base64_encoded sign\n %.*s\n", data_len,
+    buf, secret_len, secret, ret, b64_buf);
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
     /*LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret,
      * sign_out, url_ret); */

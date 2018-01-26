@@ -12,8 +12,8 @@ int http_post_urlencoded(tc_iot_network_t* network,
                          const char* encoded_body, char* resp, int resp_max_len,
                          int timeout_ms) {
     tc_iot_url_parse_result_t result;
-													 char temp_host[1024];
-		int written_len;	
+    char temp_host[1024];
+    int written_len;	
     int read_len;													 
     int ret = tc_iot_url_parse(url, strlen(url), &result);
     if (ret < 0) {

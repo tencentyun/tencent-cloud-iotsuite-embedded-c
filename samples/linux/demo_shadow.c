@@ -1,24 +1,12 @@
 #include "tc_iot_device_config.h"
 #include "tc_iot_export.h"
 
-static volatile int stop = 0;
-
-void sig_handler(int sig) {
-    if (sig == SIGINT) {
-        tc_iot_hal_printf("SIGINT received, going down.\n");
-        stop = 1;
-    } else if (sig == SIGTERM) {
-        tc_iot_hal_printf("SIGTERM received, going down.\n");
-        stop = 1;
-    } else {
-        tc_iot_hal_printf("signal received:%d\n", sig);
-    }
-}
+extern void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv);
+int run_shadow(tc_iot_shadow_config * p_client_config);
 
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
-    
 }
 
 tc_iot_shadow_config g_client_config = {
@@ -42,40 +30,62 @@ tc_iot_shadow_config g_client_config = {
         NULL,
         NULL,
     },
-    SUB_TOPIC,
-    PUB_TOPIC,
+    TC_IOT_SUB_TOPIC_DEF,
+    TC_IOT_PUB_TOPIC_DEF,
     _on_message_received,
 };
 
-tc_iot_shadow_client client;
-
 int main(int argc, char** argv) {
-    tc_iot_shadow_client* p_shadow_client = &client;
+    tc_iot_mqtt_client_config * p_client_config;
+    bool token_defined;
+    int ret;
+
+    p_client_config = &(g_client_config.mqtt_client_config);
+    parse_command(p_client_config, argc, argv);
+    snprintf(g_client_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT, 
+            p_client_config->device_info.product_id,p_client_config->device_info.device_name);
+    snprintf(g_client_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT, 
+            p_client_config->device_info.product_id,p_client_config->device_info.device_name);
+    token_defined = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
+
+    if (!token_defined) {
+        tc_iot_hal_printf("requesting username and password for mqtt.\n");
+        ret = http_refresh_auth_token(
+                TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
+                &p_client_config->device_info);
+        if (ret != TC_IOT_SUCCESS) {
+            tc_iot_hal_printf("refresh token failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);
+            return 0;
+        }
+        tc_iot_hal_printf("request username and password for mqtt success.\n");
+    } else {
+        tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
+    }
+
+    run_shadow(&g_client_config);
+
+    return 0;
+}
+
+int run_shadow(tc_iot_shadow_config * p_client_config) {
+    int timeout;
     int ret = 0;
     char buffer[512];
     int buffer_len = sizeof(buffer);
     char reported[256];
     char desired[256];
-
-    tc_iot_hal_printf("requesting username and password for mqtt.\n");
-    ret = http_refresh_auth_token(
-        TC_IOT_CONFIG_AUTH_API_URL, NULL,
-        &g_client_config.mqtt_client_config.device_info);
-    if (ret != TC_IOT_SUCCESS) {
-        tc_iot_hal_printf("refresh token failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);
-        return 0;
-    }
-    tc_iot_hal_printf("request username and password for mqtt success.\n");
+    tc_iot_shadow_client client;
+    tc_iot_shadow_client* p_shadow_client = &client;
 
     tc_iot_hal_printf("constructing mqtt shadow client.\n");
-    ret = tc_iot_shadow_construct(p_shadow_client, &g_client_config);
+    ret = tc_iot_shadow_construct(p_shadow_client, p_client_config);
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("construct shadow failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);
         return 0;
     }
 
     tc_iot_hal_printf("construct mqtt shadow client success.\n");
-    int timeout = TC_IOT_CONFIG_COMMAND_TIMEOUT_MS;
+    timeout = TC_IOT_CONFIG_COMMAND_TIMEOUT_MS;
     tc_iot_hal_printf("yield waiting for server push.\n");
     tc_iot_shadow_yield(p_shadow_client, timeout);
     tc_iot_hal_printf("yield waiting for server finished.\n");

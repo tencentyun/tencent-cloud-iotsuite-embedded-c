@@ -455,10 +455,12 @@ exit:
 }
 
 int tc_iot_mqtt_yield(tc_iot_mqtt_client* c, int timeout_ms) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     int rc = TC_IOT_SUCCESS;
+    int left_ms = 0;
     tc_iot_timer timer;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
@@ -481,6 +483,11 @@ int tc_iot_mqtt_yield(tc_iot_mqtt_client* c, int timeout_ms) {
 
     } while (!tc_iot_hal_timer_is_expired(&timer));
 
+    if (TC_IOT_SUCCESS != rc && !tc_iot_hal_timer_is_expired(&timer)) {
+        left_ms = tc_iot_hal_timer_left_ms(&timer);
+        LOG_TRACE("cycle failed ret=%d, sleep over left_ms=%d", rc, left_ms);
+        tc_iot_hal_sleep_ms(left_ms);
+    }
     return rc;
 }
 
