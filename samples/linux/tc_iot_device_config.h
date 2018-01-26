@@ -1,21 +1,6 @@
 #ifndef IOT_DEVICE_CONFIG_H
 #define IOT_DEVICE_CONFIG_H
 
-#ifdef TEST
-// 内网测试配置 忽略以下内容
-#define TC_IOT_CONFIG_AUTH_API_URL "http://auth.iot.cloud.tencent.com/device"
-#define TC_IOT_CONFIG_SERVER_HOST "<instanceid>.<location>.mqtt.myqcloud.com"
-#define TC_IOT_CONFIG_SERVER_PORT 1883
-#define TC_IOT_CONFIG_DEVICE_SECRET "<device secret>"
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "<product id>"
-#define TC_IOT_CONFIG_DEVICE_NAME "<device name>"
-#define TC_IOT_CONFIG_DEVICE_CLIENT_ID "<Instanceid@client_unique_id>"
-#define TC_IOT_CONFIG_DEVICE_USER_NAME "<user name>"
-#define TC_IOT_CONFIG_DEVICE_PASSWORD "<password>"
-// 内网测试配置 忽略以上内容
-
-#else
-
 // 服务端获取动态username和password接口，
 // 此项配置一般固定不变，无需修改。
 #ifdef ENABLE_TLS
@@ -51,17 +36,17 @@
 #define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-fdxt0fie"
 
 // 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到
-#define TC_IOT_CONFIG_DEVICE_SECRET "bb97c664b9551e753cbe59a6368849b0"
+#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
 
 // 设备名称，可以在产品“设备管理”->“设备名称”位置找到
-#define TC_IOT_CONFIG_DEVICE_NAME "device003"
+#define TC_IOT_CONFIG_DEVICE_NAME "device006"
 // client id，
 // 由两部分组成，组成形式为“Instanceid@DeviceID”，ClientID 的长度不超过 64个字符
 // ，请不要使用不可见字符。其中
 // Instanceid 为 IoT MQ 的实例 ID。
 // DeviceID 为每个设备独一无二的标识，由业务方自己指定，需保证全局唯一，例如每个
 // 传感器设备的序列号。
-#define TC_IOT_CONFIG_DEVICE_CLIENT_ID "mqtt-1e8w58ou4@device003"
+#define TC_IOT_CONFIG_DEVICE_CLIENT_ID "mqtt-1e8w58ou4@" TC_IOT_CONFIG_DEVICE_NAME
 
 /************************************************************************/
 /**********************************选填项********************************/
@@ -71,8 +56,6 @@
 #define TC_IOT_CONFIG_DEVICE_USER_NAME ""
 #define TC_IOT_CONFIG_DEVICE_PASSWORD ""
 /************************************************************************/
-
-#endif
 
 
 // connect、publish、subscribe、unsubscribe 
