@@ -98,9 +98,9 @@ typedef struct _tc_iot_mqtt_client_config {
     char clean_session;
     char use_tls;
     char auto_reconnect;
-    char* p_root_ca;
-    char* p_client_crt;
-    char* p_client_key;
+    const char* p_root_ca;
+    const char* p_client_crt;
+    const char* p_client_key;
 
     disconnectHandler disconnect_handler;
     defaultMessageHandler default_msg_handler;

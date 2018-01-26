@@ -7,9 +7,10 @@ typedef struct tc_iot_network_t tc_iot_network_t;
 
 #ifdef ENABLE_TLS
 typedef struct tc_iot_tls_config_t {
-    char* root_ca_location;
-    char* device_cert_location;
-    char* device_private_key_location;
+    const char* root_ca_in_mem;
+    const char* root_ca_location;
+    const char* device_cert_location;
+    const char* device_private_key_location;
     uint32_t timeout_ms;
     char verify_server;
 } tc_iot_tls_config_t;

@@ -346,18 +346,31 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
         return TC_IOT_CTR_DRBG_SEED_FAILED;
     }
 
+    if (tls_config->root_ca_in_mem) {
+        LOG_TRACE("Loading preset root CA cert...");
+        ret = mbedtls_x509_crt_parse(&(tls_data->cacert),
+                                          tls_config->root_ca_in_mem, strlen(tls_config->root_ca_in_mem)+1);
+        if (ret < 0) {
+            LOG_ERROR(
+                "mbedtls_x509_crt_parse returned %d while parsing root cert " ,
+                ret);
+            return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
+        }
+        LOG_TRACE("preset root CA cert load success.");
+    }
+
     if (tls_config->root_ca_location) {
-        LOG_TRACE("Loading root CA cert...");
+        LOG_TRACE("Loading extra root CA cert...");
         ret = mbedtls_x509_crt_parse_file(&(tls_data->cacert),
                                           tls_config->root_ca_location);
         if (ret < 0) {
             LOG_ERROR(
-                "mbedtls_x509_crt_parse returned %d while parsing root cert "
+                "mbedtls_x509_crt_parse_file returned %d while parsing root cert "
                 "file: %s",
                 ret, tls_config->root_ca_location);
             return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
         }
-        LOG_TRACE("root CA cert load success.");
+        LOG_TRACE("extra root CA cert load success.");
     }
 
     if (tls_config->device_cert_location) {
@@ -366,7 +379,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
                                           tls_config->device_cert_location);
         if (ret != 0) {
             LOG_ERROR(
-                "mbedtls_x509_crt_parse returned %d while parsing device "
+                "mbedtls_x509_crt_parse_file returned %d while parsing device "
                 "cert file: %s",
                 ret, tls_config->device_cert_location);
             return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
@@ -379,7 +392,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
             &(tls_data->pkey), tls_config->device_private_key_location, "");
         if (ret != 0) {
             LOG_ERROR(
-                "mbedtls_pk_parse_key returned %d while parsing private key "
+                "mbedtls_pk_parse_keyfile returned %d while parsing private key "
                 "file: %s",
                 ret, tls_config->device_private_key_location);
             return TC_IOT_PK_PARSE_KEYFILE_FAILED;

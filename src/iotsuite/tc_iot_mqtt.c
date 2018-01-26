@@ -125,7 +125,16 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     netcontext.port = p_client_config->port;
     if (netcontext.use_tls) {
 #ifdef ENABLE_TLS
-        // TODO 证书加载
+        tc_iot_tls_config_t * p_tls_config;
+        p_tls_config = &(netcontext.tls_config);
+        if (netcontext.use_tls) {
+            p_tls_config->verify_server = 1;
+            p_tls_config->root_ca_in_mem = g_tc_iot_mqtt_root_ca_certs;
+            p_tls_config->root_ca_location = p_client_config->p_root_ca;
+            p_tls_config->device_cert_location = p_client_config->p_client_crt;
+            p_tls_config->device_private_key_location = p_client_config->p_client_key;
+        }
+
         tc_iot_hal_tls_init(p_network, &netcontext);
 #else
         LOG_CRIT("tls network not supported.");

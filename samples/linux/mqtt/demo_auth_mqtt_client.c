@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     int ret = 0;
     tc_iot_hal_printf("requesting username and password for mqtt.\n");
     ret = http_refresh_auth_token(
-        TC_IOT_CONFIG_AUTH_API_URL, NULL,
+        TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
         &g_client_config.device_info);
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("refresh token failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);

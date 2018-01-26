@@ -61,8 +61,6 @@ int http_post_urlencoded(tc_iot_network_t* network,
 
 int http_refresh_auth_token(const char* api_url, char* root_ca_path,
                             tc_iot_device_info* p_device_info	) {
-
-
     char sign_out[1024];
 	char http_resp[2048];
     long timestamp = tc_iot_hal_timestamp(NULL);
@@ -99,18 +97,20 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
 
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
 #ifdef ENABLE_TLS
-        
-		tc_iot_tls_config_t* config;
-        
+        tc_iot_tls_config_t* config;
+
         netcontext.fd = -1;
         netcontext.use_tls = 1;
 
         config = &(netcontext.tls_config);
+        config->root_ca_in_mem = g_tc_iot_https_root_ca_certs;
         if (root_ca_path) {
             config->root_ca_location = root_ca_path;
         }
         config->timeout_ms = 10000;
-        config->verify_server = 0;
+        if (netcontext.use_tls) {
+            config->verify_server = 1;
+        }
 
         tc_iot_hal_tls_init(&network, &netcontext);
         /* init network end*/
