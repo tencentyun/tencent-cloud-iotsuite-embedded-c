@@ -3,6 +3,14 @@
 
 tc_unit_test_state_t g_tc_unit_test_state = {0,0,0,0};
 
+TEST(testbase64, test_base64_encode);
+TEST(testbase64, test_base64_decode);
+TEST(test_ya_buffer, test_ya_buffer_all);
+TEST(testjson, test_json_unescape);
+TEST(testjson, test_json_escape);
+TEST(testjson, test_json_property);
+
+
 int main(int ac, char **argv) {
     tc_iot_set_log_level(TC_IOT_LOG_CRIT);
 

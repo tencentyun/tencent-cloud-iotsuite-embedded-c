@@ -2,12 +2,13 @@
 #include "tc_iot_device_config.h"
 #include <getopt.h>
 
-static int _log_level = TC_IOT_LOG_TRACE;
+static int _log_level = TC_IOT_LOG_DEBUG;
 static int request_token = 1;
 
 static struct option long_options[] =
 {
     {"verbose",      no_argument,          &_log_level, TC_IOT_LOG_WARN},
+    {"trace",        no_argument,          &_log_level, TC_IOT_LOG_TRACE},
     {"host",         optional_argument,    0, 'h'},
     {"port",         optional_argument,    0, 'p'},
     {"product",      optional_argument,    0, 't'},

@@ -22,7 +22,7 @@ TEST(testbase64, test_base64_encode)
     STRCMP_EQUAL(output, base64_out);
 } 
 
-TEST(testbase64, test_base64_decode)  
+TEST(testbase64, test_base64_decode)
 {  
     const unsigned char * base64_in = (const unsigned char *)"I am tom.";
     const char * base64_out = "SSBhbSB0b20u";

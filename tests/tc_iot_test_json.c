@@ -1,7 +1,7 @@
 #include "tc_iot_inc.h"
 #include "tc_iot_unit_test.h"
 
-TEST(testjson, test_json_unescape)  
+TEST(testjson, test_json_unescape)
 {  
     char output[1024];
     int buffer_len = sizeof(output);
@@ -60,7 +60,7 @@ TEST(testjson, test_json_escape)
     STRCMP_EQUAL(output, "\\ngood\\r\\n");
 }
 
-TEST(testjson, test_json_property)  
+TEST(testjson, test_json_property)
 {
     char buffer[1024];
     const char * expected = "{\"key_int8_t\":127,\"key_int16_t\":32500,\"key_int32_t\":80000,\"key_uint8_t\":128,\"key_uint16_t\":65535,\"key_uint32_t\":80000,\"key_float\":10.111000,\"key_double\":11112110.111000,\"key_bool\":true,\"key_string\":\"This is a string\"}"; 
