@@ -1,15 +1,7 @@
 #ifndef IOT_INC_01091040_H
 #define IOT_INC_01091040_H
 
-
-#include "MQTTPacket.h"
-#include "MQTTConnect.h"
-
-#ifndef JSMN_PARENT_LINKS
-#define JSMN_PARENT_LINKS 1
-#endif
-
-#include "jsmn.h"
+#include "tc_iot_external.h"
 
 #include "tc_iot_platform.h"
 
@@ -27,10 +19,10 @@
 #include "common/tc_iot_json.h"
 #include "common/tc_iot_url.h"
 #include "tc_iot_config.h"
-#include "common/tc_iot_certs.h"
-#include "common/tc_iot_mqtt.h"
-#include "common/tc_iot_client.h"
-#include "common/tc_iot_shadow.h"
-#include "common/tc_iot_token.h"
+#include "iotsuite/tc_iot_certs.h"
+#include "iotsuite/tc_iot_mqtt.h"
+#include "iotsuite/tc_iot_client.h"
+#include "iotsuite/tc_iot_shadow.h"
+#include "iotsuite/tc_iot_token.h"
 
 #endif /* end of include guard */

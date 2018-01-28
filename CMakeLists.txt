@@ -61,12 +61,12 @@ include_directories(include)
 # include_directories(include/common)
 # include_directories(include/platform)
 include_directories(include/platform/${platform_name})
-include_directories(external/paho.mqtt.embedded-c/MQTTPacket/src)
+# include_directories(external/paho.mqtt.embedded-c/MQTTPacket/src)
 
 add_definitions(-DJSMN_PARENT_LINKS)
 #add_definitions(-std=gnu99)
 
-include_directories(external/jsmn/)
+# include_directories(external/jsmn/)
 
 # enable_testing()
 ADD_SUBDIRECTORY(external)
