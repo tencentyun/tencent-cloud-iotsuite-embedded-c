@@ -13,8 +13,8 @@ int http_post_urlencoded(tc_iot_network_t* network,
                          int timeout_ms) {
     tc_iot_url_parse_result_t result;
     char temp_host[1024];
-    int written_len;	
-    int read_len;													 
+    int written_len;
+    int read_len;
     int ret = tc_iot_url_parse(url, strlen(url), &result);
     if (ret < 0) {
         return ret;
@@ -30,7 +30,6 @@ int http_post_urlencoded(tc_iot_network_t* network,
                                        result.host_len, encoded_body);
     }
 
-    
     if (result.host_len >= sizeof(temp_host)) {
         LOG_ERROR("host address too long.");
         return -1;
@@ -38,7 +37,7 @@ int http_post_urlencoded(tc_iot_network_t* network,
 
     if (result.over_tls != network->net_context.use_tls) {
         LOG_WARN("network type not match: url tls=%d, context tls=%d",
-                  (int)result.over_tls, (int)network->net_context.use_tls);
+                 (int)result.over_tls, (int)network->net_context.use_tls);
         return -1;
     }
 
@@ -49,7 +48,7 @@ int http_post_urlencoded(tc_iot_network_t* network,
 
     network->do_connect(network, temp_host, result.port);
     written_len = network->do_write(network, request->buf.data,
-                                        request->buf.pos, timeout_ms);
+                                    request->buf.pos, timeout_ms);
     LOG_TRACE("request with:\n%.*s", written_len, request->buf.data);
     read_len = network->do_read(network, resp, resp_max_len, timeout_ms);
     LOG_TRACE("response with:\n%.*s", read_len, resp);
@@ -60,27 +59,27 @@ int http_post_urlencoded(tc_iot_network_t* network,
 }
 
 int http_refresh_auth_token(const char* api_url, char* root_ca_path,
-                            tc_iot_device_info* p_device_info	) {
+                            tc_iot_device_info* p_device_info) {
     char sign_out[1024];
-	char http_resp[2048];
+    char http_resp[2048];
     long timestamp = tc_iot_hal_timestamp(NULL);
-    
+
     long nonce = tc_iot_hal_random();
     long expire = 60;
-	int sign_len;
-	tc_iot_network_t network;			
+    int sign_len;
+    tc_iot_network_t network;
     tc_iot_http_request request;
-    unsigned char http_request_buffer[2048];	
-	int ret;		
-	char* rsp_body;		
-	tc_iot_net_context_t netcontext;
+    unsigned char http_request_buffer[2048];
+    int ret;
+    char* rsp_body;
+    tc_iot_net_context_t netcontext;
 
-	memset(&netcontext, 0, sizeof(netcontext));
-	//netcontext.eth = eth;
-	
-	tc_iot_hal_srandom(timestamp);
+    memset(&netcontext, 0, sizeof(netcontext));
+    // netcontext.eth = eth;
 
-	IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
+    tc_iot_hal_srandom(timestamp);
+
+    IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_device_info, TC_IOT_NULL_POINTER);
 
     sign_len = tc_iot_create_auth_request_form(
@@ -92,7 +91,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
         timestamp);
 
     LOG_TRACE("signed request form:\n%.*s", sign_len, sign_out);
-    
+
     memset(&network, 0, sizeof(network));
 
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
@@ -132,10 +131,9 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
                          sizeof(http_request_buffer));
     /* request init end */
 
-    
     memset(http_resp, 0, sizeof(http_resp));
-    ret = http_post_urlencoded(&network, &request, api_url, sign_out,
-                                   http_resp, sizeof(http_resp), 2000);
+    ret = http_post_urlencoded(&network, &request, api_url, sign_out, http_resp,
+                               sizeof(http_resp), 2000);
 
     rsp_body = strstr(http_resp, "\r\n\r\n");
     if (rsp_body) {
@@ -157,18 +155,19 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
         char temp_buf[256];
         int returnCodeIndex = 0;
         char num_buf[25];
-        int expire_index ;
+        int expire_index;
         long expire;
         int password_index;
-        int r ;
+        int r;
         int username_index;
 
         jsmn_init(&p);
 
         rsp_body += 4;
         LOG_TRACE("\nbody:\n%s\n", rsp_body);
-			
-        r = jsmn_parse(&p, rsp_body, strlen(rsp_body), t, sizeof(t) / sizeof(t[0]));
+
+        r = jsmn_parse(&p, rsp_body, strlen(rsp_body), t,
+                       sizeof(t) / sizeof(t[0]));
         if (r < 0) {
             LOG_ERROR("Failed to parse JSON: %s", rsp_body);
             return TC_IOT_JSON_PARSE_FAILED;
@@ -179,34 +178,33 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
             return TC_IOT_JSON_PARSE_FAILED;
         }
 
-
         returnCodeIndex = tc_iot_json_find_token(rsp_body, t, r, "returnCode",
-                                                    temp_buf,
-                                                    sizeof(temp_buf));
-        if (returnCodeIndex <= 0 || strlen(temp_buf) != 1 || temp_buf[0] != '0') {
-            LOG_ERROR("failed to fetch token %d/%s: %s", returnCodeIndex, temp_buf, rsp_body);
+                                                 temp_buf, sizeof(temp_buf));
+        if (returnCodeIndex <= 0 || strlen(temp_buf) != 1 ||
+            temp_buf[0] != '0') {
+            LOG_ERROR("failed to fetch token %d/%s: %s", returnCodeIndex,
+                      temp_buf, rsp_body);
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
         username_index = tc_iot_json_find_token(rsp_body, t, r, "data.id",
-                                                    p_device_info->username,
-                                                    TC_IOT_MAX_USER_NAME_LEN);
+                                                p_device_info->username,
+                                                TC_IOT_MAX_USER_NAME_LEN);
         if (username_index <= 0) {
             LOG_TRACE("data.id not found in response.");
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
-        password_index = tc_iot_json_find_token(
-            rsp_body, t, r, "data.secret", p_device_info->password,
-            TC_IOT_MAX_PASSWORD_LEN);
+        password_index = tc_iot_json_find_token(rsp_body, t, r, "data.secret",
+                                                p_device_info->password,
+                                                TC_IOT_MAX_PASSWORD_LEN);
         if (password_index <= 0) {
             LOG_TRACE("data.secret not found in response.");
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
-
         expire_index = tc_iot_json_find_token(rsp_body, t, r, "data.expire",
-                                                  num_buf, sizeof(num_buf));
+                                              num_buf, sizeof(num_buf));
         if (expire_index <= 0) {
             LOG_TRACE("data.expire not found in response.");
             return TC_IOT_REFRESH_TOKEN_FAILED;

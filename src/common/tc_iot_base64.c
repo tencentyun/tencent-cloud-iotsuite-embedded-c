@@ -23,7 +23,6 @@ const static int mod_table[] = {0, 2, 1};
 
 int tc_base64_encode(const unsigned char *data, int input_length,
                      char *output_data, int max_output_len) {
-
     int i;
     int j;
     int output_length = 4 * ((input_length + 2) / 3);
@@ -54,7 +53,6 @@ int tc_base64_encode(const unsigned char *data, int input_length,
 
 int tc_iot_base64_decode(const char *data, int input_length,
                          unsigned char *output_data, int max_output_len) {
-
     int output_length = input_length / 4 * 3;
     int i = 0;
     int j = 0;
@@ -91,7 +89,7 @@ int tc_iot_base64_decode(const char *data, int input_length,
             output_data[j++] = (triple >> 0 * 8) & 0xFF;
         }
     }
-    if (output_length < max_output_len-1) {
+    if (output_length < max_output_len - 1) {
         output_data[output_length] = '\0';
     }
 

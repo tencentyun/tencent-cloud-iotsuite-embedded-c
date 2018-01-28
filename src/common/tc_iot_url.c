@@ -118,8 +118,8 @@ int tc_iot_url_decode(const char *input, int input_len, char *output,
 int tc_iot_url_parse(const char *input_url, int input_url_len,
                      tc_iot_url_parse_result_t *result) {
     int pos = 0;
-		int prefix_len ;
-		int split_len;
+    int prefix_len;
+    int split_len;
 
     /* at least should be http://x */
     if (input_url_len <= URL_LEAST_LEN) {
@@ -164,9 +164,9 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
     for (; pos < input_url_len; pos++) {
         /* meet custom port */
         if (':' == input_url[pos]) {
-						int temp_port = 0;
+            int temp_port = 0;
             result->host_len = pos - (result->host_start);
-            
+
             pos++;
             while ((input_url[pos] >= '0') && (input_url[pos] <= '9') &&
                    (pos < input_url_len)) {

@@ -125,14 +125,15 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     netcontext.port = p_client_config->port;
     if (netcontext.use_tls) {
 #ifdef ENABLE_TLS
-        tc_iot_tls_config_t * p_tls_config;
+        tc_iot_tls_config_t* p_tls_config;
         p_tls_config = &(netcontext.tls_config);
         if (netcontext.use_tls) {
             p_tls_config->verify_server = 1;
             p_tls_config->root_ca_in_mem = g_tc_iot_mqtt_root_ca_certs;
             p_tls_config->root_ca_location = p_client_config->p_root_ca;
             p_tls_config->device_cert_location = p_client_config->p_client_crt;
-            p_tls_config->device_private_key_location = p_client_config->p_client_key;
+            p_tls_config->device_private_key_location =
+                p_client_config->p_client_key;
         }
 
         tc_iot_hal_tls_init(p_network, &netcontext);
@@ -220,9 +221,10 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         rem_len); /* put the original remaining length back into the buffer */
 
     if (rem_len > (c->readbuf_size - len)) {
-        LOG_ERROR("buffer not enough: rem_len=%d, readbuf_size=%d, len=%d,"
-                " please check TC_IOT_CLIENT_READ_BUF_SIZE", 
-                rem_len ,(int)c->readbuf_size, len);
+        LOG_ERROR(
+            "buffer not enough: rem_len=%d, readbuf_size=%d, len=%d,"
+            " please check TC_IOT_CLIENT_READ_BUF_SIZE",
+            rem_len, (int)c->readbuf_size, len);
         rc = TC_IOT_BUFFER_OVERFLOW;
         goto exit;
     }
@@ -366,7 +368,8 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         default:
             rc = packet_type;
             if (errno > 0) {
-                LOG_TRACE("cycle rc=%d, errno=%d, errstr=%s", rc, errno, strerror(errno));
+                LOG_TRACE("cycle rc=%d, errno=%d, errstr=%s", rc, errno,
+                          strerror(errno));
             }
             goto exit;
         case 0:
@@ -457,7 +460,6 @@ exit:
 }
 
 int tc_iot_mqtt_yield(tc_iot_mqtt_client* c, int timeout_ms) {
-
     int rc = TC_IOT_SUCCESS;
     int left_ms = 0;
     tc_iot_timer timer;

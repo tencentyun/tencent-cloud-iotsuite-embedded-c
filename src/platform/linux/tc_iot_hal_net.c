@@ -5,7 +5,7 @@ extern "C" {
 #include "tc_iot_inc.h"
 
 int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
-                          int len, int timeout_ms) {
+                        int len, int timeout_ms) {
     struct timeval interval = {timeout_ms / 1000, (timeout_ms % 1000) * 1000};
     if (interval.tv_sec < 0 ||
         (interval.tv_sec == 0 && interval.tv_usec <= 0)) {
@@ -25,7 +25,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
             if (errno != EAGAIN && errno != EWOULDBLOCK) {
                 bytes = -1;
             }
-            //LOG_TRACE("recv errno=%d", errno);
+            // LOG_TRACE("recv errno=%d", errno);
             break;
         } else if (rc == 0) {
             bytes = 0;
@@ -38,7 +38,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
 }
 
 int tc_iot_hal_net_write(tc_iot_network_t* network, unsigned char* buffer,
-                           int len, int timeout_ms) {
+                         int len, int timeout_ms) {
     struct timeval tv;
 
     int socket_fd = network->net_context.fd;
@@ -72,7 +72,7 @@ static int net_prepare(void) {
 }
 
 int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
-                             uint16_t port) {
+                           uint16_t port) {
     int type = SOCK_STREAM;
     struct sockaddr_in address;
     int rc = -1;
@@ -126,7 +126,8 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
             if (rc == 0) {
                 network->net_context.is_connected = 1;
             } else {
-                LOG_ERROR("tcp connect return error: code=%d, msg=%s", errno, strerror(errno));
+                LOG_ERROR("tcp connect return error: code=%d, msg=%s", errno,
+                          strerror(errno));
                 rc = TC_IOT_NET_CONNECT_FAILED;
             }
         }
@@ -135,9 +136,8 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
     return rc;
 }
 
-int tc_iot_hal_net_is_connected(tc_iot_network_t* network)
-{
-    return network->net_context.is_connected; 
+int tc_iot_hal_net_is_connected(tc_iot_network_t* network) {
+    return network->net_context.is_connected;
 }
 
 int tc_iot_hal_net_disconnect(tc_iot_network_t* network) {
@@ -149,7 +149,6 @@ int tc_iot_hal_net_disconnect(tc_iot_network_t* network) {
 }
 
 int tc_iot_hal_net_destroy(tc_iot_network_t* network) {
-
     if (tc_iot_hal_net_is_connected(network)) {
         tc_iot_hal_net_disconnect(network);
     }
@@ -159,7 +158,7 @@ int tc_iot_hal_net_destroy(tc_iot_network_t* network) {
 }
 
 int tc_iot_hal_net_init(tc_iot_network_t* network,
-                    tc_iot_net_context_t* net_context) {
+                        tc_iot_net_context_t* net_context) {
     if (NULL == network) {
         return TC_IOT_NETWORK_PTR_NULL;
     }

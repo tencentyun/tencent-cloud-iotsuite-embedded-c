@@ -5,7 +5,7 @@ extern "C" {
 #include "tc_iot_inc.h"
 
 int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
-                            int len, int timeout_ms) {
+                        int len, int timeout_ms) {
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
     int read_len = 0;
     int ret = 0;
@@ -23,7 +23,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
                                len - read_len);
         if (ret > 0) {
             read_len += ret;
-            //LOG_TRACE("ret=%d, read_len=%d", ret, read_len);
+            // LOG_TRACE("ret=%d, read_len=%d", ret, read_len);
         } else if (ret == 0) {
             LOG_TRACE("server closed connection, read_len = %d", read_len);
             if (read_len > 0) {
@@ -46,17 +46,16 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             }
         } else {
             if (tc_iot_hal_timer_is_expired(&timer)) {
-                //LOG_TRACE("tls read timeout=%d", timeout_ms)
+                // LOG_TRACE("tls read timeout=%d", timeout_ms)
                 IOT_FUNC_EXIT_RC(read_len);
-            }else {
+            } else {
                 LOG_TRACE("tls_read unkownn ret=%d", ret);
             }
         }
-
     }
 
     if (read_len > 0) {
-        //LOG_TRACE("total read len = %d", read_len);
+        // LOG_TRACE("total read len = %d", read_len);
         IOT_FUNC_EXIT_RC(read_len);
     } else {
         LOG_TRACE("ssl read timeout");
@@ -65,7 +64,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
 }
 
 int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
-                             int len, int timeout_ms) {
+                         int len, int timeout_ms) {
     int written_len = 0;
     bool is_write_failed = false;
     int ret = 0;
@@ -78,7 +77,8 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
     tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
 
     while (written_len < len) {
-        ret = mbedtls_ssl_write(&(tls_data->ssl_context), buffer + written_len, len - written_len);
+        ret = mbedtls_ssl_write(&(tls_data->ssl_context), buffer + written_len,
+                                len - written_len);
         if (ret > 0) {
             written_len += ret;
             continue;
@@ -90,7 +90,7 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
             if (tc_iot_hal_timer_is_expired(&timer)) {
                 LOG_ERROR("mbedtls_ssl_write timeout");
                 IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_TIMEOUT);
-            }else {
+            } else {
             }
         }
     }
@@ -118,7 +118,7 @@ static int net_prepare(void) {
 }
 
 int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
-                               uint16_t port) {
+                           uint16_t port) {
     if (host) {
         network->net_context.host = host;
     }
@@ -255,15 +255,15 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
         ret = TC_IOT_SUCCESS;
     }
 
-/* #ifdef ENABLE_LOG_TRACE */
+    /* #ifdef ENABLE_LOG_TRACE */
     /* if (mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context)) != NULL) { */
-        /* info_buf[sizeof(info_buf) - 1] = '\0'; */
-        /* mbedtls_x509_crt_info( */
-            /* (char*)info_buf, sizeof(info_buf) - 1, "", */
-            /* mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context))); */
-        /* LOG_TRACE("peer cert info:%s\n", info_buf); */
+    /* info_buf[sizeof(info_buf) - 1] = '\0'; */
+    /* mbedtls_x509_crt_info( */
+    /* (char*)info_buf, sizeof(info_buf) - 1, "", */
+    /* mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context))); */
+    /* LOG_TRACE("peer cert info:%s\n", info_buf); */
     /* } */
-/* #endif */
+    /* #endif */
 
     return ret;
 }
@@ -308,7 +308,7 @@ int tc_iot_hal_tls_destroy(tc_iot_network_t* network) {
 }
 
 int tc_iot_hal_tls_init(tc_iot_network_t* network,
-                                  tc_iot_net_context_t* net_context) {
+                        tc_iot_net_context_t* net_context) {
     if (NULL == network) {
         return TC_IOT_NETWORK_PTR_NULL;
     }
@@ -349,10 +349,11 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     if (tls_config->root_ca_in_mem) {
         LOG_TRACE("Loading preset root CA cert...");
         ret = mbedtls_x509_crt_parse(&(tls_data->cacert),
-                                          tls_config->root_ca_in_mem, strlen(tls_config->root_ca_in_mem)+1);
+                                     tls_config->root_ca_in_mem,
+                                     strlen(tls_config->root_ca_in_mem) + 1);
         if (ret < 0) {
             LOG_ERROR(
-                "mbedtls_x509_crt_parse returned %d while parsing root cert " ,
+                "mbedtls_x509_crt_parse returned %d while parsing root cert ",
                 ret);
             return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
         }
@@ -365,7 +366,8 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
                                           tls_config->root_ca_location);
         if (ret < 0) {
             LOG_ERROR(
-                "mbedtls_x509_crt_parse_file returned %d while parsing root cert "
+                "mbedtls_x509_crt_parse_file returned %d while parsing root "
+                "cert "
                 "file: %s",
                 ret, tls_config->root_ca_location);
             return TC_IOT_X509_CRT_PARSE_FILE_FAILED;
@@ -392,7 +394,8 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
             &(tls_data->pkey), tls_config->device_private_key_location, "");
         if (ret != 0) {
             LOG_ERROR(
-                "mbedtls_pk_parse_keyfile returned %d while parsing private key "
+                "mbedtls_pk_parse_keyfile returned %d while parsing private "
+                "key "
                 "file: %s",
                 ret, tls_config->device_private_key_location);
             return TC_IOT_PK_PARSE_KEYFILE_FAILED;

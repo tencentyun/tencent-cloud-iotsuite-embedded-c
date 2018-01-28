@@ -4,12 +4,15 @@ extern "C" {
 
 #include "tc_iot_inc.h"
 
-#define TC_IOT_SHA256_I_S0(x) (x >> 7 | x << 25) ^ (x >> 18 | x << 14) ^ (x >> 3)
-#define TC_IOT_SHA256_I_S1(x) (x >> 17 | x << 15) ^ (x >> 19 | x << 13) ^ (x >> 10)
+#define TC_IOT_SHA256_I_S0(x) \
+    (x >> 7 | x << 25) ^ (x >> 18 | x << 14) ^ (x >> 3)
+#define TC_IOT_SHA256_I_S1(x) \
+    (x >> 17 | x << 15) ^ (x >> 19 | x << 13) ^ (x >> 10)
 
-#define TC_IOT_SHA256_M_S0(x) (x >> 2 | x << 30) ^ (x >> 13 | x << 19) ^ (x >> 22 | x << 10)
-#define TC_IOT_SHA256_M_S1(x) (x >> 6 | x << 26) ^ (x >> 11 | x << 21) ^ (x >> 25 | x << 7)
-
+#define TC_IOT_SHA256_M_S0(x) \
+    (x >> 2 | x << 30) ^ (x >> 13 | x << 19) ^ (x >> 22 | x << 10)
+#define TC_IOT_SHA256_M_S1(x) \
+    (x >> 6 | x << 26) ^ (x >> 11 | x << 21) ^ (x >> 25 | x << 7)
 
 static const uint32_t sha256_initial_state[TC_IOT_SHA256_STATE_SIZE] = {
     0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
@@ -46,7 +49,7 @@ static void tc_iot_sha256_update(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
     int index;
     int bits;
     uint32_t w[64], a, b, c, d, e, f, g, h;
-    uint32_t is0, is1, ms0,ms1;
+    uint32_t is0, is1, ms0, ms1;
     uint32_t ch, temp1, temp2, maj;
 
     if ((!p_sha) || (!buffer)) {
@@ -76,13 +79,13 @@ static void tc_iot_sha256_update(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
             p_sha->buffer[index / 4] |= *buffer << (24 - index % 4 * 8);
         }
         if (index == 64) {
-            memcpy(&w[0], &(p_sha->buffer[0]), 16*sizeof(uint32_t));
-            memset(&(p_sha->buffer[0]), 0, 16*sizeof(uint32_t));
+            memcpy(&w[0], &(p_sha->buffer[0]), 16 * sizeof(uint32_t));
+            memset(&(p_sha->buffer[0]), 0, 16 * sizeof(uint32_t));
 
             for (t = 16; t < 64; t++) {
-                is0 = TC_IOT_SHA256_I_S0(w[t-15]);
-                is1 = TC_IOT_SHA256_I_S1(w[t-2]);
-                w[t] = (is1 + w[t-7] + is0 + w[t-16]) & 0xFFFFFFFFU;
+                is0 = TC_IOT_SHA256_I_S0(w[t - 15]);
+                is1 = TC_IOT_SHA256_I_S1(w[t - 2]);
+                w[t] = (is1 + w[t - 7] + is0 + w[t - 16]) & 0xFFFFFFFFU;
             }
             a = p_sha->state[0];
             b = p_sha->state[1];
@@ -150,8 +153,7 @@ static void tc_iot_sha256_finish(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
     }
 }
 
-static void tc_iot_sha256_get(uint8_t *hash, const uint8_t *buffer,
-                              int len) {
+static void tc_iot_sha256_get(uint8_t *hash, const uint8_t *buffer, int len) {
     tc_iot_sha256_t sha;
     if (!hash) {
         return;

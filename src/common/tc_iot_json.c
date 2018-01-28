@@ -17,9 +17,10 @@ int tc_iot_jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 
 static void _trace_node(const char *prefix, const char *str,
                         const jsmntok_t *node) {
-    /* LOG_TRACE("---%s type=%d,start=%d,end=%d,size=%d,parent=%d\t %.*s", prefix, */
-              /* node->type, node->start, node->end, node->size, node->parent, */
-              /* node->end - node->start, str + node->start); */
+    /* LOG_TRACE("---%s type=%d,start=%d,end=%d,size=%d,parent=%d\t %.*s",
+     * prefix, */
+    /* node->type, node->start, node->end, node->size, node->parent, */
+    /* node->end - node->start, str + node->start); */
 }
 
 int tc_iot_jsoneq_len(const char *json, const jsmntok_t *tok, const char *s,
@@ -122,7 +123,8 @@ int tc_iot_unicode_to_utf8(char *output, int output_len, unsigned long code) {
     return 0;
 }
 
-int tc_iot_json_unescape(char *dest, int dest_len, const char *src, int src_len) {
+int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
+                         int src_len) {
     int index = 0;
     int ret;
     int dest_index = 0;
@@ -216,7 +218,7 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src, int src_len)
     return dest_index;
 }
 
-char * tc_iot_json_inline_escape(char *dest, int dest_len, const char *src) {
+char *tc_iot_json_inline_escape(char *dest, int dest_len, const char *src) {
     tc_iot_json_escape(dest, dest_len, src, strlen(src));
     return dest;
 }
@@ -225,11 +227,10 @@ int tc_iot_json_escape(char *dest, int dest_len, const char *src, int src_len) {
     int ret;
     int src_index;
     int dest_index;
-    
 
-    for (src_index = 0, dest_index = 0 ; 
-            src[src_index] && (src_index < src_len) && (dest_index < dest_len); 
-            src_index++) {
+    for (src_index = 0, dest_index = 0;
+         src[src_index] && (src_index < src_len) && (dest_index < dest_len);
+         src_index++) {
         switch (src[src_index]) {
             case '\b':
                 dest[dest_index++] = '\\';
@@ -261,7 +262,7 @@ int tc_iot_json_escape(char *dest, int dest_len, const char *src, int src_len) {
         }
     }
 
-    if (dest_index <= (dest_len-1)) {
+    if (dest_index <= (dest_len - 1)) {
         dest[dest_index] = '\0';
     }
     return dest_index;
@@ -279,7 +280,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
     int token_name_len = 0;
     char is_last = 0;
     int val_len = 0;
-    const char * pos;
+    const char *pos;
 
     IF_NULL_RETURN(json, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(root_token, TC_IOT_NULL_POINTER);
@@ -334,11 +335,13 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                     }
                     break;
                 } else {
-                    /* _trace_node("node name not match:", json, &root_token[tok_index]); */
+                    /* _trace_node("node name not match:", json,
+                     * &root_token[tok_index]); */
                 }
                 visited_child++;
             } else {
-                /* _trace_node("node parent not match:", json, &root_token[tok_index]); */
+                /* _trace_node("node parent not match:", json,
+                 * &root_token[tok_index]); */
             }
         }
 
@@ -353,37 +356,37 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
     }
 }
 
-DEFINE_TC_IOT_PROPERTY_FUNC(int8_t,  TC_IOT_INT8);
+DEFINE_TC_IOT_PROPERTY_FUNC(int8_t, TC_IOT_INT8);
 DEFINE_TC_IOT_PROPERTY_FUNC(int16_t, TC_IOT_INT16);
 DEFINE_TC_IOT_PROPERTY_FUNC(int32_t, TC_IOT_INT32);
-DEFINE_TC_IOT_PROPERTY_FUNC(uint8_t,  TC_IOT_UINT8);
+DEFINE_TC_IOT_PROPERTY_FUNC(uint8_t, TC_IOT_UINT8);
 DEFINE_TC_IOT_PROPERTY_FUNC(uint16_t, TC_IOT_UINT16);
 DEFINE_TC_IOT_PROPERTY_FUNC(uint32_t, TC_IOT_UINT32);
 DEFINE_TC_IOT_PROPERTY_FUNC(bool, TC_IOT_BOOL);
 DEFINE_TC_IOT_PROPERTY_FUNC(float, TC_IOT_FLOAT);
 DEFINE_TC_IOT_PROPERTY_FUNC(double, TC_IOT_DOUBLE);
 
-tc_iot_property tc_iot_property_ref(const char * key, void * ptr, tc_iot_type_e type, int length) { 
-    tc_iot_property prop; 
-    prop.key = key; 
-    prop.length = length; 
+tc_iot_property tc_iot_property_ref(const char *key, void *ptr,
+                                    tc_iot_type_e type, int length) {
+    tc_iot_property prop;
+    prop.key = key;
+    prop.length = length;
     prop.data.as_string = ptr;
-    prop.type = type; 
+    prop.type = type;
     return prop;
-} 
+}
 
-
-int _tc_iot_shadow_req_construct(char * buffer, int len, tc_iot_shadow_client * c, const char * method) {
+int _tc_iot_shadow_req_construct(char *buffer, int len, tc_iot_shadow_client *c,
+                                 const char *method) {
     return snprintf(buffer, len, "{\"method\":\"%s\"}", method);
 }
 
-
-int tc_iot_json_property_printf(char * buffer, int len, int count, ... ) {
-    int i ;
+int tc_iot_json_property_printf(char *buffer, int len, int count, ...) {
+    int i;
     va_list p_args;
-    tc_iot_property * temp = NULL;
+    tc_iot_property *temp = NULL;
     int buffer_used;
-    int ret ;
+    int ret;
 
     va_start(p_args, count);
 
@@ -393,8 +396,8 @@ int tc_iot_json_property_printf(char * buffer, int len, int count, ... ) {
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
-    for (i = 0 ; i < count; i++) {
-        temp = va_arg (p_args, tc_iot_property *);
+    for (i = 0; i < count; i++) {
+        temp = va_arg(p_args, tc_iot_property *);
         if (!temp) {
             return TC_IOT_NULL_POINTER;
         }
@@ -407,79 +410,89 @@ int tc_iot_json_property_printf(char * buffer, int len, int count, ... ) {
             return TC_IOT_NULL_POINTER;
         }
         if (i > 0) {
-            ret = tc_iot_hal_snprintf(buffer+buffer_used, len, ",");
+            ret = tc_iot_hal_snprintf(buffer + buffer_used, len, ",");
             buffer_used++;
             if (buffer_used >= len) {
                 return TC_IOT_BUFFER_OVERFLOW;
             }
         }
 
-        //LOG_TRACE("%d:buffer_used=%d, buffer_left=%d, key=%s, buffer=%s", i, buffer_used, len - buffer_used, temp->key, buffer);
+        // LOG_TRACE("%d:buffer_used=%d, buffer_left=%d, key=%s, buffer=%s", i,
+        // buffer_used, len - buffer_used, temp->key, buffer);
 
-        switch(temp->type) {
+        switch (temp->type) {
             case TC_IOT_INT8:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used, 
-                        "\"%s\":%d", temp->key, (int)temp->data.as_int8_t);
+                ret = tc_iot_hal_snprintf(buffer + buffer_used,
+                                          len - buffer_used, "\"%s\":%d",
+                                          temp->key, (int)temp->data.as_int8_t);
                 break;
             case TC_IOT_INT16:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used,len-buffer_used,
-                        "\"%s\":%d", temp->key, (int)temp->data.as_int16_t);
+                ret = tc_iot_hal_snprintf(
+                    buffer + buffer_used, len - buffer_used, "\"%s\":%d",
+                    temp->key, (int)temp->data.as_int16_t);
                 break;
             case TC_IOT_INT32:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                        "\"%s\":%d", temp->key, (int)temp->data.as_int32_t);
+                ret = tc_iot_hal_snprintf(
+                    buffer + buffer_used, len - buffer_used, "\"%s\":%d",
+                    temp->key, (int)temp->data.as_int32_t);
                 break;
             case TC_IOT_UINT8:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                        "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint8_t);
+                ret = tc_iot_hal_snprintf(
+                    buffer + buffer_used, len - buffer_used, "\"%s\":%u",
+                    temp->key, (unsigned int)temp->data.as_uint8_t);
                 break;
             case TC_IOT_UINT16:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                        "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint16_t);
+                ret = tc_iot_hal_snprintf(
+                    buffer + buffer_used, len - buffer_used, "\"%s\":%u",
+                    temp->key, (unsigned int)temp->data.as_uint16_t);
                 break;
             case TC_IOT_UINT32:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                        "\"%s\":%u", temp->key, (unsigned int)temp->data.as_uint32_t);
+                ret = tc_iot_hal_snprintf(
+                    buffer + buffer_used, len - buffer_used, "\"%s\":%u",
+                    temp->key, (unsigned int)temp->data.as_uint32_t);
                 break;
             case TC_IOT_FLOAT:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                        "\"%s\":%f", temp->key, temp->data.as_float);
+                ret = tc_iot_hal_snprintf(buffer + buffer_used,
+                                          len - buffer_used, "\"%s\":%f",
+                                          temp->key, temp->data.as_float);
                 break;
             case TC_IOT_DOUBLE:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                        "\"%s\":%f", temp->key, temp->data.as_double);
+                ret = tc_iot_hal_snprintf(buffer + buffer_used,
+                                          len - buffer_used, "\"%s\":%f",
+                                          temp->key, temp->data.as_double);
                 break;
             case TC_IOT_STRING:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                        "\"%s\":\"%.*s\"", temp->key, temp->length, temp->data.as_string);
+                ret = tc_iot_hal_snprintf(
+                    buffer + buffer_used, len - buffer_used, "\"%s\":\"%.*s\"",
+                    temp->key, temp->length, temp->data.as_string);
                 break;
             case TC_IOT_BOOL:
-                ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used,
-                        "\"%s\":%s", temp->key, temp->data.as_bool? "true":"false");
+                ret = tc_iot_hal_snprintf(
+                    buffer + buffer_used, len - buffer_used, "\"%s\":%s",
+                    temp->key, temp->data.as_bool ? "true" : "false");
                 break;
             default:
                 LOG_WARN("unknown data type=%d", temp->type);
                 return TC_IOT_FAILURE;
         }
 
-        buffer_used+=ret;
+        buffer_used += ret;
         if (buffer_used >= len) {
             return TC_IOT_BUFFER_OVERFLOW;
         }
     }
     va_end(p_args);
 
-    ret = tc_iot_hal_snprintf(buffer+buffer_used, len-buffer_used, "}");
+    ret = tc_iot_hal_snprintf(buffer + buffer_used, len - buffer_used, "}");
     buffer_used += ret;
     if (buffer_used >= len) {
         return TC_IOT_BUFFER_OVERFLOW;
-    }else if (buffer_used < len-1) {
+    } else if (buffer_used < len - 1) {
         buffer[buffer_used] = '\0';
     }
 
     return buffer_used;
 }
-
 
 #ifdef __cplusplus
 }
