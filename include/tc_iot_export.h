@@ -3,7 +3,13 @@
 
 #include "tc_iot_inc.h"
 
+/**
+ * @brief tc_iot_set_log_level 设置日志打印级别
+ *
+ * @param log_level 需要设置的日志级别，参见 TC_IOT_LogLevel
+ */
 void tc_iot_set_log_level(int log_level);
+
 int tc_iot_get_log_level();
 bool tc_iot_log_level_enabled(int log_level);
 
