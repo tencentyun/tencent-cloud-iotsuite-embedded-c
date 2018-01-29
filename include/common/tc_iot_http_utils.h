@@ -29,9 +29,11 @@ typedef struct _tc_iot_http_request {
     tc_iot_yabuffer_t buf;
 } tc_iot_http_request;
 
+
 int tc_iot_http_request_init(tc_iot_http_request* request, const char* method,
                              const char* abs_path, int abs_path_len,
                              const char* http_version);
+
 int tc_iot_http_request_append_header(tc_iot_http_request* request,
                                       const char* header, const char* val);
 int tc_iot_http_request_n_append_header(tc_iot_http_request* request,

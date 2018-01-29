@@ -160,12 +160,13 @@ tc_iot_log.h 的引用(Include)关系图:</div>
 <tr class="separator:add82efa459e0af380b68522c29b9fd44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4a9117ce894e3319e903142347a0f63"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__log_8h.html#ad4a9117ce894e3319e903142347a0f63">LOG_ERROR</a>(...)</td></tr>
 <tr class="separator:ad4a9117ce894e3319e903142347a0f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0929e7b2b643a94ddeea4863983c499d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__log_8h.html#a0929e7b2b643a94ddeea4863983c499d">LOG_CRIT</a>(...)</td></tr>
-<tr class="separator:a0929e7b2b643a94ddeea4863983c499d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89cecd05aeaafc715ebc091cf74d10fe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__log_8h.html#a89cecd05aeaafc715ebc091cf74d10fe">LOG_FATAL</a>(...)</td></tr>
+<tr class="separator:a89cecd05aeaafc715ebc091cf74d10fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 类型定义</h2></td></tr>
 <tr class="memitem:a30b9363d110f0613cca8e8b4241b737b"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97">_tc_iot_log_level_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__log_8h.html#a30b9363d110f0613cca8e8b4241b737b">tc_iot_log_level_e</a></td></tr>
+<tr class="memdesc:a30b9363d110f0613cca8e8b4241b737b"><td class="mdescLeft">&#160;</td><td class="mdescRight">日志等级 TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL &lt; OFF  <a href="#a30b9363d110f0613cca8e8b4241b737b">更多...</a><br /></td></tr>
 <tr class="separator:a30b9363d110f0613cca8e8b4241b737b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -177,9 +178,11 @@ tc_iot_log.h 的引用(Include)关系图:</div>
 <a class="el" href="tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97ad0521eabd72cba4c43ab63239b6d0b3f">TC_IOT_LOG_WARN</a> = 3, 
 <br />
 &#160;&#160;<a class="el" href="tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97ad198444e989dedb2587252ca83e7e9a3">TC_IOT_LOG_ERROR</a> = 4, 
-<a class="el" href="tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97ad86646c1093a5152e72d94ebaf7f7cae">TC_IOT_LOG_CRIT</a> = 5
+<a class="el" href="tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97a1a0c8fe0b239fad818e911f88e0bf7f3">TC_IOT_LOG_FATAL</a> = 5, 
+<a class="el" href="tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97a567a33ec06ea4eb631782ba5216721b3">TC_IOT_LOG_OFF</a> = 6
 <br />
- }</td></tr>
+ }<tr class="memdesc:aa05f46043c8218c9fa10658610f7be97"><td class="mdescLeft">&#160;</td><td class="mdescRight">日志等级 TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL &lt; OFF  <a href="tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97">更多...</a><br /></td></tr>
+</td></tr>
 <tr class="separator:aa05f46043c8218c9fa10658610f7be97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -232,22 +235,6 @@ tc_iot_log.h 的引用(Include)关系图:</div>
 
 </div>
 </div>
-<a class="anchor" id="a0929e7b2b643a94ddeea4863983c499d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define LOG_CRIT</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a754b3d074e0af4ad3c7b918dd77ecb2d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -270,6 +257,22 @@ tc_iot_log.h 的引用(Include)关系图:</div>
       <table class="memname">
         <tr>
           <td class="memname">#define LOG_ERROR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a89cecd05aeaafc715ebc091cf74d10fe"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LOG_FATAL</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>...</em></td><td>)</td>
@@ -339,6 +342,8 @@ tc_iot_log.h 的引用(Include)关系图:</div>
       </table>
 </div><div class="memdoc">
 
+<p>日志等级 TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL &lt; OFF </p>
+
 </div>
 </div>
 <h2 class="groupheader">枚举类型说明</h2>
@@ -351,18 +356,29 @@ tc_iot_log.h 的引用(Include)关系图:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>日志等级 TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL &lt; OFF </p>
 <table class="fieldtable">
 <tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a class="anchor" id="aa05f46043c8218c9fa10658610f7be97aa2e02e3849ae5491e6114bf368345c21"></a>TC_IOT_LOG_TRACE&#160;</td><td class="fielddoc">
+<p>输出各类详细过程及输入输出信息 </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="aa05f46043c8218c9fa10658610f7be97af3e801767c03794d3c1e7da5add2773c"></a>TC_IOT_LOG_DEBUG&#160;</td><td class="fielddoc">
+<p>输出应用调试信息 </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="aa05f46043c8218c9fa10658610f7be97ac767bb9675af8d0e0b27c0853e2cbe42"></a>TC_IOT_LOG_INFO&#160;</td><td class="fielddoc">
+<p>输出从粗粒度上，描述了应用运行过程 </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="aa05f46043c8218c9fa10658610f7be97ad0521eabd72cba4c43ab63239b6d0b3f"></a>TC_IOT_LOG_WARN&#160;</td><td class="fielddoc">
+<p>输出潜在的有害状况，需要及时关注 </p>
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="aa05f46043c8218c9fa10658610f7be97ad198444e989dedb2587252ca83e7e9a3"></a>TC_IOT_LOG_ERROR&#160;</td><td class="fielddoc">
+<p>输出错误事件，但应用可能还能继续运行 </p>
 </td></tr>
-<tr><td class="fieldname"><a class="anchor" id="aa05f46043c8218c9fa10658610f7be97ad86646c1093a5152e72d94ebaf7f7cae"></a>TC_IOT_LOG_CRIT&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><a class="anchor" id="aa05f46043c8218c9fa10658610f7be97a1a0c8fe0b239fad818e911f88e0bf7f3"></a>TC_IOT_LOG_FATAL&#160;</td><td class="fielddoc">
+<p>输出非常严重的错误事件，可能会导致应用终止执行 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="aa05f46043c8218c9fa10658610f7be97a567a33ec06ea4eb631782ba5216721b3"></a>TC_IOT_LOG_OFF&#160;</td><td class="fielddoc">
+<p>关闭所有日志 </p>
 </td></tr>
 </table>
 

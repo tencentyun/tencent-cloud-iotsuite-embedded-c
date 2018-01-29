@@ -21,7 +21,7 @@ const static char decoding_table[256] = {
 
 const static int mod_table[] = {0, 2, 1};
 
-int tc_base64_encode(const unsigned char *data, int input_length,
+int tc_iot_base64_encode(const unsigned char *data, int input_length,
                      char *output_data, int max_output_len) {
 
     int i;
