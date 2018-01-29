@@ -1,7 +1,15 @@
 #ifndef IOT_CONST_01091047_H
 #define IOT_CONST_01091047_H
 
+/**
+ * @brief 系统常见错误码定义
+ */
 typedef enum _tc_iot_sys_code_e {
+
+    /**
+     * @name TC_IOT_SUCCESS
+     * @{ */
+    /**  @} */
     TC_IOT_SUCCESS = 0,
     TC_IOT_FAILURE = -90,
     TC_IOT_INVALID_PARAMETER = -91,

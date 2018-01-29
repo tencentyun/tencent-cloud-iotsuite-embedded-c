@@ -3,18 +3,23 @@
 
 #include "tc_iot_inc.h"
 
-typedef enum _TC_IOT_LogLevel {
+
+/**
+ * @brief 日志等级  TRACE < DEBUG < INFO < WARN < ERROR < CRIT < OFF
+ */
+typedef enum _tc_iot_log_level_e{
     TC_IOT_LOG_TRACE = 0,
     TC_IOT_LOG_DEBUG = 1,
     TC_IOT_LOG_INFO = 2,
     TC_IOT_LOG_WARN = 3,
     TC_IOT_LOG_ERROR = 4,
     TC_IOT_LOG_CRIT = 5,
-} TC_IOT_LogLevel;
+    TC_IOT_LOG_OFF  = 6,
+} tc_iot_log_level_e;
 
-void tc_iot_set_log_level(int log_level);
-int tc_iot_get_log_level();
-bool tc_iot_log_level_enabled(int log_level);
+void tc_iot_set_log_level(tc_iot_log_level_e log_level);
+tc_iot_log_level_e tc_iot_get_log_level();
+char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 
 #ifdef ENABLE_LOG_TRACE
 #define LOG_TRACE(...)                                             \
