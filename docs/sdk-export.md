@@ -1,5 +1,5 @@
 # SDK接口说明
-以下是 v1.0.0 版本 C SDK 提供的功能和对应 API，用于客户编写业务逻辑，更加详细的说明请查看 include/tc_iot_export.h 中的注释。
+以下是 v1.0.0 版本 C SDK 提供的功能和对应 API，用于客户编写业务逻辑，更加详细的说明请查看 [include/tc_iot_export.h](https://tencentyun.github.io/tencent-cloud-iotsuite-embedded-c/sdk/tc__iot__export_8h.html) 中的注释。
 
 ## 1. 日志接口
 
