@@ -87,7 +87,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     tc_iot_mqtt_client client;
     tc_iot_mqtt_client* p_client = &client;
     tc_iot_mqtt_client_construct(p_client, p_client_config);
-    int ret = tc_iot_mqtt_client_subscribe(p_client, sub_topic, QOS1,
+    int ret = tc_iot_mqtt_client_subscribe(p_client, sub_topic, TC_IOT_QOS1,
                                            _on_message_received);
     int timeout = 2000;
     tc_iot_mqtt_client_yield(p_client, timeout);
@@ -99,7 +99,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
         memset(&pubmsg, '\0', sizeof(pubmsg));
         pubmsg.payload = action_get;
         pubmsg.payloadlen = strlen(pubmsg.payload);
-        pubmsg.qos = QOS1;
+        pubmsg.qos = TC_IOT_QOS1;
         pubmsg.retained = 0;
         pubmsg.dup = 0;
         tc_iot_hal_printf("[c->s] shadow_get\n");

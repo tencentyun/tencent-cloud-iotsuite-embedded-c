@@ -3,18 +3,23 @@
 
 #include "tc_iot_inc.h"
 
-typedef enum _TC_IOT_LogLevel {
-    TC_IOT_LOG_TRACE = 0,
-    TC_IOT_LOG_DEBUG = 1,
-    TC_IOT_LOG_INFO = 2,
-    TC_IOT_LOG_WARN = 3,
-    TC_IOT_LOG_ERROR = 4,
-    TC_IOT_LOG_CRIT = 5,
-} TC_IOT_LogLevel;
 
-void tc_iot_set_log_level(int log_level);
-int tc_iot_get_log_level();
-bool tc_iot_log_level_enabled(int log_level);
+/**
+ * @brief 日志等级  TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
+ */
+typedef enum _tc_iot_log_level_e{
+    TC_IOT_LOG_TRACE = 0, /**< 输出各类详细过程及输入输出信息 */
+    TC_IOT_LOG_DEBUG = 1, /**< 输出应用调试信息 */
+    TC_IOT_LOG_INFO = 2,  /**< 输出从粗粒度上，描述了应用运行过程 */
+    TC_IOT_LOG_WARN = 3,  /**< 输出潜在的有害状况，需要及时关注 */
+    TC_IOT_LOG_ERROR = 4, /**< 输出错误事件，但应用可能还能继续运行 */
+    TC_IOT_LOG_FATAL = 5, /**< 输出非常严重的错误事件，可能会导致应用终止执行 */
+    TC_IOT_LOG_OFF  = 6,  /**< 关闭所有日志*/
+} tc_iot_log_level_e;
+
+void tc_iot_set_log_level(tc_iot_log_level_e log_level);
+tc_iot_log_level_e tc_iot_get_log_level();
+char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 
 #ifdef ENABLE_LOG_TRACE
 #define LOG_TRACE(...)                                             \
@@ -97,16 +102,16 @@ bool tc_iot_log_level_enabled(int log_level);
 #define LOG_ERROR(...)
 #endif
 
-#ifdef ENABLE_LOG_CRIT
-#define LOG_CRIT(...)                                             \
-    if (tc_iot_log_level_enabled(TC_IOT_LOG_CRIT)){               \
-        tc_iot_hal_printf("CRIT %s:%d ", __FUNCTION__, __LINE__); \
+#ifdef ENABLE_LOG_FATAL
+#define LOG_FATAL(...)                                             \
+    if (tc_iot_log_level_enabled(TC_IOT_LOG_FATAL)){               \
+        tc_iot_hal_printf("FATAL %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                           \
         tc_iot_hal_printf("\n");                                  \
     }
 
 #else
-#define LOG_CRIT(...)
+#define LOG_FATAL(...)
 #endif
 
 #endif /* end of include guard */

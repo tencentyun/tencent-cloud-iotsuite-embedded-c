@@ -7,7 +7,7 @@ add_definitions(-DENABLE_LOG_TRACE)
 add_definitions(-DENABLE_LOG_DEBUG)
 add_definitions(-DENABLE_LOG_WARN)
 add_definitions(-DENABLE_LOG_ERROR)
-add_definitions(-DENABLE_LOG_CRIT)
+add_definitions(-DENABLE_LOG_FATAL)
 
 message(STATUS "CMake version: " ${CMAKE_VERSION})
 message(STATUS "CMake system name: " ${CMAKE_SYSTEM_NAME})

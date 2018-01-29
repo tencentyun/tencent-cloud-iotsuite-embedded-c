@@ -30,7 +30,7 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
         msg_handler = _on_message_receved;
     }
 
-    int rc = tc_iot_mqtt_client_subscribe(p_mqtt_client, p_cfg->sub_topic, QOS1,
+    int rc = tc_iot_mqtt_client_subscribe(p_mqtt_client, p_cfg->sub_topic, TC_IOT_QOS1,
                                           msg_handler);
     if (TC_IOT_SUCCESS == rc) {
         LOG_TRACE("Subscribing to %s success.", p_cfg->sub_topic);
@@ -65,7 +65,7 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c) {
     memset(&pubmsg, 0, sizeof(pubmsg));
     pubmsg.payload = action_get;
     pubmsg.payloadlen = strlen(pubmsg.payload);
-    pubmsg.qos = QOS1;
+    pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
     LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
@@ -86,7 +86,7 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char *p_json) {
     memset(&pubmsg, 0, sizeof(pubmsg));
     pubmsg.payload = p_json;
     pubmsg.payloadlen = strlen(pubmsg.payload);
-    pubmsg.qos = QOS1;
+    pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
     LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
@@ -106,7 +106,7 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char *p_json) {
     memset(&pubmsg, 0, sizeof(pubmsg));
     pubmsg.payload = p_json;
     pubmsg.payloadlen = strlen(pubmsg.payload);
-    pubmsg.qos = QOS1;
+    pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
     LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,

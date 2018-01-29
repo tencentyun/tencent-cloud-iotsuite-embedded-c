@@ -215,7 +215,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
 
         return TC_IOT_SUCCESS;
     } else {
-        return ERROR_HTTP_REQUEST_FAILED;
+        return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
     }
 }
 

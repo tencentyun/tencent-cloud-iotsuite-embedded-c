@@ -9,15 +9,15 @@ TEST(testbase64, test_base64_encode)
     char output[1024];
     int buffer_len = sizeof(output);
     int ret;
-    ret = tc_base64_encode((const unsigned char *)base64_in, strlen(base64_in), NULL, buffer_len);
+    ret = tc_iot_base64_encode((const unsigned char *)base64_in, strlen(base64_in), NULL, buffer_len);
     CHECK_EQUAL(TC_IOT_NULL_POINTER, ret);
-    ret = tc_base64_encode((const unsigned char *)NULL, strlen(base64_in), NULL, buffer_len);
+    ret = tc_iot_base64_encode((const unsigned char *)NULL, strlen(base64_in), NULL, buffer_len);
     CHECK_EQUAL(TC_IOT_NULL_POINTER, ret);
-    ret = tc_base64_encode((const unsigned char *)base64_in, strlen(base64_in), output, 0);
+    ret = tc_iot_base64_encode((const unsigned char *)base64_in, strlen(base64_in), output, 0);
     CHECK_EQUAL(TC_IOT_INVALID_PARAMETER, ret);
 
     memset(output, 0, buffer_len);
-    ret = tc_base64_encode((const unsigned char *)base64_in, strlen(base64_in), output, buffer_len);
+    ret = tc_iot_base64_encode((const unsigned char *)base64_in, strlen(base64_in), output, buffer_len);
     CHECK_EQUAL(strlen(output), ret);
     STRCMP_EQUAL(output, base64_out);
 } 

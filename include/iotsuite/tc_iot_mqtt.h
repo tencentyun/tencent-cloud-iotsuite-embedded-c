@@ -7,11 +7,20 @@
 #define MAX_MESSAGE_HANDLERS 5
 
 typedef enum _tc_iot_mqtt_qos_e {
-    QOS0 = 0,
-    QOS1 = 1,
-    QOS2 = 2,
-    SUBFAIL = 0x80,
+    TC_IOT_QOS0 = 0,
+    TC_IOT_QOS1 = 1,
+    TC_IOT_QOS2 = 2,
+    TC_IOT_SUBFAIL = 0x80,
 } tc_iot_mqtt_qos_e;
+
+typedef enum _tc_iot_mqtt_conn_ack_e {
+    TC_IOT_CONN_SUCCESS = 0,
+    TC_IOT_CONN_PROTOCOL_UNACCEPTABLE = 1,
+    TC_IOT_CONN_CLIENT_ID_INVALID = 2,
+    TC_IOT_CONN_SERVICE_UNAVAILABLE = 3,
+    TC_IOT_CONN_BAD_USER_OR_PASSWORD = 4,
+    TC_IOT_CONN_NOT_AUTHORIZED = 5,
+} tc_iot_mqtt_conn_ack_e;
 
 typedef struct _tc_iot_mqtt_message {
     tc_iot_mqtt_qos_e qos;

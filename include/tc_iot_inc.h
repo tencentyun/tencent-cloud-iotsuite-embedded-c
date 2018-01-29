@@ -1,5 +1,5 @@
-#ifndef IOT_INC_01091040_H
-#define IOT_INC_01091040_H
+#ifndef TC_IOT_INC_H
+#define TC_IOT_INC_H
 
 #include "tc_iot_external.h"
 

@@ -1,6 +1,7 @@
 #ifndef TC_IOT_CONFIG_01181534_H
 #define TC_IOT_CONFIG_01181534_H
 
+
 /* mqtt消息接收缓冲区长度 */
 #define TC_IOT_CLIENT_SEND_BUF_SIZE 1024
 /* mqtt消息发送缓冲区长度 */

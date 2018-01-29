@@ -392,11 +392,11 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
             }
             msg.qos = (tc_iot_mqtt_qos_e)intQoS;
             deliverMessage(c, &topicName, &msg);
-            if (msg.qos != QOS0) {
-                if (msg.qos == QOS1) {
+            if (msg.qos != TC_IOT_QOS0) {
+                if (msg.qos == TC_IOT_QOS1) {
                     len = MQTTSerialize_ack(c->buf, c->buf_size, PUBACK, 0,
                                             msg.id);
-                } else if (msg.qos == QOS2) {
+                } else if (msg.qos == TC_IOT_QOS2) {
                     len = MQTTSerialize_ack(c->buf, c->buf_size, PUBREC, 0,
                                             msg.id);
                 }
@@ -721,7 +721,7 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
     if (waitfor(c, SUBACK, &timer) == SUBACK) {
         int count = 0;
         unsigned short mypacketid;
-        data->grantedQoS = QOS0;
+        data->grantedQoS = TC_IOT_QOS0;
         if (MQTTDeserialize_suback(&mypacketid, 1, &count,
                                    (int*)&data->grantedQoS, c->readbuf,
                                    c->readbuf_size) == 1) {
@@ -832,7 +832,7 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, c->command_timeout_ms);
 
-    if (message->qos == QOS1 || message->qos == QOS2) {
+    if (message->qos == TC_IOT_QOS1 || message->qos == TC_IOT_QOS2) {
         message->id = _get_next_pack_id(c);
     }
 
@@ -848,7 +848,7 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
         goto exit;
     }
 
-    if (message->qos == QOS1) {
+    if (message->qos == TC_IOT_QOS1) {
         if (waitfor(c, PUBACK, &timer) == PUBACK) {
             unsigned short mypacketid;
             unsigned char dup, type;
@@ -860,7 +860,7 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
             LOG_TRACE("waitfor PUBACK timeout");
             rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
         }
-    } else if (message->qos == QOS2) {
+    } else if (message->qos == TC_IOT_QOS2) {
         if (waitfor(c, PUBCOMP, &timer) == PUBCOMP) {
             unsigned short mypacketid;
             unsigned char dup, type;

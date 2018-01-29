@@ -1,0 +1,16 @@
+# Doxyfile 1.8.15
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "tencent-cloud-iotsuite-embedded-c"
+PROJECT_NUMBER         = 1
+PROJECT_BRIEF          = tencent-cloud-iotsuite-embedded-c SDK document.
+INPUT                  = include
+RECURSIVE              = YES
+
+OUTPUT_DIRECTORY       = doc
+
+OUTPUT_LANGUAGE        = Chinese
+
+OPTIMIZE_OUTPUT_FOR_C  = YES
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+EXTRACT_ALL            = YES
