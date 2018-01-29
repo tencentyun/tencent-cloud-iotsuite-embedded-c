@@ -13,7 +13,7 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 
 1. 安装cmake工具 [http://www.cmake.org/download/](http://www.cmake.org/download/) 
 2. 从控制台创建产品和设备，获取对应的 MQTT Server Host、Product ID、DeviceName、DeviceSecret，详情请登录[物联云平台控制台](https://console.qcloud.com/iotsuite/product)。
-3. 打开 samples/linux/mqtt/tc_iot_device_config.h ，配置文件，配置设备参数：
+3. 打开 samples/linux/tc_iot_device_config.h ，配置文件，配置设备参数：
 ```c
 /************************************************************************/
 /**********************************必填项********************************/
@@ -39,10 +39,6 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 /************************************************************************/
 ```
 
-4. 同步mqtt的配置到shadow：
-```shell
-cp samples/linux/mqtt/tc_iot_device_config.h samples/linux/shaodow/tc_iot_device_config.h
-```
 
 ### 编译及运行
 1. 执行下面的命令，编译示例程序：
@@ -59,7 +55,7 @@ make
 
 ```shell
 bin
-|-- demo_auth_mqtt_client   # MQTT 连接云服务演示程序
+|-- demo_mqtt               # MQTT 连接云服务演示程序
 |-- demo_shadow             # Shadow 影子设备操作演示程序
 lib
 |-- libtc_iot_suite.a       # SDK 的核心层, libtc_iot_hal、libtc_iot_common 提供连接云服务的能力
@@ -73,7 +69,7 @@ lib
 cd bin
 
 # 运行demo程序
-./demo_auth_mqtt_client
+./demo_mqtt
 # or
 ./demo_shadow
 
