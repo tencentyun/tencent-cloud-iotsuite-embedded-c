@@ -5,12 +5,13 @@ PROJECT_NUMBER         = 1
 PROJECT_BRIEF          = tencent-cloud-iotsuite-embedded-c SDK document.
 INPUT                  = include
 RECURSIVE              = YES
+HAVEDOT                = NO
 
-OUTPUT_DIRECTORY       = doc
-
+OUTPUT_DIRECTORY       = docs
 OUTPUT_LANGUAGE        = Chinese
 
 OPTIMIZE_OUTPUT_FOR_C  = YES
 GENERATE_HTML          = YES
+HTML_OUTPUT            = sdk
 GENERATE_LATEX         = NO
 EXTRACT_ALL            = YES

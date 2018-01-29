@@ -184,22 +184,22 @@ int tc_iot_shadow_get(tc_iot_shadow_client *p_shadow_client);
  * @brief tc_iot_shadow_update 异步方式更新设备影子文档
  *
  * @param  p_shadow_client 设备影子对象
- * @param  pJsonDoc 更新文档请求包
+ * @param  p_json 更新文档请求包
  *
  * @return 结果返回码 
  * @see tc_iot_sys_code_e
  */
-int tc_iot_shadow_update(tc_iot_shadow_client *p_shadow_client, char *pJsonDoc);
+int tc_iot_shadow_update(tc_iot_shadow_client *p_shadow_client, char * p_json);
 
 /**
  * @brief tc_iot_shadow_delete 异步方式删除设备影子文档中的属性
  *
  * @param  p_shadow_client 设备影子对象
- * @param  pJsonDoc 删除请求包
+ * @param  p_json 删除请求包
  *
  * @return 结果返回码 
  * @see tc_iot_sys_code_e
  */
-int tc_iot_shadow_delete(tc_iot_shadow_client *p_shadow_client, char *pJsonDoc);
+int tc_iot_shadow_delete(tc_iot_shadow_client *p_shadow_client, char * p_json);
 
 #endif /* end of include guard */

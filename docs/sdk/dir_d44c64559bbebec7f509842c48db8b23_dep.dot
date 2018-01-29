@@ -1,0 +1,15 @@
+digraph "include" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_d44c64559bbebec7f509842c48db8b23 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_d44c64559bbebec7f509842c48db8b23.html"];
+    dir_d44c64559bbebec7f509842c48db8b23 [shape=plaintext label="include"];
+    dir_0966d06610f72609fd9aa4979c2b5a92 [shape=box label="common" color="black" fillcolor="white" style="filled" URL="dir_0966d06610f72609fd9aa4979c2b5a92.html"];
+    dir_0d3828895224ab6d23844886dc9f942e [shape=box label="iotsuite" color="black" fillcolor="white" style="filled" URL="dir_0d3828895224ab6d23844886dc9f942e.html"];
+    dir_ac186d3e8926949364e5821f25491cc3 [shape=box label="platform" color="red" fillcolor="white" style="filled" URL="dir_ac186d3e8926949364e5821f25491cc3.html"];
+  }
+  dir_d44c64559bbebec7f509842c48db8b23->dir_ac186d3e8926949364e5821f25491cc3 [headlabel="4", labeldistance=1.5 headhref="dir_000000_000003.html"];
+  dir_d44c64559bbebec7f509842c48db8b23->dir_0d3828895224ab6d23844886dc9f942e [headlabel="5", labeldistance=1.5 headhref="dir_000000_000002.html"];
+  dir_d44c64559bbebec7f509842c48db8b23->dir_0966d06610f72609fd9aa4979c2b5a92 [headlabel="9", labeldistance=1.5 headhref="dir_000000_000001.html"];
+}
