@@ -1,5 +1,5 @@
-#ifndef IOT_DEVICE_CONFIG_H
-#define IOT_DEVICE_CONFIG_H
+#ifndef TC_IOT_DEVICE_CONFIG_H
+#define TC_IOT_DEVICE_CONFIG_H
 
 // 服务端获取动态username和password接口，
 // 此项配置一般固定不变，无需修改。

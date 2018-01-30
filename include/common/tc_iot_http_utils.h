@@ -1,5 +1,5 @@
-#ifndef IOT_HTTP_UTILS_01111941_H
-#define IOT_HTTP_UTILS_01111941_H
+#ifndef IOT_HTTP_UTILS_H
+#define IOT_HTTP_UTILS_H
 
 #include "tc_iot_inc.h"
 

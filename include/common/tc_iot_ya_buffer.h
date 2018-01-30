@@ -1,5 +1,5 @@
-#ifndef IOT_YA_BUFFER_01091046_H
-#define IOT_YA_BUFFER_01091046_H
+#ifndef TC_IOT_YA_BUFFER_H
+#define TC_IOT_YA_BUFFER_H
 
 typedef struct _tc_iot_yabuffer_t {
     char* data;

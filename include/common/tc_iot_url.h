@@ -1,5 +1,5 @@
-#ifndef IOT_URL_01091046_H
-#define IOT_URL_01091046_H
+#ifndef TC_IOT_URL_H
+#define TC_IOT_URL_H
 
 int tc_iot_url_encode(const char* input, int input_len, char* output,
                       int max_output_len);

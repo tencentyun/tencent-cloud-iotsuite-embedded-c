@@ -1,5 +1,5 @@
-#ifndef IOT_JSON_01121520_H
-#define IOT_JSON_01121520_H
+#ifndef TC_IOT_JSON_H
+#define TC_IOT_JSON_H
 
 #include "tc_iot_inc.h"
 

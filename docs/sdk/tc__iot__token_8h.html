@@ -97,6 +97,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <div class="dyncontent">
 <div class="center"><img src="tc__iot__token_8h__dep__incl.png" border="0" usemap="#include_2iotsuite_2tc__iot__token_8hdep" alt=""/></div>
 <map name="include_2iotsuite_2tc__iot__token_8hdep" id="include_2iotsuite_2tc__iot__token_8hdep">
+<area shape="rect" id="node2" href="tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="680,95,815,121"/>
+<area shape="rect" id="node3" href="tc__iot__http__utils_8h.html" title="include/common/tc_iot\l_http_utils.h" alt="" coords="5,169,159,211"/>
+<area shape="rect" id="node4" href="tc__iot__json_8h.html" title="include/common/tc_iot\l_json.h" alt="" coords="183,169,336,211"/>
+<area shape="rect" id="node5" href="tc__iot__log_8h.html" title="include/common/tc_iot\l_log.h" alt="" coords="360,169,513,211"/>
+<area shape="rect" id="node6" href="tc__iot__client_8h.html" title="include/iotsuite/tc\l_iot_client.h" alt="" coords="537,169,661,211"/>
+<area shape="rect" id="node7" href="tc__iot__mqtt_8h.html" title="include/iotsuite/tc\l_iot_mqtt.h" alt="" coords="685,169,809,211"/>
+<area shape="rect" id="node8" href="tc__iot__hal__network_8h.html" title="include/platform/tc\l_iot_hal_network.h" alt="" coords="833,169,963,211"/>
+<area shape="rect" id="node9" href="tc__iot__hal__os_8h.html" title="include/platform/tc\l_iot_hal_os.h" alt="" coords="987,169,1116,211"/>
+<area shape="rect" id="node10" href="tc__iot__hal__timer_8h.html" title="include/platform/tc\l_iot_hal_timer.h" alt="" coords="1140,169,1269,211"/>
+<area shape="rect" id="node11" href="tc__iot__export_8h.html" title="include/tc_iot_export.h" alt="" coords="1293,177,1447,203"/>
 </map>
 </div>
 </div>
@@ -105,6 +115,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
 <tr class="memitem:aa130d77e04e1e7cec69b8091b454944c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__token_8h.html#aa130d77e04e1e7cec69b8091b454944c">http_refresh_auth_token</a> (const char *api_url, char *root_ca_path, <a class="el" href="tc__iot__mqtt_8h.html#a5b9f545868639f4d9b5529ebb5a491cc">tc_iot_device_info</a> *p_device_info)</td></tr>
+<tr class="memdesc:aa130d77e04e1e7cec69b8091b454944c"><td class="mdescLeft">&#160;</td><td class="mdescRight">http_refresh_auth_token 请求 MQTT 访问服务端动态用户名和密码  <a href="#aa130d77e04e1e7cec69b8091b454944c">更多...</a><br /></td></tr>
 <tr class="separator:aa130d77e04e1e7cec69b8091b454944c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">函数说明</h2>
@@ -137,6 +148,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>http_refresh_auth_token 请求 MQTT 访问服务端动态用户名和密码 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">api_url</td><td>请求接口的地址 </td></tr>
+    <tr><td class="paramname">root_ca_path</td><td>额外加载证书地址，一般填 NULL 即可 </td></tr>
+    <tr><td class="paramname">p_device_info</td><td>设备信息，请求成功后，会自动更新该对象的 username 和 password 成员数据</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>结果返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
 
 </div>
 </div>

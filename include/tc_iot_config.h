@@ -1,5 +1,5 @@
-#ifndef TC_IOT_CONFIG_01181534_H
-#define TC_IOT_CONFIG_01181534_H
+#ifndef TC_IOT_CONFIG_H
+#define TC_IOT_CONFIG_H
 
 
 /* mqtt消息接收缓冲区长度 */

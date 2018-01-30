@@ -1,5 +1,5 @@
-#ifndef IOT_LOG_H
-#define IOT_LOG_H
+#ifndef TC_IOT_LOG_H
+#define TC_IOT_LOG_H
 
 #include "tc_iot_inc.h"
 

@@ -1,5 +1,5 @@
-#ifndef IOT_CONST_01091047_H
-#define IOT_CONST_01091047_H
+#ifndef IOT_CONST_H
+#define IOT_CONST_H
 
 /**
  * @brief 系统常见错误码定义，基本定义原则：

@@ -1,5 +1,5 @@
-#ifndef SYS_TIMER_01091118_H
-#define SYS_TIMER_01091118_H
+#ifndef TC_IOT_HAL_TIMER_H
+#define TC_IOT_HAL_TIMER_H
 
 #include "tc_iot_inc.h"
 

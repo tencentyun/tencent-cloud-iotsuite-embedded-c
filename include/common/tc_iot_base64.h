@@ -1,5 +1,5 @@
-#ifndef IOT_BASE64_01091047_H
-#define IOT_BASE64_01091047_H
+#ifndef IOT_BASE64_H
+#define IOT_BASE64_H
 
 
 /**
