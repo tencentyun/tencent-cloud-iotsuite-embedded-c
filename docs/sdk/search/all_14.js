@@ -193,7 +193,6 @@ var searchData=
   ['tc_5fiot_5fsuccess',['TC_IOT_SUCCESS',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca639ffe4d6e21bc6dbfb785a9395e397a',1,'tc_iot_const.h']]],
   ['tc_5fiot_5fsys_5fcode_5fe',['tc_iot_sys_code_e',['../tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6',1,'tc_iot_const.h']]],
   ['tc_5fiot_5ftimer',['tc_iot_timer',['../structtc__iot__timer.html',1,'tc_iot_timer'],['../tc__iot__platform_8h.html#a34bee198dbb84acc8e38e16c2f449baf',1,'tc_iot_timer():&#160;tc_iot_platform.h'],['../tc__iot__hal__timer_8h.html#aa7b7334abb97e56971f370da6619c87f',1,'tc_iot_timer():&#160;tc_iot_hal_timer.h']]],
-  ['tc_5fiot_5ftls_5fmd_5fsetup_5ffailed',['TC_IOT_TLS_MD_SETUP_FAILED',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca50ab505a0e8a372ca792f610bbbedff4',1,'tc_iot_const.h']]],
   ['tc_5fiot_5ftls_5fnet_5fset_5fblock_5ffailed',['TC_IOT_TLS_NET_SET_BLOCK_FAILED',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccac7061a5d6daba6b3da2760fe83e6b62a',1,'tc_iot_const.h']]],
   ['tc_5fiot_5ftls_5fnot_5fsupported',['TC_IOT_TLS_NOT_SUPPORTED',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca24f2ad823e7ce6b452952fd09b3f60cb',1,'tc_iot_const.h']]],
   ['tc_5fiot_5ftls_5fssl_5fconf_5fown_5fcert_5ffailed',['TC_IOT_TLS_SSL_CONF_OWN_CERT_FAILED',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaba58a6308ea9d50632a1573752180128',1,'tc_iot_const.h']]],
