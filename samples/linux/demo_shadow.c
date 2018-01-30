@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
                 TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
                 &p_client_config->device_info);
         if (ret != TC_IOT_SUCCESS) {
-            tc_iot_hal_printf("refresh token failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);
+            tc_iot_hal_printf("refresh token failed, visit: https://git.io/vN9le#%d\n.", ret);
             return 0;
         }
         tc_iot_hal_printf("request username and password for mqtt success.\n");
@@ -80,7 +80,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("constructing mqtt shadow client.\n");
     ret = tc_iot_shadow_construct(p_shadow_client, p_client_config);
     if (ret != TC_IOT_SUCCESS) {
-        tc_iot_hal_printf("construct shadow failed, visit: https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/wiki/trouble_shooting#%d\n.", ret);
+        tc_iot_hal_printf("construct shadow failed, visit: https://git.io/vN9le#%d\n.", ret);
         return 0;
     }
 
