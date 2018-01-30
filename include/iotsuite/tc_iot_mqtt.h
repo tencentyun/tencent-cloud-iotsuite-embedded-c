@@ -29,7 +29,7 @@ typedef enum _tc_iot_mqtt_qos_e {
     TC_IOT_QOS0 = 0,  /**< QOS0*/
     TC_IOT_QOS1 = 1, /**< QOS1*/
     TC_IOT_QOS2 = 2, /**< QOS2*/
-    TC_IOT_SUBFAIL = 0x80, /**< 订阅失败，有可能 Topic 不存在，或者无权等*/
+    TC_IOT_SUBFAIL = 0x80, /**< 订阅失败，有可能 Topic 不存在，或者无权限等*/
 } tc_iot_mqtt_qos_e;
 
 

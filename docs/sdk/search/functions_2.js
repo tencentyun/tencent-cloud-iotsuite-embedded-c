@@ -80,7 +80,6 @@ var searchData=
   ['tc_5fiot_5furl_5fencode',['tc_iot_url_encode',['../tc__iot__url_8h.html#a0ed15225fc6498a43d051ee2ed70a36b',1,'tc_iot_url.h']]],
   ['tc_5fiot_5furl_5fparse',['tc_iot_url_parse',['../tc__iot__url_8h.html#a9bd08e18b87c305c381ce149f5475b72',1,'tc_iot_url.h']]],
   ['tc_5fiot_5fyabuffer_5fappend',['tc_iot_yabuffer_append',['../tc__iot__ya__buffer_8h.html#a1af5e25a7ad1e28c6f25d4cf57f1b532',1,'tc_iot_ya_buffer.h']]],
-  ['tc_5fiot_5fyabuffer_5fappend_5fformat',['tc_iot_yabuffer_append_format',['../tc__iot__ya__buffer_8h.html#a5005086a64ea14792d26a781c51621ec',1,'tc_iot_ya_buffer.h']]],
   ['tc_5fiot_5fyabuffer_5fcurrent',['tc_iot_yabuffer_current',['../tc__iot__ya__buffer_8h.html#a3d68ad067f46c459527936c767329583',1,'tc_iot_ya_buffer.h']]],
   ['tc_5fiot_5fyabuffer_5fforward',['tc_iot_yabuffer_forward',['../tc__iot__ya__buffer_8h.html#abea2dd670a2bccda4d7bd1eec905b1ab',1,'tc_iot_ya_buffer.h']]],
   ['tc_5fiot_5fyabuffer_5finit',['tc_iot_yabuffer_init',['../tc__iot__ya__buffer_8h.html#a2b99dcf6e51b1103119b5e91a2f88de8',1,'tc_iot_ya_buffer.h']]],

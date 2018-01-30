@@ -11,7 +11,7 @@ int tc_iot_yabuffer_init(tc_iot_yabuffer_t *yabuffer, char *buf, int len) {
     yabuffer->data = buf;
     yabuffer->pos = 0;
     yabuffer->len = len;
-    return 0;
+    return TC_IOT_SUCCESS;
 }
 
 int tc_iot_yabuffer_reset(tc_iot_yabuffer_t *yabuffer) {
@@ -37,7 +37,11 @@ char *tc_iot_yabuffer_current(tc_iot_yabuffer_t *yabuffer) {
 
 int tc_iot_yabuffer_forward(tc_iot_yabuffer_t *yabuffer, int forward_len) {
     IF_NULL_RETURN(yabuffer, TC_IOT_NULL_POINTER);
+    /* 检查是否超过最大限制 */
     IF_LESS_RETURN(yabuffer->len, yabuffer->pos + forward_len,
+                   TC_IOT_INVALID_PARAMETER);
+    /* 检查是否会导致负溢出 */
+    IF_LESS_RETURN(yabuffer->pos + forward_len, 0,
                    TC_IOT_INVALID_PARAMETER);
     return yabuffer->pos += forward_len;
 }

@@ -118,6 +118,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 结构体</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__url__parse__result__t.html">_tc_iot_url_parse_result_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">url 地址解析结果  <a href="struct__tc__iot__url__parse__result__t.html#details">更多...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -144,15 +145,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 类型定义</h2></td></tr>
 <tr class="memitem:a0121d63ea1590ec9a7e94e6582a097cf"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct__tc__iot__url__parse__result__t.html">_tc_iot_url_parse_result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__url_8h.html#a0121d63ea1590ec9a7e94e6582a097cf">tc_iot_url_parse_result_t</a></td></tr>
+<tr class="memdesc:a0121d63ea1590ec9a7e94e6582a097cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">url 地址解析结果  <a href="#a0121d63ea1590ec9a7e94e6582a097cf">更多...</a><br /></td></tr>
 <tr class="separator:a0121d63ea1590ec9a7e94e6582a097cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
 <tr class="memitem:a0ed15225fc6498a43d051ee2ed70a36b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__url_8h.html#a0ed15225fc6498a43d051ee2ed70a36b">tc_iot_url_encode</a> (const char *input, int input_len, char *output, int max_output_len)</td></tr>
+<tr class="memdesc:a0ed15225fc6498a43d051ee2ed70a36b"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_url_encode 对数据进行 url encode ，以便作为 query string 或者 url encoded form 请求参数发送给服务端。  <a href="#a0ed15225fc6498a43d051ee2ed70a36b">更多...</a><br /></td></tr>
 <tr class="separator:a0ed15225fc6498a43d051ee2ed70a36b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a821b04d8f5e3a85f065963e3466998e2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__url_8h.html#a821b04d8f5e3a85f065963e3466998e2">tc_iot_url_decode</a> (const char *input, int input_len, char *output, int max_output_len)</td></tr>
+<tr class="memdesc:a821b04d8f5e3a85f065963e3466998e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_url_decode 对数据进行 url decode 解码。  <a href="#a821b04d8f5e3a85f065963e3466998e2">更多...</a><br /></td></tr>
 <tr class="separator:a821b04d8f5e3a85f065963e3466998e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bd08e18b87c305c381ce149f5475b72"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__url_8h.html#a9bd08e18b87c305c381ce149f5475b72">tc_iot_url_parse</a> (const char *input_url, int input_url_len, <a class="el" href="tc__iot__url_8h.html#a0121d63ea1590ec9a7e94e6582a097cf">tc_iot_url_parse_result_t</a> *result)</td></tr>
+<tr class="memdesc:a9bd08e18b87c305c381ce149f5475b72"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_url_parse 解析 http/https 前缀的 url 地址， 解析服务器地址、端口、请求路径等信息。  <a href="#a9bd08e18b87c305c381ce149f5475b72">更多...</a><br /></td></tr>
 <tr class="separator:a9bd08e18b87c305c381ce149f5475b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
@@ -275,6 +280,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
       </table>
 </div><div class="memdoc">
 
+<p>url 地址解析结果 </p>
+
 </div>
 </div>
 <h2 class="groupheader">函数说明</h2>
@@ -314,6 +321,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
       </table>
 </div><div class="memdoc">
 
+<p>tc_iot_url_decode 对数据进行 url decode 解码。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>待解码码数据 </td></tr>
+    <tr><td class="paramname">input_len</td><td>待解码数据长度 </td></tr>
+    <tr><td class="paramname">output</td><td>输出缓存区 </td></tr>
+    <tr><td class="paramname">max_output_len</td><td>输出缓存区最大大小</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>实际输出大小 </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a0ed15225fc6498a43d051ee2ed70a36b"></a>
@@ -352,6 +371,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
       </table>
 </div><div class="memdoc">
 
+<p>tc_iot_url_encode 对数据进行 url encode ，以便作为 query string 或者 url encoded form 请求参数发送给服务端。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>待编码数据 </td></tr>
+    <tr><td class="paramname">input_len</td><td>待编码数据长度 </td></tr>
+    <tr><td class="paramname">output</td><td>输出缓存区 </td></tr>
+    <tr><td class="paramname">max_output_len</td><td>输出缓存区最大大小</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>实际输出大小 </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a9bd08e18b87c305c381ce149f5475b72"></a>
@@ -383,6 +414,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>tc_iot_url_parse 解析 http/https 前缀的 url 地址， 解析服务器地址、端口、请求路径等信息。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input_url</td><td>待解析的 url 地址 </td></tr>
+    <tr><td class="paramname">input_url_len</td><td>待解析的地址长度 </td></tr>
+    <tr><td class="paramname">result</td><td>解析结果</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 编码结果长度，&lt;0 失败错误码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
 
 </div>
 </div>

@@ -194,20 +194,28 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
 <tr class="memitem:aee7dca705acb06f89f6074343aaa5e98"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#aee7dca705acb06f89f6074343aaa5e98">tc_iot_http_request_init</a> (<a class="el" href="tc__iot__http__utils_8h.html#aee4584d5862c6bd649279852662888cb">tc_iot_http_request</a> *request, const char *method, const char *abs_path, int abs_path_len, const char *http_version)</td></tr>
+<tr class="memdesc:aee7dca705acb06f89f6074343aaa5e98"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_http_request_init 初始化请求缓存区  <a href="#aee7dca705acb06f89f6074343aaa5e98">更多...</a><br /></td></tr>
 <tr class="separator:aee7dca705acb06f89f6074343aaa5e98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac16931ea2814abb4134c2e962a803051"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#ac16931ea2814abb4134c2e962a803051">tc_iot_http_request_append_header</a> (<a class="el" href="tc__iot__http__utils_8h.html#aee4584d5862c6bd649279852662888cb">tc_iot_http_request</a> *request, const char *header, const char *val)</td></tr>
+<tr class="memdesc:ac16931ea2814abb4134c2e962a803051"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_http_request_append_header 添加 HTTP header头部信息。  <a href="#ac16931ea2814abb4134c2e962a803051">更多...</a><br /></td></tr>
 <tr class="separator:ac16931ea2814abb4134c2e962a803051"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1073deae49bdca3314c158a3cb6aa826"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a1073deae49bdca3314c158a3cb6aa826">tc_iot_http_request_n_append_header</a> (<a class="el" href="tc__iot__http__utils_8h.html#aee4584d5862c6bd649279852662888cb">tc_iot_http_request</a> *request, const char *header, const char *val, int val_len)</td></tr>
+<tr class="memdesc:a1073deae49bdca3314c158a3cb6aa826"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_http_request_n_append_header 添加 HTTP header头部信息。  <a href="#a1073deae49bdca3314c158a3cb6aa826">更多...</a><br /></td></tr>
 <tr class="separator:a1073deae49bdca3314c158a3cb6aa826"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f674325b0c4866aaa7732cb6f7597dd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a5f674325b0c4866aaa7732cb6f7597dd">tc_iot_http_request_append_body</a> (<a class="el" href="tc__iot__http__utils_8h.html#aee4584d5862c6bd649279852662888cb">tc_iot_http_request</a> *request, const char *body)</td></tr>
+<tr class="memdesc:a5f674325b0c4866aaa7732cb6f7597dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_http_request_append_body 添加请求包体  <a href="#a5f674325b0c4866aaa7732cb6f7597dd">更多...</a><br /></td></tr>
 <tr class="separator:a5f674325b0c4866aaa7732cb6f7597dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b33525946aa4a83de532f1995ba4a22"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a2b33525946aa4a83de532f1995ba4a22">tc_iot_create_http_request</a> (<a class="el" href="tc__iot__http__utils_8h.html#aee4584d5862c6bd649279852662888cb">tc_iot_http_request</a> *request, const char *host, int host_len, const char *method, const char *abs_path, int abs_path_len, const char *http_version, const char *user_agent, const char *content_type, const char *body)</td></tr>
+<tr class="memdesc:a2b33525946aa4a83de532f1995ba4a22"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_create_http_request 创建 HTTP 请求  <a href="#a2b33525946aa4a83de532f1995ba4a22">更多...</a><br /></td></tr>
 <tr class="separator:a2b33525946aa4a83de532f1995ba4a22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b4ee986439bd337ab8ce5b14cdefa65"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a3b4ee986439bd337ab8ce5b14cdefa65">tc_iot_create_post_request</a> (<a class="el" href="tc__iot__http__utils_8h.html#aee4584d5862c6bd649279852662888cb">tc_iot_http_request</a> *request, const char *abs_path, int abs_path_len, const char *host, int host_len, const char *body)</td></tr>
+<tr class="memdesc:a3b4ee986439bd337ab8ce5b14cdefa65"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_create_post_request 创建 HTTP POST 请求  <a href="#a3b4ee986439bd337ab8ce5b14cdefa65">更多...</a><br /></td></tr>
 <tr class="separator:a3b4ee986439bd337ab8ce5b14cdefa65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21d5bcac4dddaa30096b0313b093bf33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a21d5bcac4dddaa30096b0313b093bf33">tc_iot_calc_auth_sign</a> (char *sign_out, int max_sign_len, const char *secret, int secret_len, const char *client_id, int client_id_len, const char *device_name, int device_name_len, long expire, long nonce, const char *product_id, int product_id_len, long timestamp)</td></tr>
+<tr class="memdesc:a21d5bcac4dddaa30096b0313b093bf33"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_calc_auth_sign 计算 Token 请求签名  <a href="#a21d5bcac4dddaa30096b0313b093bf33">更多...</a><br /></td></tr>
 <tr class="separator:a21d5bcac4dddaa30096b0313b093bf33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5642aae30e497076894847b5be57077f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a5642aae30e497076894847b5be57077f">tc_iot_create_auth_request_form</a> (char *form, int max_form_len, const char *secret, int secret_len, const char *client_id, int client_id_len, const char *device_name, int device_name_len, long expire, long nonce, const char *product_id, int product_id_len, long timestamp)</td></tr>
+<tr class="memdesc:a5642aae30e497076894847b5be57077f"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_create_auth_request_form 构造 Token HTTP 签名请求 form  <a href="#a5642aae30e497076894847b5be57077f">更多...</a><br /></td></tr>
 <tr class="separator:a5642aae30e497076894847b5be57077f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
@@ -531,6 +539,28 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
       </table>
 </div><div class="memdoc">
 
+<p>tc_iot_calc_auth_sign 计算 Token 请求签名 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sign_out</td><td>签名( Base64 编码)结果 </td></tr>
+    <tr><td class="paramname">max_sign_len</td><td>签名( Bsse64 编码)结果区长度 </td></tr>
+    <tr><td class="paramname">secret</td><td>签名密钥 </td></tr>
+    <tr><td class="paramname">secret_len</td><td>签名密钥长度 </td></tr>
+    <tr><td class="paramname">client_id</td><td>Client Id </td></tr>
+    <tr><td class="paramname">client_id_len</td><td>Client Id 长度 </td></tr>
+    <tr><td class="paramname">device_name</td><td>Device Name </td></tr>
+    <tr><td class="paramname">device_name_len</td><td>Device Name 长度 </td></tr>
+    <tr><td class="paramname">expire</td><td>Token有效期 </td></tr>
+    <tr><td class="paramname">nonce</td><td>随机数 </td></tr>
+    <tr><td class="paramname">product_id</td><td>Product Id </td></tr>
+    <tr><td class="paramname">product_id_len</td><td>Product Id 长度 </td></tr>
+    <tr><td class="paramname">timestamp</td><td>时间戳</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 签名结果实际长度，&lt;0 错误码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a5642aae30e497076894847b5be57077f"></a>
@@ -623,6 +653,28 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
       </table>
 </div><div class="memdoc">
 
+<p>tc_iot_create_auth_request_form 构造 Token HTTP 签名请求 form </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">form</td><td>结果缓存区 </td></tr>
+    <tr><td class="paramname">max_form_len</td><td>结果缓存区最大大小 </td></tr>
+    <tr><td class="paramname">secret</td><td>签名密钥 </td></tr>
+    <tr><td class="paramname">secret_len</td><td>签名密钥长度 </td></tr>
+    <tr><td class="paramname">client_id</td><td>Client Id </td></tr>
+    <tr><td class="paramname">client_id_len</td><td>Client Id 长度 </td></tr>
+    <tr><td class="paramname">device_name</td><td>Device Name </td></tr>
+    <tr><td class="paramname">device_name_len</td><td>Device Name 长度 </td></tr>
+    <tr><td class="paramname">expire</td><td>Token有效期 </td></tr>
+    <tr><td class="paramname">nonce</td><td>随机数 </td></tr>
+    <tr><td class="paramname">product_id</td><td>Product Id </td></tr>
+    <tr><td class="paramname">product_id_len</td><td>Product Id 长度 </td></tr>
+    <tr><td class="paramname">timestamp</td><td>时间戳</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 签名结果实际长度，&lt;0 错误码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a2b33525946aa4a83de532f1995ba4a22"></a>
@@ -697,6 +749,25 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
       </table>
 </div><div class="memdoc">
 
+<p>tc_iot_create_http_request 创建 HTTP 请求 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">request</td><td>HTTP 请求对象 </td></tr>
+    <tr><td class="paramname">host</td><td>服务器地址 </td></tr>
+    <tr><td class="paramname">host_len</td><td>服务器地址长度 </td></tr>
+    <tr><td class="paramname">method</td><td>请求方法 </td></tr>
+    <tr><td class="paramname">abs_path</td><td>请求服务路径 </td></tr>
+    <tr><td class="paramname">abs_path_len</td><td>请求服务路径长度 </td></tr>
+    <tr><td class="paramname">http_version</td><td>HTTP 协议版本 </td></tr>
+    <tr><td class="paramname">user_agent</td><td>User Agent 头部信息 </td></tr>
+    <tr><td class="paramname">content_type</td><td>Content Type 头部信息 </td></tr>
+    <tr><td class="paramname">body</td><td>HTTP 请求Body</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a3b4ee986439bd337ab8ce5b14cdefa65"></a>
@@ -747,6 +818,21 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
       </table>
 </div><div class="memdoc">
 
+<p>tc_iot_create_post_request 创建 HTTP POST 请求 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">request</td><td>HTTP 请求对象 </td></tr>
+    <tr><td class="paramname">abs_path</td><td>请求服务路径 </td></tr>
+    <tr><td class="paramname">abs_path_len</td><td>请求服务路径长度 </td></tr>
+    <tr><td class="paramname">host</td><td>服务器地址 </td></tr>
+    <tr><td class="paramname">host_len</td><td>服务器地址长度 </td></tr>
+    <tr><td class="paramname">body</td><td>HTTP 请求Body</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a5f674325b0c4866aaa7732cb6f7597dd"></a>
@@ -772,6 +858,17 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>tc_iot_http_request_append_body 添加请求包体 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">request</td><td>HTTP 请求对象 </td></tr>
+    <tr><td class="paramname">body</td><td>包体数据</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 添加的 Body 实际占用空间大小，&lt;0 返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
 
 </div>
 </div>
@@ -804,6 +901,18 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>tc_iot_http_request_append_header 添加 HTTP header头部信息。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">request</td><td>HTTP 请求对象 </td></tr>
+    <tr><td class="paramname">header</td><td>Header 名称 </td></tr>
+    <tr><td class="paramname">val</td><td>Header 值</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 添加的 Header 实际占用空间大小，&lt;0 返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
 
 </div>
 </div>
@@ -849,6 +958,20 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
       </table>
 </div><div class="memdoc">
 
+<p>tc_iot_http_request_init 初始化请求缓存区 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">request</td><td>HTTP 请求对象 </td></tr>
+    <tr><td class="paramname">method</td><td>请求方法：GET/POST/PUT ... </td></tr>
+    <tr><td class="paramname">abs_path</td><td>请求地址："/", "/index", "/news?t=abc" ... </td></tr>
+    <tr><td class="paramname">abs_path_len</td><td>请求地址长度 </td></tr>
+    <tr><td class="paramname">http_version</td><td>HTTP 协议版本：1.0, 1.1 ...</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 初始化后数据占用缓存长度，&lt;0 返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="a1073deae49bdca3314c158a3cb6aa826"></a>
@@ -886,6 +1009,19 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>tc_iot_http_request_n_append_header 添加 HTTP header头部信息。 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">request</td><td>HTTP 请求对象 </td></tr>
+    <tr><td class="paramname">header</td><td>Header 名称 </td></tr>
+    <tr><td class="paramname">val</td><td>Header 值 </td></tr>
+    <tr><td class="paramname">val_len</td><td>Header 值的长度</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 添加的 Header 实际占用空间大小，&lt;0 返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
 
 </div>
 </div>
