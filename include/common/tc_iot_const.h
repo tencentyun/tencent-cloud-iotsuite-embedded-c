@@ -43,7 +43,6 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_TLS_SSL_WRITE_TIMEOUT = -213,/**< TLS 写入操作超时*/
     TC_IOT_TLS_SSL_READ_FAILED = -214,/**< TLS 读取失败*/
     TC_IOT_TLS_SSL_READ_TIMEOUT = -215,/**< TLS 读取超时*/
-    TC_IOT_TLS_MD_SETUP_FAILED = -216, 
 
     TC_IOT_LOGIC_ERROR_BASE = -1000, /**< 业务逻辑错误 */
     TC_IOT_NETWORK_PTR_NULL = -1001,/**< network 对象指针为空*/

@@ -63,12 +63,17 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
 
 /*--- begin 影子设备请求响应包 method 字段取值----*/
 /* 请求类 */
+/**< 读取服务端影子设备数据*/
 #define TC_IOT_MQTT_METHOD_GET       "get"
+/**< 更新服务端影子设备数据*/
 #define TC_IOT_MQTT_METHOD_UPDATE    "update"
+/**< 删除服务端影子设备数据*/
 #define TC_IOT_MQTT_METHOD_DELETE    "delete"
 
 /* 响应类 */
+/**< 读取请求响应*/
 #define TC_IOT_MQTT_METHOD_REPLY     "reply"
+/**< 更新请求响应*/
 #define TC_IOT_MQTT_METHOD_CONTROL   "control"
 /*--- end 影子设备请求响应包 method 字段取值----*/
 
