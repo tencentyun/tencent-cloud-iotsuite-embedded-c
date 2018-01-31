@@ -128,7 +128,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
         tc_iot_tls_config_t* p_tls_config;
         p_tls_config = &(netcontext.tls_config);
         if (netcontext.use_tls) {
-            p_tls_config->verify_server = 1;
+            p_tls_config->verify_server = 0;
             p_tls_config->root_ca_in_mem = g_tc_iot_mqtt_root_ca_certs;
             p_tls_config->root_ca_location = p_client_config->p_root_ca;
             p_tls_config->device_cert_location = p_client_config->p_client_crt;

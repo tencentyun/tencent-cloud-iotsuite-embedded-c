@@ -238,20 +238,20 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
     LOG_TRACE("Verifying peer X.509 certificate...");
 
     char info_buf[512];
-    if (tls_config->verify_server) {
-        if ((tls_data->flags = mbedtls_ssl_get_verify_result(
-                 &(tls_data->ssl_context))) != 0) {
-            info_buf[sizeof(info_buf) - 1] = '\0';
-            mbedtls_x509_crt_verify_info(info_buf, sizeof(info_buf) - 1, "",
-                                         tls_data->flags);
-            LOG_ERROR("verify info:%s\n", info_buf);
+    if ((tls_data->flags = mbedtls_ssl_get_verify_result(
+                    &(tls_data->ssl_context))) != 0) {
+        info_buf[sizeof(info_buf) - 1] = '\0';
+        mbedtls_x509_crt_verify_info(info_buf, sizeof(info_buf) - 1, "",
+                tls_data->flags);
+        LOG_ERROR("verify info:%s", info_buf);
+        if (tls_config->verify_server) {
             ret = TC_IOT_TLS_X509_CRT_VERIFY_FAILED;
         } else {
-            LOG_TRACE("Server verification success\n");
+            LOG_TRACE(" Server verification skipped");
             ret = TC_IOT_SUCCESS;
         }
     } else {
-        LOG_TRACE(" Server verification skipped\n");
+        LOG_TRACE("Server verification success");
         ret = TC_IOT_SUCCESS;
     }
 
