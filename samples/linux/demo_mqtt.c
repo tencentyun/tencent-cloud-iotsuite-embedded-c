@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
                 TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
                 &p_client_config->device_info);
         if (ret != TC_IOT_SUCCESS) {
-            tc_iot_hal_printf("refresh token failed, visit: https://git.io/vN9le#%d\n.", ret);
+            tc_iot_hal_printf("refresh token failed, visit: https://git.io/vN9le#%d\n", ret);
             return 0;
         }
         tc_iot_hal_printf("request username and password for mqtt success.\n");

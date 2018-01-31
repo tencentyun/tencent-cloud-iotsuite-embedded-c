@@ -26,6 +26,72 @@ static struct option long_options[] =
     {0, 0, 0, 0}
 };
 
+const char * command_help = 
+"Usage: %s [-h host] [-p port] [-i client_id]\r\n"
+"                     [-d] [--trace]\r\n"
+"                     [-u username [-P password]]\r\n"
+"                     [{--cafile file | --capath dir} [--cert file] [--key file]\r\n"
+"\r\n"
+"       %s --help\r\n"
+"\r\n"
+" -h mqtt_host\r\n"
+" --host=mqtt_host\r\n"
+"     MQTT host to connect to. Defaults to localhost.\r\n"
+" \r\n"
+" -p port\r\n"
+" --port=port\r\n"
+"     network port to connect to. Defaults to 1883, or set to 8883 for tls is MQTT server supports.\r\n"
+"\r\n"
+" -i client_id\r\n"
+" --client=client_id\r\n"
+"     id to use for this client. \r\n"
+"\r\n"
+" -t product_id\r\n"
+" --product=product_id\r\n"
+"     product_id to use for this client. \r\n"
+"\r\n"
+" -d device_name\r\n"
+" --device=device_name\r\n"
+"     device_name to use for this client. \r\n"
+"\r\n"
+" -s secret\r\n"
+" --secret=secret\r\n"
+"     secret for dynamic token, it not using fixed usename and password.\r\n"
+"\r\n"
+" -u username\r\n"
+" --username=username\r\n"
+" provide a fix username, it not use dynamic token.\r\n"
+" \r\n"
+" -P password\r\n"
+" --password=password\r\n"
+"     provide a fixed password, it not use dynamic token.\r\n"
+"\r\n"
+" -a path_to_ca_crt\r\n"
+" --cafile=path_to_ca_certificates\r\n"
+" path to a file containing trusted CA certificates to enable encrypted\r\n"
+"            communication.\r\n"
+"\r\n"
+" -c path_to_client_crt\r\n"
+" --clifile=path_to_client_crt\r\n"
+"     client certificate for authentication, if required by server.\r\n"
+"\r\n"
+" -k path_to_client_key\r\n"
+" --clikey=path_to_client_key\r\n"
+"     client private key for authentication, if required by server.\r\n"
+" \r\n"
+" --disable_tls\r\n"
+"     don't use TLS for MQTT connection, use TCP directly.\r\n"
+" \r\n"
+" --verbose\r\n"
+"     don't print info and debug, trace messages.\r\n"
+"\r\n"
+" --trace\r\n"
+"     print all system messages, for debug or problem tracing.\r\n"
+"  -?\r\n"
+" --help\r\n"
+"     display this message.\r\n"
+;
+
 void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
     int c;
     int option_index = 0;
@@ -122,6 +188,10 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
                     tc_iot_hal_printf ("client id=%s\n", config->device_info.client_id);
                 }
                 break;
+	    case '?':
+		tc_iot_hal_printf (command_help, argv[0]);
+                exit(0);
+		break;
 
             default:
                 tc_iot_hal_printf("option: %c\n", (char)c);
