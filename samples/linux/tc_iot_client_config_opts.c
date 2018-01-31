@@ -10,7 +10,6 @@ static struct option long_options[] =
 {
     {"verbose",      no_argument,          &_log_level, TC_IOT_LOG_WARN},
     {"trace",        no_argument,          &_log_level, TC_IOT_LOG_TRACE},
-    {"disable_tls",  no_argument,          &use_tls, 0},
     {"host",         optional_argument,    0, 'h'},
     {"port",         optional_argument,    0, 'p'},
     {"product",      optional_argument,    0, 't'},
@@ -79,9 +78,6 @@ const char * command_help =
 " --clikey=path_to_client_key\r\n"
 "     client private key for authentication, if required by server.\r\n"
 " \r\n"
-" --disable_tls\r\n"
-"     don't use TLS for MQTT connection, use TCP directly.\r\n"
-" \r\n"
 " --verbose\r\n"
 "     don't print info and debug, trace messages.\r\n"
 "\r\n"
@@ -126,10 +122,16 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
                     config->port =  atoi(optarg);
                     if (config->port == 8883) {
                         config->use_tls = 1;
+                        tc_iot_hal_printf ("port=%s\n", optarg);
                     } else if (config->port == 1883) {
                         config->use_tls = 0;
+                        tc_iot_hal_printf ("port=%s\n", optarg);
+                    } else if (config->port == 0){
+                        tc_iot_hal_printf ("invalid port=%s\n", optarg);
+                        exit(0);
+                    } else {
+                        tc_iot_hal_printf ("WARNING: unknown port=%d\n", (int)config->port);
                     }
-                    tc_iot_hal_printf ("port=%s\n", optarg);
                 }
                 break;
             case 's':
@@ -198,8 +200,6 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
                 break;
         }
     }
-
-    config->use_tls =  (char)use_tls;
 
     tc_iot_set_log_level(_log_level);
 

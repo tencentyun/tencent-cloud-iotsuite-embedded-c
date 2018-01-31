@@ -4,6 +4,24 @@
 extern void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv);
 int run_shadow(tc_iot_shadow_config * p_client_config);
 
+static volatile int stop = 0;
+
+void sig_handler(int sig) {
+    if (sig == SIGINT) {
+        tc_iot_hal_printf("SIGINT received, going down.\n");
+        stop ++;
+    } else if (sig == SIGTERM) {
+        tc_iot_hal_printf("SIGTERM received, going down.\n");
+        stop ++;
+    } else {
+        tc_iot_hal_printf("signal received:%d\n", sig);
+    }
+    if (stop >= 3) {
+        tc_iot_hal_printf("SIGINT/SIGTERM received over %d times, force shutdown now.\n", stop);
+        exit(0);
+    }
+}
+
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
@@ -39,6 +57,9 @@ int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;
     bool token_defined;
     int ret;
+
+    signal(SIGINT, sig_handler);
+    signal(SIGTERM, sig_handler);
 
     p_client_config = &(g_client_config.mqtt_client_config);
     parse_command(p_client_config, argc, argv);

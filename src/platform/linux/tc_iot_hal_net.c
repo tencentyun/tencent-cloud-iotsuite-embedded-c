@@ -93,8 +93,8 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
         network->net_context.port = port;
     }
 
-    if ((rc = getaddrinfo(network->net_context.host, NULL, &hints, &result)) ==
-        0) {
+    rc = getaddrinfo(network->net_context.host, NULL, &hints, &result);
+    if (rc == 0) {
         struct addrinfo* res = result;
 
         /* prefer ip4 addresses */
@@ -116,6 +116,12 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
         }
 
         freeaddrinfo(result);
+    } else {
+        LOG_ERROR("getaddrinfo failed for host:%s, errno=%d,errstr=%s", 
+                network->net_context.host,
+                rc, gai_strerror(rc)
+                );
+        rc = TC_IOT_NET_UNKNOWN_HOST;
     }
 
     if (rc == 0) {

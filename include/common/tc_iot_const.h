@@ -27,6 +27,13 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_MQTT_NETWORK_UNAVAILABLE = -153,/**< 网络不可用*/
     TC_IOT_MQTT_WAIT_ACT_TIMEOUT = -154, /**< 等待ACK响应操作*/
 
+    TC_IOT_MQTT_CONNACK_ERROR = -160, /**< 连接失败，未知错误*/
+    TC_IOT_MQTT_CONNACK_PROTOCOL_UNACCEPTABLE = -161, /**< 连接失败，不支持请求的协议版本*/
+    TC_IOT_MQTT_CONNACK_CLIENT_ID_INVALID = -162, /**< 连接失败，Client Id 判定非法*/
+    TC_IOT_MQTT_CONNACK_SERVICE_UNAVAILABLE = -163,  /**< 连接失败，后端服务不可用*/
+    TC_IOT_MQTT_CONNACK_BAD_USER_OR_PASSWORD = -164,  /**< 连接失败，用户名或密码校验不通过*/
+    TC_IOT_MQTT_CONNACK_NOT_AUTHORIZED = -165,  /**< 连接失败，用户访问未授权*/
+
     TC_IOT_MBED_TLS_ERROR_BASE = -200, /**< TLS 错误*/
     TC_IOT_CTR_DRBG_SEED_FAILED = -201, /**< TLS 初始化失败*/
     TC_IOT_X509_CRT_PARSE_FILE_FAILED = -202, /**< 解析证书文件失败*/

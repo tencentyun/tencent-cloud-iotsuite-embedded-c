@@ -9,14 +9,14 @@
  * Identifier](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718025) 只有
  * 2 字节，请保持 65535 这个值不要改动 
  */
-#define MAX_PACKET_ID 65535
+#define TC_IOT_MAX_PACKET_ID 65535
 
 
 /**
  * @brief 客户端最大订阅 Topic 数，请根据业务场景，
  * 实际订阅的最大 Topic 数情况进行配置。
  */
-#define MAX_MESSAGE_HANDLERS 5
+#define TC_IOT_MAX_MESSAGE_HANDLERS 5
 
 
 
@@ -149,7 +149,7 @@ typedef struct _tc_iot_mqtt_client {
     struct MessageHandlers {
         const char* topicFilter;
         void (*fp)(tc_iot_message_data*);
-    } message_handlers[MAX_MESSAGE_HANDLERS]; /**< 订阅消息回调*/
+    } message_handlers[TC_IOT_MAX_MESSAGE_HANDLERS]; /**< 订阅消息回调*/
 
     defaultMessageHandler default_msg_handler; /**< 订阅消息默认回调*/
     disconnectHandler disconnect_handler; /**< 连接断开通知回调*/

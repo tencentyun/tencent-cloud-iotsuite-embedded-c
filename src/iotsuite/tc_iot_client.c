@@ -6,24 +6,29 @@ extern "C" {
 
 int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* c,
                                  tc_iot_mqtt_client_config* p_client_config) {
+    int rc;
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_client_config, TC_IOT_NULL_POINTER);
 
-    tc_iot_mqtt_init(c, p_client_config);
+
+    rc = tc_iot_mqtt_init(c, p_client_config);
+    if (rc != TC_IOT_SUCCESS) {
+        return rc;
+    }
 
     MQTTPacket_connectData default_data = MQTTPacket_connectData_initializer;
 
     c->connect_options = default_data;
     MQTTPacket_connectData* data = &(c->connect_options);
     data->willFlag = 0;
-    data->MQTTVersion = 4;
+    data->MQTTVersion = 4; // 4 means MQTT 3.1.1
     data->clientID.cstring = p_client_config->device_info.client_id;
     data->username.cstring = p_client_config->device_info.username;
     data->password.cstring = p_client_config->device_info.password;
     data->keepAliveInterval = p_client_config->keep_alive_interval;
     data->cleansession = p_client_config->clean_session;
 
-    int rc = tc_iot_mqtt_connect(c, data);
+    rc = tc_iot_mqtt_connect(c, data);
     if (TC_IOT_SUCCESS == rc) {
         LOG_TRACE("mqtt client connect %s:%d success", p_client_config->host,
                   p_client_config->port);
@@ -31,7 +36,7 @@ int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* c,
         LOG_ERROR("!!! mqtt cllient connect %s:%d failed retcode %d",
                   p_client_config->host, p_client_config->port, rc);
     }
-    return TC_IOT_SUCCESS;
+    return rc;
 }
 
 void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* c) {}
