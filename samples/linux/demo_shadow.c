@@ -1,8 +1,28 @@
 #include "tc_iot_device_config.h"
 #include "tc_iot_export.h"
 
+#define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
+
 extern void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv);
 int run_shadow(tc_iot_shadow_config * p_client_config);
+
+static volatile int stop = 0;
+
+void sig_handler(int sig) {
+    if (sig == SIGINT) {
+        tc_iot_hal_printf("SIGINT received, going down.\n");
+        stop ++;
+    } else if (sig == SIGTERM) {
+        tc_iot_hal_printf("SIGTERM received, going down.\n");
+        stop ++;
+    } else {
+        tc_iot_hal_printf("signal received:%d\n", sig);
+    }
+    if (stop >= 3) {
+        tc_iot_hal_printf("SIGINT/SIGTERM received over %d times, force shutdown now.\n", stop);
+        exit(0);
+    }
+}
 
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
@@ -40,6 +60,9 @@ int main(int argc, char** argv) {
     bool token_defined;
     int ret;
 
+    signal(SIGINT, sig_handler);
+    signal(SIGTERM, sig_handler);
+
     p_client_config = &(g_client_config.mqtt_client_config);
     parse_command(p_client_config, argc, argv);
     snprintf(g_client_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT, 
@@ -54,7 +77,7 @@ int main(int argc, char** argv) {
                 TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
                 &p_client_config->device_info);
         if (ret != TC_IOT_SUCCESS) {
-            tc_iot_hal_printf("refresh token failed, visit: https://git.io/vN9le#%d\n.", ret);
+            tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
             return 0;
         }
         tc_iot_hal_printf("request username and password for mqtt success.\n");
@@ -80,7 +103,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("constructing mqtt shadow client.\n");
     ret = tc_iot_shadow_construct(p_shadow_client, p_client_config);
     if (ret != TC_IOT_SUCCESS) {
-        tc_iot_hal_printf("construct shadow failed, visit: https://git.io/vN9le#%d\n.", ret);
+        tc_iot_hal_printf("construct shadow client failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
         return 0;
     }
 

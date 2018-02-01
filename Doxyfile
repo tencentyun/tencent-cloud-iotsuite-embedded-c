@@ -16,3 +16,4 @@ HTML_OUTPUT            = sdk
 GENERATE_LATEX         = NO
 GENERATE_XML           = NO
 EXTRACT_ALL            = YES
+

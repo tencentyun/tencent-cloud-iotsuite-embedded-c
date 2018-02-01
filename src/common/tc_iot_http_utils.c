@@ -128,14 +128,15 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
         }
     }
     tc_iot_http_request_append_body(request, body);
+    return TC_IOT_SUCCESS;
 }
 
 int tc_iot_create_post_request(tc_iot_http_request* request,
                                const char* abs_path, int abs_path_len,
                                const char* host, int host_len,
                                const char* body) {
-    tc_iot_create_http_request(request, host, host_len, HTTP_POST, abs_path,
-                               abs_path_len, HTTP_VER_1_0, "iotclient/1.0",
+    return tc_iot_create_http_request(request, host, host_len, HTTP_POST, abs_path,
+                               abs_path_len, HTTP_VER_1_0, "tciotclient/1.0",
                                HTTP_CONTENT_FORM_URLENCODED, body);
 }
 
@@ -169,7 +170,7 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
 
     if (data_len >= buf_len) {
         LOG_ERROR("generate_auth_sign buffer overflow.");
-        return -1;
+        return TC_IOT_BUFFER_OVERFLOW;
     }
 
     tc_iot_hmac_sha256(buf, data_len, secret, secret_len, sha256_digest);

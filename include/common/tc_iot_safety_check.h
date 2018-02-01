@@ -1,5 +1,5 @@
-#ifndef IOT_SAFETY_CHECK_01131546_H
-#define IOT_SAFETY_CHECK_01131546_H
+#ifndef TC_IOT_SAFETY_CHECK_H
+#define TC_IOT_SAFETY_CHECK_H
 
 #define IF_NULL_RETURN(p, ret)                                             \
     do {                                                                   \

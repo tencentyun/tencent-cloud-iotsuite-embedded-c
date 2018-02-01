@@ -4,6 +4,7 @@
 
 static int _log_level = TC_IOT_LOG_DEBUG;
 static int request_token = 1;
+static int use_tls = TC_IOT_CONFIG_USE_TLS;
 
 static struct option long_options[] =
 {
@@ -17,16 +18,82 @@ static struct option long_options[] =
     {"client",       optional_argument,    0, 'i'},
     {"username",     optional_argument,    0, 'u'},
     {"password",     optional_argument,    0, 'P'},
+    {"cafile",       optional_argument,    0, 'a'},
+    {"clifile",      optional_argument,    0, 'c'},
+    {"clikey",       optional_argument,    0, 'k'},
     {"help",         optional_argument,    0, '?'},
     {0, 0, 0, 0}
 };
+
+const char * command_help = 
+"Usage: %s [-h host] [-p port] [-i client_id]\r\n"
+"                     [-d] [--trace]\r\n"
+"                     [-u username [-P password]]\r\n"
+"                     [{--cafile file | --capath dir} [--cert file] [--key file]\r\n"
+"\r\n"
+"       %s --help\r\n"
+"\r\n"
+" -h mqtt_host\r\n"
+" --host=mqtt_host\r\n"
+"     MQTT host to connect to. Defaults to localhost.\r\n"
+" \r\n"
+" -p port\r\n"
+" --port=port\r\n"
+"     network port to connect to. Defaults to 1883, or set to 8883 for tls is MQTT server supports.\r\n"
+"\r\n"
+" -i client_id\r\n"
+" --client=client_id\r\n"
+"     id to use for this client. \r\n"
+"\r\n"
+" -t product_id\r\n"
+" --product=product_id\r\n"
+"     product_id to use for this client. \r\n"
+"\r\n"
+" -d device_name\r\n"
+" --device=device_name\r\n"
+"     device_name to use for this client. \r\n"
+"\r\n"
+" -s secret\r\n"
+" --secret=secret\r\n"
+"     secret for dynamic token, it not using fixed usename and password.\r\n"
+"\r\n"
+" -u username\r\n"
+" --username=username\r\n"
+" provide a fix username, it not use dynamic token.\r\n"
+" \r\n"
+" -P password\r\n"
+" --password=password\r\n"
+"     provide a fixed password, it not use dynamic token.\r\n"
+"\r\n"
+" -a path_to_ca_crt\r\n"
+" --cafile=path_to_ca_certificates\r\n"
+" path to a file containing trusted CA certificates to enable encrypted\r\n"
+"            communication.\r\n"
+"\r\n"
+" -c path_to_client_crt\r\n"
+" --clifile=path_to_client_crt\r\n"
+"     client certificate for authentication, if required by server.\r\n"
+"\r\n"
+" -k path_to_client_key\r\n"
+" --clikey=path_to_client_key\r\n"
+"     client private key for authentication, if required by server.\r\n"
+" \r\n"
+" --verbose\r\n"
+"     don't print info and debug, trace messages.\r\n"
+"\r\n"
+" --trace\r\n"
+"     print all system messages, for debug or problem tracing.\r\n"
+"  -?\r\n"
+" --help\r\n"
+"     display this message.\r\n"
+;
 
 void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
     int c;
     int option_index = 0;
     while (1)
     {
-        c = getopt_long (argc, argv, "s:h:p:t:d:i:u:P:", long_options, &option_index);
+        c = getopt_long (argc, argv, "s:h:p:t:d:i:u:P:c:a:k:", long_options, &option_index);
         if (c == -1) {
             break;
         }
@@ -38,15 +105,16 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
                 if (long_options[option_index].flag != 0) {
                     break;
                 }
-                printf ("option %s", long_options[option_index].name);
+                tc_iot_hal_printf ("option %s", long_options[option_index].name);
                 if (optarg) {
-                    printf (" with arg %s", optarg);
+                    tc_iot_hal_printf (" with arg %s", optarg);
                 }
-                printf ("\n");
+                tc_iot_hal_printf ("\n");
                 break;
             case 'h':
                 if (optarg) {
                     config->host =  optarg;
+                    tc_iot_hal_printf ("host=%s\n", optarg);
                 }
                 break;
             case 'p':
@@ -54,46 +122,81 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
                     config->port =  atoi(optarg);
                     if (config->port == 8883) {
                         config->use_tls = 1;
+                        tc_iot_hal_printf ("port=%s\n", optarg);
                     } else if (config->port == 1883) {
                         config->use_tls = 0;
+                        tc_iot_hal_printf ("port=%s\n", optarg);
+                    } else if (config->port == 0){
+                        tc_iot_hal_printf ("invalid port=%s\n", optarg);
+                        exit(0);
+                    } else {
+                        tc_iot_hal_printf ("WARNING: unknown port=%d\n", (int)config->port);
                     }
                 }
                 break;
             case 's':
                 if (optarg) {
                     strncpy(config->device_info.secret, optarg, TC_IOT_MAX_SECRET_LEN);
+                    tc_iot_hal_printf ("secret=%s\n", optarg);
+                }
+                break;
+            case 'a':
+                if (optarg) {
+                    config->p_root_ca = optarg;
+                    tc_iot_hal_printf ("root ca=%s\n", config->p_root_ca);
+                }
+                break;
+            case 'c':
+                if (optarg) {
+                    config->p_client_crt = optarg;
+                    tc_iot_hal_printf ("client crt=%s\n", config->p_client_crt);
+                }
+                break;
+            case 'k':
+                if (optarg) {
+                    config->p_client_key = optarg;
+                    tc_iot_hal_printf ("client key=%s\n", config->p_client_key);
                 }
                 break;
             case 'u':
                 if (optarg) {
                     strncpy(config->device_info.username, optarg, TC_IOT_MAX_USER_NAME_LEN);
+                    tc_iot_hal_printf ("username=%s\n", config->device_info.username);
                     request_token = 0;
                 }
                 break;
             case 'P':
                 if (optarg) {
                     strncpy(config->device_info.password, optarg, TC_IOT_MAX_PASSWORD_LEN);
+                    tc_iot_hal_printf ("password=%s\n", config->device_info.password);
                     request_token = 0;
                 }
                 break;
             case 't':
                 if (optarg) {
                     strncpy(config->device_info.product_id, optarg, TC_IOT_MAX_PRODUCT_ID_LEN);
+                    tc_iot_hal_printf ("product id=%s\n", config->device_info.product_id);
                 }
                 break;
             case 'd':
                 if (optarg) {
                     strncpy(config->device_info.device_name, optarg, TC_IOT_MAX_DEVICE_NAME_LEN);
+                    tc_iot_hal_printf ("device name=%s\n", config->device_info.device_name);
                 }
                 break;
             case 'i':
                 if (optarg) {
                     strncpy(config->device_info.client_id, optarg, TC_IOT_MAX_CLIENT_ID_LEN);
+                    tc_iot_hal_printf ("client id=%s\n", config->device_info.client_id);
                 }
                 break;
+	    case '?':
+		tc_iot_hal_printf (command_help, argv[0]);
+                exit(0);
+		break;
 
             default:
-                printf("option: %c\n", (char)c);
+                tc_iot_hal_printf("option: %c\n", (char)c);
                 break;
         }
     }
@@ -102,7 +205,7 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
 
     if (optind < argc)
     {
-        printf ("non-option ARGV-elements: ");
+        tc_iot_hal_printf ("non-option ARGV-elements: ");
         while (optind < argc) {
             tc_iot_hal_printf ("%s ", argv[optind++]);
         }

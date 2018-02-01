@@ -1,5 +1,5 @@
-#ifndef TC_IOT_PLATFORM_01172050_H
-#define TC_IOT_PLATFORM_01172050_H
+#ifndef TC_IOT_PLATFORM_H
+#define TC_IOT_PLATFORM_H
 
 #include <arpa/inet.h>
 #include <ctype.h>

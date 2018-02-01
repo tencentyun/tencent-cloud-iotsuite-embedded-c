@@ -1,5 +1,5 @@
-#ifndef IOT_LOG_H
-#define IOT_LOG_H
+#ifndef TC_IOT_LOG_H
+#define TC_IOT_LOG_H
 
 #include "tc_iot_inc.h"
 
@@ -81,7 +81,7 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 #ifdef ENABLE_LOG_WARN
 #define LOG_WARN(...)                                             \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_WARN)){               \
-        tc_iot_hal_printf("WARN %s:%d ", __FUNCTION__, __LINE__); \
+        tc_iot_hal_printf("WARN  %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                           \
         tc_iot_hal_printf("\n");                                  \
     }

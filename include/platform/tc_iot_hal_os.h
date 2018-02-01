@@ -1,5 +1,5 @@
-#ifndef SYS_MEM_01091541_H
-#define SYS_MEM_01091541_H
+#ifndef TC_IOT_HAL_OS_H
+#define TC_IOT_HAL_OS_H
 
 #include "tc_iot_inc.h"
 
@@ -54,10 +54,32 @@ int tc_iot_hal_snprintf(char *str, size_t size, const char *format, ...);
  * @return 时间戳
  */
 long tc_iot_hal_timestamp(void *);
+
+
+/**
+ * @brief tc_iot_hal_sleep_ms 睡眠挂起一定时长，单位：ms
+ *
+ * @param sleep_ms 时长，单位ms
+ *
+ * @return 0 表示成功，-1 表示失败
+ */
 int tc_iot_hal_sleep_ms(long sleep_ms);
 
+
+/**
+ * @brief tc_iot_hal_random 获取随机数
+ *
+ * @return 获得的随机数
+ */
 long tc_iot_hal_random(void);
 
+
+
+/**
+ * @brief tc_iot_hal_srandom 设置随机数种子值
+ *
+ * @param seed 随机数种子值
+ */
 void tc_iot_hal_srandom(unsigned int seed);
 
 #endif /* end of include guard */

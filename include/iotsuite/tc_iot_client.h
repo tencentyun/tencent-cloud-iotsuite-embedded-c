@@ -1,12 +1,14 @@
-#ifndef TC_IOT_CLIENT_01091046_H
-#define TC_IOT_CLIENT_01091046_H
+#ifndef TC_IOT_CLIENT_H
+#define TC_IOT_CLIENT_H
 
 #include "tc_iot_inc.h"
 
 
 int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* p_mqtt_client,
                                  tc_iot_mqtt_client_config* p_client_config);
+
 void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* p_mqtt_client);
+
 char tc_iot_mqtt_client_is_connected(tc_iot_mqtt_client* p_mqtt_client);
 int tc_iot_mqtt_client_yield(tc_iot_mqtt_client* p_mqtt_client, int timeout_ms);
 int tc_iot_mqtt_client_publish(tc_iot_mqtt_client* p_mqtt_client,
