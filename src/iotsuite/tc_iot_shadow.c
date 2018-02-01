@@ -81,7 +81,7 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c) {
     char *pub_topic = c->p_shadow_config->pub_topic;
     int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
-        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=%d", rc);
+        LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
     return rc;
 }
@@ -102,7 +102,7 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char *p_json) {
     char *pub_topic = c->p_shadow_config->pub_topic;
     int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
-        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=%d", rc);
+        LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
     return rc;
 }
@@ -122,7 +122,7 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char *p_json) {
     char *pub_topic = c->p_shadow_config->pub_topic;
     int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
-        LOG_ERROR("!!!tc_iot_mqtt_client_publish failed, return=%d", rc);
+        LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
     return rc;
 }
