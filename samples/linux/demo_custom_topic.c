@@ -53,9 +53,13 @@ int main(int argc, char** argv) {
         tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
     }
 
-    snprintf(sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT, 
+    /* 用户自定义 Topic ，格式一般固定以 prodcut id 和 device name为前缀， */
+    /* 格式为：{$product_id}/{$device_name}/xxx/yyy/zzz .... */
+    /* 具体后缀根据实际业务情况来定义，自行创建。 */
+    const char * custom_topic = "%s/%s/user/get";
+    snprintf(sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, custom_topic, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-    snprintf(pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT, 
+    snprintf(pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN,  custom_topic, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
     tc_iot_hal_printf("sub topic: %s\n", sub_topic);
@@ -99,7 +103,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     ret = tc_iot_mqtt_client_construct(p_client, p_client_config);
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("connect MQTT server failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
-        return ret;
+        return TC_IOT_FAILURE;
     }
     ret = tc_iot_mqtt_client_subscribe(p_client, sub_topic, TC_IOT_QOS1,
                                            _on_message_received);
@@ -111,7 +115,8 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     tc_iot_mqtt_client_yield(p_client, timeout);
 
     while (!stop) {
-        action_get = "{\"method\":\"get\"}";
+        // 具体消息格式可自行定义，注意保持为 JSON 格式
+        action_get = "{\"method\":\"notify\", \"device_status\":{\"light\":\"on\",\"level\":8}}";
 
         tc_iot_mqtt_message pubmsg;
         memset(&pubmsg, '\0', sizeof(pubmsg));
@@ -120,7 +125,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
         pubmsg.qos = TC_IOT_QOS1;
         pubmsg.retained = 0;
         pubmsg.dup = 0;
-        tc_iot_hal_printf("[c->s] shadow_get\n");
+        tc_iot_hal_printf("[c->s] publishing msg\n");
         ret = tc_iot_mqtt_client_publish(p_client, pub_topic, &pubmsg);
         if (TC_IOT_SUCCESS != ret) {
             if (ret != TC_IOT_MQTT_RECONNECT_IN_PROGRESS) {

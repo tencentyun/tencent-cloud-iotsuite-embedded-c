@@ -749,9 +749,16 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
         if (MQTTDeserialize_suback(&mypacketid, 1, &count,
                                    (int*)&data->grantedQoS, c->readbuf,
                                    c->readbuf_size) == 1) {
-            if (data->grantedQoS != 0x80) {
+            /* grantedQoS 是无符号byte类型，paho解包时按照有符号的char来读取， */
+            /* 导致读取到的数据是 -128，需要重新转回无符号类型。 */
+            data->grantedQoS &= 0xFF;
+            /* LOG_TRACE("grantedQoS = 0x%x", data->grantedQoS); */
+            if (data->grantedQoS != TC_IOT_SUBFAIL) {
                 rc = tc_iot_mqtt_set_message_handler(c, topicFilter,
                                                      message_handler);
+            } else {
+                rc = TC_IOT_MQTT_SUBACK_FAILED;
+                LOG_WARN("subscribe %s failed.", topicFilter);
             }
         }
     } else {
@@ -881,7 +888,7 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
                 rc = TC_IOT_FAILURE;
             }
         } else {
-            LOG_TRACE("waitfor PUBACK timeout");
+            LOG_WARN("waitfor PUBACK timeout");
             rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
         }
     } else if (message->qos == TC_IOT_QOS2) {

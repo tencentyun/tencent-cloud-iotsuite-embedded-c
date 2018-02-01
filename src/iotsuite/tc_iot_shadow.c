@@ -11,6 +11,11 @@ static void _on_message_receved(tc_iot_message_data *md) {
 
 int tc_iot_shadow_construct(tc_iot_shadow_client *c,
                             tc_iot_shadow_config *p_cfg) {
+    
+    char *product_id;
+    char *device_name;
+    int rc;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_cfg, TC_IOT_NULL_POINTER);
 
@@ -18,10 +23,13 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
     tc_iot_mqtt_client_config *p_config = &(p_cfg->mqtt_client_config);
 
     tc_iot_mqtt_client *p_mqtt_client = &(c->mqtt_client);
-    tc_iot_mqtt_client_construct(p_mqtt_client, p_config);
+    rc = tc_iot_mqtt_client_construct(p_mqtt_client, p_config);
+    if (rc != TC_IOT_SUCCESS) {
+        return rc;
+    }
 
-    char *product_id = p_config->device_info.product_id;
-    char *device_name = p_config->device_info.device_name;
+    product_id = p_config->device_info.product_id;
+    device_name = p_config->device_info.device_name;
 
     message_handler msg_handler;
     if (p_cfg->on_receive_msg) {
@@ -30,15 +38,15 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
         msg_handler = _on_message_receved;
     }
 
-    int rc = tc_iot_mqtt_client_subscribe(p_mqtt_client, p_cfg->sub_topic, TC_IOT_QOS1,
+    rc = tc_iot_mqtt_client_subscribe(p_mqtt_client, p_cfg->sub_topic, TC_IOT_QOS1,
                                           msg_handler);
     if (TC_IOT_SUCCESS == rc) {
-        LOG_TRACE("Subscribing to %s success.", p_cfg->sub_topic);
+        LOG_TRACE("subscribing to %s success.", p_cfg->sub_topic);
     } else {
-        LOG_ERROR("!!!Subscribing to %s failed, ret code=%d.", p_cfg->sub_topic,
+        LOG_ERROR("subscribing to %s failed, ret code=%d.", p_cfg->sub_topic,
                   rc);
     }
-    return TC_IOT_SUCCESS;
+    return rc;
 }
 
 void tc_iot_shadow_destroy(tc_iot_shadow_client *c) {

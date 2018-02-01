@@ -12,12 +12,12 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_FAILURE = -90,             /**< 执行失败*/
     TC_IOT_INVALID_PARAMETER = -91,   /**< 参数取值非法 */
     TC_IOT_NULL_POINTER = -92,        /**< 参数指针为空 */
-    TC_IOT_TLS_NOT_SUPPORTED = -93,   /**< 系统不只支持 TLS 连接方式*/
-    TC_IOT_BUFFER_OVERFLOW = -94,     /**< 缓存不足*/
+    TC_IOT_TLS_NOT_SUPPORTED = -93,   /**< 系统不支持 TLS 连接方式*/
+    TC_IOT_BUFFER_OVERFLOW = -94,     /**< 函数输出参数内存空间不足，无法完成数据输出*/
 
     TC_IOT_NETWORK_ERROR_BASE = -100, /**< 网络类错误*/
-    TC_IOT_NET_CONNECT_FAILED = -101, /**< 网络连接失败*/
-    TC_IOT_NET_UNKNOWN_HOST = -102, /**< 域名解析失败*/
+    TC_IOT_NET_UNKNOWN_HOST = -101, /**< 域名解析失败*/
+    TC_IOT_NET_CONNECT_FAILED = -102, /**< 网络连接失败*/
     TC_IOT_NET_SOCKET_FAILED = -103, /**< Socket操作失败*/
     TC_IOT_SEND_PACK_FAILED = -104, /**< 发送数据失败*/
 
@@ -33,6 +33,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_MQTT_CONNACK_SERVICE_UNAVAILABLE = -163,  /**< 连接失败，后端服务不可用*/
     TC_IOT_MQTT_CONNACK_BAD_USER_OR_PASSWORD = -164,  /**< 连接失败，用户名或密码校验不通过*/
     TC_IOT_MQTT_CONNACK_NOT_AUTHORIZED = -165,  /**< 连接失败，用户访问未授权*/
+    TC_IOT_MQTT_SUBACK_FAILED = -170,  /**< 订阅失败，有可能 Topic 不存在，或者无权限等*/
 
     TC_IOT_MBED_TLS_ERROR_BASE = -200, /**< TLS 错误*/
     TC_IOT_CTR_DRBG_SEED_FAILED = -201, /**< TLS 初始化失败*/

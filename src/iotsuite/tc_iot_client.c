@@ -33,7 +33,7 @@ int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* c,
         LOG_TRACE("mqtt client connect %s:%d success", p_client_config->host,
                   p_client_config->port);
     } else {
-        LOG_ERROR("!!! mqtt cllient connect %s:%d failed retcode %d",
+        LOG_ERROR("mqtt cllient connect %s:%d failed retcode %d",
                   p_client_config->host, p_client_config->port, rc);
     }
     return rc;

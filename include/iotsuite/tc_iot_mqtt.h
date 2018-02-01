@@ -50,7 +50,7 @@ typedef enum _tc_iot_mqtt_conn_ack_e {
  * @brief MQTT Publis请求消息，头部参数定义(非协议头)，关键参数说明
  */
 typedef struct _tc_iot_mqtt_message {
-    tc_iot_mqtt_qos_e qos; /**< QOS级别*/
+    int qos; /**< QOS级别*/
     unsigned char retained;  /**< 是否要求服务端持久保存此消息*/
     unsigned char dup; /**< 是否重发消息*/
     unsigned short id; /**< 消息 ID*/
