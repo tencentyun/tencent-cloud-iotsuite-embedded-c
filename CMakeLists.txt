@@ -3,6 +3,11 @@ project (tencent-cloud-iotsuite-embedded-c)
 
 set(CMAKE_BUILD_TYPE Debug)
 
+if(TC_IOT_PLATFORM_NAME)
+else()
+    set(TC_IOT_PLATFORM_NAME "linux")
+endif()
+
 add_definitions(-DENABLE_LOG_TRACE)
 add_definitions(-DENABLE_LOG_DEBUG)
 add_definitions(-DENABLE_LOG_WARN)
@@ -11,15 +16,16 @@ add_definitions(-DENABLE_LOG_FATAL)
 
 message(STATUS "CMake version: " ${CMAKE_VERSION})
 message(STATUS "CMake system name: " ${CMAKE_SYSTEM_NAME})
+message(STATUS "TC_IOT_PLATFORM_NAME: " ${TC_IOT_PLATFORM_NAME})
 
 set(CMAKE_SCRIPTS "${CMAKE_SOURCE_DIR}/cmake")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 ## build settings
-set(IOT_VERSION_MAJOR 1)
-set(IOT_VERSION_MINOR 0)
-set(IOT_VERSION_PATCH 0)
-set(CLIENT_VERSION ${IOT_VERSION_MAJOR}.${IOT_VERSION_MINOR}.${IOT_VERSION_PATCH})
+set(TC_IOT_VERSION_MAJOR 1)
+set(TC_IOT_VERSION_MINOR 0)
+set(TC_IOT_VERSION_PATCH 0)
+set(CLIENT_VERSION ${TC_IOT_VERSION_MAJOR}.${TC_IOT_VERSION_MINOR}.${TC_IOT_VERSION_PATCH})
 
 string(TIMESTAMP BUILD_TIMESTAMP UTC)
 message(STATUS "Timestamp is ${BUILD_TIMESTAMP}")
@@ -28,11 +34,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-option(ENABLE_TLS "use mqtt/http over tls" ON) 
-option(ENABLE_TESTING "enable testting" ON)
+if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
+    option(ENABLE_TLS "use mqtt/http over tls" OFF) 
+else()
+    option(ENABLE_TLS "use mqtt/http over tls" ON) 
+endif()
 
-# 
-set(platform_name "linux")
+option(ENABLE_TESTING "enable testting" ON)
 
 if(LIB_INSTALL_DIR)
 else()
@@ -60,7 +68,7 @@ SET(CMAKE_SYSTEM_NAME Linux)
 include_directories(include)
 # include_directories(include/common)
 # include_directories(include/platform)
-include_directories(include/platform/${platform_name})
+include_directories(include/platform/${TC_IOT_PLATFORM_NAME})
 # include_directories(external/paho.mqtt.embedded-c/MQTTPacket/src)
 
 add_definitions(-DJSMN_PARENT_LINKS)

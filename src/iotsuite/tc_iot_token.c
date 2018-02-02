@@ -115,7 +115,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
         /* init network end*/
         LOG_TRACE("tls network intialized.");
 #else
-        LOG_CRIT("tls network not supported.");
+        LOG_FATAL("tls network not supported.");
         return TC_IOT_TLS_NOT_SUPPORTED;
 #endif
     } else {

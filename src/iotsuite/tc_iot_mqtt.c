@@ -138,7 +138,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
 
         tc_iot_hal_tls_init(p_network, &netcontext);
 #else
-        LOG_CRIT("tls network not supported.");
+        LOG_FATAL("tls network not supported.");
         return TC_IOT_TLS_NOT_SUPPORTED;
 #endif
     } else {

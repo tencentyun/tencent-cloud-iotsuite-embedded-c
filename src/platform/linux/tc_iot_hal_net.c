@@ -161,6 +161,7 @@ int tc_iot_hal_net_destroy(tc_iot_network_t* network) {
 
     LOG_TRACE("network destroying...");
     LOG_TRACE("network destroied...");
+    return TC_IOT_SUCCESS;
 }
 
 int tc_iot_hal_net_init(tc_iot_network_t* network,
@@ -176,6 +177,8 @@ int tc_iot_hal_net_init(tc_iot_network_t* network,
     network->is_connected = tc_iot_hal_net_is_connected;
     network->do_destroy = tc_iot_hal_net_destroy;
     network->net_context = (*net_context);
+
+    return TC_IOT_SUCCESS;
 }
 
 #ifdef __cplusplus

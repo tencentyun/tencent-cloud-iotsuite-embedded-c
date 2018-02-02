@@ -14,6 +14,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_NULL_POINTER = -92,        /**< 参数指针为空 */
     TC_IOT_TLS_NOT_SUPPORTED = -93,   /**< 系统不支持 TLS 连接方式*/
     TC_IOT_BUFFER_OVERFLOW = -94,     /**< 函数输出参数内存空间不足，无法完成数据输出*/
+    TC_IOT_FUCTION_NOT_IMPLEMENTED = -99,     /**< 适配函数未做迁移实现 */
 
     TC_IOT_NETWORK_ERROR_BASE = -100, /**< 网络类错误*/
     TC_IOT_NET_UNKNOWN_HOST = -101, /**< 域名解析失败*/
