@@ -147,10 +147,10 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
                                  port_str, MBEDTLS_NET_PROTO_TCP)) != 0) {
         LOG_ERROR("mbedtls_net_connect returned %d", ret);
         switch (ret) {
-            case MBEDTLS_ERR_NET_SOCKET_FAILED:
-                return TC_IOT_NET_SOCKET_FAILED;
             case MBEDTLS_ERR_NET_UNKNOWN_HOST:
                 return TC_IOT_NET_UNKNOWN_HOST;
+            case MBEDTLS_ERR_NET_SOCKET_FAILED:
+                return TC_IOT_NET_SOCKET_FAILED;
             case MBEDTLS_ERR_NET_CONNECT_FAILED:
             default:
                 return TC_IOT_NET_CONNECT_FAILED;
