@@ -20,3 +20,6 @@ if(ENABLE_TLS)
 else()
     target_link_libraries(demo_custom_topic tc_iot_suite tc_iot_common tc_iot_hal jsmn MQTTPacketClient)
 endif()
+
+ADD_SUBDIRECTORY(light)
+
