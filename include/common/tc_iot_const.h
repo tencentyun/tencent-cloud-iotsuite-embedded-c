@@ -63,4 +63,6 @@ typedef enum _tc_iot_sys_code_e {
 
 } tc_iot_sys_code_e;
 
+#define TC_IOT_ARRAY_LENGTH(a)  (sizeof(a)/sizeof(a[0]))
+
 #endif /* end of include guard */

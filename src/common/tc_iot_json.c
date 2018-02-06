@@ -15,12 +15,38 @@ int tc_iot_jsoneq(const char *json, jsmntok_t *tok, const char *s) {
     return -1;
 }
 
-static void _trace_node(const char *prefix, const char *str,
-                        const jsmntok_t *node) {
+static void _trace_node(const char *prefix, const char *str, const jsmntok_t *node) {
     /* LOG_TRACE("---%s type=%d,start=%d,end=%d,size=%d,parent=%d\t %.*s", */
     /* prefix,  */
     /* node->type, node->start, node->end, node->size, node->parent, */
     /* node->end - node->start, str + node->start); */
+}
+
+const char * tc_iot_json_token_type_str(int type) {
+    switch(type) {
+        case JSMN_UNDEFINED:
+            return "undefined";
+        case JSMN_OBJECT:
+            return "object";
+        case JSMN_ARRAY:
+            return "array";
+        case JSMN_STRING:
+            return "string";
+        case JSMN_PRIMITIVE:
+            return "premitive:bool/number/null";
+        default:
+            return "unknown";
+    }
+}
+
+void tc_iot_json_print_node(const char *prefix, const char *json, const jsmntok_t *root_node, int node_index) {
+    const jsmntok_t * node = root_node + node_index;
+
+    LOG_TRACE("%s id=%d,type=%s,start=%d,end=%d,size(child_count)=%d,parent=%d\t %.*s",
+    prefix, node_index,
+    tc_iot_json_token_type_str(node->type), 
+    node->start, node->end, node->size, node->parent,
+    node->end - node->start, json + node->start);
 }
 
 int tc_iot_jsoneq_len(const char *json, const jsmntok_t *tok, const char *s,
@@ -352,6 +378,26 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
         name_start = pos + 1;
         /* LOG_TRACE("searching sub path: %s", name_start); */
     }
+}
+
+int tc_iot_json_parse(const char * json, int json_len, jsmntok_t * tokens, int token_count) {
+    jsmn_parser p;
+    int ret;
+
+    jsmn_init(&p);
+    ret = jsmn_parse(&p, json, json_len, tokens, token_count);
+
+    if (ret < 0) {
+        LOG_ERROR("Failed to parse JSON: %.*s", json_len, json);
+        return TC_IOT_JSON_PARSE_FAILED;
+    }
+
+    if (ret < 1 || tokens[0].type != JSMN_OBJECT) {
+        LOG_ERROR("Invalid JSON format: %.*s", json_len, json);
+        return TC_IOT_JSON_PARSE_FAILED;
+    }
+
+    return ret;
 }
 
 DEFINE_TC_IOT_PROPERTY_FUNC(int8_t, TC_IOT_INT8);

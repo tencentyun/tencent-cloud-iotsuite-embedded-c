@@ -30,54 +30,65 @@ void sig_handler(int sig) {
 }
 
 void _on_message_received(tc_iot_message_data* md) {
-    
-    jsmn_parser p;
-    jsmntok_t t[60];
-    jsmntok_t* temp;
-    char temp_buf[256];
+    jsmntok_t  json_token[60];
+    char json_buf[512];
+    char field_buf[TC_IOT_LIGHT_NAME_LEN+1];
     int field_index = 0;
-    int r;
+    const char * reported_start = NULL;
+    int reported_len = 0;
+    const char * desired_start;
+    int desired_len = 0;
+    int ret = 0;
+    int i = 0;
+
+    memset(field_buf, 0, sizeof(field_buf));
+    memset(json_buf, 0, sizeof(json_buf));
 
     tc_iot_mqtt_message* message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 
-    jsmn_init(&p);
-
-    r = jsmn_parse(&p, message->payload, message->payloadlen, t,
-                   sizeof(t) / sizeof(t[0]));
-    if (r < 0) {
-        LOG_ERROR("Failed to parse JSON: %.*s", (int)message->payloadlen, (char*)message->payload);
+    ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));
+    if (ret <= 0) {
         return ;
     }
 
-    if (r < 1 || t[0].type != JSMN_OBJECT) {
-        LOG_ERROR("Invalid JSON: %.*s", (int)message->payloadlen, (char*)message->payload);
-        return ;
-    }
-
-    field_index = tc_iot_json_find_token((char*)message->payload, t, r, "method", temp_buf, sizeof(temp_buf));
+    field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, "method", json_buf, sizeof(json_buf));
     if (field_index <= 0 ) {
         LOG_ERROR("field method not found in JSON: %.*s", (int)message->payloadlen, (char*)message->payload);
         return ;
     }
 
-    if (strncmp("control", temp_buf, strlen(temp_buf)) == 0) {
+    if (strncmp("control", json_buf, strlen(json_buf)) == 0) {
 
         LOG_TRACE("Control data receved.");
-        field_index = tc_iot_json_find_token((char*)message->payload, t, r, "payload.state.reported", temp_buf, sizeof(temp_buf));
+        field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, "payload.state.reported", json_buf, sizeof(json_buf));
         if (field_index <= 0 ) {
             LOG_TRACE("payload.state.reported not found");
         } else {
-            LOG_INFO("payload.state.reported found:%s", temp_buf);
+            reported_start = message->payload + json_token[field_index].start;
+            reported_len = json_token[field_index].end - json_token[field_index].start;
+            LOG_TRACE("payload.state.reported found:%.*s", reported_len, reported_start);
         }
 
-        field_index = tc_iot_json_find_token((char*)message->payload, t, r, "payload.state.desired", temp_buf, sizeof(temp_buf));
+        field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, "payload.state.desired", json_buf, sizeof(json_buf));
         if (field_index <= 0 ) {
             LOG_TRACE("payload.state.desired not found");
         } else {
-            LOG_INFO("payload.state.desired found:%s", temp_buf);
+            desired_start = message->payload + json_token[field_index].start;
+            desired_len = json_token[field_index].end - json_token[field_index].start;
+            LOG_TRACE("payload.state.desired found:%.*s", desired_len, desired_start);
+
+            ret = tc_iot_json_parse(desired_start,desired_len, json_token, TC_IOT_ARRAY_LENGTH(json_token));
+            if (ret <= 0) {
+                return ;
+            }
+            for (i = 0; i < ret; i++) {
+                tc_iot_json_print_node("desired:", json_buf, json_token, i);
+            }
         }
-    } else if (strncmp("reply", temp_buf, strlen(temp_buf)) == 0) {
+        LOG_TRACE("Control data processed.");
+
+    } else if (strncmp("reply", json_buf, strlen(json_buf)) == 0) {
         LOG_TRACE("Reply pack recevied.");
     }
 
