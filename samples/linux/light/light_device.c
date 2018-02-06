@@ -1,5 +1,10 @@
 #include "tc_iot_device_config.h"
+#include "tc_iot_demo_light.h"
 #include "tc_iot_export.h"
+
+static tc_iot_demo_light g_light_status = {
+    false, "colorful light", 0xFFFFFF, 100.00,
+};
 
 #define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
 
@@ -118,33 +123,18 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     snprintf(reported, sizeof(reported), 
-            "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}",
-            tc_iot_json_inline_escape(buffer, buffer_len, "A string \"\r\n"),
-            12345,3.14159, TC_IOT_JSON_TRUE, TC_IOT_JSON_NULL);
-    snprintf(desired, sizeof(desired), 
-            "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}",
-            tc_iot_json_inline_escape(buffer, buffer_len, "Hello, world!"),
-            700,10000.1234, TC_IOT_JSON_FALSE, TC_IOT_JSON_NULL);
-
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, desired);
-    tc_iot_hal_printf("[c->s] shadow_update_all\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-
+            "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s}",
+            tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
+            g_light_status.color,g_light_status.brightness,
+            g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
     ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, NULL);
     tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
     tc_iot_shadow_update(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, NULL, desired);
-    tc_iot_hal_printf("[c->s] shadow_update_desired\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-
-    ret =  tc_iot_shadow_doc_pack_for_delete(buffer, buffer_len, p_shadow_client, TC_IOT_JSON_NULL, TC_IOT_JSON_NULL);
-    tc_iot_hal_printf("[c->s] shadow_delete\n%s\n",buffer);
-    tc_iot_shadow_delete(p_shadow_client, buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
+    while (!stop) {
+        tc_iot_shadow_yield(p_shadow_client, 500);
+    }
 
     tc_iot_hal_printf("Stopping\n");
     tc_iot_shadow_destroy(p_shadow_client);

@@ -146,11 +146,11 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
                           int device_name_len, long expire, long nonce,
                           const char* product_id, int product_id_len,
                           long timestamp) {
-    char buf[4096];
+    char buf[512];
     int buf_len = sizeof(buf);
     char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
     int ret;
-    char b64_buf[1024];
+    char b64_buf[128];
     int data_len;
     int url_ret;
 

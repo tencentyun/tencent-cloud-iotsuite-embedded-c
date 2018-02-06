@@ -12,7 +12,7 @@ int http_post_urlencoded(tc_iot_network_t* network,
                          const char* encoded_body, char* resp, int resp_max_len,
                          int timeout_ms) {
     tc_iot_url_parse_result_t result;
-    char temp_host[1024];
+    char temp_host[512];
     int written_len;
     int read_len;
     int ret = tc_iot_url_parse(url, strlen(url), &result);
@@ -60,8 +60,8 @@ int http_post_urlencoded(tc_iot_network_t* network,
 
 int http_refresh_auth_token(const char* api_url, char* root_ca_path,
                             tc_iot_device_info* p_device_info) {
-    char sign_out[1024];
-    char http_resp[2048];
+    char sign_out[512];
+    char http_resp[512];
     long timestamp = tc_iot_hal_timestamp(NULL);
 
     long nonce = tc_iot_hal_random();

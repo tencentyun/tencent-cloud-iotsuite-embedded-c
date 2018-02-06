@@ -1,24 +1,17 @@
 #include "tc_iot_device_config.h"
+#include "tc_iot_demo_light.h"
 #include "tc_iot_export.h"
 
-#define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
+static tc_iot_demo_light g_light_status = {
+    true, "kitchen light", 0xFFFFFF, 50.12,
+};
 
-#define TC_IOT_LIGHT_NAME_LEN  25
-typedef _tc_iot_demo_light {
-    bool          light_switch;
-    char          name[TC_IOT_LIGHT_NAME_LEN];
-    unsigned int  color;
-    float         brightness; // percentage 0.00 ~ 100.00
-}tc_iot_demo_light;
+#define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
 
 extern void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv);
 int run_shadow(tc_iot_shadow_config * p_client_config);
 
 static volatile int stop = 0;
-
-static tc_iot_demo_light light_status = {
-    false, "colorful light", 0xFFFFFF, 100.00,
-};
 
 void sig_handler(int sig) {
     if (sig == SIGINT) {
@@ -82,6 +75,14 @@ int main(int argc, char** argv) {
     snprintf(g_client_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
     token_defined = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
+    
+    char * client_id = &(g_client_config.mqtt_client_config.device_info.client_id[0]);
+    int client_id_len = strlen(client_id);
+    int client_id_left_len = TC_IOT_MAX_CLIENT_ID_LEN - client_id_len;
+
+    if (client_id_left_len > 0) {
+        tc_iot_hal_snprintf(client_id+strlen(client_id), client_id_left_len, "%s", "_controller");
+    }
 
     if (!token_defined) {
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
@@ -129,33 +130,14 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_shadow_get(p_shadow_client);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    snprintf(reported, sizeof(reported), 
-            "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}",
-            tc_iot_json_inline_escape(buffer, buffer_len, "A string \"\r\n"),
-            12345,3.14159, TC_IOT_JSON_TRUE, TC_IOT_JSON_NULL);
     snprintf(desired, sizeof(desired), 
-            "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}",
-            tc_iot_json_inline_escape(buffer, buffer_len, "Hello, world!"),
-            700,10000.1234, TC_IOT_JSON_FALSE, TC_IOT_JSON_NULL);
-
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, desired);
-    tc_iot_hal_printf("[c->s] shadow_update_all\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, NULL);
-    tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-
+            "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s}",
+            tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
+            g_light_status.color,g_light_status.brightness,
+            g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
     ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, NULL, desired);
     tc_iot_hal_printf("[c->s] shadow_update_desired\n%s\n", buffer);
     tc_iot_shadow_update(p_shadow_client, buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-
-    ret =  tc_iot_shadow_doc_pack_for_delete(buffer, buffer_len, p_shadow_client, TC_IOT_JSON_NULL, TC_IOT_JSON_NULL);
-    tc_iot_hal_printf("[c->s] shadow_delete\n%s\n",buffer);
-    tc_iot_shadow_delete(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     tc_iot_hal_printf("Stopping\n");
@@ -163,4 +145,3 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("Exit success.\n");
     return 0;
 }
-

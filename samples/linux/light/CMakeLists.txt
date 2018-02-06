@@ -6,11 +6,11 @@ else()
     target_link_libraries(light_device tc_iot_suite tc_iot_common tc_iot_hal jsmn MQTTPacketClient)
 endif()
 
-add_executable(light_controller light_controller.c ../tc_iot_client_config_opts.c)
+add_executable(light_app light_app.c ../tc_iot_client_config_opts.c)
 
 if(ENABLE_TLS)
-    target_link_libraries(light_controller tc_iot_suite tc_iot_common tc_iot_hal mbedtls jsmn MQTTPacketClient)
+    target_link_libraries(light_app tc_iot_suite tc_iot_common tc_iot_hal mbedtls jsmn MQTTPacketClient)
 else()
-    target_link_libraries(light_controller tc_iot_suite tc_iot_common tc_iot_hal jsmn MQTTPacketClient)
+    target_link_libraries(light_app tc_iot_suite tc_iot_common tc_iot_hal jsmn MQTTPacketClient)
 endif()
 
