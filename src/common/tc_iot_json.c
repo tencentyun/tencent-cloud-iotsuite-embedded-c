@@ -17,8 +17,8 @@ int tc_iot_jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 
 static void _trace_node(const char *prefix, const char *str,
                         const jsmntok_t *node) {
-    /* LOG_TRACE("---%s type=%d,start=%d,end=%d,size=%d,parent=%d\t %.*s",
-     * prefix, */
+    /* LOG_TRACE("---%s type=%d,start=%d,end=%d,size=%d,parent=%d\t %.*s", */
+    /* prefix,  */
     /* node->type, node->start, node->end, node->size, node->parent, */
     /* node->end - node->start, str + node->start); */
 }
@@ -290,12 +290,12 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
     for (tok_index = 0; tok_index < count;) {
         pos = strstr(name_start, ".");
         if (NULL != pos) {
-            token_name_len = pos - path;
+            token_name_len = pos - name_start;
         } else {
             token_name_len = strlen(name_start);
         }
 
-        /* _trace_node("check node:", json, &root_token[tok_index]); */
+        _trace_node("check node:", json, &root_token[tok_index]);
         if (root_token[tok_index].type != JSMN_OBJECT) {
             LOG_ERROR("token %d not object", tok_index);
             return -1;
@@ -306,9 +306,8 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
         tok_index++;
         visited_child = 0;
 
-        for (; (visited_child < child_count) && (tok_index < count);
-             tok_index++) {
-            /* _trace_node("compare node:", json, &root_token[tok_index]); */
+        for (; (visited_child < child_count) && (tok_index < count); tok_index++) {
+            _trace_node("compare node:", json, &root_token[tok_index]);
             if (parent_index == root_token[tok_index].parent) {
                 if (tc_iot_jsoneq_len(json, &root_token[tok_index], name_start,
                                       token_name_len) == 0) {
@@ -335,24 +334,23 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                     }
                     break;
                 } else {
-                    /* _trace_node("node name not match:", json,
-                     * &root_token[tok_index]); */
+                    _trace_node("node name not match:", json, &root_token[tok_index]); 
                 }
                 visited_child++;
             } else {
-                /* _trace_node("node parent not match:", json,
-                 * &root_token[tok_index]); */
+                /* LOG_TRACE("target parent=%d/current parent=%d", parent_index, root_token[tok_index].parent); */
+                _trace_node("node parent not match:", json, &root_token[tok_index]); 
             }
         }
 
         if (visited_child >= child_count) {
-            /* LOG_TRACE("%s no match in json.", path); */
+            LOG_TRACE("%s no match in json.", path);
             return TC_IOT_JSON_PATH_NO_MATCH;
         }
 
         /* continue search */
         name_start = pos + 1;
-        /* LOG_TRACE("searching sub path: %s", name_start); */
+        LOG_TRACE("searching sub path: %s", name_start);
     }
 }
 

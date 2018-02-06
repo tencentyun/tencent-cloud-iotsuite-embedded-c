@@ -32,7 +32,7 @@ void sig_handler(int sig) {
 void _on_message_received(tc_iot_message_data* md) {
     
     jsmn_parser p;
-    jsmntok_t t[20];
+    jsmntok_t t[60];
     jsmntok_t* temp;
     char temp_buf[256];
     int field_index = 0;
