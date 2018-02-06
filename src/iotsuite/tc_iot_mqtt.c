@@ -4,6 +4,25 @@ extern "C" {
 
 #include "tc_iot_inc.h"
 
+void tc_iot_init_mqtt_conn_data(MQTTPacket_connectData * conn_data)
+{
+    if (!conn_data) {
+        return;
+    }
+    memset(conn_data, 0, sizeof(MQTTPacket_connectData));
+    conn_data->struct_id[0] = 'M';
+    conn_data->struct_id[1] = 'Q';
+    conn_data->struct_id[2] = 'T';
+    conn_data->struct_id[3] = 'C';
+    conn_data->MQTTVersion = 4;
+    conn_data->keepAliveInterval = 60;
+    conn_data->cleansession = 1;
+    conn_data->will.struct_id[0] = 'M';
+    conn_data->will.struct_id[1] = 'Q';
+    conn_data->will.struct_id[2] = 'T';
+    conn_data->will.struct_id[3] = 'W';
+}
+
 static void _on_new_message_data(tc_iot_message_data* md, MQTTString* topic,
                                  tc_iot_mqtt_message* message) {
     if (!md) {
@@ -586,7 +605,7 @@ int tc_iot_mqtt_connect_with_results(tc_iot_mqtt_client* c,
 
     tc_iot_timer connect_timer;
     int rc = TC_IOT_FAILURE;
-    MQTTPacket_connectData default_options = MQTTPacket_connectData_initializer;
+    MQTTPacket_connectData default_options;
     int len = 0;
 
     if (tc_iot_mqtt_is_connected(c)) {
@@ -599,6 +618,7 @@ int tc_iot_mqtt_connect_with_results(tc_iot_mqtt_client* c,
 
     if (!options) {
         options = &default_options;
+        tc_iot_init_mqtt_conn_data(options);;
     }
 
     c->keep_alive_interval = options->keepAliveInterval;

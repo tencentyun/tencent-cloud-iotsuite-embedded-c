@@ -2,6 +2,10 @@
 #include "tc_iot_demo_light.h"
 #include "tc_iot_export.h"
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
 static tc_iot_demo_light g_light_status = {
     false, "colorful light", 0xFFFFFF, 100.00,
 };
@@ -26,6 +30,28 @@ void sig_handler(int sig) {
     if (stop >= 3) {
         tc_iot_hal_printf("SIGINT/SIGTERM received over %d times, force shutdown now.\n", stop);
         exit(0);
+    }
+}
+
+static void operate_light(tc_iot_demo_light * light) {
+    if (light->light_switch) {
+        tc_iot_hal_printf(
+                ANSI_COLOR_RED 
+                "light status:[name=%s]|[switch:off]|[color rgb:%d]|[brightness:%f]" 
+                ANSI_COLOR_RESET, 
+                light->name,
+                light->color,
+                light->brightness
+                );
+    } else {
+        tc_iot_hal_printf(
+                ANSI_COLOR_RED 
+                "light status:[name=%s]|[switch:on]|[color rgb:%d]|[brightness:%f]" 
+                ANSI_COLOR_RESET, 
+                light->name,
+                light->color,
+                light->brightness
+                );
     }
 }
 
@@ -184,6 +210,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("[c->s] shadow_get\n");
     tc_iot_shadow_get(p_shadow_client);
     tc_iot_shadow_yield(p_shadow_client, timeout);
+    operate_light(&g_light_status);
 
     snprintf(reported, sizeof(reported), 
             "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s}",
