@@ -350,7 +350,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
 
         /* continue search */
         name_start = pos + 1;
-        LOG_TRACE("searching sub path: %s", name_start);
+        /* LOG_TRACE("searching sub path: %s", name_start); */
     }
 }
 
