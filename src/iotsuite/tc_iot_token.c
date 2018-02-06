@@ -58,13 +58,10 @@ int http_post_urlencoded(tc_iot_network_t* network,
     return read_len;
 }
 
-int http_refresh_auth_token(const char* api_url, char* root_ca_path,
-                            tc_iot_device_info* p_device_info) {
+int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timestamp, long nonce,
+        tc_iot_device_info* p_device_info) {
     char sign_out[512];
     char http_resp[512];
-    long timestamp = tc_iot_hal_timestamp(NULL);
-
-    long nonce = tc_iot_hal_random();
     long expire = 60;
     int sign_len;
     tc_iot_network_t network;

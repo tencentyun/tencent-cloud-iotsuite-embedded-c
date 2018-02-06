@@ -46,9 +46,7 @@ typedef struct {
     int fd; /**< 连接句柄fd */
     int is_connected; /**< 是否网络已连接*/
 
-#ifdef STM32
-    sim800l_t *eth; /**< STM32 网络连接数据*/
-#endif
+    void * extra_context; /**< 平台相关网络数据*/
 
 #ifdef ENABLE_TLS
     tc_iot_tls_config_t tls_config; /**< TLS 配置*/

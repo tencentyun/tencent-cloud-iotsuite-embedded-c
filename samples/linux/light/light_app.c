@@ -64,6 +64,8 @@ int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;
     bool token_defined;
     int ret;
+    long timestamp = tc_iot_hal_timestamp(NULL);
+    long nonce = tc_iot_hal_random();
 
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
@@ -88,6 +90,7 @@ int main(int argc, char** argv) {
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
         ret = http_refresh_auth_token(
                 TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
+                timestamp, nonce,
                 &p_client_config->device_info);
         if (ret != TC_IOT_SUCCESS) {
             tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);

@@ -30,8 +30,57 @@ void sig_handler(int sig) {
 }
 
 void _on_message_received(tc_iot_message_data* md) {
+    
+    jsmn_parser p;
+    jsmntok_t t[20];
+    jsmntok_t* temp;
+    char temp_buf[256];
+    int field_index = 0;
+    int r;
+
     tc_iot_mqtt_message* message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+
+    jsmn_init(&p);
+
+    r = jsmn_parse(&p, message->payload, message->payloadlen, t,
+                   sizeof(t) / sizeof(t[0]));
+    if (r < 0) {
+        LOG_ERROR("Failed to parse JSON: %.*s", (int)message->payloadlen, (char*)message->payload);
+        return ;
+    }
+
+    if (r < 1 || t[0].type != JSMN_OBJECT) {
+        LOG_ERROR("Invalid JSON: %.*s", (int)message->payloadlen, (char*)message->payload);
+        return ;
+    }
+
+    field_index = tc_iot_json_find_token((char*)message->payload, t, r, "method", temp_buf, sizeof(temp_buf));
+    if (field_index <= 0 ) {
+        LOG_ERROR("field method not found in JSON: %.*s", (int)message->payloadlen, (char*)message->payload);
+        return ;
+    }
+
+    if (strncmp("control", temp_buf, strlen(temp_buf)) == 0) {
+
+        LOG_TRACE("Control data receved.");
+        field_index = tc_iot_json_find_token((char*)message->payload, t, r, "payload.state.reported", temp_buf, sizeof(temp_buf));
+        if (field_index <= 0 ) {
+            LOG_TRACE("payload.state.reported not found");
+        } else {
+            LOG_INFO("payload.state.reported found:%s", temp_buf);
+        }
+
+        field_index = tc_iot_json_find_token((char*)message->payload, t, r, "payload.state.desired", temp_buf, sizeof(temp_buf));
+        if (field_index <= 0 ) {
+            LOG_TRACE("payload.state.desired not found");
+        } else {
+            LOG_INFO("payload.state.desired found:%s", temp_buf);
+        }
+    } else if (strncmp("reply", temp_buf, strlen(temp_buf)) == 0) {
+        LOG_TRACE("Reply pack recevied.");
+    }
+
 }
 
 tc_iot_shadow_config g_client_config = {
@@ -64,6 +113,8 @@ int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;
     bool token_defined;
     int ret;
+    long timestamp = tc_iot_hal_timestamp(NULL);
+    long nonce = tc_iot_hal_random();
 
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
@@ -80,6 +131,7 @@ int main(int argc, char** argv) {
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
         ret = http_refresh_auth_token(
                 TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
+                timestamp, nonce,
                 &p_client_config->device_info);
         if (ret != TC_IOT_SUCCESS) {
             tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
