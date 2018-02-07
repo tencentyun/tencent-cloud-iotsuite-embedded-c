@@ -41,8 +41,24 @@ int tc_iot_hal_net_destroy(tc_iot_network_t* network) {
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
+int tc_iot_copy_net_context(tc_iot_net_context_t * net_context, tc_iot_net_context_init_t * init) {
+    IF_NULL_RETURN(net_context, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(init, TC_IOT_NULL_POINTER);
+
+    net_context->use_tls           = init->use_tls      ;
+    net_context->host              = init->host         ;
+    net_context->port              = init->port         ;
+    net_context->fd                = init->fd           ;
+    net_context->is_connected      = init->is_connected ;
+    net_context->extra_context     = init->extra_context;
+
+#ifdef ENABLE_TLS
+    net_context->tls_config = init->tls_config;
+#endif
+}
+
 int tc_iot_hal_net_init(tc_iot_network_t* network,
-                        tc_iot_net_context_t* net_context) {
+                        tc_iot_net_context_init_t* net_context) {
     if (NULL == network) {
         return TC_IOT_NETWORK_PTR_NULL;
     }
@@ -53,7 +69,7 @@ int tc_iot_hal_net_init(tc_iot_network_t* network,
     network->do_disconnect = tc_iot_hal_net_disconnect;
     network->is_connected = tc_iot_hal_net_is_connected;
     network->do_destroy = tc_iot_hal_net_destroy;
-    network->net_context = (*net_context);
+    tc_iot_copy_net_context(&(network->net_context), net_context);
 
     return TC_IOT_SUCCESS;
 }

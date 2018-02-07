@@ -160,6 +160,11 @@ typedef struct _tc_iot_mqtt_client {
     tc_iot_timer reconnect_timer; /**< 重连定时器，用来判断是否需要发起新一轮重连尝试*/
 } tc_iot_mqtt_client;
 
+typedef enum _tc_iot_device_auth_mode_e {
+    TC_IOT_MQTT_AUTH_NONE,
+    TC_IOT_MQTT_AUTH_STATIC_PASS,
+    TC_IOT_MQTT_AUTH_DYNAMIC_TOKEN,
+} tc_iot_device_auth_mode_e;
 
 /**
  * @brief 设备信息
@@ -170,6 +175,7 @@ typedef struct _tc_iot_device_info {
     char device_name[TC_IOT_MAX_DEVICE_NAME_LEN];  /**< 设备 Device Name*/
     char client_id[TC_IOT_MAX_CLIENT_ID_LEN]; /**< 设备 Client Id*/
 
+    // int  auth_mode; [>* 登陆模式<]
     char username[TC_IOT_MAX_USER_NAME_LEN]; /**< 连接 MQ 服务端的 Username*/
     char password[TC_IOT_MAX_PASSWORD_LEN]; /**< 连接 MQ 服务端的 Password*/
     long token_expire_time;  /**< username & password 超时时间*/

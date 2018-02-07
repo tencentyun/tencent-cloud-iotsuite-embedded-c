@@ -35,6 +35,22 @@ typedef struct tc_iot_tls_data_t {
 
 #endif
 
+/**
+ * @brief 网络连接参数初始数据
+ */
+typedef struct {
+    uint16_t use_tls; /**< 是否基于 TLS 方式通讯*/
+    char* host; /**< 服务器域名或地址*/
+    uint16_t port; /**< 服务器端口*/
+    int fd; /**< 连接句柄fd */
+    int is_connected; /**< 是否网络已连接*/
+    void * extra_context; /**< 平台相关网络数据*/
+
+#ifdef ENABLE_TLS
+    tc_iot_tls_config_t tls_config; /**< TLS 配置*/
+#endif
+
+} tc_iot_net_context_init_t;
 
 /**
  * @brief 网络连接参数及过程会话数据
@@ -83,7 +99,7 @@ typedef struct tc_iot_network_t {
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_net_init(tc_iot_network_t* network,
-        tc_iot_net_context_t* net_context);
+        tc_iot_net_context_init_t* net_context);
 
 
 /**
@@ -171,7 +187,7 @@ int tc_iot_hal_net_destroy(tc_iot_network_t* network);
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_tls_init(tc_iot_network_t* network,
-        tc_iot_net_context_t* net_context);
+        tc_iot_net_context_init_t* net_context);
 
 /**
  * @brief tc_iot_hal_tls_connect 连接 TLS 服务端并进行相关握手及认证
@@ -244,6 +260,8 @@ int tc_iot_hal_tls_disconnect(tc_iot_network_t* network);
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_tls_destroy(tc_iot_network_t* network);
+
+int tc_iot_copy_net_context(tc_iot_net_context_t * dest, tc_iot_net_context_init_t * init);
 
 #endif
 

@@ -94,6 +94,9 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
                                const char* abs_path, int abs_path_len,
                                const char* http_version, const char* user_agent,
                                const char* content_type, const char* body) {
+    int body_len;
+    char body_len_str[20];
+
     IF_NULL_RETURN(request, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(host, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(method, TC_IOT_NULL_POINTER);
@@ -118,9 +121,8 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
         "identity"); /* accept orignal content only, no zip */
 
     if (body) {
-        int body_len = strlen(body);
+        body_len = strlen(body);
         if (body_len) {
-            char body_len_str[20];
             tc_iot_hal_snprintf(body_len_str, sizeof(body_len_str), "%d",
                                 body_len);
             tc_iot_http_request_append_header(

@@ -69,7 +69,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timest
     unsigned char http_request_buffer[2048];
     int ret;
     char* rsp_body;
-    tc_iot_net_context_t netcontext;
+    tc_iot_net_context_init_t netcontext;
 
     memset(&netcontext, 0, sizeof(netcontext));
     // netcontext.eth = eth;
@@ -116,7 +116,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timest
         return TC_IOT_TLS_NOT_SUPPORTED;
 #endif
     } else {
-        tc_iot_net_context_t netcontext;
+        tc_iot_net_context_init_t netcontext;
         memset(&netcontext, 0, sizeof(netcontext));
         tc_iot_hal_net_init(&network, &netcontext);
         LOG_TRACE("dirtect tcp network intialized.");

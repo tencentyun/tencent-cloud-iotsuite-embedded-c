@@ -463,8 +463,8 @@ int tc_iot_json_property_printf(char *buffer, int len, int count, ...) {
             }
         }
 
-        // LOG_TRACE("%d:buffer_used=%d, buffer_left=%d, key=%s, buffer=%s", i,
-        // buffer_used, len - buffer_used, temp->key, buffer);
+         /* LOG_TRACE("%d:buffer_used=%d, buffer_left=%d, key=%s, buffer=%s", i, */
+         /* buffer_used, len - buffer_used, temp->key, buffer); */
 
         switch (temp->type) {
             case TC_IOT_INT8:

@@ -130,6 +130,7 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
                         tc_iot_hal_printf ("invalid port=%s\n", optarg);
                         exit(0);
                     } else {
+                        config->use_tls = (config->port > 8883);
                         tc_iot_hal_printf ("WARNING: unknown port=%d\n", (int)config->port);
                     }
                 }

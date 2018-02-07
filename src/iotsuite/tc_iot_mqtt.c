@@ -137,7 +137,8 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     tc_iot_network_t* p_network = &(c->ipstack);
     memset(p_network, 0, sizeof(tc_iot_network_t));
 
-    tc_iot_net_context_t netcontext;
+    tc_iot_net_context_init_t netcontext;
+
     netcontext.fd = -1;
     netcontext.use_tls = p_client_config->use_tls;
     netcontext.host = p_client_config->host;
@@ -148,6 +149,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
         p_tls_config = &(netcontext.tls_config);
         if (netcontext.use_tls) {
             p_tls_config->verify_server = 0;
+            p_tls_config->timeout_ms = p_client_config->command_timeout_ms;
             p_tls_config->root_ca_in_mem = g_tc_iot_mqtt_root_ca_certs;
             p_tls_config->root_ca_location = p_client_config->p_root_ca;
             p_tls_config->device_cert_location = p_client_config->p_client_crt;

@@ -33,7 +33,7 @@ int tc_iot_mqtt_client_connect(tc_iot_mqtt_client* c,
     MQTTPacket_connectData* data = &(c->connect_options);
     tc_iot_init_mqtt_conn_data(data);;
     data->willFlag = 0;
-    data->MQTTVersion = 4; // 4 means MQTT 3.1.1
+    data->MQTTVersion = 4; /*4 means MQTT 3.1.1 */
     data->clientID.cstring = p_client_config->device_info.client_id;
     data->username.cstring = p_client_config->device_info.username;
     data->password.cstring = p_client_config->device_info.password;

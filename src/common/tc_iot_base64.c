@@ -25,6 +25,11 @@ int tc_iot_base64_encode(const unsigned char *data, int input_length,
                      char *output_data, int max_output_len) {
     int i;
     int j;
+    uint32_t octet_a;
+    uint32_t octet_b;
+    uint32_t octet_c;
+    uint32_t triple;
+
     int output_length = 4 * ((input_length + 2) / 3);
 
     IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
@@ -32,11 +37,11 @@ int tc_iot_base64_encode(const unsigned char *data, int input_length,
     IF_LESS_RETURN(max_output_len, output_length, TC_IOT_INVALID_PARAMETER);
 
     for (i = 0, j = 0; i < input_length;) {
-        uint32_t octet_a = i < input_length ? (unsigned char)data[i++] : 0;
-        uint32_t octet_b = i < input_length ? (unsigned char)data[i++] : 0;
-        uint32_t octet_c = i < input_length ? (unsigned char)data[i++] : 0;
+        octet_a = i < input_length ? (unsigned char)data[i++] : 0;
+        octet_b = i < input_length ? (unsigned char)data[i++] : 0;
+        octet_c = i < input_length ? (unsigned char)data[i++] : 0;
 
-        uint32_t triple = (octet_a << 0x10) + (octet_b << 0x08) + octet_c;
+        triple = (octet_a << 0x10) + (octet_b << 0x08) + octet_c;
 
         output_data[j++] = encoding_table[(triple >> 3 * 6) & 0x3F];
         output_data[j++] = encoding_table[(triple >> 2 * 6) & 0x3F];
@@ -56,6 +61,11 @@ int tc_iot_base64_decode(const char *data, int input_length,
     int output_length = input_length / 4 * 3;
     int i = 0;
     int j = 0;
+    uint32_t extet_a;
+    uint32_t extet_b;
+    uint32_t extet_c;
+    uint32_t extet_d;
+    uint32_t triple;
 
     IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(output_data, TC_IOT_NULL_POINTER);
@@ -71,12 +81,12 @@ int tc_iot_base64_decode(const char *data, int input_length,
     IF_LESS_RETURN(max_output_len, output_length, TC_IOT_INVALID_PARAMETER);
 
     for (i = 0, j = 0; i < input_length;) {
-        uint32_t extet_a = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        uint32_t extet_b = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        uint32_t extet_c = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        uint32_t extet_d = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        extet_a = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        extet_b = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        extet_c = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        extet_d = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
 
-        uint32_t triple = (extet_a << 3 * 6) + (extet_b << 2 * 6) +
+        triple = (extet_a << 3 * 6) + (extet_b << 2 * 6) +
                           (extet_c << 1 * 6) + (extet_d << 0 * 6);
 
         if (j < output_length) {

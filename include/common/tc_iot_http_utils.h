@@ -23,10 +23,10 @@
 #define HTTP_CONTENT_FORM_DATA "multipart/form-data"
 #define HTTP_CONTENT_JSON "application/json"
 
-// examples:
-// HTTP/1.0 200 OK
-// HTTP/1.1 404 Not Found
-// HTTP/1.1 503 Service Unavailable
+/* examples: */
+/* HTTP/1.0 200 OK */
+/* HTTP/1.1 404 Not Found */
+/* HTTP/1.1 503 Service Unavailable */
 #define HTTP_RESPONSE_STATE_PREFIX "HTTP/1."
 #define HTTP_RESPONSE_STATE_PREFIX_LEN (sizeof(HTTP_RESPONSE_STATE_PREFIX)-1)
 

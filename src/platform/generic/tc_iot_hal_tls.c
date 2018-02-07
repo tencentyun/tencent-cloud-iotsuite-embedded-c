@@ -54,7 +54,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     network->is_connected = tc_iot_hal_tls_is_connected;
     network->do_destroy = tc_iot_hal_tls_destroy;
 
-    network->net_context = (*net_context);
+    tc_iot_copy_net_context(&(network->net_context), net_context);
     network->net_context.is_connected = 0;
 
     LOG_ERROR("not implemented");  

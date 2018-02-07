@@ -308,7 +308,7 @@ int tc_iot_hal_tls_destroy(tc_iot_network_t* network) {
 }
 
 int tc_iot_hal_tls_init(tc_iot_network_t* network,
-                        tc_iot_net_context_t* net_context) {
+                        tc_iot_net_context_init_t* net_context) {
     if (NULL == network) {
         return TC_IOT_NETWORK_PTR_NULL;
     }
@@ -320,7 +320,8 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     network->is_connected = tc_iot_hal_tls_is_connected;
     network->do_destroy = tc_iot_hal_tls_destroy;
 
-    network->net_context = (*net_context);
+    tc_iot_copy_net_context(&(network->net_context), net_context);
+
     network->net_context.is_connected = 0;
     tc_iot_tls_config_t* tls_config = &(network->net_context.tls_config);
 

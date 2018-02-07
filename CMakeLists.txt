@@ -36,6 +36,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     option(ENABLE_TLS "use mqtt/http over tls" OFF) 
+    # add_definitions(-std=c89)
 else()
     option(ENABLE_TLS "use mqtt/http over tls" ON) 
 endif()
@@ -72,7 +73,6 @@ include_directories(include/platform/${TC_IOT_PLATFORM_NAME})
 # include_directories(external/paho.mqtt.embedded-c/MQTTPacket/src)
 
 add_definitions(-DJSMN_PARENT_LINKS)
-#add_definitions(-std=gnu99)
 
 # include_directories(external/jsmn/)
 
