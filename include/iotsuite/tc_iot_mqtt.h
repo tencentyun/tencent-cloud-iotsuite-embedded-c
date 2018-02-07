@@ -228,5 +228,6 @@ tc_iot_mqtt_client_state_e tc_iot_mqtt_get_state(tc_iot_mqtt_client* client);
 char tc_iot_mqtt_get_auto_reconnect(tc_iot_mqtt_client* client);
 int tc_iot_mqtt_set_auto_reconnect(tc_iot_mqtt_client* client,
                                    char auto_reconnect);
+void tc_iot_init_mqtt_conn_data(MQTTPacket_connectData * conn_data);
 
 #endif /* end of include guard */

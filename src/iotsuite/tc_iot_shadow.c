@@ -66,9 +66,12 @@ int tc_iot_shadow_yield(tc_iot_shadow_client *c, int timeout_ms) {
 }
 
 int tc_iot_shadow_get(tc_iot_shadow_client *c) {
+    char *pub_topic ;
+    int rc ;
+    char *action_get = "{\"method\":\"get\"}";
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
-    char *action_get = "{\"method\":\"get\"}";
     tc_iot_mqtt_message pubmsg;
     memset(&pubmsg, 0, sizeof(pubmsg));
     pubmsg.payload = action_get;
@@ -78,8 +81,8 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c) {
     pubmsg.dup = 0;
     LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
               (char *)pubmsg.payload);
-    char *pub_topic = c->p_shadow_config->pub_topic;
-    int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
+    pub_topic = c->p_shadow_config->pub_topic;
+    rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
         LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
@@ -87,6 +90,9 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c) {
 }
 
 int tc_iot_shadow_update(tc_iot_shadow_client *c, char *p_json) {
+    char *pub_topic ;
+    int rc ;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_json, TC_IOT_NULL_POINTER);
 
@@ -99,8 +105,8 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char *p_json) {
     pubmsg.dup = 0;
     LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
               (char *)pubmsg.payload);
-    char *pub_topic = c->p_shadow_config->pub_topic;
-    int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
+    pub_topic = c->p_shadow_config->pub_topic;
+    rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
         LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
@@ -108,6 +114,9 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char *p_json) {
 }
 
 int tc_iot_shadow_delete(tc_iot_shadow_client *c, char *p_json) {
+    char *pub_topic;
+    int rc;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     tc_iot_mqtt_message pubmsg;
@@ -119,8 +128,8 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char *p_json) {
     pubmsg.dup = 0;
     LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
               (char *)pubmsg.payload);
-    char *pub_topic = c->p_shadow_config->pub_topic;
-    int rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
+    pub_topic = c->p_shadow_config->pub_topic;
+    rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
         LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
