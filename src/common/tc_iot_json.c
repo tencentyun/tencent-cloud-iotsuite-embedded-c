@@ -311,7 +311,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
     IF_NULL_RETURN(json, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(root_token, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(path, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(result, TC_IOT_NULL_POINTER);
+    /* IF_NULL_RETURN(result, TC_IOT_NULL_POINTER); */
 
     for (tok_index = 0; tok_index < count;) {
         pos = strstr(name_start, ".");
@@ -343,17 +343,19 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                         _trace_node("match node:", json,
                                     &root_token[tok_index]);
 
-                        val_len = root_token[tok_index].end -
-                                  root_token[tok_index].start;
-                        if (val_len > result_len) {
-                            return -1;
-                        }
+                        if (result && result_len) {
+                            val_len = root_token[tok_index].end -
+                                    root_token[tok_index].start;
+                            if (val_len > result_len) {
+                                return TC_IOT_BUFFER_OVERFLOW;
+                            }
 
-                        tc_iot_json_unescape(result, result_len,
-                                             json + root_token[tok_index].start,
-                                             val_len);
-                        if (val_len < result_len) {
-                            result[val_len] = 0;
+                            tc_iot_json_unescape(result, result_len,
+                                    json + root_token[tok_index].start,
+                                    val_len);
+                            if (val_len < result_len) {
+                                result[val_len] = 0;
+                            }
                         }
                         /* LOG_TRACE("result=%.*s", val_len, result); */
                         return tok_index;
