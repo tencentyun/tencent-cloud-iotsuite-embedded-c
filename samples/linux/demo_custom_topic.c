@@ -5,6 +5,12 @@
 
 extern void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv);
 
+bool use_static_token = false;
+
+void my_default_msg_handler(tc_iot_message_data*);
+void my_disconnect_handler(tc_iot_mqtt_client* c, void* ctx);
+void _refresh_token();
+
 int run_mqtt(tc_iot_mqtt_client_config* p_client_config);
 
 tc_iot_mqtt_client_config g_client_config = {
@@ -24,6 +30,8 @@ tc_iot_mqtt_client_config g_client_config = {
     TC_IOT_CONFIG_ROOT_CA,
     TC_IOT_CONFIG_CLIENT_CRT,
     TC_IOT_CONFIG_CLIENT_KEY,
+    my_disconnect_handler,
+    my_default_msg_handler,
 };
 
 char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_SUB_TOPIC_DEF;
@@ -31,30 +39,13 @@ char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_PUB_TOPIC_DEF;
 
 int main(int argc, char** argv) {
     int ret = 0;
-    bool token_defined;
     tc_iot_mqtt_client_config * p_client_config;
-    long timestamp = tc_iot_hal_timestamp(NULL);
-    long nonce = tc_iot_hal_random();
 
     p_client_config = &(g_client_config);
     parse_command(p_client_config, argc, argv);
 
-    token_defined = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
-
-    if (!token_defined) {
-        tc_iot_hal_printf("requesting username and password for mqtt.\n");
-        ret = http_refresh_auth_token(
-                TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
-                timestamp, nonce,
-                &p_client_config->device_info);
-        if (ret != TC_IOT_SUCCESS) {
-            tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
-            return 0;
-        }
-        tc_iot_hal_printf("request username and password for mqtt success.\n");
-    } else {
-        tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
-    }
+    use_static_token = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
+    _refresh_token();
 
     /* 用户自定义 Topic ，格式一般固定以 prodcut id 和 device name为前缀， */
     /* 格式为：{$product_id}/{$device_name}/xxx/yyy/zzz .... */
@@ -74,6 +65,43 @@ void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
+
+void _refresh_token() {
+    int ret;
+    long timestamp = tc_iot_hal_timestamp(NULL);
+    long nonce = tc_iot_hal_random();
+    tc_iot_mqtt_client_config * p_client_config;
+
+    p_client_config = &(g_client_config);
+
+    if (!use_static_token) {
+        tc_iot_hal_printf("requesting username and password for mqtt.\n");
+        ret = http_refresh_auth_token(
+                TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
+                timestamp, nonce,
+                &p_client_config->device_info);
+        if (ret != TC_IOT_SUCCESS) {
+            tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
+            return;
+        }
+        tc_iot_hal_printf("request username and password for mqtt success.\n");
+    } else {
+        tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
+    }
+}
+
+void my_disconnect_handler(tc_iot_mqtt_client* c, void* ctx) {
+    // 自动刷新 password
+    if (!use_static_token && tc_iot_mqtt_get_auto_reconnect(c)) {
+        /* _refresh_token(); */
+    }
+}
+
+void my_default_msg_handler(tc_iot_message_data * md) {
+    tc_iot_mqtt_message* message = md->message;
+    tc_iot_hal_printf("UNHANDLED [s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+}
+
 
 static volatile int stop = 0;
 

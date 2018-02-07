@@ -16,6 +16,20 @@ int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* c,
         return rc;
     }
 
+    rc = tc_iot_mqtt_client_connect(c, p_client_config);
+    return rc;
+}
+
+int tc_iot_mqtt_client_connect(tc_iot_mqtt_client* c,
+                                 tc_iot_mqtt_client_config* p_client_config) {
+    int rc;
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(p_client_config, TC_IOT_NULL_POINTER);
+    
+    if (tc_iot_mqtt_client_is_connected(c)) {
+        return TC_IOT_SUCCESS;
+    }
+
     MQTTPacket_connectData* data = &(c->connect_options);
     tc_iot_init_mqtt_conn_data(data);;
     data->willFlag = 0;

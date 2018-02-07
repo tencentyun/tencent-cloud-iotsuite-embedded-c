@@ -7,6 +7,9 @@
 int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* p_mqtt_client,
                                  tc_iot_mqtt_client_config* p_client_config);
 
+int tc_iot_mqtt_client_connect(tc_iot_mqtt_client* c, 
+        tc_iot_mqtt_client_config* p_client_config);
+
 void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* p_mqtt_client);
 
 char tc_iot_mqtt_client_is_connected(tc_iot_mqtt_client* p_mqtt_client);
