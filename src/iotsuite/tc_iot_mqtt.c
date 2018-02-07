@@ -575,6 +575,29 @@ int tc_iot_mqtt_reconnect(tc_iot_mqtt_client* c) {
         if (MQTTDeserialize_connack(&data->sessionPresent, &data->rc,
                                     c->readbuf, c->readbuf_size) == 1) {
             rc = data->rc;
+            switch (rc) {
+                case TC_IOT_CONN_PROTOCOL_UNACCEPTABLE:
+                    rc = TC_IOT_MQTT_CONNACK_PROTOCOL_UNACCEPTABLE;
+                    break;
+                case TC_IOT_CONN_CLIENT_ID_INVALID:
+                    rc = TC_IOT_MQTT_CONNACK_CLIENT_ID_INVALID;
+                    break;
+                case TC_IOT_CONN_SERVICE_UNAVAILABLE:
+                    rc = TC_IOT_MQTT_CONNACK_SERVICE_UNAVAILABLE;
+                    break;
+                case TC_IOT_CONN_BAD_USER_OR_PASSWORD:
+                    rc = TC_IOT_MQTT_CONNACK_BAD_USER_OR_PASSWORD;
+                    break;
+                case TC_IOT_CONN_NOT_AUTHORIZED:
+                    rc = TC_IOT_MQTT_CONNACK_NOT_AUTHORIZED;
+                    break;
+                case TC_IOT_CONN_SUCCESS:
+                    rc = TC_IOT_SUCCESS;
+                    break;
+                default:
+                    rc = TC_IOT_MQTT_CONNACK_ERROR;
+                    break;
+            }
         } else {
             rc = TC_IOT_FAILURE;
         }

@@ -14,6 +14,8 @@ static tc_iot_demo_light g_light_status = {
 
 extern void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv);
 int run_shadow(tc_iot_shadow_config * p_client_config);
+static void operate_light(tc_iot_demo_light * light);
+static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_light * light);
 
 static volatile int stop = 0;
 
@@ -34,30 +36,57 @@ void sig_handler(int sig) {
 }
 
 static void operate_light(tc_iot_demo_light * light) {
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+
     if (light->light_switch) {
+        tc_iot_hal_printf( ANSI_COLOR_GREEN "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET, 
+                tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         tc_iot_hal_printf(
-                ANSI_COLOR_RED 
-                "light status:[name=%s]|[switch:off]|[color rgb:%d]|[brightness:%f]" 
+                ANSI_COLOR_GREEN 
+                "light status:[name=%s]|[switch:on]|[color rgb:0x%X]|[brightness:%f]\n" 
                 ANSI_COLOR_RESET, 
                 light->name,
                 light->color,
                 light->brightness
                 );
     } else {
+        tc_iot_hal_printf( ANSI_COLOR_RED "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET, 
+                tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         tc_iot_hal_printf(
                 ANSI_COLOR_RED 
-                "light status:[name=%s]|[switch:on]|[color rgb:%d]|[brightness:%f]" 
+                "light status:[name=%s]|[switch:off]|[color rgb:0x%X]|[brightness:%f]\n" 
                 ANSI_COLOR_RESET, 
                 light->name,
                 light->color,
                 light->brightness
                 );
     }
+    tc_iot_hal_printf("-----------------------------------------------------");
+}
+
+static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_light * light) {
+    char buffer[512];
+    int buffer_len = sizeof(buffer);
+    char reported[256];
+    int ret;
+
+    snprintf(reported, sizeof(reported), 
+            "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s}",
+            tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
+            g_light_status.color,g_light_status.brightness,
+            g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
+    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, NULL);
+    tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
+    tc_iot_shadow_update(p_shadow_client, buffer);
 }
 
 void _on_message_received(tc_iot_message_data* md) {
-    jsmntok_t  json_token[60];
+    jsmntok_t  json_token[120];
+    jsmntok_t  * key_tok;
+    jsmntok_t  * val_tok;
     char field_buf[TC_IOT_LIGHT_NAME_LEN+1];
+    int field_len = sizeof(field_buf);
     int field_index = 0;
     const char * reported_start = NULL;
     int reported_len = 0;
@@ -65,11 +94,15 @@ void _on_message_received(tc_iot_message_data* md) {
     int desired_len = 0;
     int ret = 0;
     int i = 0;
+    int temp_color;
+    int  key_len, val_len;
+    const char * key_start;
+    const char * val_start;
 
     memset(field_buf, 0, sizeof(field_buf));
 
     tc_iot_mqtt_message* message = md->message;
-    tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+    LOG_INFO("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 
     ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));
     if (ret <= 0) {
@@ -111,7 +144,7 @@ void _on_message_received(tc_iot_message_data* md) {
             if (ret <= 0) {
                 return ;
             }
-            for (i = 0; i < ret; i++) {
+            for (i = 1; i < ret; i++) {
                 tc_iot_json_print_node("reported:", reported_start, json_token, i);
             }
         }
@@ -121,9 +154,70 @@ void _on_message_received(tc_iot_message_data* md) {
             if (ret <= 0) {
                 return ;
             }
-            for (i = 0; i < ret; i++) {
-                tc_iot_json_print_node("desired:", desired_start, json_token, i);
+            for (i = 0; i < ret/2; i++) {
+                /* tc_iot_json_print_node("desired:", desired_start, json_token, i); */
+
+                // 位置 0 是object对象，所以要从位置 1 开始取数据
+                // 2*i+1 为 key 字段，2*i + 2 为 value 字段
+                key_tok = &(json_token[2*i + 1]);
+                key_start = desired_start + key_tok->start;
+                key_len = key_tok->end - key_tok->start;
+
+                val_tok = &(json_token[2*i + 2]);
+                val_start = desired_start + val_tok->start;
+                val_len = val_tok->end - val_tok->start;
+
+                if (strncmp("name", key_start, key_len) == 0)  {
+                    if (val_len > TC_IOT_LIGHT_NAME_LEN) {
+                        LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
+                                val_len, val_start, TC_IOT_LIGHT_NAME_LEN, val_start);
+                        val_len = TC_IOT_LIGHT_NAME_LEN;
+                    }
+                    LOG_TRACE("state change:[name|%s -> %.*s]", g_light_status.name, val_len, val_start);
+                    strncpy(g_light_status.name, val_start, val_len);
+                    g_light_status.name[val_len] = '\0';
+                }
+
+                if (strncmp("brightness", key_start, key_len) == 0)  {
+                    if (val_len > field_len) {
+                        LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
+                                val_len, val_start, field_len, val_start);
+                        val_len = field_len;
+                    }
+                    strncpy(field_buf, val_start, val_len);
+                    field_buf[val_len] = '\0';
+                    LOG_TRACE("state change:[brightness|%f -> %.*s]", g_light_status.brightness, val_len, val_start);
+                    g_light_status.brightness = atof(field_buf);
+                }
+
+                if (strncmp("light_switch", key_start, key_len) == 0)  {
+                    if (val_len > field_len) {
+                        LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
+                                val_len, val_start, field_len, val_start);
+                        val_len = field_len;
+                    }
+                    strncpy(field_buf, val_start, val_len);
+                    field_buf[val_len] = '\0';
+                    LOG_TRACE("state change:[light_switch|%s -> %.*s]", g_light_status.light_switch?"true":"false", val_len, val_start);
+                    g_light_status.light_switch = (strncmp(TC_IOT_JSON_TRUE, field_buf, val_len) == 0);
+                }
+
+                if (strncmp("color", key_start, key_len) == 0)  {
+                    if (val_len > field_len) {
+                        LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
+                                val_len, val_start, field_len, val_start);
+                        val_len = field_len;
+                    }
+                    strncpy(field_buf, val_start, val_len);
+                    field_buf[val_len] = '\0';
+                    temp_color = atoi(field_buf);
+                    LOG_TRACE("state change:[brightness|0x%x -> 0x%x]", g_light_status.color, temp_color);
+                    
+                    g_light_status.color = temp_color;
+                }
             }
+
+            operate_light(&g_light_status);
         }
 
         LOG_TRACE("Control data processed.");
@@ -131,7 +225,6 @@ void _on_message_received(tc_iot_message_data* md) {
     } else if (strncmp("reply", field_buf, strlen(field_buf)) == 0) {
         LOG_TRACE("Reply pack recevied.");
     }
-
 }
 
 tc_iot_shadow_config g_client_config = {
@@ -221,20 +314,9 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_shadow_yield(p_shadow_client, timeout);
     tc_iot_hal_printf("yield waiting for server finished.\n");
 
-    tc_iot_hal_printf("[c->s] shadow_get\n");
+    LOG_INFO("[c->s] shadow_get\n");
+    // 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态
     tc_iot_shadow_get(p_shadow_client);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-    operate_light(&g_light_status);
-
-    snprintf(reported, sizeof(reported), 
-            "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s}",
-            tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
-            g_light_status.color,g_light_status.brightness,
-            g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, NULL);
-    tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
 
     while (!stop) {
         tc_iot_shadow_yield(p_shadow_client, 500);
