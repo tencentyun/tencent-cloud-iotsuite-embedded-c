@@ -132,6 +132,12 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timest
     ret = http_post_urlencoded(&network, &request, api_url, sign_out, http_resp,
                                sizeof(http_resp), 2000);
 
+    ret = tc_iot_parse_http_response_code(http_resp);
+    if (ret != 200) {
+        LOG_WARN("http response status code=%d", ret);
+        return TC_IOT_REFRESH_TOKEN_FAILED;
+    }
+
     rsp_body = strstr(http_resp, "\r\n\r\n");
     if (rsp_body) {
         // skip \r\n\r\n

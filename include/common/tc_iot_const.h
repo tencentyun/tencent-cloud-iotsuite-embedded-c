@@ -60,6 +60,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_JSON_PARSE_FAILED = -1004, /**< json 解析失败*/
     TC_IOT_ERROR_HTTP_REQUEST_FAILED = -1005, /**<  http 请求失败*/
     TC_IOT_REFRESH_TOKEN_FAILED = -1006, /**< 获取用户Token失败 */
+    TC_IOT_HTTP_RESPONSE_INVALID = -1007, /**< 服务端相应的 HTTP 数据格式非法 */
 
 } tc_iot_sys_code_e;
 

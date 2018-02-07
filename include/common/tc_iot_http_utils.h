@@ -23,6 +23,14 @@
 #define HTTP_CONTENT_FORM_DATA "multipart/form-data"
 #define HTTP_CONTENT_JSON "application/json"
 
+// examples:
+// HTTP/1.0 200 OK
+// HTTP/1.1 404 Not Found
+// HTTP/1.1 503 Service Unavailable
+#define HTTP_RESPONSE_STATE_PREFIX "HTTP/1."
+#define HTTP_RESPONSE_STATE_PREFIX_LEN (sizeof(HTTP_RESPONSE_STATE_PREFIX)-1)
+
+
 #define HTTP_BODY_FMT "\r\n%s"
 
 typedef struct _tc_iot_http_request {
@@ -185,5 +193,16 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
                                     int device_name_len, long expire,
                                     long nonce, const char* product_id,
                                     int product_id_len, long timestamp);
+
+
+/**
+ * @brief tc_iot_parse_http_response_code 解析 HTTP 响应数据返回码
+ *
+ * @param resp HTTP 响应数据字符串
+ *
+ * @return >0 HTTP Status Code, 比如 200、404、50x 等， <0 数据格式非法，无法解
+ * 析
+ */
+int tc_iot_parse_http_response_code(const char * http_resp);
 
 #endif /* end of include guard */

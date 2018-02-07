@@ -266,6 +266,40 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
     return total;
 }
 
+int tc_iot_parse_http_response_code(const char * resp) {
+    int ret;
+    int i;
+
+    IF_NULL_RETURN(resp, TC_IOT_NULL_POINTER);
+    if (strncmp(HTTP_RESPONSE_STATE_PREFIX, resp, HTTP_RESPONSE_STATE_PREFIX_LEN) != 0) {
+        return TC_IOT_HTTP_RESPONSE_INVALID;
+    }
+    
+    resp+= HTTP_RESPONSE_STATE_PREFIX_LEN;
+    if (*resp != '0' && *resp != '1') {
+        LOG_TRACE("http minor version invalid: %.*s", 5, resp);
+        return TC_IOT_HTTP_RESPONSE_INVALID;
+    }
+    resp++;
+    if (*resp != ' ') {
+        LOG_TRACE("http minor version invalid: %.*s", 5, resp);
+        return TC_IOT_HTTP_RESPONSE_INVALID;
+    }
+    resp++;
+    ret = 0;
+    for ( i = 0; i < 3; i++, resp++) {
+        if (*resp < '0') {
+            return TC_IOT_HTTP_RESPONSE_INVALID;
+        } 
+        if (*resp > '9') {
+            return TC_IOT_HTTP_RESPONSE_INVALID;
+        } 
+        ret = ret*10 +((*resp) - '0');
+    }
+
+    return ret;
+}
+
 #ifdef __cplusplus
 }
 #endif

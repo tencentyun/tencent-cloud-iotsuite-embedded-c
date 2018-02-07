@@ -274,7 +274,7 @@ int main(int argc, char** argv) {
     if (!token_defined) {
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
         ret = http_refresh_auth_token(
-                TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
+                TC_IOT_CONFIG_AUTH_API_URL, NULL,
                 timestamp, nonce,
                 &p_client_config->device_info);
         if (ret != TC_IOT_SUCCESS) {
