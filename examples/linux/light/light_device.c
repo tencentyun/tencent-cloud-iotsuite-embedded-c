@@ -334,7 +334,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_shadow_get(p_shadow_client);
 
     while (!stop) {
-        tc_iot_shadow_yield(p_shadow_client, 500);
+        tc_iot_shadow_yield(p_shadow_client, 2000);
     }
 
     tc_iot_hal_printf("Stopping\n");

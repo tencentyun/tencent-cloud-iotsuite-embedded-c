@@ -389,7 +389,13 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     switch (packet_type) {
         default:
             rc = packet_type;
-            LOG_TRACE("cycle readPacket rc=%d", rc);
+            if (rc == TC_IOT_NET_NOTHING_READ) {
+                /* LOG_TRACE("cycle readPacket: nothing read"); */
+            } else if (rc == TC_IOT_NET_READ_TIMEOUT){
+                LOG_TRACE("cycle readPacket: read timeout", rc);
+            } else {
+                LOG_TRACE("cycle readPacket: rc=%d", rc);
+            }
             /* if (errno > 0) { */
                 /* LOG_TRACE("cycle rc=%d, errno=%d, errstr=%s", rc, errno, strerror(errno)); */
             /* } */
@@ -472,7 +478,10 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
 exit:
     if (rc == TC_IOT_SUCCESS) {
         rc = packet_type;
-    } else {
+    } else if (rc == TC_IOT_NET_NOTHING_READ) {
+        rc = TC_IOT_SUCCESS;
+    }
+    else {
         if (tc_iot_mqtt_is_connected(c)) {
             LOG_TRACE("disconnecting for rc=%d.", rc);
             tc_iot_mqtt_disconnect(c);
@@ -503,7 +512,8 @@ int tc_iot_mqtt_yield(tc_iot_mqtt_client* c, int timeout_ms) {
                 continue;
             }
         }
-        if (cycle(c, &timer) < 0) {
+        if ((rc = cycle(c, &timer)) < 0) {
+            LOG_TRACE("cycle failed rc=%d", rc);
             rc = TC_IOT_FAILURE;
             break;
         }
@@ -528,6 +538,7 @@ int waitfor(tc_iot_mqtt_client* c, int packet_type, tc_iot_timer* timer) {
         if (tc_iot_hal_timer_is_expired(timer)) {
             break;  // we timed out
         }
+        /* LOG_TRACE("calling cycle, packet_type=%d", packet_type); */
         rc = cycle(c, timer);
     } while (rc != packet_type && rc >= 0);
 

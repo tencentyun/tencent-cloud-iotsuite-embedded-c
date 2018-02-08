@@ -25,7 +25,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
             if (errno != EAGAIN && errno != EWOULDBLOCK) {
                 bytes = -1;
             }
-            // LOG_TRACE("recv errno=%d", errno);
+            /* LOG_TRACE("recv rc=%d, errno=%d,str=%s,timeout=%d,ts=%d",rc, errno, strerror(errno), timeout_ms, time(NULL)); */
             break;
         } else if (rc == 0) {
             bytes = 0;
@@ -33,6 +33,11 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
         } else {
             bytes += rc;
         }
+    }
+    if (bytes == 0) {
+        return TC_IOT_NET_NOTHING_READ;
+    } else if (bytes != len) {
+        return TC_IOT_NET_READ_TIMEOUT;
     }
     return bytes;
 }

@@ -46,21 +46,20 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             }
         } else {
             if (tc_iot_hal_timer_is_expired(&timer)) {
-                // LOG_TRACE("tls read timeout=%d", timeout_ms)
-                IOT_FUNC_EXIT_RC(read_len);
+                break;
             } else {
                 LOG_TRACE("tls_read unkownn ret=%d", ret);
             }
         }
     }
 
-    if (read_len > 0) {
-        // LOG_TRACE("total read len = %d", read_len);
-        IOT_FUNC_EXIT_RC(read_len);
-    } else {
-        LOG_TRACE("ssl read timeout");
-        IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_READ_TIMEOUT);
+    if (read_len == 0) {
+        return TC_IOT_NET_NOTHING_READ;
+    } else if (read_len != len) {
+        return TC_IOT_NET_READ_TIMEOUT;
     }
+
+    return read_len;
 }
 
 int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
