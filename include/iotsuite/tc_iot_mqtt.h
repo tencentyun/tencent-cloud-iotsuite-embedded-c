@@ -200,6 +200,8 @@ typedef struct _tc_iot_mqtt_client_config {
 
     disconnectHandler disconnect_handler; /**< 连接断开回调*/
     defaultMessageHandler default_msg_handler; /**< 默认消息处理回调*/
+    char willFlag;
+    MQTTPacket_willOptions will; 
 } tc_iot_mqtt_client_config;
 
 
