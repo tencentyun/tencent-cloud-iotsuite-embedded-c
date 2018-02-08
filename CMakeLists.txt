@@ -78,7 +78,7 @@ add_definitions(-DJSMN_PARENT_LINKS)
 
 # enable_testing()
 ADD_SUBDIRECTORY(external)
-ADD_SUBDIRECTORY(samples)
+ADD_SUBDIRECTORY(examples)
 ADD_SUBDIRECTORY(src)
 
 if(ENABLE_TESTING)
