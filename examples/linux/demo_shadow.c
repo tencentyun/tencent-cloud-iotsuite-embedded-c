@@ -112,7 +112,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     }
 
     tc_iot_hal_printf("construct mqtt shadow client success.\n");
-    timeout = TC_IOT_CONFIG_COMMAND_TIMEOUT_MS;
+    timeout = 2000;
     tc_iot_hal_printf("yield waiting for server push.\n");
     tc_iot_shadow_yield(p_shadow_client, timeout);
     tc_iot_hal_printf("yield waiting for server finished.\n");
