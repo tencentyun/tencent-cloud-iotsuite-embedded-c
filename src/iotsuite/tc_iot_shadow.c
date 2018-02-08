@@ -68,7 +68,7 @@ int tc_iot_shadow_yield(tc_iot_shadow_client *c, int timeout_ms) {
 int tc_iot_shadow_get(tc_iot_shadow_client *c) {
     char *pub_topic ;
     int rc ;
-    char *action_get = "{\"method\":\"get\"}";
+    char *action_get = "{\"method\":\"get\",\"passthrough\":{\"m\":\"get\"}}";
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
@@ -144,7 +144,7 @@ int tc_iot_shadow_doc_pack_for_delete(char *buffer, int buffer_len,
     int buffer_used = 0;
 
     ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len,
-                              "{\"method\":\"%s\"", TC_IOT_MQTT_METHOD_DELETE);
+                              "{\"method\":\"%s\",\"passthrough\":{\"m\":\"d\"}", TC_IOT_MQTT_METHOD_DELETE);
     buffer_used += ret;
     ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len, ",\"state\":{");
     buffer_used += ret;
@@ -184,7 +184,7 @@ int tc_iot_shadow_doc_pack_for_update(char *buffer, int buffer_len,
     int buffer_used = 0;
 
     ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len,
-                              "{\"method\":\"%s\"", TC_IOT_MQTT_METHOD_UPDATE);
+                              "{\"method\":\"%s\",\"passthrough\":{\"m\":\"u\"}", TC_IOT_MQTT_METHOD_UPDATE);
     buffer_used += ret;
     ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len, ",\"state\":{");
     buffer_used += ret;
@@ -221,7 +221,7 @@ int tc_iot_shadow_doc_pack_for_get(char *buffer, int buffer_len,
     int buffer_used = 0;
 
     ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len,
-                              "{\"method\":\"%s\"}", TC_IOT_MQTT_METHOD_GET);
+                              "{\"method\":\"%s\",\"passthrough\":{\"m\":\"g\"}}", TC_IOT_MQTT_METHOD_GET);
     buffer_used += ret;
     if (buffer_used < buffer_len) {
         buffer[buffer_used] = '\0';

@@ -59,8 +59,12 @@ class Request:
             req = requests.get(url, params=params, timeout=Request.timeout,verify=False)
         else:
             req = requests.post(url, data=params, files=files, timeout=Request.timeout,verify=False)
-        print 'elapsed=' + str((time.time() - start) * 1000)
-        print "Response:", req.status_code, req.text
+        print '{'
+        print '"elapsed_time":' ,str((time.time() - start) * 1000) , ","
+        print '"http_status_code":' , req.status_code , ","
+        print '"response":'
+        print req.text
+        print "}"
         if req.status_code != requests.codes.ok:
             req.raise_for_status()
 

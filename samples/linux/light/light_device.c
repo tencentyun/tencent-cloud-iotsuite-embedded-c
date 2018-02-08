@@ -16,9 +16,10 @@ static tc_iot_demo_light g_light_status = {
     false, "colorful light", 0xFFFFFF, 100.00,
 };
 
-static volatile int stop = 0;
 tc_iot_shadow_client client;
 
+
+static volatile int stop = 0;
 void sig_handler(int sig) {
     if (sig == SIGINT) {
         tc_iot_hal_printf("SIGINT received, going down.\n");
@@ -140,7 +141,6 @@ void _on_message_received(tc_iot_message_data* md) {
         desired_start = message->payload + json_token[field_index].start;
         desired_len = json_token[field_index].end - json_token[field_index].start;
         LOG_TRACE("payload.state.desired found:%.*s", desired_len, desired_start);
-
     }
 
     if (reported_start) {

@@ -389,10 +389,10 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     switch (packet_type) {
         default:
             rc = packet_type;
-            if (errno > 0) {
-                LOG_TRACE("cycle rc=%d, errno=%d, errstr=%s", rc, errno,
-                          strerror(errno));
-            }
+            LOG_TRACE("cycle readPacket rc=%d", rc);
+            /* if (errno > 0) { */
+                /* LOG_TRACE("cycle rc=%d, errno=%d, errstr=%s", rc, errno, strerror(errno)); */
+            /* } */
             goto exit;
         case 0:
             break;
@@ -474,6 +474,7 @@ exit:
         rc = packet_type;
     } else {
         if (tc_iot_mqtt_is_connected(c)) {
+            LOG_TRACE("disconnecting for rc=%d.", rc);
             tc_iot_mqtt_disconnect(c);
         }
         _close_session(c);
@@ -615,7 +616,7 @@ exit:
         c->ping_outstanding = 0;
     } else if (rc == TC_IOT_SEND_PACK_FAILED ||
                rc == TC_IOT_MQTT_WAIT_ACT_TIMEOUT) {
-        // reconnect network layer
+        LOG_TRACE("disconnecting for rc=%d.", rc);
         tc_iot_mqtt_disconnect(c);
     }
 
@@ -701,7 +702,7 @@ exit:
         tc_iot_mqtt_set_state(c, CLIENT_CONNECTED);
     } else if (rc == TC_IOT_SEND_PACK_FAILED ||
                rc == TC_IOT_MQTT_WAIT_ACT_TIMEOUT) {
-        // reconnect network layer
+        LOG_TRACE("disconnecting for rc=%d.", rc);
         tc_iot_mqtt_disconnect(c);
     }
 
@@ -817,6 +818,7 @@ exit:
     } else if (rc == TC_IOT_SEND_PACK_FAILED ||
                rc == TC_IOT_MQTT_WAIT_ACT_TIMEOUT) {
         if (tc_iot_mqtt_is_connected(c)) {
+            LOG_TRACE("disconnecting for rc=%d.", rc);
             tc_iot_mqtt_disconnect(c);
         }
         return _handle_reconnect(c);
@@ -881,6 +883,7 @@ exit:
     } else if (rc == TC_IOT_SEND_PACK_FAILED ||
                rc == TC_IOT_MQTT_WAIT_ACT_TIMEOUT) {
         if (tc_iot_mqtt_is_connected(c)) {
+            LOG_TRACE("disconnecting for rc=%d.", rc);
             tc_iot_mqtt_disconnect(c);
         }
         return _handle_reconnect(c);
@@ -956,6 +959,7 @@ exit:
     } else if (rc == TC_IOT_SEND_PACK_FAILED ||
                rc == TC_IOT_MQTT_WAIT_ACT_TIMEOUT) {
         if (tc_iot_mqtt_is_connected(c)) {
+            LOG_TRACE("disconnecting for rc=%d.", rc);
             tc_iot_mqtt_disconnect(c);
         }
         return _handle_reconnect(c);
