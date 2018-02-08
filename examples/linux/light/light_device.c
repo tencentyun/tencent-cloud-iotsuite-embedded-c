@@ -77,7 +77,7 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
             tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
             g_light_status.color,g_light_status.brightness,
             g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, NULL);
+    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, TC_IOT_JSON_NULL);
     tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
     tc_iot_shadow_update(p_shadow_client, buffer);
 }
@@ -238,6 +238,7 @@ tc_iot_shadow_config g_client_config = {
         TC_IOT_CONFIG_SERVER_HOST,
         TC_IOT_CONFIG_SERVER_PORT,
         TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
+        TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
         TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
         TC_IOT_CONFIG_CLEAN_SESSION,
         TC_IOT_CONFIG_USE_TLS,

@@ -190,6 +190,7 @@ typedef struct _tc_iot_mqtt_client_config {
     char* host; /**< MQ 服务地址*/
     uint16_t port; /**< MQ 服务端口*/
     int command_timeout_ms; /**< MQTT 指令超时时延，单位毫秒*/
+    int tls_handshake_timeout_ms; /**< TLS 握手时延，单位毫秒*/
     int keep_alive_interval; /**< 心跳保持间隔，单位秒 */
     char clean_session; /**< Clean Session 标志*/
     char use_tls; /**< 是否通过 TLS 连接服务*/

@@ -149,7 +149,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
         p_tls_config = &(netcontext.tls_config);
         if (netcontext.use_tls) {
             p_tls_config->verify_server = 0;
-            p_tls_config->timeout_ms = p_client_config->command_timeout_ms;
+            p_tls_config->timeout_ms = p_client_config->tls_handshake_timeout_ms;
             p_tls_config->root_ca_in_mem = g_tc_iot_mqtt_root_ca_certs;
             p_tls_config->root_ca_location = p_client_config->p_root_ca;
             p_tls_config->device_cert_location = p_client_config->p_client_crt;

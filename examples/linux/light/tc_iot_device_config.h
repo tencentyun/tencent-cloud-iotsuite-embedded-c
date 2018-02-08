@@ -65,6 +65,8 @@
 // connect、publish、subscribe、unsubscribe 
 // 等命令执行超时时长，单位是毫秒
 #define TC_IOT_CONFIG_COMMAND_TIMEOUT_MS  2000
+// TLS 握手执行超时时长，单位是毫秒
+#define TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS  10000
 // keep alive 间隔时长，单位是秒
 #define TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC  60
 // 网络故障或服务端超时，是否自动重连
