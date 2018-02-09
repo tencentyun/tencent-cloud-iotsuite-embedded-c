@@ -263,6 +263,7 @@ int main(int argc, char** argv) {
     bool token_defined;
     int ret;
     long timestamp = tc_iot_hal_timestamp(NULL);
+    tc_iot_hal_srandom(timestamp);
     long nonce = tc_iot_hal_random();
 
     static const char * will_message = "{\"method\":\"update\",\"state\":{\"reported\":{\"status\":\"abnormal_exit\"}}}";

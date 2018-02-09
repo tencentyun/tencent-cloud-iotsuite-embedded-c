@@ -22,12 +22,6 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
     c->p_shadow_config = p_cfg;
     tc_iot_mqtt_client_config *p_config = &(p_cfg->mqtt_client_config);
 
-    tc_iot_mqtt_client *p_mqtt_client = &(c->mqtt_client);
-    rc = tc_iot_mqtt_client_construct(p_mqtt_client, p_config);
-    if (rc != TC_IOT_SUCCESS) {
-        return rc;
-    }
-
     product_id = p_config->device_info.product_id;
     device_name = p_config->device_info.device_name;
 
@@ -36,6 +30,13 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
         msg_handler = p_cfg->on_receive_msg;
     } else {
         msg_handler = _on_message_receved;
+    }
+
+
+    tc_iot_mqtt_client *p_mqtt_client = &(c->mqtt_client);
+    rc = tc_iot_mqtt_client_construct(p_mqtt_client, p_config);
+    if (rc != TC_IOT_SUCCESS) {
+        return rc;
     }
 
     rc = tc_iot_mqtt_client_subscribe(p_mqtt_client, p_cfg->sub_topic, TC_IOT_QOS1,
@@ -48,6 +49,7 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
     }
     return rc;
 }
+
 
 void tc_iot_shadow_destroy(tc_iot_shadow_client *c) {
     if (c) {

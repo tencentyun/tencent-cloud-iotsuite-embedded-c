@@ -35,6 +35,7 @@ int main(int argc, char** argv) {
     bool token_defined;
     tc_iot_mqtt_client_config * p_client_config;
     long timestamp = tc_iot_hal_timestamp(NULL);
+    tc_iot_hal_srandom(timestamp);
     long nonce = tc_iot_hal_random();
 
     p_client_config = &(g_client_config);

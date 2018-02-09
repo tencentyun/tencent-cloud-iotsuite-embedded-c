@@ -74,7 +74,6 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timest
     memset(&netcontext, 0, sizeof(netcontext));
     // netcontext.eth = eth;
 
-    tc_iot_hal_srandom(timestamp);
 
     IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_device_info, TC_IOT_NULL_POINTER);

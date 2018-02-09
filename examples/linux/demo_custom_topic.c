@@ -70,6 +70,7 @@ void _on_message_received(tc_iot_message_data* md) {
 void _refresh_token() {
     int ret;
     long timestamp = tc_iot_hal_timestamp(NULL);
+    tc_iot_hal_srandom(timestamp);
     long nonce = tc_iot_hal_random();
     tc_iot_mqtt_client_config * p_client_config;
 
