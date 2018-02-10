@@ -63,6 +63,8 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_ERROR_HTTP_REQUEST_FAILED = -1005, /**<  http 请求失败*/
     TC_IOT_REFRESH_TOKEN_FAILED = -1006, /**< 获取用户Token失败 */
     TC_IOT_HTTP_RESPONSE_INVALID = -1007, /**< 服务端相应的 HTTP 数据格式非法 */
+    TC_IOT_SHADOW_SESSION_NOT_ENOUGH = -1008, /**< 影子回调会话空间不够，请检查是否发送过多并发请求，
+                                                合理设置 TC_IOT_MAX_SESSION_COUNT 的值*/
 
 } tc_iot_sys_code_e;
 

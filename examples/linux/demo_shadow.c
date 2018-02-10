@@ -28,6 +28,21 @@ void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
+void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
+        tc_iot_message_data * md , void * p_context) {
+
+    tc_iot_hal_printf("***********************\n");
+    if (ack_status != TC_IOT_ACK_SUCCESS) {
+        if (ack_status == TC_IOT_ACK_TIMEOUT) {
+            tc_iot_hal_printf("request timeout\n");
+        }
+        return;
+    }
+
+    tc_iot_mqtt_message* message = md->message;
+
+    tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+}
 
 tc_iot_shadow_config g_client_config = {
     {
@@ -102,6 +117,8 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     int buffer_len = sizeof(buffer);
     char reported[256];
     char desired[256];
+    char session_id[TC_IOT_SESSION_ID_LEN+1];
+    int session_id_len = sizeof(session_id);
     tc_iot_shadow_client client;
     tc_iot_shadow_client* p_shadow_client = &client;
 
@@ -119,7 +136,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("yield waiting for server finished.\n");
 
     tc_iot_hal_printf("[c->s] shadow_get\n");
-    tc_iot_shadow_get(p_shadow_client);
+    tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 6000, NULL);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     snprintf(reported, sizeof(reported), 

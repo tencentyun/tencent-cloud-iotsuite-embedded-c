@@ -12,6 +12,24 @@ typedef struct _tc_iot_shadow_config {
     message_handler on_receive_msg; /**< 影子设备消息回调*/
 } tc_iot_shadow_config;
 
+typedef enum _tc_iot_command_ack_status_e {
+    TC_IOT_ACK_SUCCESS,
+    TC_IOT_ACK_TIMEOUT,
+} tc_iot_command_ack_status_e;
+
+typedef void (*message_ack_handler)(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * p_context);
+
+
+#define TC_IOT_SESSION_ID_LEN     8
+#define TC_IOT_MAX_SESSION_COUNT  3
+
+typedef struct _tc_iot_shadow_session{
+    char sid[TC_IOT_SESSION_ID_LEN+1];
+    tc_iot_timer        timer;
+    message_ack_handler handler;    
+    void * context;
+}tc_iot_shadow_session;
+
 
 /**
  * @brief 影子设备客户端
@@ -19,6 +37,7 @@ typedef struct _tc_iot_shadow_config {
 typedef struct _tc_iot_shadow_client {
     tc_iot_shadow_config* p_shadow_config; /**< 影子设备配置*/
     tc_iot_mqtt_client mqtt_client; /**< MQTT 客户端*/
+    tc_iot_shadow_session sessions[TC_IOT_MAX_SESSION_COUNT];
 } tc_iot_shadow_client;
 
 
@@ -76,6 +95,20 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
 /**< 更新请求响应*/
 #define TC_IOT_MQTT_METHOD_CONTROL   "control"
 /*--- end 影子设备请求响应包 method 字段取值----*/
+
+int tc_iot_shadow_doc_pack_for_get_with_sid(char *buffer, int buffer_len,
+                                    char * session_id, int session_id_len,
+                                    tc_iot_shadow_client *c);
+
+int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
+                                 char * session_id, int session_id_len,
+                                 const char * method,
+                                 tc_iot_shadow_client *c);
+
+int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len, 
+        const char * reported, 
+        const char * desired);
+int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_client *c);
 
 #endif /* end of include guard */
 

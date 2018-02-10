@@ -19,7 +19,9 @@ int tc_iot_mqtt_client_publish(tc_iot_mqtt_client* p_mqtt_client,
 int tc_iot_mqtt_client_subscribe(tc_iot_mqtt_client* p_mqtt_client,
                                  const char* topic_filter,
                                  tc_iot_mqtt_qos_e qos,
-                                 message_handler msg_handler);
+                                 message_handler msg_handler,
+                                 void * context
+                                 );
 int tc_iot_mqtt_client_unsubscribe(tc_iot_mqtt_client* p_mqtt_client,
                                    const char* topic_filter);
 int tc_iot_mqtt_client_disconnect(tc_iot_mqtt_client* p_mqtt_client);

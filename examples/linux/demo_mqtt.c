@@ -107,7 +107,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
         return ret;
     }
     ret = tc_iot_mqtt_client_subscribe(p_client, sub_topic, TC_IOT_QOS1,
-                                           _on_message_received);
+                                           _on_message_received, NULL);
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("subscribe topic %s failed, trouble shooting guide: " "%s#%d\n", sub_topic, TC_IOT_TROUBLE_SHOOTING_URL, ret);
         return TC_IOT_FAILURE;

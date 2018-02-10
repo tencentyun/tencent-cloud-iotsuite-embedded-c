@@ -65,6 +65,7 @@ typedef struct _tc_iot_mqtt_message {
 typedef struct _tc_iot_message_data {
     tc_iot_mqtt_message* message; /**< 消息内容*/
     MQTTString* topicName; /**< 所属 Topic*/
+    void * context;
 } tc_iot_message_data;
 
 
@@ -110,17 +111,6 @@ typedef struct _tc_iot_mqtt_client tc_iot_mqtt_client;
 typedef void (*disconnectHandler)(tc_iot_mqtt_client*, void*);
 
 
-/**
- * @brief  订阅消息默认回调函数原型，用户用户可通过实现该函数，
- * 并注册到 MQTT client上，实现当收到的订阅消息未找到对应的订阅
- * 回调，或者订阅消息回调未能正确处理时，默认的处理，例如，打印
- * 错误日志等。
- *
- * @param p_mqtt_client MQTT client 对象
- */
-typedef void (*defaultMessageHandler)(tc_iot_message_data*);
-
-
 
 /**
  * @brief MQTT client 对象结构，保存 MQTT 客户端相关配置、连接状态、
@@ -148,16 +138,19 @@ typedef struct _tc_iot_mqtt_client {
 
     struct MessageHandlers {
         const char* topicFilter;
-        void (*fp)(tc_iot_message_data*);
+        message_handler fp;
+        void * context;
     } message_handlers[TC_IOT_MAX_MESSAGE_HANDLERS]; /**< 订阅消息回调*/
 
-    defaultMessageHandler default_msg_handler; /**< 订阅消息默认回调*/
+    message_handler  default_msg_handler; /**< 订阅消息默认回调*/
     disconnectHandler disconnect_handler; /**< 连接断开通知回调*/
 
     tc_iot_network_t ipstack; /**< 网络服务*/
     tc_iot_timer last_sent; /**< 最近一次发包定时器，用来判断是否需要发起 keep alive 心跳*/
     tc_iot_timer last_received; /**< 最近一次收包定时器，用来判断是否需要发起 keep alive 心跳*/
     tc_iot_timer reconnect_timer; /**< 重连定时器，用来判断是否需要发起新一轮重连尝试*/
+    
+    long         client_init_time;
 } tc_iot_mqtt_client;
 
 typedef enum _tc_iot_device_auth_mode_e {
@@ -200,7 +193,7 @@ typedef struct _tc_iot_mqtt_client_config {
     const char* p_client_key; /**< 客户端私钥*/
 
     disconnectHandler disconnect_handler; /**< 连接断开回调*/
-    defaultMessageHandler default_msg_handler; /**< 默认消息处理回调*/
+    message_handler   default_msg_handler; /**< 默认消息处理回调*/
     char willFlag;
     MQTTPacket_willOptions will; 
 } tc_iot_mqtt_client_config;
@@ -219,12 +212,14 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* client, const char*,
                         tc_iot_mqtt_message*);
 int tc_iot_mqtt_set_message_handler(tc_iot_mqtt_client* c,
                                     const char* topicFilter,
-                                    message_handler message_handler);
+                                    message_handler message_handler,
+                                    void * context);
 int tc_iot_mqtt_subscribe(tc_iot_mqtt_client* client, const char* topicFilter,
-                          tc_iot_mqtt_qos_e, message_handler);
+                          tc_iot_mqtt_qos_e, message_handler, void * context);
 int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* client,
                                        const char* topicFilter,
                                        tc_iot_mqtt_qos_e, message_handler,
+                                       void * context,
                                        tc_iot_mqtt_suback_data* data);
 int tc_iot_mqtt_unsubscribe(tc_iot_mqtt_client* client,
                             const char* topicFilter);

@@ -74,10 +74,10 @@ int tc_iot_mqtt_client_publish(tc_iot_mqtt_client* c, const char* topic,
 int tc_iot_mqtt_client_subscribe(tc_iot_mqtt_client* c,
                                  const char* topic_filter,
                                  tc_iot_mqtt_qos_e qos,
-                                 message_handler msg_handler) {
+                                 message_handler msg_handler, void * context) {
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topic_filter, TC_IOT_NULL_POINTER);
-    return tc_iot_mqtt_subscribe(c, topic_filter, qos, msg_handler);
+    return tc_iot_mqtt_subscribe(c, topic_filter, qos, msg_handler, context);
 }
 
 int tc_iot_mqtt_client_unsubscribe(tc_iot_mqtt_client* c,

@@ -10,6 +10,7 @@ endif()
 
 add_definitions(-DENABLE_LOG_TRACE)
 add_definitions(-DENABLE_LOG_DEBUG)
+add_definitions(-DENABLE_LOG_INFO)
 add_definitions(-DENABLE_LOG_WARN)
 add_definitions(-DENABLE_LOG_ERROR)
 add_definitions(-DENABLE_LOG_FATAL)

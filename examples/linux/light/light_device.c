@@ -36,6 +36,21 @@ void sig_handler(int sig) {
     }
 }
 
+void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
+        tc_iot_message_data * md , void * p_context) {
+
+    tc_iot_mqtt_message* message = md->message;
+
+    if (ack_status != TC_IOT_ACK_SUCCESS) {
+        if (ack_status == TC_IOT_ACK_TIMEOUT) {
+            tc_iot_hal_printf("request timeout");
+        }
+        return;
+    }
+
+    tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+}
+
 static void operate_light(tc_iot_demo_light * light) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -332,7 +347,8 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
 
     LOG_INFO("[c->s] shadow_get\n");
     // 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态
-    tc_iot_shadow_get(p_shadow_client);
+    ret = tc_iot_shadow_doc_pack_for_get(buffer, buffer_len, p_shadow_client);
+    tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 2000, NULL);
 
     while (!stop) {
         tc_iot_shadow_yield(p_shadow_client, 2000);

@@ -101,7 +101,8 @@ int tc_iot_mqtt_client_publish(tc_iot_mqtt_client* p_mqtt_client,
 int tc_iot_mqtt_client_subscribe(tc_iot_mqtt_client* p_mqtt_client,
                                  const char* topic_filter,
                                  tc_iot_mqtt_qos_e qos,
-                                 message_handler msg_handler);
+                                 message_handler msg_handler,
+                                 void * context);
 
 /**
  * @brief tc_iot_mqtt_client_unsubscribe 取消对某个或多个 Topic 订阅
@@ -178,7 +179,8 @@ int tc_iot_shadow_yield(tc_iot_shadow_client *p_shadow_client, int timeout_ms);
  * @return 结果返回码 
  * @see tc_iot_sys_code_e
  */
-int tc_iot_shadow_get(tc_iot_shadow_client *p_shadow_client);
+int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,  
+         message_ack_handler callback, int timeout_ms, void * context);
 
 /**
  * @brief tc_iot_shadow_update 异步方式更新设备影子文档

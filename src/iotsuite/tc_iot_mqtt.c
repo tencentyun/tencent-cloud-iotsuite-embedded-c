@@ -24,7 +24,7 @@ void tc_iot_init_mqtt_conn_data(MQTTPacket_connectData * conn_data)
 }
 
 static void _on_new_message_data(tc_iot_message_data* md, MQTTString* topic,
-                                 tc_iot_mqtt_message* message) {
+                                 tc_iot_mqtt_message* message, void * context) {
     if (!md) {
         LOG_ERROR("md is null");
         return;
@@ -42,6 +42,7 @@ static void _on_new_message_data(tc_iot_message_data* md, MQTTString* topic,
 
     md->topicName = topic;
     md->message = message;
+    md->context = context;
 }
 
 static int _handle_reconnect(tc_iot_mqtt_client* c) {
@@ -185,6 +186,8 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     tc_iot_hal_timer_init(&c->last_received);
     tc_iot_hal_timer_init(&c->reconnect_timer);
 
+    c->client_init_time = tc_iot_hal_timestamp(NULL);
+
     tc_iot_mqtt_set_state(c, CLIENT_INTIALIAZED);
     int ret = c->ipstack.do_connect(&(c->ipstack), NULL, 0);
     if (TC_IOT_SUCCESS == ret) {
@@ -317,7 +320,7 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
                             topicName))) {
             if (c->message_handlers[i].fp != NULL) {
                 tc_iot_message_data md;
-                _on_new_message_data(&md, topicName, message);
+                _on_new_message_data(&md, topicName, message, c->message_handlers[i].context);
                 c->message_handlers[i].fp(&md);
                 rc = TC_IOT_SUCCESS;
             }
@@ -326,7 +329,7 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
 
     if (rc == TC_IOT_FAILURE && c->default_msg_handler != NULL) {
         tc_iot_message_data md;
-        _on_new_message_data(&md, topicName, message);
+        _on_new_message_data(&md, topicName, message, c->message_handlers[i].context);
         c->default_msg_handler(&md);
         rc = TC_IOT_SUCCESS;
     }
@@ -730,7 +733,9 @@ int tc_iot_mqtt_connect(tc_iot_mqtt_client* c,
 
 int tc_iot_mqtt_set_message_handler(tc_iot_mqtt_client* c,
                                     const char* topicFilter,
-                                    message_handler msg_handler) {
+                                    message_handler msg_handler,
+                                    void * context
+                                    ) {
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(msg_handler, TC_IOT_NULL_POINTER);
@@ -761,6 +766,7 @@ int tc_iot_mqtt_set_message_handler(tc_iot_mqtt_client* c,
         if (i < TC_IOT_MAX_MESSAGE_HANDLERS) {
             c->message_handlers[i].topicFilter = topicFilter;
             c->message_handlers[i].fp = msg_handler;
+            c->message_handlers[i].context = context;
         }
     }
     return rc;
@@ -770,6 +776,7 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
                                        const char* topicFilter,
                                        tc_iot_mqtt_qos_e qos,
                                        message_handler message_handler,
+                                       void * context,
                                        tc_iot_mqtt_suback_data* data) {
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
@@ -812,7 +819,7 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
             /* LOG_TRACE("grantedQoS = 0x%x", data->grantedQoS); */
             if (data->grantedQoS != TC_IOT_SUBFAIL) {
                 rc = tc_iot_mqtt_set_message_handler(c, topicFilter,
-                                                     message_handler);
+                                                     message_handler, context);
             } else {
                 rc = TC_IOT_MQTT_SUBACK_FAILED;
                 LOG_WARN("subscribe %s failed.", topicFilter);
@@ -840,12 +847,13 @@ exit:
 
 int tc_iot_mqtt_subscribe(tc_iot_mqtt_client* c, const char* topicFilter,
                           tc_iot_mqtt_qos_e qos,
-                          message_handler message_handler) {
+                          message_handler message_handler,
+                          void * context) {
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
     tc_iot_mqtt_suback_data data;
     return tc_iot_mqtt_subscribe_with_results(c, topicFilter, qos,
-                                              message_handler, &data);
+                                              message_handler, context, &data);
 }
 
 int tc_iot_mqtt_unsubscribe(tc_iot_mqtt_client* c, const char* topicFilter) {
@@ -881,7 +889,7 @@ int tc_iot_mqtt_unsubscribe(tc_iot_mqtt_client* c, const char* topicFilter) {
         unsigned short mypacketid;
         if (MQTTDeserialize_unsuback(&mypacketid, c->readbuf,
                                      c->readbuf_size) == 1) {
-            tc_iot_mqtt_set_message_handler(c, topicFilter, NULL);
+            tc_iot_mqtt_set_message_handler(c, topicFilter, NULL, NULL);
         }
     } else {
         LOG_TRACE("waitfor UNSUBACK timeout");
