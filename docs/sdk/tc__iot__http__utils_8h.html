@@ -121,6 +121,10 @@ $(function() {
 <tr class="separator:ac5b4f778b9a691ba77c5d9997043e649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9f5b25caaacfb0b6db790b97fb8c397"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#ae9f5b25caaacfb0b6db790b97fb8c397">HTTP_CONTENT_JSON</a>&#160;&#160;&#160;&quot;application/json&quot;</td></tr>
 <tr class="separator:ae9f5b25caaacfb0b6db790b97fb8c397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac78ed6a739e3045aa2fbefae169a9086"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#ac78ed6a739e3045aa2fbefae169a9086">HTTP_RESPONSE_STATE_PREFIX</a>&#160;&#160;&#160;&quot;HTTP/1.&quot;</td></tr>
+<tr class="separator:ac78ed6a739e3045aa2fbefae169a9086"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a428da71aaf60722eba3aa76da0150af5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a428da71aaf60722eba3aa76da0150af5">HTTP_RESPONSE_STATE_PREFIX_LEN</a>&#160;&#160;&#160;(sizeof(<a class="el" href="tc__iot__http__utils_8h.html#ac78ed6a739e3045aa2fbefae169a9086">HTTP_RESPONSE_STATE_PREFIX</a>)-1)</td></tr>
+<tr class="separator:a428da71aaf60722eba3aa76da0150af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa68b720d6fb26c01e03fb17b12d645a0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#aa68b720d6fb26c01e03fb17b12d645a0">HTTP_BODY_FMT</a>&#160;&#160;&#160;&quot;\r\n%s&quot;</td></tr>
 <tr class="separator:aa68b720d6fb26c01e03fb17b12d645a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -155,6 +159,9 @@ $(function() {
 <tr class="memitem:a5642aae30e497076894847b5be57077f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a5642aae30e497076894847b5be57077f">tc_iot_create_auth_request_form</a> (char *form, int max_form_len, const char *secret, int secret_len, const char *client_id, int client_id_len, const char *device_name, int device_name_len, long expire, long nonce, const char *product_id, int product_id_len, long timestamp)</td></tr>
 <tr class="memdesc:a5642aae30e497076894847b5be57077f"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_create_auth_request_form 构造 Token HTTP 签名请求 form  <a href="#a5642aae30e497076894847b5be57077f">更多...</a><br /></td></tr>
 <tr class="separator:a5642aae30e497076894847b5be57077f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba8a80606b36c51db6525aaba12b8b6c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#aba8a80606b36c51db6525aaba12b8b6c">tc_iot_parse_http_response_code</a> (const char *http_resp)</td></tr>
+<tr class="memdesc:aba8a80606b36c51db6525aaba12b8b6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_parse_http_response_code 解析 HTTP 响应数据返回码  <a href="#aba8a80606b36c51db6525aaba12b8b6c">更多...</a><br /></td></tr>
+<tr class="separator:aba8a80606b36c51db6525aaba12b8b6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
 <a id="aa68b720d6fb26c01e03fb17b12d645a0"></a>
@@ -361,6 +368,34 @@ $(function() {
       <table class="memname">
         <tr>
           <td class="memname">#define HTTP_REQUEST_LINE_FMT&#160;&#160;&#160;(&quot;%s %s HTTP/%s&quot; HTTP_SPLIT_STR)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac78ed6a739e3045aa2fbefae169a9086"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac78ed6a739e3045aa2fbefae169a9086">&#9670;&nbsp;</a></span>HTTP_RESPONSE_STATE_PREFIX</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define HTTP_RESPONSE_STATE_PREFIX&#160;&#160;&#160;&quot;HTTP/1.&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a428da71aaf60722eba3aa76da0150af5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a428da71aaf60722eba3aa76da0150af5">&#9670;&nbsp;</a></span>HTTP_RESPONSE_STATE_PREFIX_LEN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define HTTP_RESPONSE_STATE_PREFIX_LEN&#160;&#160;&#160;(sizeof(<a class="el" href="tc__iot__http__utils_8h.html#ac78ed6a739e3045aa2fbefae169a9086">HTTP_RESPONSE_STATE_PREFIX</a>)-1)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1014,6 +1049,33 @@ $(function() {
 </dl>
 <dl class="section return"><dt>返回</dt><dd>&gt;=0 添加的 Header 实际占用空间大小，&lt;0 返回码 </dd></dl>
 <dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
+</div>
+</div>
+<a id="aba8a80606b36c51db6525aaba12b8b6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba8a80606b36c51db6525aaba12b8b6c">&#9670;&nbsp;</a></span>tc_iot_parse_http_response_code()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_parse_http_response_code </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>http_resp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tc_iot_parse_http_response_code 解析 HTTP 响应数据返回码 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">resp</td><td>HTTP 响应数据字符串</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;0 HTTP Status Code, 比如 200、404、50x 等， &lt;0 数据格式非法，无法解 析 </dd></dl>
 
 </div>
 </div>

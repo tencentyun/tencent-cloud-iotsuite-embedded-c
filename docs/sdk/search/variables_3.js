@@ -1,7 +1,7 @@
 var searchData=
 [
   ['data',['data',['../struct__tc__iot__property.html#a8d03a3012f68ea53b3869362343cd7a4',1,'_tc_iot_property::data()'],['../struct__tc__iot__yabuffer__t.html#a0d28e455537cd14978e88cc409a40830',1,'_tc_iot_yabuffer_t::data()']]],
-  ['default_5fmsg_5fhandler',['default_msg_handler',['../struct__tc__iot__mqtt__client.html#af38d6b91671543d31f41d884e7d11d5f',1,'_tc_iot_mqtt_client::default_msg_handler()'],['../struct__tc__iot__mqtt__client__config.html#adc2a364b149ce51ab34d64755f9ea12e',1,'_tc_iot_mqtt_client_config::default_msg_handler()']]],
+  ['default_5fmsg_5fhandler',['default_msg_handler',['../struct__tc__iot__mqtt__client.html#a7993651ca787e9bd39e2963d5476a9f9',1,'_tc_iot_mqtt_client::default_msg_handler()'],['../struct__tc__iot__mqtt__client__config.html#aa6f3360a173b1caa53b83075310b3d90',1,'_tc_iot_mqtt_client_config::default_msg_handler()']]],
   ['device_5finfo',['device_info',['../struct__tc__iot__mqtt__client__config.html#a06c0bd67d2945054fc7a45a5d01e98e0',1,'_tc_iot_mqtt_client_config']]],
   ['device_5fname',['device_name',['../struct__tc__iot__device__info.html#a62caf459ee975632d0fd7dd716ad69eb',1,'_tc_iot_device_info']]],
   ['digest',['digest',['../struct__tc__iot__hmac__sha256__t.html#af6eca1caac5caf2a3c776f8bc8a5fd5d',1,'_tc_iot_hmac_sha256_t']]],

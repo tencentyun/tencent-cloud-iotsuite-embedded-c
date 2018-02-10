@@ -78,13 +78,13 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
-<tr class="memitem:aa130d77e04e1e7cec69b8091b454944c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__token_8h.html#aa130d77e04e1e7cec69b8091b454944c">http_refresh_auth_token</a> (const char *api_url, char *root_ca_path, <a class="el" href="tc__iot__mqtt_8h.html#a5b9f545868639f4d9b5529ebb5a491cc">tc_iot_device_info</a> *p_device_info)</td></tr>
-<tr class="memdesc:aa130d77e04e1e7cec69b8091b454944c"><td class="mdescLeft">&#160;</td><td class="mdescRight">http_refresh_auth_token 请求 MQTT 访问服务端动态用户名和密码  <a href="#aa130d77e04e1e7cec69b8091b454944c">更多...</a><br /></td></tr>
-<tr class="separator:aa130d77e04e1e7cec69b8091b454944c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae33c7cd10bfb63fb1bbacd91bcf6e221"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__token_8h.html#ae33c7cd10bfb63fb1bbacd91bcf6e221">http_refresh_auth_token</a> (const char *api_url, char *root_ca_path, long timestamp, long nonce, <a class="el" href="tc__iot__mqtt_8h.html#a5b9f545868639f4d9b5529ebb5a491cc">tc_iot_device_info</a> *p_device_info)</td></tr>
+<tr class="memdesc:ae33c7cd10bfb63fb1bbacd91bcf6e221"><td class="mdescLeft">&#160;</td><td class="mdescRight">http_refresh_auth_token 请求 MQTT 访问服务端动态用户名和密码  <a href="#ae33c7cd10bfb63fb1bbacd91bcf6e221">更多...</a><br /></td></tr>
+<tr class="separator:ae33c7cd10bfb63fb1bbacd91bcf6e221"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">函数说明</h2>
-<a id="aa130d77e04e1e7cec69b8091b454944c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa130d77e04e1e7cec69b8091b454944c">&#9670;&nbsp;</a></span>http_refresh_auth_token()</h2>
+<a id="ae33c7cd10bfb63fb1bbacd91bcf6e221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae33c7cd10bfb63fb1bbacd91bcf6e221">&#9670;&nbsp;</a></span>http_refresh_auth_token()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -100,6 +100,18 @@ $(function() {
           <td></td>
           <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>root_ca_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>timestamp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>nonce</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -120,6 +132,8 @@ $(function() {
   <table class="params">
     <tr><td class="paramname">api_url</td><td>请求接口的地址 </td></tr>
     <tr><td class="paramname">root_ca_path</td><td>额外加载证书地址，一般填 NULL 即可 </td></tr>
+    <tr><td class="paramname">timestamp</td><td>时间戳 </td></tr>
+    <tr><td class="paramname">nonce</td><td>随机值 </td></tr>
     <tr><td class="paramname">p_device_info</td><td>设备信息，请求成功后，会自动更新该对象的 username 和 password 成员数据</td></tr>
   </table>
   </dd>

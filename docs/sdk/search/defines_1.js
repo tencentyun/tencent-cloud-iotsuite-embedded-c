@@ -16,6 +16,8 @@ var searchData=
   ['http_5fpost',['HTTP_POST',['../tc__iot__http__utils_8h.html#ad786c274cc31d7193adba110054555b7',1,'tc_iot_http_utils.h']]],
   ['http_5fput',['HTTP_PUT',['../tc__iot__http__utils_8h.html#ad0e84459f11d4b8762fa7c5adc775602',1,'tc_iot_http_utils.h']]],
   ['http_5frequest_5fline_5ffmt',['HTTP_REQUEST_LINE_FMT',['../tc__iot__http__utils_8h.html#a8126f2dfe2f3bec70efac122501e303a',1,'tc_iot_http_utils.h']]],
+  ['http_5fresponse_5fstate_5fprefix',['HTTP_RESPONSE_STATE_PREFIX',['../tc__iot__http__utils_8h.html#ac78ed6a739e3045aa2fbefae169a9086',1,'tc_iot_http_utils.h']]],
+  ['http_5fresponse_5fstate_5fprefix_5flen',['HTTP_RESPONSE_STATE_PREFIX_LEN',['../tc__iot__http__utils_8h.html#a428da71aaf60722eba3aa76da0150af5',1,'tc_iot_http_utils.h']]],
   ['http_5fscheme_5fprefix',['HTTP_SCHEME_PREFIX',['../tc__iot__url_8h.html#a6f4e1a2a43774e9c39bc9b41e46ac939',1,'tc_iot_url.h']]],
   ['http_5fscheme_5fprefix_5flen',['HTTP_SCHEME_PREFIX_LEN',['../tc__iot__url_8h.html#ada74c59bdb7341f766859adcf6ce78c3',1,'tc_iot_url.h']]],
   ['http_5fsplit_5fstr',['HTTP_SPLIT_STR',['../tc__iot__http__utils_8h.html#ac7128ff6f4a221471dc9b7e5657409fc',1,'tc_iot_http_utils.h']]],

@@ -66,8 +66,17 @@ $(function() {
 <div class="textblock">这里列出了所有函数,变量,宏,枚举和类型定义等,并附带其所属的文件:</div>
 
 <h3><a id="index_t"></a>- t -</h3><ul>
+<li>TC_IOT_ACK_SUCCESS
+: <a class="el" href="tc__iot__shadow_8h.html#acfeee5865fa73359d0bed9fe872bfac9a8eca140d55528ba9ff4f6948ed8397c8">tc_iot_shadow.h</a>
+</li>
+<li>TC_IOT_ACK_TIMEOUT
+: <a class="el" href="tc__iot__shadow_8h.html#acfeee5865fa73359d0bed9fe872bfac9a5a16f030ed148607cdaccf9bd4ac937c">tc_iot_shadow.h</a>
+</li>
 <li>TC_IOT_ARRAY
 : <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dae97346e4e8e922e321435b770298cdb0">tc_iot_json.h</a>
+</li>
+<li>TC_IOT_ARRAY_LENGTH
+: <a class="el" href="tc__iot__const_8h.html#aa5e1d04aaa4a59ee810d3cadbcb29a01">tc_iot_const.h</a>
 </li>
 <li>tc_iot_base64_decode()
 : <a class="el" href="tc__iot__base64_8h.html#a2daea9cd30f2c52e6bd3f4bf021885f6">tc_iot_base64.h</a>
@@ -89,6 +98,9 @@ $(function() {
 </li>
 <li>TC_IOT_CLIENT_SEND_BUF_SIZE
 : <a class="el" href="tc__iot__config_8h.html#aeb1b7a69f90b97e74d63ac84a2dffb1a">tc_iot_config.h</a>
+</li>
+<li>tc_iot_command_ack_status_e
+: <a class="el" href="tc__iot__shadow_8h.html#a4d31b2454a8541d0f3fa8613315837f7">tc_iot_shadow.h</a>
 </li>
 <li>TC_IOT_CONN_BAD_USER_OR_PASSWORD
 : <a class="el" href="tc__iot__mqtt_8h.html#af52ea9fb83a0b76960ae714b67dbce15a9a8a8e8527c487e24b37ac48d8c5bd39">tc_iot_mqtt.h</a>
@@ -120,6 +132,9 @@ $(function() {
 <li>TC_IOT_CTR_DRBG_SEED_FAILED
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca5bbc187dff0f9a790298c56a7efbcf3d">tc_iot_const.h</a>
 </li>
+<li>tc_iot_device_auth_mode_e
+: <a class="el" href="tc__iot__mqtt_8h.html#a02e44679b76db346568b8062e44dd0e3">tc_iot_mqtt.h</a>
+</li>
 <li>tc_iot_device_info
 : <a class="el" href="tc__iot__mqtt_8h.html#a5b9f545868639f4d9b5529ebb5a491cc">tc_iot_mqtt.h</a>
 </li>
@@ -135,16 +150,19 @@ $(function() {
 <li>TC_IOT_FLOAT
 : <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da48742d3097aaa788395ee8f177bbd635">tc_iot_json.h</a>
 </li>
+<li>TC_IOT_FUCTION_NOT_IMPLEMENTED
+: <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca2dc307729a1a5cfe50998985d1dcb384">tc_iot_const.h</a>
+</li>
 <li>tc_iot_get_log_level()
 : <a class="el" href="tc__iot__log_8h.html#aa2cfdf057df51104756e79f75beee5f8">tc_iot_log.h</a>
 , <a class="el" href="tc__iot__export_8h.html#aa2cfdf057df51104756e79f75beee5f8">tc_iot_export.h</a>
 </li>
 <li>tc_iot_hal_free
-: <a class="el" href="tc__iot__platform_8h.html#a31421883beff6d0cafbe944f6f8bd5fb">tc_iot_platform.h</a>
+: <a class="el" href="generic_2tc__iot__platform_8h.html#a31421883beff6d0cafbe944f6f8bd5fb">tc_iot_platform.h</a>
 , <a class="el" href="tc__iot__hal__os_8h.html#ab1aa8698953af09c980853546c05a42d">tc_iot_hal_os.h</a>
 </li>
 <li>tc_iot_hal_malloc
-: <a class="el" href="tc__iot__platform_8h.html#a7de133691cd74dd8742e65389c3bba80">tc_iot_platform.h</a>
+: <a class="el" href="generic_2tc__iot__platform_8h.html#a7de133691cd74dd8742e65389c3bba80">tc_iot_platform.h</a>
 , <a class="el" href="tc__iot__hal__os_8h.html#ab7ec78d1d074ddb11cbec97c1f1e6609">tc_iot_hal_os.h</a>
 </li>
 <li>tc_iot_hal_net_connect()
@@ -157,7 +175,7 @@ $(function() {
 : <a class="el" href="tc__iot__hal__network_8h.html#a252be642f32a74427f3bc35e7151eb4b">tc_iot_hal_network.h</a>
 </li>
 <li>tc_iot_hal_net_init()
-: <a class="el" href="tc__iot__hal__network_8h.html#a626d55a1d57b212159af1b66389ca7d6">tc_iot_hal_network.h</a>
+: <a class="el" href="tc__iot__hal__network_8h.html#a3cfd612bceb35d38c8575a1dcd17d85b">tc_iot_hal_network.h</a>
 </li>
 <li>tc_iot_hal_net_is_connected()
 : <a class="el" href="tc__iot__hal__network_8h.html#a32e078ea249ad04a2f7efb79cbd33a18">tc_iot_hal_network.h</a>
@@ -169,7 +187,7 @@ $(function() {
 : <a class="el" href="tc__iot__hal__network_8h.html#a382b941ccb637b21ce97955f13feed36">tc_iot_hal_network.h</a>
 </li>
 <li>tc_iot_hal_printf
-: <a class="el" href="tc__iot__platform_8h.html#afee52b9ae321042fe5a31ae91ab189ed">tc_iot_platform.h</a>
+: <a class="el" href="generic_2tc__iot__platform_8h.html#afee52b9ae321042fe5a31ae91ab189ed">tc_iot_platform.h</a>
 , <a class="el" href="tc__iot__hal__os_8h.html#aa63ad19b4a3d75bb37ceddd488e8c622">tc_iot_hal_os.h</a>
 </li>
 <li>tc_iot_hal_random()
@@ -179,7 +197,7 @@ $(function() {
 : <a class="el" href="tc__iot__hal__os_8h.html#a66f657f83532323804892d1ec4fae6a2">tc_iot_hal_os.h</a>
 </li>
 <li>tc_iot_hal_snprintf
-: <a class="el" href="tc__iot__platform_8h.html#a53b31ed1cf08eaa5b12d8fc5c8da164b">tc_iot_platform.h</a>
+: <a class="el" href="generic_2tc__iot__platform_8h.html#a53b31ed1cf08eaa5b12d8fc5c8da164b">tc_iot_platform.h</a>
 , <a class="el" href="tc__iot__hal__os_8h.html#a4e4b44802bf38099d0a642f67ec07e23">tc_iot_hal_os.h</a>
 </li>
 <li>tc_iot_hal_srandom()
@@ -224,6 +242,12 @@ $(function() {
 <li>tc_iot_http_request_n_append_header()
 : <a class="el" href="tc__iot__http__utils_8h.html#a1073deae49bdca3314c158a3cb6aa826">tc_iot_http_utils.h</a>
 </li>
+<li>TC_IOT_HTTP_RESPONSE_INVALID
+: <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0db7b477f0ea341d328b0fc44beddf31">tc_iot_const.h</a>
+</li>
+<li>tc_iot_init_mqtt_conn_data()
+: <a class="el" href="tc__iot__mqtt_8h.html#a3c1b400415992be1b7ae59042869ab07">tc_iot_mqtt.h</a>
+</li>
 <li>TC_IOT_INT16
 : <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da67c842d4dc9a910e2732c1753a750bd9">tc_iot_json.h</a>
 </li>
@@ -251,14 +275,23 @@ $(function() {
 <li>TC_IOT_JSON_NULL
 : <a class="el" href="tc__iot__json_8h.html#a0ecf6b458880f0b3b69b06eae8958960">tc_iot_json.h</a>
 </li>
+<li>tc_iot_json_parse()
+: <a class="el" href="tc__iot__json_8h.html#a2d34333a268ec872f802b5f2adb3444b">tc_iot_json.h</a>
+</li>
 <li>TC_IOT_JSON_PARSE_FAILED
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf38eeda745c089d46ae07fe3b9bcaa5a">tc_iot_const.h</a>
 </li>
 <li>TC_IOT_JSON_PATH_NO_MATCH
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca6d64df731f15cad35395ffa19a63c0e6">tc_iot_const.h</a>
 </li>
+<li>tc_iot_json_print_node()
+: <a class="el" href="tc__iot__json_8h.html#acec27650088b9197917760340ca5f265">tc_iot_json.h</a>
+</li>
 <li>tc_iot_json_property_printf()
 : <a class="el" href="tc__iot__json_8h.html#a9065f44a9dd07e41484fb7ded3c92aee">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_token_type_str()
+: <a class="el" href="tc__iot__json_8h.html#afb4af3b8de6a5cdc46c54630e12e336e">tc_iot_json.h</a>
 </li>
 <li>TC_IOT_JSON_TRUE
 : <a class="el" href="tc__iot__json_8h.html#ae57218e89b8d7addb960cfcb2116b64d">tc_iot_json.h</a>
@@ -309,6 +342,9 @@ $(function() {
 <li>TC_IOT_MAX_DEVICE_NAME_LEN
 : <a class="el" href="tc__iot__config_8h.html#a104ce0993b62d9ad156f9efa29843b2e">tc_iot_config.h</a>
 </li>
+<li>TC_IOT_MAX_JSON_TOKEN_COUNT
+: <a class="el" href="tc__iot__json_8h.html#a15e85e64900b1443dabb487eb4ede9e0">tc_iot_json.h</a>
+</li>
 <li>TC_IOT_MAX_MESSAGE_HANDLERS
 : <a class="el" href="tc__iot__mqtt_8h.html#a3366e60d76472dcc6d22337f83fdd715">tc_iot_mqtt.h</a>
 </li>
@@ -330,6 +366,9 @@ $(function() {
 <li>TC_IOT_MAX_SECRET_LEN
 : <a class="el" href="tc__iot__config_8h.html#aba74ebbc499001968b03da0fa326bbae">tc_iot_config.h</a>
 </li>
+<li>TC_IOT_MAX_SESSION_COUNT
+: <a class="el" href="tc__iot__shadow_8h.html#a1946bf5c5aafe5e951d6ba01280f7f14">tc_iot_shadow.h</a>
+</li>
 <li>TC_IOT_MAX_USER_NAME_LEN
 : <a class="el" href="tc__iot__config_8h.html#a1e4db2d88a2b684d146898f86692e661">tc_iot_config.h</a>
 </li>
@@ -342,11 +381,23 @@ $(function() {
 <li>TC_IOT_MIN_RECONNECT_WAIT_INTERVAL
 : <a class="el" href="tc__iot__config_8h.html#a5b27c07c77bbfa28fe5979428c5ec056">tc_iot_config.h</a>
 </li>
+<li>TC_IOT_MQTT_AUTH_DYNAMIC_TOKEN
+: <a class="el" href="tc__iot__mqtt_8h.html#a969240708b1ac6dfacf14ab37c163324a6e64ddd19e909b436752878c96bd6389">tc_iot_mqtt.h</a>
+</li>
+<li>TC_IOT_MQTT_AUTH_NONE
+: <a class="el" href="tc__iot__mqtt_8h.html#a969240708b1ac6dfacf14ab37c163324a0a9dc67890bdb2d4cae0fab0fb944bb1">tc_iot_mqtt.h</a>
+</li>
+<li>TC_IOT_MQTT_AUTH_STATIC_PASS
+: <a class="el" href="tc__iot__mqtt_8h.html#a969240708b1ac6dfacf14ab37c163324a791e7cf80e9e5e267d4f9e46a8198ed5">tc_iot_mqtt.h</a>
+</li>
 <li>tc_iot_mqtt_client
 : <a class="el" href="tc__iot__mqtt_8h.html#a77c4ce58b6b42a86a23a78ecf4dbdbac">tc_iot_mqtt.h</a>
 </li>
 <li>tc_iot_mqtt_client_config
 : <a class="el" href="tc__iot__mqtt_8h.html#a27cc46b3cbe4d47608e47099660f0624">tc_iot_mqtt.h</a>
+</li>
+<li>tc_iot_mqtt_client_connect()
+: <a class="el" href="tc__iot__client_8h.html#ae94b6e8640a9c31b54db73a305f8604f">tc_iot_client.h</a>
 </li>
 <li>tc_iot_mqtt_client_construct()
 : <a class="el" href="tc__iot__client_8h.html#a139d227adb9a4269908fc8a4936eddfc">tc_iot_client.h</a>
@@ -372,8 +423,8 @@ $(function() {
 : <a class="el" href="tc__iot__mqtt_8h.html#afdad8acd961a07d87ce033ca9d0668ed">tc_iot_mqtt.h</a>
 </li>
 <li>tc_iot_mqtt_client_subscribe()
-: <a class="el" href="tc__iot__client_8h.html#a5910b7f9e2457f8b4e8142b8c8eda860">tc_iot_client.h</a>
-, <a class="el" href="tc__iot__export_8h.html#a5910b7f9e2457f8b4e8142b8c8eda860">tc_iot_export.h</a>
+: <a class="el" href="tc__iot__client_8h.html#a82181f39263c85a68b8b2e077fa213e9">tc_iot_client.h</a>
+, <a class="el" href="tc__iot__export_8h.html#a82181f39263c85a68b8b2e077fa213e9">tc_iot_export.h</a>
 </li>
 <li>tc_iot_mqtt_client_unsubscribe()
 : <a class="el" href="tc__iot__client_8h.html#a09134bf2b5efb12b4f3f653958819b46">tc_iot_client.h</a>
@@ -471,7 +522,7 @@ $(function() {
 : <a class="el" href="tc__iot__mqtt_8h.html#a37f3b31442896fa3d375e3325c0d366b">tc_iot_mqtt.h</a>
 </li>
 <li>tc_iot_mqtt_set_message_handler()
-: <a class="el" href="tc__iot__mqtt_8h.html#a36fd756952af98adbe1d7e5d0453fa8b">tc_iot_mqtt.h</a>
+: <a class="el" href="tc__iot__mqtt_8h.html#a026932ce4d85713fc8a4d4571ecd63a3">tc_iot_mqtt.h</a>
 </li>
 <li>tc_iot_mqtt_set_state()
 : <a class="el" href="tc__iot__mqtt_8h.html#ae214074965773d9c0ef5af9e1daedfb0">tc_iot_mqtt.h</a>
@@ -483,10 +534,10 @@ $(function() {
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccad91491c10e405239a239c1e4a72dfc13">tc_iot_const.h</a>
 </li>
 <li>tc_iot_mqtt_subscribe()
-: <a class="el" href="tc__iot__mqtt_8h.html#a9b0c0f13645b64edbda59fffc2dacf3b">tc_iot_mqtt.h</a>
+: <a class="el" href="tc__iot__mqtt_8h.html#ac424836552c47e85beeb333f64c1aef7">tc_iot_mqtt.h</a>
 </li>
 <li>tc_iot_mqtt_subscribe_with_results()
-: <a class="el" href="tc__iot__mqtt_8h.html#a7f59beb807ab876739e7c54855ca3b90">tc_iot_mqtt.h</a>
+: <a class="el" href="tc__iot__mqtt_8h.html#a2e3579ac55dd277e97bf55a7cc426546">tc_iot_mqtt.h</a>
 </li>
 <li>tc_iot_mqtt_unsubscribe()
 : <a class="el" href="tc__iot__mqtt_8h.html#a6724fc53095b5e64ca870b8e13fa1883">tc_iot_mqtt.h</a>
@@ -499,6 +550,12 @@ $(function() {
 </li>
 <li>TC_IOT_NET_CONNECT_FAILED
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccabcbeaa0b8fda8d9619c50f769fbec5d3">tc_iot_const.h</a>
+</li>
+<li>TC_IOT_NET_NOTHING_READ
+: <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca19b404b3495d7494b1875a5ac1ebf71b">tc_iot_const.h</a>
+</li>
+<li>TC_IOT_NET_READ_TIMEOUT
+: <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca955fd3f8f0943f292da1cfea57eed11d">tc_iot_const.h</a>
 </li>
 <li>TC_IOT_NET_SOCKET_FAILED
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4244188b2e2751048388c0a9ac75eda5">tc_iot_const.h</a>
@@ -524,6 +581,9 @@ $(function() {
 <li>TC_IOT_OBJECT
 : <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dab0cbb7d2e2e2c253643eccd1a50d9b97">tc_iot_json.h</a>
 </li>
+<li>tc_iot_parse_http_response_code()
+: <a class="el" href="tc__iot__http__utils_8h.html#aba8a80606b36c51db6525aaba12b8b6c">tc_iot_http_utils.h</a>
+</li>
 <li>TC_IOT_PK_PARSE_KEYFILE_FAILED
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0dc0de5542351a883b2d5d70afb1d930">tc_iot_const.h</a>
 </li>
@@ -536,11 +596,11 @@ $(function() {
 <li>tc_iot_property
 : <a class="el" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">tc_iot_json.h</a>
 </li>
-<li>TC_IOT_PROPERTY_REF
-: <a class="el" href="tc__iot__json_8h.html#a2b88c8ef60628bbc8370166b646133c8">tc_iot_json.h</a>
-</li>
 <li>tc_iot_property_ref()
 : <a class="el" href="tc__iot__json_8h.html#abfe54dd9e43decbb8667908a4827c5af">tc_iot_json.h</a>
+</li>
+<li>TC_IOT_PROPERTY_REF
+: <a class="el" href="tc__iot__json_8h.html#a2b88c8ef60628bbc8370166b646133c8">tc_iot_json.h</a>
 </li>
 <li>TC_IOT_QOS0
 : <a class="el" href="tc__iot__mqtt_8h.html#afd833e94758a9e94f4be6a3ef2e54805a8880693a54012a1fc442bdf327a417af">tc_iot_mqtt.h</a>
@@ -556,6 +616,9 @@ $(function() {
 </li>
 <li>TC_IOT_SEND_PACK_FAILED
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf03ae1475f793db94977affc68744db3">tc_iot_const.h</a>
+</li>
+<li>TC_IOT_SESSION_ID_LEN
+: <a class="el" href="tc__iot__shadow_8h.html#a11879c96b587d9a33e88eaf4df1e1fcc">tc_iot_shadow.h</a>
 </li>
 <li>tc_iot_set_log_level()
 : <a class="el" href="tc__iot__log_8h.html#aacdb67168a3c3b31b9ba2181282a076d">tc_iot_log.h</a>
@@ -592,28 +655,52 @@ $(function() {
 : <a class="el" href="tc__iot__export_8h.html#af1417b96ca0cac6690b7bbb9675e38e7">tc_iot_export.h</a>
 </li>
 <li>tc_iot_shadow_delete()
-: <a class="el" href="tc__iot__export_8h.html#ac1d88335df56444e95597c7eb7b45155">tc_iot_export.h</a>
+: <a class="el" href="tc__iot__export_8h.html#abc2ee1edb589b34bc0bd955bb3259a10">tc_iot_export.h</a>
 </li>
 <li>tc_iot_shadow_destroy()
 : <a class="el" href="tc__iot__export_8h.html#a9757496b3a760b51f90c6f016d0775d5">tc_iot_export.h</a>
 </li>
+<li>tc_iot_shadow_doc_pack_end()
+: <a class="el" href="tc__iot__shadow_8h.html#ad05d4c5ad02db77ef6a0465c3fc816cc">tc_iot_shadow.h</a>
+</li>
 <li>tc_iot_shadow_doc_pack_for_delete()
 : <a class="el" href="tc__iot__shadow_8h.html#ace0920527c08ac4bd1afc40902b639b1">tc_iot_shadow.h</a>
+</li>
+<li>tc_iot_shadow_doc_pack_for_delete_with_sid()
+: <a class="el" href="tc__iot__shadow_8h.html#a5c0d5f5b1ab33e2cde40f51c46fb0b6e">tc_iot_shadow.h</a>
 </li>
 <li>tc_iot_shadow_doc_pack_for_get()
 : <a class="el" href="tc__iot__shadow_8h.html#a2fdb84d6d80406e1e000d36c4929deb1">tc_iot_shadow.h</a>
 </li>
+<li>tc_iot_shadow_doc_pack_for_get_with_sid()
+: <a class="el" href="tc__iot__shadow_8h.html#a1ae3a341a5570e9cda5f28562cb6cc5a">tc_iot_shadow.h</a>
+</li>
 <li>tc_iot_shadow_doc_pack_for_update()
 : <a class="el" href="tc__iot__shadow_8h.html#abecbf2e085de83f5d3e1ab43b9fe1124">tc_iot_shadow.h</a>
 </li>
+<li>tc_iot_shadow_doc_pack_for_update_with_sid()
+: <a class="el" href="tc__iot__shadow_8h.html#a47f7a84cf7f52ec18b41ee80fb1cc7af">tc_iot_shadow.h</a>
+</li>
+<li>tc_iot_shadow_doc_pack_format()
+: <a class="el" href="tc__iot__shadow_8h.html#a1eb7cea0387a2f60fc574b16059c3c72">tc_iot_shadow.h</a>
+</li>
+<li>tc_iot_shadow_doc_pack_start()
+: <a class="el" href="tc__iot__shadow_8h.html#a7644003ff16f5787bb521ed1317b0cef">tc_iot_shadow.h</a>
+</li>
 <li>tc_iot_shadow_get()
-: <a class="el" href="tc__iot__export_8h.html#a016a109b1fbeaac4e73d589e35ce4fa7">tc_iot_export.h</a>
+: <a class="el" href="tc__iot__export_8h.html#af3e8a1e44ca17e06a3138ae47d414cf9">tc_iot_export.h</a>
 </li>
 <li>tc_iot_shadow_isconnected()
 : <a class="el" href="tc__iot__export_8h.html#a7a5c790b1b663fe048019dbb65ed93a2">tc_iot_export.h</a>
 </li>
+<li>tc_iot_shadow_session
+: <a class="el" href="tc__iot__shadow_8h.html#a807a86632af0db9d89c1c9d19ed19f98">tc_iot_shadow.h</a>
+</li>
+<li>TC_IOT_SHADOW_SESSION_NOT_ENOUGH
+: <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca25564bec5ebbab108fbb1b16579b2152">tc_iot_const.h</a>
+</li>
 <li>tc_iot_shadow_update()
-: <a class="el" href="tc__iot__export_8h.html#a6e3910b2349033744fbb36f4953dd446">tc_iot_export.h</a>
+: <a class="el" href="tc__iot__export_8h.html#a73b257e679d3b9810fb7d6d2758172aa">tc_iot_export.h</a>
 </li>
 <li>tc_iot_shadow_yield()
 : <a class="el" href="tc__iot__export_8h.html#abeaa44d1454f9c9cde5f43fc3576412e">tc_iot_export.h</a>
@@ -631,8 +718,8 @@ $(function() {
 : <a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6">tc_iot_const.h</a>
 </li>
 <li>tc_iot_timer
-: <a class="el" href="tc__iot__platform_8h.html#a34bee198dbb84acc8e38e16c2f449baf">tc_iot_platform.h</a>
-, <a class="el" href="tc__iot__hal__timer_8h.html#aa7b7334abb97e56971f370da6619c87f">tc_iot_hal_timer.h</a>
+: <a class="el" href="tc__iot__hal__timer_8h.html#aa7b7334abb97e56971f370da6619c87f">tc_iot_hal_timer.h</a>
+, <a class="el" href="linux_2tc__iot__platform_8h.html#a34bee198dbb84acc8e38e16c2f449baf">tc_iot_platform.h</a>
 </li>
 <li>TC_IOT_TLS_NET_SET_BLOCK_FAILED
 : <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccac7061a5d6daba6b3da2760fe83e6b62a">tc_iot_const.h</a>

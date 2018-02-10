@@ -37,7 +37,7 @@ void sig_handler(int sig) {
 }
 
 void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
-        tc_iot_message_data * md , void * p_context) {
+        tc_iot_message_data * md , void * session_context) {
 
     tc_iot_mqtt_message* message = md->message;
 
@@ -92,14 +92,13 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
             tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
             g_light_status.color,g_light_status.brightness,
             g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, TC_IOT_JSON_NULL);
+    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, NULL, 0, NULL);
     tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
 }
 
 
 void _on_message_received(tc_iot_message_data* md) {
-    jsmntok_t  json_token[120];
+    jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
     jsmntok_t  * key_tok = NULL;
     jsmntok_t  * val_tok = NULL;
     char field_buf[TC_IOT_LIGHT_NAME_LEN+1];
@@ -141,7 +140,7 @@ void _on_message_received(tc_iot_message_data* md) {
     field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, 
             "payload.state.reported", NULL, 0);
     if (field_index <= 0 ) {
-        LOG_TRACE("payload.state.reported not found");
+        /* LOG_TRACE("payload.state.reported not found"); */
     } else {
         reported_start = message->payload + json_token[field_index].start;
         reported_len = json_token[field_index].end - json_token[field_index].start;
@@ -151,7 +150,7 @@ void _on_message_received(tc_iot_message_data* md) {
     field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, 
             "payload.state.desired", NULL, 0);
     if (field_index <= 0 ) {
-        LOG_TRACE("payload.state.desired not found");
+        /* LOG_TRACE("payload.state.desired not found"); */
     } else {
         desired_start = message->payload + json_token[field_index].start;
         desired_len = json_token[field_index].end - json_token[field_index].start;

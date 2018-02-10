@@ -131,12 +131,19 @@ $(function() {
 <li>client_id
 : <a class="el" href="struct__tc__iot__device__info.html#a8d9f4e7e0a0f085eed637eac3b14f365">_tc_iot_device_info</a>
 </li>
+<li>client_init_time
+: <a class="el" href="struct__tc__iot__mqtt__client.html#aad0257482671e46b1b1c846120c67b8c">_tc_iot_mqtt_client</a>
+</li>
 <li>command_timeout_ms
 : <a class="el" href="struct__tc__iot__mqtt__client.html#aaac2751d6fc922642e7ac81452f643d6">_tc_iot_mqtt_client</a>
 , <a class="el" href="struct__tc__iot__mqtt__client__config.html#a7af645007f7fc1c5c2ff64c866da2ad1">_tc_iot_mqtt_client_config</a>
 </li>
 <li>connect_options
 : <a class="el" href="struct__tc__iot__mqtt__client.html#ae5ead9821d53cb73f33635b846ef32be">_tc_iot_mqtt_client</a>
+</li>
+<li>context
+: <a class="el" href="struct__tc__iot__message__data.html#ab114b7e6adedc839637b921f3af195b7">_tc_iot_message_data</a>
+, <a class="el" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html#a690f0eb430e15edce6a86fe0dbfc40a4">_tc_iot_mqtt_client::MessageHandlers</a>
 </li>
 </ul>
 
@@ -147,8 +154,8 @@ $(function() {
 , <a class="el" href="struct__tc__iot__yabuffer__t.html#a0d28e455537cd14978e88cc409a40830">_tc_iot_yabuffer_t</a>
 </li>
 <li>default_msg_handler
-: <a class="el" href="struct__tc__iot__mqtt__client.html#af38d6b91671543d31f41d884e7d11d5f">_tc_iot_mqtt_client</a>
-, <a class="el" href="struct__tc__iot__mqtt__client__config.html#adc2a364b149ce51ab34d64755f9ea12e">_tc_iot_mqtt_client_config</a>
+: <a class="el" href="struct__tc__iot__mqtt__client.html#a7993651ca787e9bd39e2963d5476a9f9">_tc_iot_mqtt_client</a>
+, <a class="el" href="struct__tc__iot__mqtt__client__config.html#aa6f3360a173b1caa53b83075310b3d90">_tc_iot_mqtt_client_config</a>
 </li>
 <li>device_info
 : <a class="el" href="struct__tc__iot__mqtt__client__config.html#a06c0bd67d2945054fc7a45a5d01e98e0">_tc_iot_mqtt_client_config</a>
@@ -188,15 +195,20 @@ $(function() {
 <li>end_time
 : <a class="el" href="structtc__iot__timer.html#a8d227aa9290a46fe3b6f19695589a9f0">tc_iot_timer</a>
 </li>
+<li>extra_context
+: <a class="el" href="structtc__iot__net__context__init__t.html#a3f17aae0fa086541b1410c18563e495b">tc_iot_net_context_init_t</a>
+, <a class="el" href="structtc__iot__net__context__t.html#a1e0c1a209268a4cb58a7d239a92568a8">tc_iot_net_context_t</a>
+</li>
 </ul>
 
 
 <h3><a id="index_f"></a>- f -</h3><ul>
 <li>fd
-: <a class="el" href="structtc__iot__net__context__t.html#af94046d2136ddf2c6a5e8ae9c8deb665">tc_iot_net_context_t</a>
+: <a class="el" href="structtc__iot__net__context__init__t.html#a037f0651ebba595303c5474b2a3319c3">tc_iot_net_context_init_t</a>
+, <a class="el" href="structtc__iot__net__context__t.html#af94046d2136ddf2c6a5e8ae9c8deb665">tc_iot_net_context_t</a>
 </li>
 <li>fp
-: <a class="el" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html#a2f439d4f313b9d28e1a03cd0f7be7a52">_tc_iot_mqtt_client::MessageHandlers</a>
+: <a class="el" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html#af18d4662f91f73b7711ea2229d414568">_tc_iot_mqtt_client::MessageHandlers</a>
 </li>
 </ul>
 
@@ -209,11 +221,15 @@ $(function() {
 
 
 <h3><a id="index_h"></a>- h -</h3><ul>
+<li>handler
+: <a class="el" href="struct__tc__iot__shadow__session.html#a7a6f47a02afa76ddbd8a26f85244f1d7">_tc_iot_shadow_session</a>
+</li>
 <li>hash
 : <a class="el" href="struct__tc__iot__sha256__t.html#a4fb3fe2882a22e0e519db5b93a713055">_tc_iot_sha256_t</a>
 </li>
 <li>host
 : <a class="el" href="struct__tc__iot__mqtt__client__config.html#a65924d0a4b69ba5b43d57e5b7f720569">_tc_iot_mqtt_client_config</a>
+, <a class="el" href="structtc__iot__net__context__init__t.html#a661e4f17c73087ae5853dfba5d459485">tc_iot_net_context_init_t</a>
 , <a class="el" href="structtc__iot__net__context__t.html#a1dba0732cce27bc73baa4b55cb314b46">tc_iot_net_context_t</a>
 </li>
 <li>host_len
@@ -233,7 +249,8 @@ $(function() {
 : <a class="el" href="struct__tc__iot__mqtt__client.html#ac13effb3f4fa20ea8fdd643806949a85">_tc_iot_mqtt_client</a>
 </li>
 <li>is_connected
-: <a class="el" href="structtc__iot__net__context__t.html#a379f04e4e9b63b7f66aba5201a0fd0f3">tc_iot_net_context_t</a>
+: <a class="el" href="structtc__iot__net__context__init__t.html#a09344a97e490aeb86d258e988b9d63cd">tc_iot_net_context_init_t</a>
+, <a class="el" href="structtc__iot__net__context__t.html#a379f04e4e9b63b7f66aba5201a0fd0f3">tc_iot_net_context_t</a>
 , <a class="el" href="structtc__iot__network__t.html#a9f66a9ee6aeeba4f8b84e715f71f34a2">tc_iot_network_t</a>
 </li>
 </ul>
@@ -338,6 +355,7 @@ $(function() {
 <li>port
 : <a class="el" href="struct__tc__iot__mqtt__client__config.html#a9c63ef7769f515471eb976b22ff99b87">_tc_iot_mqtt_client_config</a>
 , <a class="el" href="struct__tc__iot__url__parse__result__t.html#a69308d498e91b19af714fe66a0c8dcfb">_tc_iot_url_parse_result_t</a>
+, <a class="el" href="structtc__iot__net__context__init__t.html#a52df7ed648c885cd6400ca1b25348727">tc_iot_net_context_init_t</a>
 , <a class="el" href="structtc__iot__net__context__t.html#ab4f93937350406a755ddca9c4b89c528">tc_iot_net_context_t</a>
 </li>
 <li>pos
@@ -388,11 +406,20 @@ $(function() {
 <li>secret
 : <a class="el" href="struct__tc__iot__device__info.html#ad4d23019e8ff91eecaac71b6fa84672e">_tc_iot_device_info</a>
 </li>
+<li>session_context
+: <a class="el" href="struct__tc__iot__shadow__session.html#aa8c99d539768b1ba1b23173f53eb854e">_tc_iot_shadow_session</a>
+</li>
 <li>sessionPresent
 : <a class="el" href="struct__tc__iot__mqtt__connack__data.html#ac46af70a9ec1e17c1e67a9c9e603e03e">_tc_iot_mqtt_connack_data</a>
 </li>
+<li>sessions
+: <a class="el" href="struct__tc__iot__shadow__client.html#ac0c4c451da8eeb3dce36a8ebb951e10d">_tc_iot_shadow_client</a>
+</li>
 <li>sha
 : <a class="el" href="struct__tc__iot__hmac__sha256__t.html#ac94a99354605a4ca8030e709b0ef54bb">_tc_iot_hmac_sha256_t</a>
+</li>
+<li>sid
+: <a class="el" href="struct__tc__iot__shadow__session.html#a1d8c5c4857ccc11efd5d1fed3ccf045e">_tc_iot_shadow_session</a>
 </li>
 <li>state
 : <a class="el" href="struct__tc__iot__mqtt__client.html#ab8b7c43485b50a825c9b91bf4fba8014">_tc_iot_mqtt_client</a>
@@ -405,6 +432,12 @@ $(function() {
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
+<li>timer
+: <a class="el" href="struct__tc__iot__shadow__session.html#a75b111b6cccd06d4552733682ac0faef">_tc_iot_shadow_session</a>
+</li>
+<li>tls_handshake_timeout_ms
+: <a class="el" href="struct__tc__iot__mqtt__client__config.html#a80e1550db35d2a1b61d042ceded924bf">_tc_iot_mqtt_client_config</a>
+</li>
 <li>token_expire_time
 : <a class="el" href="struct__tc__iot__device__info.html#a0e599a1b859cb075f33d8b682c80b347">_tc_iot_device_info</a>
 </li>
@@ -423,10 +456,21 @@ $(function() {
 <h3><a id="index_u"></a>- u -</h3><ul>
 <li>use_tls
 : <a class="el" href="struct__tc__iot__mqtt__client__config.html#a672f87155022980803d5b0dfb37077d0">_tc_iot_mqtt_client_config</a>
+, <a class="el" href="structtc__iot__net__context__init__t.html#a14e989b570531c1751bf47409046934c">tc_iot_net_context_init_t</a>
 , <a class="el" href="structtc__iot__net__context__t.html#ae4492b11f53628abc74e7f0bf574a5e7">tc_iot_net_context_t</a>
 </li>
 <li>username
 : <a class="el" href="struct__tc__iot__device__info.html#a76dff42e448df8a03b257e2c2fd94e18">_tc_iot_device_info</a>
+</li>
+</ul>
+
+
+<h3><a id="index_w"></a>- w -</h3><ul>
+<li>will
+: <a class="el" href="struct__tc__iot__mqtt__client__config.html#a15446f7bbe63337442d6152f72936e2c">_tc_iot_mqtt_client_config</a>
+</li>
+<li>willFlag
+: <a class="el" href="struct__tc__iot__mqtt__client__config.html#a76f5331cff8b28b32bb1865ff65f67dc">_tc_iot_mqtt_client_config</a>
 </li>
 </ul>
 </div><!-- contents -->

@@ -28,10 +28,9 @@ void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
-void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
+void _message_ack_callback(tc_iot_command_ack_status_e ack_status, 
         tc_iot_message_data * md , void * p_context) {
 
-    tc_iot_hal_printf("***********************\n");
     if (ack_status != TC_IOT_ACK_SUCCESS) {
         if (ack_status == TC_IOT_ACK_TIMEOUT) {
             tc_iot_hal_printf("request timeout\n");
@@ -135,8 +134,8 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_shadow_yield(p_shadow_client, timeout);
     tc_iot_hal_printf("yield waiting for server finished.\n");
 
-    tc_iot_hal_printf("[c->s] shadow_get\n");
-    tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 6000, NULL);
+    tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, _message_ack_callback, 6000, NULL);
+    tc_iot_hal_printf("[c->s] shadow_get\n%s\n", buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     snprintf(reported, sizeof(reported), 
@@ -148,24 +147,20 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
             tc_iot_json_inline_escape(buffer, buffer_len, "Hello, world!"),
             700,10000.1234, TC_IOT_JSON_FALSE, TC_IOT_JSON_NULL);
 
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, desired);
+    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, desired, _message_ack_callback, 6000, NULL);
     tc_iot_hal_printf("[c->s] shadow_update_all\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, reported, NULL);
+    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, NULL, _message_ack_callback, 6000, NULL);
     tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    ret =  tc_iot_shadow_doc_pack_for_update(buffer, buffer_len, p_shadow_client, NULL, desired);
+    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, NULL, desired, _message_ack_callback, 6000, NULL);
     tc_iot_hal_printf("[c->s] shadow_update_desired\n%s\n", buffer);
-    tc_iot_shadow_update(p_shadow_client, buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    ret =  tc_iot_shadow_doc_pack_for_delete(buffer, buffer_len, p_shadow_client, TC_IOT_JSON_NULL, TC_IOT_JSON_NULL);
-    tc_iot_hal_printf("[c->s] shadow_delete\n%s\n",buffer);
-    tc_iot_shadow_delete(p_shadow_client, buffer);
+    tc_iot_shadow_delete(p_shadow_client, buffer, buffer_len, TC_IOT_JSON_NULL, TC_IOT_JSON_NULL, NULL, 0, NULL);
+    tc_iot_hal_printf("[c->s] shadow_delete\n%s\n", buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     tc_iot_hal_printf("Stopping\n");

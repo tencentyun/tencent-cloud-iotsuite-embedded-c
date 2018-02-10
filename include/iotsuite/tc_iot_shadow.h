@@ -17,7 +17,7 @@ typedef enum _tc_iot_command_ack_status_e {
     TC_IOT_ACK_TIMEOUT,
 } tc_iot_command_ack_status_e;
 
-typedef void (*message_ack_handler)(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * p_context);
+typedef void (*message_ack_handler)(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * session_context);
 
 
 #define TC_IOT_SESSION_ID_LEN     8
@@ -27,7 +27,7 @@ typedef struct _tc_iot_shadow_session{
     char sid[TC_IOT_SESSION_ID_LEN+1];
     tc_iot_timer        timer;
     message_ack_handler handler;    
-    void * context;
+    void * session_context;
 }tc_iot_shadow_session;
 
 
@@ -99,6 +99,14 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
 int tc_iot_shadow_doc_pack_for_get_with_sid(char *buffer, int buffer_len,
                                     char * session_id, int session_id_len,
                                     tc_iot_shadow_client *c);
+int tc_iot_shadow_doc_pack_for_update_with_sid(char *buffer, int buffer_len,
+                                    char * session_id, int session_id_len,
+                                    const char * reported, const char * desired,
+                                    tc_iot_shadow_client *c) ;
+int tc_iot_shadow_doc_pack_for_delete_with_sid(char *buffer, int buffer_len,
+                                    char * session_id, int session_id_len,
+                                    const char * reported, const char * desired,
+                                    tc_iot_shadow_client *c) ;
 
 int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
                                  char * session_id, int session_id_len,

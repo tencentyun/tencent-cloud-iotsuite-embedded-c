@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>tencent-cloud-iotsuite-embedded-c: _tc_iot_mqtt_client::MessageHandlers结构体 参考</title>
+<title>tencent-cloud-iotsuite-embedded-c: _tc_iot_shadow_session结构体 参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,67 +61,79 @@ $(function() {
 </iframe>
 </div>
 
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="struct__tc__iot__mqtt__client.html">_tc_iot_mqtt_client</a></li><li class="navelem"><a class="el" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html">MessageHandlers</a></li>  </ul>
-</div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-attribs">成员变量</a>  </div>
   <div class="headertitle">
-<div class="title">_tc_iot_mqtt_client::MessageHandlers结构体 参考</div>  </div>
+<div class="title">_tc_iot_shadow_session结构体 参考</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="tc__iot__mqtt_8h_source.html">tc_iot_mqtt.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="tc__iot__shadow_8h_source.html">tc_iot_shadow.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 成员变量</h2></td></tr>
-<tr class="memitem:abfad215b7a61f6dc91cdaf2d820bd64a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html#abfad215b7a61f6dc91cdaf2d820bd64a">topicFilter</a></td></tr>
-<tr class="separator:abfad215b7a61f6dc91cdaf2d820bd64a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af18d4662f91f73b7711ea2229d414568"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html#af18d4662f91f73b7711ea2229d414568">fp</a></td></tr>
-<tr class="separator:af18d4662f91f73b7711ea2229d414568"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a690f0eb430e15edce6a86fe0dbfc40a4"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html#a690f0eb430e15edce6a86fe0dbfc40a4">context</a></td></tr>
-<tr class="separator:a690f0eb430e15edce6a86fe0dbfc40a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d8c5c4857ccc11efd5d1fed3ccf045e"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__shadow__session.html#a1d8c5c4857ccc11efd5d1fed3ccf045e">sid</a> [<a class="el" href="tc__iot__shadow_8h.html#a11879c96b587d9a33e88eaf4df1e1fcc">TC_IOT_SESSION_ID_LEN</a>+1]</td></tr>
+<tr class="separator:a1d8c5c4857ccc11efd5d1fed3ccf045e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75b111b6cccd06d4552733682ac0faef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtc__iot__timer.html">tc_iot_timer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__shadow__session.html#a75b111b6cccd06d4552733682ac0faef">timer</a></td></tr>
+<tr class="separator:a75b111b6cccd06d4552733682ac0faef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a6f47a02afa76ddbd8a26f85244f1d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__shadow_8h.html#a4fb08f88375041799f4b7054baa9f3f0">message_ack_handler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__shadow__session.html#a7a6f47a02afa76ddbd8a26f85244f1d7">handler</a></td></tr>
+<tr class="separator:a7a6f47a02afa76ddbd8a26f85244f1d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8c99d539768b1ba1b23173f53eb854e"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__shadow__session.html#aa8c99d539768b1ba1b23173f53eb854e">session_context</a></td></tr>
+<tr class="separator:aa8c99d539768b1ba1b23173f53eb854e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">结构体成员变量说明</h2>
-<a id="a690f0eb430e15edce6a86fe0dbfc40a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a690f0eb430e15edce6a86fe0dbfc40a4">&#9670;&nbsp;</a></span>context</h2>
+<a id="a7a6f47a02afa76ddbd8a26f85244f1d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a6f47a02afa76ddbd8a26f85244f1d7">&#9670;&nbsp;</a></span>handler</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void* _tc_iot_mqtt_client::MessageHandlers::context</td>
+          <td class="memname"><a class="el" href="tc__iot__shadow_8h.html#a4fb08f88375041799f4b7054baa9f3f0">message_ack_handler</a> _tc_iot_shadow_session::handler</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="af18d4662f91f73b7711ea2229d414568"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af18d4662f91f73b7711ea2229d414568">&#9670;&nbsp;</a></span>fp</h2>
+<a id="aa8c99d539768b1ba1b23173f53eb854e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8c99d539768b1ba1b23173f53eb854e">&#9670;&nbsp;</a></span>session_context</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a> _tc_iot_mqtt_client::MessageHandlers::fp</td>
+          <td class="memname">void* _tc_iot_shadow_session::session_context</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="abfad215b7a61f6dc91cdaf2d820bd64a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfad215b7a61f6dc91cdaf2d820bd64a">&#9670;&nbsp;</a></span>topicFilter</h2>
+<a id="a1d8c5c4857ccc11efd5d1fed3ccf045e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d8c5c4857ccc11efd5d1fed3ccf045e">&#9670;&nbsp;</a></span>sid</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* _tc_iot_mqtt_client::MessageHandlers::topicFilter</td>
+          <td class="memname">char _tc_iot_shadow_session::sid[<a class="el" href="tc__iot__shadow_8h.html#a11879c96b587d9a33e88eaf4df1e1fcc">TC_IOT_SESSION_ID_LEN</a>+1]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a75b111b6cccd06d4552733682ac0faef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75b111b6cccd06d4552733682ac0faef">&#9670;&nbsp;</a></span>timer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structtc__iot__timer.html">tc_iot_timer</a> _tc_iot_shadow_session::timer</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -129,7 +141,7 @@ $(function() {
 </div>
 </div>
 <hr/>该结构体的文档由以下文件生成:<ul>
-<li>include/iotsuite/<a class="el" href="tc__iot__mqtt_8h_source.html">tc_iot_mqtt.h</a></li>
+<li>include/iotsuite/<a class="el" href="tc__iot__shadow_8h_source.html">tc_iot_shadow.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

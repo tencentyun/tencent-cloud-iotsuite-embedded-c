@@ -13,6 +13,7 @@ var searchData=
   ['_5ftc_5fiot_5fsha256_5ft',['_tc_iot_sha256_t',['../struct__tc__iot__sha256__t.html',1,'']]],
   ['_5ftc_5fiot_5fshadow_5fclient',['_tc_iot_shadow_client',['../struct__tc__iot__shadow__client.html',1,'']]],
   ['_5ftc_5fiot_5fshadow_5fconfig',['_tc_iot_shadow_config',['../struct__tc__iot__shadow__config.html',1,'']]],
+  ['_5ftc_5fiot_5fshadow_5fsession',['_tc_iot_shadow_session',['../struct__tc__iot__shadow__session.html',1,'']]],
   ['_5ftc_5fiot_5furl_5fparse_5fresult_5ft',['_tc_iot_url_parse_result_t',['../struct__tc__iot__url__parse__result__t.html',1,'']]],
   ['_5ftc_5fiot_5fvariant_5fdata',['_tc_iot_variant_data',['../union__tc__iot__variant__data.html',1,'']]],
   ['_5ftc_5fiot_5fyabuffer_5ft',['_tc_iot_yabuffer_t',['../struct__tc__iot__yabuffer__t.html',1,'']]]

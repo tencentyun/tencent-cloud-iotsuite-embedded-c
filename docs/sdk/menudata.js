@@ -47,7 +47,8 @@ var menudata={children:[
 {text:"r",url:"functions.html#index_r"},
 {text:"s",url:"functions.html#index_s"},
 {text:"t",url:"functions.html#index_t"},
-{text:"u",url:"functions.html#index_u"}]},
+{text:"u",url:"functions.html#index_u"},
+{text:"w",url:"functions.html#index_w"}]},
 {text:"变量",url:"functions_vars.html",children:[
 {text:"a",url:"functions_vars.html#index_a"},
 {text:"b",url:"functions_vars.html#index_b"},
@@ -68,7 +69,8 @@ var menudata={children:[
 {text:"r",url:"functions_vars.html#index_r"},
 {text:"s",url:"functions_vars.html#index_s"},
 {text:"t",url:"functions_vars.html#index_t"},
-{text:"u",url:"functions_vars.html#index_u"}]}]}]},
+{text:"u",url:"functions_vars.html#index_u"},
+{text:"w",url:"functions_vars.html#index_w"}]}]}]},
 {text:"文件",url:"files.html",children:[
 {text:"文件列表",url:"files.html"},
 {text:"全局定义",url:"globals.html",children:[
@@ -91,7 +93,11 @@ var menudata={children:[
 {text:"h",url:"globals_func.html#index_h"},
 {text:"t",url:"globals_func.html#index_t"}]},
 {text:"变量",url:"globals_vars.html"},
-{text:"类型定义",url:"globals_type.html"},
+{text:"类型定义",url:"globals_type.html",children:[
+{text:"d",url:"globals_type.html#index_d"},
+{text:"m",url:"globals_type.html#index_m"},
+{text:"p",url:"globals_type.html#index_p"},
+{text:"t",url:"globals_type.html#index_t"}]},
 {text:"枚举",url:"globals_enum.html"},
 {text:"枚举值",url:"globals_eval.html",children:[
 {text:"c",url:"globals_eval.html#index_c"},

@@ -111,8 +111,8 @@ $(function() {
 <tr class="separator:ae5ead9821d53cb73f33635b846ef32be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2efa81c351a6b1482126dcbbc983ee1"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html">_tc_iot_mqtt_client::MessageHandlers</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client.html#aa2efa81c351a6b1482126dcbbc983ee1">message_handlers</a> [<a class="el" href="tc__iot__mqtt_8h.html#a3366e60d76472dcc6d22337f83fdd715">TC_IOT_MAX_MESSAGE_HANDLERS</a>]</td></tr>
 <tr class="separator:aa2efa81c351a6b1482126dcbbc983ee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af38d6b91671543d31f41d884e7d11d5f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__mqtt_8h.html#ab0bf065d193101c2f2cf682ce962ffb9">defaultMessageHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client.html#af38d6b91671543d31f41d884e7d11d5f">default_msg_handler</a></td></tr>
-<tr class="separator:af38d6b91671543d31f41d884e7d11d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7993651ca787e9bd39e2963d5476a9f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client.html#a7993651ca787e9bd39e2963d5476a9f9">default_msg_handler</a></td></tr>
+<tr class="separator:a7993651ca787e9bd39e2963d5476a9f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae4efdf66c603fc24df38f64b534d841"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__mqtt_8h.html#a8d1ce635834f8d467d387786090d1652">disconnectHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client.html#aae4efdf66c603fc24df38f64b534d841">disconnect_handler</a></td></tr>
 <tr class="separator:aae4efdf66c603fc24df38f64b534d841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac13effb3f4fa20ea8fdd643806949a85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client.html#ac13effb3f4fa20ea8fdd643806949a85">ipstack</a></td></tr>
@@ -123,6 +123,8 @@ $(function() {
 <tr class="separator:a3290d4681e401dd5042e2ffeb37c01fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6a2615c0cd6c3f7d52dfe21319d76a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtc__iot__timer.html">tc_iot_timer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client.html#ac6a2615c0cd6c3f7d52dfe21319d76a8">reconnect_timer</a></td></tr>
 <tr class="separator:ac6a2615c0cd6c3f7d52dfe21319d76a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad0257482671e46b1b1c846120c67b8c"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__mqtt__client.html#aad0257482671e46b1b1c846120c67b8c">client_init_time</a></td></tr>
+<tr class="separator:aad0257482671e46b1b1c846120c67b8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p class="">MQTT client 对象结构，保存 MQTT 客户端相关配置、连接状态、 回调处理、时延要求、收发缓存区等信息。 </p>
@@ -187,6 +189,20 @@ $(function() {
 
 </div>
 </div>
+<a id="aad0257482671e46b1b1c846120c67b8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad0257482671e46b1b1c846120c67b8c">&#9670;&nbsp;</a></span>client_init_time</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long _tc_iot_mqtt_client::client_init_time</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aaac2751d6fc922642e7ac81452f643d6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaac2751d6fc922642e7ac81452f643d6">&#9670;&nbsp;</a></span>command_timeout_ms</h2>
 
@@ -217,14 +233,14 @@ $(function() {
 
 </div>
 </div>
-<a id="af38d6b91671543d31f41d884e7d11d5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af38d6b91671543d31f41d884e7d11d5f">&#9670;&nbsp;</a></span>default_msg_handler</h2>
+<a id="a7993651ca787e9bd39e2963d5476a9f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7993651ca787e9bd39e2963d5476a9f9">&#9670;&nbsp;</a></span>default_msg_handler</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="tc__iot__mqtt_8h.html#ab0bf065d193101c2f2cf682ce962ffb9">defaultMessageHandler</a> _tc_iot_mqtt_client::default_msg_handler</td>
+          <td class="memname"><a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a> _tc_iot_mqtt_client::default_msg_handler</td>
         </tr>
       </table>
 </div><div class="memdoc">

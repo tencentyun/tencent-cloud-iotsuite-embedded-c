@@ -68,6 +68,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#define-members">宏定义</a> &#124;
 <a href="#typedef-members">类型定义</a> &#124;
 <a href="#enum-members">枚举</a>  </div>
   <div class="headertitle">
@@ -77,6 +78,11 @@ $(function() {
 
 <p><a href="tc__iot__const_8h_source.html">浏览源代码.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:aa5e1d04aaa4a59ee810d3cadbcb29a01"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#aa5e1d04aaa4a59ee810d3cadbcb29a01">TC_IOT_ARRAY_LENGTH</a>(a)&#160;&#160;&#160;(sizeof(a)/sizeof(a[0]))</td></tr>
+<tr class="separator:aa5e1d04aaa4a59ee810d3cadbcb29a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 类型定义</h2></td></tr>
 <tr class="memitem:a22976d49fd798dc8f3625734a8b6f6f6"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecc">_tc_iot_sys_code_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6">tc_iot_sys_code_e</a></td></tr>
@@ -93,61 +99,86 @@ $(function() {
 <br />
 &#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca24f2ad823e7ce6b452952fd09b3f60cb">TC_IOT_TLS_NOT_SUPPORTED</a> = -93, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca5041e7db89fb044c93c589495e7c1c74">TC_IOT_BUFFER_OVERFLOW</a> = -94, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca2dc307729a1a5cfe50998985d1dcb384">TC_IOT_FUCTION_NOT_IMPLEMENTED</a> = -99, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf041e53fc21dec16627a04478eaa63f9">TC_IOT_NETWORK_ERROR_BASE</a> = -100, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaa9cea0361e8cebad62b4d03911d5a3d7">TC_IOT_NET_UNKNOWN_HOST</a> = -101, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccabcbeaa0b8fda8d9619c50f769fbec5d3">TC_IOT_NET_CONNECT_FAILED</a> = -102, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaa9cea0361e8cebad62b4d03911d5a3d7">TC_IOT_NET_UNKNOWN_HOST</a> = -101, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccabcbeaa0b8fda8d9619c50f769fbec5d3">TC_IOT_NET_CONNECT_FAILED</a> = -102, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4244188b2e2751048388c0a9ac75eda5">TC_IOT_NET_SOCKET_FAILED</a> = -103, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf03ae1475f793db94977affc68744db3">TC_IOT_SEND_PACK_FAILED</a> = -104, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca2f50e5a5db114d620c2b4c6c3ef74e3c">TC_IOT_MQTT_RECONNECT_TIMEOUT</a> = -150, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf020246b3dac170f558da816bd39941b">TC_IOT_MQTT_RECONNECT_IN_PROGRESS</a> = -151, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccadd806fdfd89a73df3bc9ae93a872cdc7">TC_IOT_MQTT_RECONNECT_FAILED</a> = -152, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca19b404b3495d7494b1875a5ac1ebf71b">TC_IOT_NET_NOTHING_READ</a> = -105, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca955fd3f8f0943f292da1cfea57eed11d">TC_IOT_NET_READ_TIMEOUT</a> = -106, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca2f50e5a5db114d620c2b4c6c3ef74e3c">TC_IOT_MQTT_RECONNECT_TIMEOUT</a> = -150, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf020246b3dac170f558da816bd39941b">TC_IOT_MQTT_RECONNECT_IN_PROGRESS</a> = -151, 
+<br />
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccadd806fdfd89a73df3bc9ae93a872cdc7">TC_IOT_MQTT_RECONNECT_FAILED</a> = -152, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca7501112394cae04a6daddc25f6f51038">TC_IOT_MQTT_NETWORK_UNAVAILABLE</a> = -153, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca9dc4e10d50a6631c43e5d75106f4d3e7">TC_IOT_MQTT_WAIT_ACT_TIMEOUT</a> = -154, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4184e6f6cfd72d95b5607cb0f9e3239b">TC_IOT_MQTT_CONNACK_ERROR</a> = -160, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4184e6f6cfd72d95b5607cb0f9e3239b">TC_IOT_MQTT_CONNACK_ERROR</a> = -160, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca8e391f3bbe893f5a76e8620a6f28b452">TC_IOT_MQTT_CONNACK_PROTOCOL_UNACCEPTABLE</a> = -161, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca8e391f3bbe893f5a76e8620a6f28b452">TC_IOT_MQTT_CONNACK_PROTOCOL_UNACCEPTABLE</a> = -161, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0a691fe03e48cbd285721caf23ae77c0">TC_IOT_MQTT_CONNACK_CLIENT_ID_INVALID</a> = -162, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca9d68548f92f65fa76ce9bec6820a504c">TC_IOT_MQTT_CONNACK_SERVICE_UNAVAILABLE</a> = -163, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca5dfab1905ded81cf673b17e98214dde4">TC_IOT_MQTT_CONNACK_BAD_USER_OR_PASSWORD</a> = -164, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca5dfab1905ded81cf673b17e98214dde4">TC_IOT_MQTT_CONNACK_BAD_USER_OR_PASSWORD</a> = -164, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca692280a98ac9e624947118747a897eb9">TC_IOT_MQTT_CONNACK_NOT_AUTHORIZED</a> = -165, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca692280a98ac9e624947118747a897eb9">TC_IOT_MQTT_CONNACK_NOT_AUTHORIZED</a> = -165, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccad91491c10e405239a239c1e4a72dfc13">TC_IOT_MQTT_SUBACK_FAILED</a> = -170, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaee262622ec69d2af4a8c4e958d647f2a">TC_IOT_MBED_TLS_ERROR_BASE</a> = -200, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca5bbc187dff0f9a790298c56a7efbcf3d">TC_IOT_CTR_DRBG_SEED_FAILED</a> = -201, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca5bbc187dff0f9a790298c56a7efbcf3d">TC_IOT_CTR_DRBG_SEED_FAILED</a> = -201, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca948f705bcb41922d8c6c9eb0878d0998">TC_IOT_X509_CRT_PARSE_FILE_FAILED</a> = -202, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca948f705bcb41922d8c6c9eb0878d0998">TC_IOT_X509_CRT_PARSE_FILE_FAILED</a> = -202, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca8c3ff8839f479465314c4061d60e6f9b">TC_IOT_PK_PRIVATE_KEY_PARSE_ERROR</a> = -203, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0dc0de5542351a883b2d5d70afb1d930">TC_IOT_PK_PARSE_KEYFILE_FAILED</a> = -204, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccac7061a5d6daba6b3da2760fe83e6b62a">TC_IOT_TLS_NET_SET_BLOCK_FAILED</a> = -205, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccac7061a5d6daba6b3da2760fe83e6b62a">TC_IOT_TLS_NET_SET_BLOCK_FAILED</a> = -205, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca66aa438b0784ec4d436dc9482254a91e">TC_IOT_TLS_SSL_CONFIG_DEFAULTS_FAILED</a> = -206, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca66aa438b0784ec4d436dc9482254a91e">TC_IOT_TLS_SSL_CONFIG_DEFAULTS_FAILED</a> = -206, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaba58a6308ea9d50632a1573752180128">TC_IOT_TLS_SSL_CONF_OWN_CERT_FAILED</a> = -207, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca9805458636af50070707973402e9909d">TC_IOT_TLS_SSL_SETUP_FAILED</a> = -208, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca015b05d7bb219ab5fd006629fc0a7897">TC_IOT_TLS_SSL_SET_HOSTNAME_FAILED</a> = -209, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca015b05d7bb219ab5fd006629fc0a7897">TC_IOT_TLS_SSL_SET_HOSTNAME_FAILED</a> = -209, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaeff0cb30d3592a95fa86827f7f982058">TC_IOT_TLS_SSL_HANDSHAKE_FAILED</a> = -210, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaeff0cb30d3592a95fa86827f7f982058">TC_IOT_TLS_SSL_HANDSHAKE_FAILED</a> = -210, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0ce63962bbb76ec114d91a45dba4aa65">TC_IOT_TLS_X509_CRT_VERIFY_FAILED</a> = -211, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccacae56cfaf68752a49a0a35b68f25315f">TC_IOT_TLS_SSL_WRITE_FAILED</a> = -212, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0b42e1cc6f23bea809de9d38891338ef">TC_IOT_TLS_SSL_WRITE_TIMEOUT</a> = -213, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0b42e1cc6f23bea809de9d38891338ef">TC_IOT_TLS_SSL_WRITE_TIMEOUT</a> = -213, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccabc6a15b87ab5bdcebf7e078b9de350ed">TC_IOT_TLS_SSL_READ_FAILED</a> = -214, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccabc6a15b87ab5bdcebf7e078b9de350ed">TC_IOT_TLS_SSL_READ_FAILED</a> = -214, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaade85125405e675dcfe5416a66055195">TC_IOT_TLS_SSL_READ_TIMEOUT</a> = -215, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaa74db8b33bb21c36b0bf0048486a1999">TC_IOT_LOGIC_ERROR_BASE</a> = -1000, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca8bf35427ae6e75f033cbbd58a96adb11">TC_IOT_NETWORK_PTR_NULL</a> = -1001, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca8bf35427ae6e75f033cbbd58a96adb11">TC_IOT_NETWORK_PTR_NULL</a> = -1001, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccabf68cef459425c3f647243209c56be07">TC_IOT_NETCONTEXT_PTR_NULL</a> = -1002, 
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccabf68cef459425c3f647243209c56be07">TC_IOT_NETCONTEXT_PTR_NULL</a> = -1002, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca6d64df731f15cad35395ffa19a63c0e6">TC_IOT_JSON_PATH_NO_MATCH</a> = -1003, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf38eeda745c089d46ae07fe3b9bcaa5a">TC_IOT_JSON_PARSE_FAILED</a> = -1004, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca565814d95f4064c7d88afc7d5c7ec45f">TC_IOT_ERROR_HTTP_REQUEST_FAILED</a> = -1005, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca565814d95f4064c7d88afc7d5c7ec45f">TC_IOT_ERROR_HTTP_REQUEST_FAILED</a> = -1005, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf7ffd96aaca8701a224dce66603585ea">TC_IOT_REFRESH_TOKEN_FAILED</a> = -1006
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf7ffd96aaca8701a224dce66603585ea">TC_IOT_REFRESH_TOKEN_FAILED</a> = -1006, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0db7b477f0ea341d328b0fc44beddf31">TC_IOT_HTTP_RESPONSE_INVALID</a> = -1007, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca25564bec5ebbab108fbb1b16579b2152">TC_IOT_SHADOW_SESSION_NOT_ENOUGH</a> = -1008
 <br />
  }</td></tr>
 <tr class="memdesc:a1bf17f05159227e33f5eef1f0e067ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统常见错误码定义，基本定义原则：  <a href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecc">更多...</a><br /></td></tr>
 <tr class="separator:a1bf17f05159227e33f5eef1f0e067ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">宏定义说明</h2>
+<a id="aa5e1d04aaa4a59ee810d3cadbcb29a01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5e1d04aaa4a59ee810d3cadbcb29a01">&#9670;&nbsp;</a></span>TC_IOT_ARRAY_LENGTH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TC_IOT_ARRAY_LENGTH</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a</td><td>)</td>
+          <td>&#160;&#160;&#160;(sizeof(a)/sizeof(a[0]))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">类型定义说明</h2>
 <a id="a22976d49fd798dc8f3625734a8b6f6f6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a22976d49fd798dc8f3625734a8b6f6f6">&#9670;&nbsp;</a></span>tc_iot_sys_code_e</h2>
@@ -202,6 +233,8 @@ $(function() {
 </td></tr>
 <tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca5041e7db89fb044c93c589495e7c1c74"></a>TC_IOT_BUFFER_OVERFLOW&#160;</td><td class="fielddoc"><p class="">函数输出参数内存空间不足，无法完成数据输出 </p>
 </td></tr>
+<tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca2dc307729a1a5cfe50998985d1dcb384"></a>TC_IOT_FUCTION_NOT_IMPLEMENTED&#160;</td><td class="fielddoc"><p class="">适配函数未做迁移实现 </p>
+</td></tr>
 <tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067eccaf041e53fc21dec16627a04478eaa63f9"></a>TC_IOT_NETWORK_ERROR_BASE&#160;</td><td class="fielddoc"><p class="">网络类错误 </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067eccaa9cea0361e8cebad62b4d03911d5a3d7"></a>TC_IOT_NET_UNKNOWN_HOST&#160;</td><td class="fielddoc"><p class="">域名解析失败 </p>
@@ -211,6 +244,10 @@ $(function() {
 <tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca4244188b2e2751048388c0a9ac75eda5"></a>TC_IOT_NET_SOCKET_FAILED&#160;</td><td class="fielddoc"><p class="">Socket操作失败 </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067eccaf03ae1475f793db94977affc68744db3"></a>TC_IOT_SEND_PACK_FAILED&#160;</td><td class="fielddoc"><p class="">发送数据失败 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca19b404b3495d7494b1875a5ac1ebf71b"></a>TC_IOT_NET_NOTHING_READ&#160;</td><td class="fielddoc"><p class="">未读取到数据 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca955fd3f8f0943f292da1cfea57eed11d"></a>TC_IOT_NET_READ_TIMEOUT&#160;</td><td class="fielddoc"><p class="">读取数据超时 </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca2f50e5a5db114d620c2b4c6c3ef74e3c"></a>TC_IOT_MQTT_RECONNECT_TIMEOUT&#160;</td><td class="fielddoc"><p class="">MQTT 重连超时 </p>
 </td></tr>
@@ -281,6 +318,10 @@ $(function() {
 <tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca565814d95f4064c7d88afc7d5c7ec45f"></a>TC_IOT_ERROR_HTTP_REQUEST_FAILED&#160;</td><td class="fielddoc"><p class="">http 请求失败 </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067eccaf7ffd96aaca8701a224dce66603585ea"></a>TC_IOT_REFRESH_TOKEN_FAILED&#160;</td><td class="fielddoc"><p class="">获取用户Token失败 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca0db7b477f0ea341d328b0fc44beddf31"></a>TC_IOT_HTTP_RESPONSE_INVALID&#160;</td><td class="fielddoc"><p class="">服务端相应的 HTTP 数据格式非法 </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1bf17f05159227e33f5eef1f0e067ecca25564bec5ebbab108fbb1b16579b2152"></a>TC_IOT_SHADOW_SESSION_NOT_ENOUGH&#160;</td><td class="fielddoc"><p class="">影子回调会话空间不够，请检查是否发送过多并发请求， 合理设置 TC_IOT_MAX_SESSION_COUNT 的值 </p>
 </td></tr>
 </table>
 

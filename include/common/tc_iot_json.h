@@ -94,4 +94,6 @@ DEFINE_TC_IOT_PROPERTY_FUNC_PROTO(double, TC_IOT_DOUBLE);
 tc_iot_property tc_iot_property_ref(const char * key, void * ptr, tc_iot_type_e type, int length);
 int tc_iot_json_property_printf(char * buffer, int len, int count, ... );
 
+#define TC_IOT_MAX_JSON_TOKEN_COUNT     120
+
 #endif /* end of include guard */

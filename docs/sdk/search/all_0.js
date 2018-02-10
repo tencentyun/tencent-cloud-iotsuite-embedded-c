@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['_5ftc_5fiot_5fcommand_5fack_5fstatus_5fe',['_tc_iot_command_ack_status_e',['../tc__iot__shadow_8h.html#acfeee5865fa73359d0bed9fe872bfac9',1,'tc_iot_shadow.h']]],
+  ['_5ftc_5fiot_5fdevice_5fauth_5fmode_5fe',['_tc_iot_device_auth_mode_e',['../tc__iot__mqtt_8h.html#a969240708b1ac6dfacf14ab37c163324',1,'tc_iot_mqtt.h']]],
   ['_5ftc_5fiot_5fdevice_5finfo',['_tc_iot_device_info',['../struct__tc__iot__device__info.html',1,'']]],
   ['_5ftc_5fiot_5fhmac_5fsha256_5ft',['_tc_iot_hmac_sha256_t',['../struct__tc__iot__hmac__sha256__t.html',1,'']]],
   ['_5ftc_5fiot_5fhttp_5frequest',['_tc_iot_http_request',['../struct__tc__iot__http__request.html',1,'']]],
@@ -17,6 +19,7 @@ var searchData=
   ['_5ftc_5fiot_5fsha256_5ft',['_tc_iot_sha256_t',['../struct__tc__iot__sha256__t.html',1,'']]],
   ['_5ftc_5fiot_5fshadow_5fclient',['_tc_iot_shadow_client',['../struct__tc__iot__shadow__client.html',1,'']]],
   ['_5ftc_5fiot_5fshadow_5fconfig',['_tc_iot_shadow_config',['../struct__tc__iot__shadow__config.html',1,'']]],
+  ['_5ftc_5fiot_5fshadow_5fsession',['_tc_iot_shadow_session',['../struct__tc__iot__shadow__session.html',1,'']]],
   ['_5ftc_5fiot_5fsys_5fcode_5fe',['_tc_iot_sys_code_e',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecc',1,'tc_iot_const.h']]],
   ['_5ftc_5fiot_5ftype_5fe',['_tc_iot_type_e',['../tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608d',1,'tc_iot_json.h']]],
   ['_5ftc_5fiot_5furl_5fparse_5fresult_5ft',['_tc_iot_url_parse_result_t',['../struct__tc__iot__url__parse__result__t.html',1,'']]],

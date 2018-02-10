@@ -94,6 +94,7 @@ int tc_iot_mqtt_client_publish(tc_iot_mqtt_client* p_mqtt_client,
  * @param topic_filter 待订阅 Topic 名称
  * @param qos 本次订阅的 QOS 等级 
  * @param msg_handler 订阅消息回调
+ * @param context 订阅响应回调 context
  *
  * @return 结果返回码 
  * @see tc_iot_sys_code_e
@@ -174,7 +175,12 @@ int tc_iot_shadow_yield(tc_iot_shadow_client *p_shadow_client, int timeout_ms);
 /**
  * @brief tc_iot_shadow_get 异步方式获取设备影子文档
  *
- * @param  p_shadow_client 设备影子对象
+ * @param c 设备影子对象
+ * @param buffer 设备影子文档缓存
+ * @param buffer_len 设备影子文档缓存最大长度
+ * @param callback 请求响应数据回调
+ * @param timeout_ms 请求最大等待时延
+ * @param session_context 请求相关 context
  *
  * @return 结果返回码 
  * @see tc_iot_sys_code_e
@@ -185,23 +191,40 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
 /**
  * @brief tc_iot_shadow_update 异步方式更新设备影子文档
  *
- * @param  p_shadow_client 设备影子对象
- * @param  p_json 更新文档请求包
+ * @param c 设备影子对象
+ * @param buffer 设备影子文档缓存
+ * @param buffer_len 设备影子文档缓存最大长度
+ * @param reported reported 字段上报数据
+ * @param desired desired 字段上报数据
+ * @param callback 请求响应数据回调
+ * @param timeout_ms 请求最大等待时延
+ * @param session_context 请求相关 context
  *
  * @return 结果返回码 
  * @see tc_iot_sys_code_e
  */
-int tc_iot_shadow_update(tc_iot_shadow_client *p_shadow_client, char * p_json);
+int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+        const char * reported, const char * desired,
+        message_ack_handler callback, int timeout_ms, void * session_context);
+
 
 /**
- * @brief tc_iot_shadow_delete 异步方式删除设备影子文档中的属性
+ * @brief tc_iot_shadow_delete 删除设备属性。
  *
- * @param  p_shadow_client 设备影子对象
- * @param  p_json 删除请求包
+ * @param c 设备影子对象
+ * @param buffer 设备影子文档缓存
+ * @param buffer_len 设备影子文档缓存最大长度
+ * @param reported reported 字段上报数据
+ * @param desired desired 字段上报数据
+ * @param callback 请求响应数据回调
+ * @param timeout_ms 请求最大等待时延
+ * @param session_context 请求相关 context
  *
  * @return 结果返回码 
  * @see tc_iot_sys_code_e
  */
-int tc_iot_shadow_delete(tc_iot_shadow_client *p_shadow_client, char * p_json);
+int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+        const char * reported, const char * desired,
+        message_ack_handler callback, int timeout_ms, void * session_context);
 
 #endif /* end of include guard */
