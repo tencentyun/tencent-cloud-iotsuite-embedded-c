@@ -413,7 +413,7 @@ int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
             memset(session_id, '0', TC_IOT_SESSION_ID_LEN);
             sid_len = TC_IOT_SESSION_ID_LEN;
         } else {
-            LOG_TRACE("sid_len=%d, sid=%.*s, ss=%s", sid_len, sid_len, session_id, session_id);
+            /* LOG_TRACE("sid_len=%d, sid=%.*s, ss=%s", sid_len, sid_len, session_id, session_id); */
         }
 
         ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len,
