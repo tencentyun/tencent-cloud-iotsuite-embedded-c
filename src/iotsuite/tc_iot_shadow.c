@@ -4,7 +4,7 @@ extern "C" {
 
 #include "tc_iot_inc.h"
 
-static void _on_message_receved(tc_iot_message_data *md) {
+static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
     static jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
 
     tc_iot_mqtt_message *message = md->message;
@@ -73,7 +73,7 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
     }
 
     rc = tc_iot_mqtt_client_subscribe(p_mqtt_client, p_cfg->sub_topic, TC_IOT_QOS1,
-                                          _on_message_receved, c);
+                                          _tc_iot_shadow_on_message_received, c);
     if (TC_IOT_SUCCESS == rc) {
         LOG_TRACE("subscribing to %s success.", p_cfg->sub_topic);
     } else {
@@ -185,7 +185,6 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
 int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
         const char * reported, const char * desired,
         message_ack_handler callback, int timeout_ms, void * session_context) {
-
     char *pub_topic ;
     int rc ;
     char session_id[TC_IOT_SESSION_ID_LEN+1];
@@ -227,15 +226,38 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
     return rc;
 }
 
-int tc_iot_shadow_delete(tc_iot_shadow_client *c, char *p_json) {
-    char *pub_topic;
-    int rc;
+int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+        const char * reported, const char * desired,
+        message_ack_handler callback, int timeout_ms, void * session_context) {
+
+    char *pub_topic ;
+    int rc ;
+    char session_id[TC_IOT_SESSION_ID_LEN+1];
+    tc_iot_shadow_session * p_session;
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
+    if (callback) {
+        p_session = tc_iot_find_empty_session(c);
+        if (!p_session) {
+            LOG_ERROR("no more empty session.");
+            return TC_IOT_SHADOW_SESSION_NOT_ENOUGH;
+        }
+        rc = tc_iot_shadow_doc_pack_for_delete_with_sid(buffer, buffer_len, &(p_session->sid[0]), 
+                TC_IOT_SESSION_ID_LEN+1, reported, desired,
+                c);
+        tc_iot_hal_timer_init(&(p_session->timer));
+        tc_iot_hal_timer_countdown_ms(&(p_session->timer), timeout_ms);
+        p_session->handler = callback;
+        p_session->session_context = session_context;
+    } else {
+        rc = tc_iot_shadow_doc_pack_for_delete_with_sid(buffer, buffer_len, NULL, 0, reported, desired, c);
+    }
+
+
     tc_iot_mqtt_message pubmsg;
     memset(&pubmsg, 0, sizeof(pubmsg));
-    pubmsg.payload = p_json;
+    pubmsg.payload = buffer;
     pubmsg.payloadlen = strlen(pubmsg.payload);
     pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;

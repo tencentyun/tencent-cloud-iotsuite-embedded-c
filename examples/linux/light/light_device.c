@@ -51,6 +51,21 @@ void get_message_ack_callback(tc_iot_command_ack_status_e ack_status,
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
 
+void report_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
+        tc_iot_message_data * md , void * session_context) {
+
+    tc_iot_mqtt_message* message = md->message;
+
+    if (ack_status != TC_IOT_ACK_SUCCESS) {
+        if (ack_status == TC_IOT_ACK_TIMEOUT) {
+            tc_iot_hal_printf("request timeout");
+        }
+        return;
+    }
+
+    tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+}
+
 static void operate_light(tc_iot_demo_light * light) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -92,12 +107,21 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
             tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
             g_light_status.color,g_light_status.brightness,
             g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
-    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, NULL, 0, NULL);
+    /* tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, NULL, 0, NULL); */
+    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, NULL, report_message_ack_callback, 0, NULL);
     tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
 }
 
+static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_light * light) {
+    char buffer[512];
+    int buffer_len = sizeof(buffer);
 
-void _on_message_received(tc_iot_message_data* md) {
+    tc_iot_shadow_delete(p_shadow_client, buffer, buffer_len, NULL, TC_IOT_JSON_NULL, report_message_ack_callback, 0, NULL);
+    tc_iot_hal_printf("[c->s] shadow_delete_desired\n%s\n", buffer);
+}
+
+
+void _light_on_message_received(tc_iot_message_data* md) {
     jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
     jsmntok_t  * key_tok = NULL;
     jsmntok_t  * val_tok = NULL;
@@ -236,7 +260,7 @@ void _on_message_received(tc_iot_message_data* md) {
         }
         operate_light(&g_light_status);
         report_light(&client, &g_light_status);
-
+        desired_light(&client, &g_light_status);
     }
 
 }
@@ -269,7 +293,7 @@ tc_iot_shadow_config g_client_config = {
     },
     TC_IOT_SUB_TOPIC_DEF,
     TC_IOT_PUB_TOPIC_DEF,
-    _on_message_received,
+    _light_on_message_received,
 };
 
 int main(int argc, char** argv) {
@@ -323,7 +347,7 @@ int main(int argc, char** argv) {
 
 
 int run_shadow(tc_iot_shadow_config * p_client_config) {
-    int timeout;
+    int timeout = 2000;
     int ret = 0;
     char buffer[512];
     int buffer_len = sizeof(buffer);
@@ -339,18 +363,19 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     }
 
     tc_iot_hal_printf("construct mqtt shadow client success.\n");
-    timeout = TC_IOT_CONFIG_COMMAND_TIMEOUT_MS;
     tc_iot_hal_printf("yield waiting for server push.\n");
     tc_iot_shadow_yield(p_shadow_client, timeout);
     tc_iot_hal_printf("yield waiting for server finished.\n");
 
+    report_light(p_shadow_client, &g_light_status);
+    tc_iot_shadow_yield(p_shadow_client, timeout);
+
     LOG_INFO("[c->s] shadow_get\n");
     // 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态
-    ret = tc_iot_shadow_doc_pack_for_get(buffer, buffer_len, p_shadow_client);
-    tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 2000, NULL);
+    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 2000, NULL);
 
     while (!stop) {
-        tc_iot_shadow_yield(p_shadow_client, 2000);
+        tc_iot_shadow_yield(p_shadow_client, timeout);
     }
 
     tc_iot_hal_printf("Stopping\n");
