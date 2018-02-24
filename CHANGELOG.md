@@ -9,10 +9,10 @@
 备数据。
 
 ### 变更
-    - tc_iot_mqtt_client_subscribe 接口新增 session_context 字段，用来做回调回传
-    ，如果不需要回传，session_context 字段传 NULL 即可。
-    - samples 目录变更为 examples
-    - bug fix 。
+- tc_iot_mqtt_client_subscribe 接口新增 session_context 字段，用来做回调回传
+，如果不需要回传，session_context 字段传 NULL 即可。
+- samples 目录变更为 examples
+- bug fix 。
 
 
 ## [1.0.5] - 2017-02-01
@@ -23,8 +23,8 @@
     https://tencentyun.github.io/tencent-cloud-iotsuite-embedded-c/sdk/index.html
 
 ### 变更
-    - 日志优化及缺陷修复
-    - samples 目录结构调整
+- 日志优化及缺陷修复
+- samples 目录结构调整
 
 
 ## [1.0.0] - 2017-01-23
