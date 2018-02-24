@@ -184,6 +184,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     c->next_packetid = 1;
     tc_iot_hal_timer_init(&c->last_sent);
     tc_iot_hal_timer_init(&c->last_received);
+    tc_iot_hal_timer_init(&c->ping_timer);
     tc_iot_hal_timer_init(&c->reconnect_timer);
 
     c->client_init_time = tc_iot_hal_timestamp(NULL);
@@ -346,19 +347,21 @@ int keepalive(tc_iot_mqtt_client* c) {
         goto exit;
     }
 
+    if (!tc_iot_hal_timer_is_expired(&c->ping_timer)) {
+        return TC_IOT_SUCCESS;
+    }
+
     if (tc_iot_hal_timer_is_expired(&c->last_sent) ||
         tc_iot_hal_timer_is_expired(&c->last_received)) {
         if (c->ping_outstanding) {
-            LOG_TRACE("keep alive heartbeat failed");
+            /* LOG_TRACE("keep alive heartbeat failed, ts=%ld", tc_iot_hal_timestamp(NULL)); */
             rc = TC_IOT_FAILURE;
         } else {
-            LOG_TRACE("keep alive heartbeat sending");
-            tc_iot_timer timer;
-            tc_iot_hal_timer_init(&timer);
-            tc_iot_hal_timer_countdown_ms(&timer, c->command_timeout_ms);
+            /* LOG_TRACE("keep alive heartbeat sending, ts=%ld", tc_iot_hal_timestamp(NULL)); */
+            tc_iot_hal_timer_countdown_second(&c->ping_timer, c->keep_alive_interval);
             int len = MQTTSerialize_pingreq(c->buf, c->buf_size);
             if (len > 0 &&
-                (rc = _send_packet(c, len, &timer)) == TC_IOT_SUCCESS) {
+                (rc = _send_packet(c, len, &c->ping_timer)) == TC_IOT_SUCCESS) {
                 c->ping_outstanding = 1;
             }
         }

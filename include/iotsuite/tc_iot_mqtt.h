@@ -148,6 +148,7 @@ typedef struct _tc_iot_mqtt_client {
     tc_iot_network_t ipstack; /**< 网络服务*/
     tc_iot_timer last_sent; /**< 最近一次发包定时器，用来判断是否需要发起 keep alive 心跳*/
     tc_iot_timer last_received; /**< 最近一次收包定时器，用来判断是否需要发起 keep alive 心跳*/
+    tc_iot_timer ping_timer; /**< keep alive ping请求定时器*/
     tc_iot_timer reconnect_timer; /**< 重连定时器，用来判断是否需要发起新一轮重连尝试*/
     
     long         client_init_time;
