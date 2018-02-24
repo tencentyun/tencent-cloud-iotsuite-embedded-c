@@ -29,7 +29,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             if (read_len > 0) {
                 IOT_FUNC_EXIT_RC(read_len);
             } else {
-                IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_READ_FAILED);
+                IOT_FUNC_EXIT_RC(TC_IOT_NET_READ_ERROR);
             }
         } else if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
                    ret != MBEDTLS_ERR_SSL_WANT_WRITE &&

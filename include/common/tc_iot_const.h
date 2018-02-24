@@ -23,6 +23,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_SEND_PACK_FAILED = -104, /**< 发送数据失败*/
     TC_IOT_NET_NOTHING_READ = -105, /**< 未读取到数据*/
     TC_IOT_NET_READ_TIMEOUT = -106, /**< 读取数据超时*/
+    TC_IOT_NET_READ_ERROR = -107, /**< 读取数据失败*/
 
     TC_IOT_MQTT_RECONNECT_TIMEOUT = -150, /**< MQTT 重连超时*/
     TC_IOT_MQTT_RECONNECT_IN_PROGRESS = -151, /**< MQTT 正在尝试重连*/

@@ -349,8 +349,10 @@ int keepalive(tc_iot_mqtt_client* c) {
     if (tc_iot_hal_timer_is_expired(&c->last_sent) ||
         tc_iot_hal_timer_is_expired(&c->last_received)) {
         if (c->ping_outstanding) {
+            LOG_TRACE("keep alive heartbeat failed");
             rc = TC_IOT_FAILURE;
         } else {
+            LOG_TRACE("keep alive heartbeat sending");
             tc_iot_timer timer;
             tc_iot_hal_timer_init(&timer);
             tc_iot_hal_timer_countdown_ms(&timer, c->command_timeout_ms);
@@ -360,6 +362,8 @@ int keepalive(tc_iot_mqtt_client* c) {
                 c->ping_outstanding = 1;
             }
         }
+    } else {
+        /* LOG_TRACE("keep alive continue for not timeout."); */
     }
 
 exit:
@@ -393,9 +397,9 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         default:
             rc = packet_type;
             if (rc == TC_IOT_NET_NOTHING_READ) {
-                /* LOG_TRACE("cycle readPacket: nothing read"); */
+                break;
             } else if (rc == TC_IOT_NET_READ_TIMEOUT){
-                LOG_TRACE("cycle readPacket: read timeout", rc);
+                LOG_TRACE("cycle readPacket: read timeout, rc=%d", rc);
             } else {
                 LOG_TRACE("cycle readPacket: rc=%d", rc);
             }
@@ -469,6 +473,7 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         case PUBCOMP:
             break;
         case PINGRESP:
+            LOG_TRACE("keep alive heartbeat success");
             c->ping_outstanding = 0;
             break;
     }

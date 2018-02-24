@@ -130,7 +130,9 @@ int tc_iot_shadow_yield(tc_iot_shadow_client *c, int timeout_ms) {
 tc_iot_shadow_session * tc_iot_find_empty_session(tc_iot_shadow_client *c) {
     int i;
     
-    IF_NULL_RETURN(c, NULL);
+    if (!c) {
+        return NULL;
+    }
 
     for (i = 0; i < TC_IOT_MAX_SESSION_COUNT; i++) {
         if (strlen(c->sessions[i].sid) == 0) {

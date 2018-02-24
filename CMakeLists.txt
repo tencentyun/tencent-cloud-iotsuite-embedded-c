@@ -35,6 +35,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+file(COPY tools/tc_iot_shadow_cli.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     option(ENABLE_TLS "use mqtt/http over tls" OFF) 
     # add_definitions(-std=c89)
@@ -68,14 +71,9 @@ endif()
 SET(CMAKE_SYSTEM_NAME Linux)
 
 include_directories(include)
-# include_directories(include/common)
-# include_directories(include/platform)
 include_directories(include/platform/${TC_IOT_PLATFORM_NAME})
-# include_directories(external/paho.mqtt.embedded-c/MQTTPacket/src)
 
 add_definitions(-DJSMN_PARENT_LINKS)
-
-# include_directories(external/jsmn/)
 
 # enable_testing()
 ADD_SUBDIRECTORY(external)

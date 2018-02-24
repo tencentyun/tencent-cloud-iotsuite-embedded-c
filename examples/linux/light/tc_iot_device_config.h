@@ -70,7 +70,7 @@
 // keep alive 间隔时长，单位是秒
 #define TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC  60
 // 网络故障或服务端超时，是否自动重连
-#define TC_IOT_CONFIG_AUTO_RECONNECT 1
+#define TC_IOT_CONFIG_AUTO_RECONNECT 0
 
 #define TC_IOT_CONFIG_CLEAN_SESSION 1
 

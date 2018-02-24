@@ -39,7 +39,7 @@ void sig_handler(int sig) {
 void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
         tc_iot_message_data * md , void * session_context) {
 
-    tc_iot_mqtt_message* message = md->message;
+    tc_iot_mqtt_message* message = NULL;
 
     if (ack_status != TC_IOT_ACK_SUCCESS) {
         if (ack_status == TC_IOT_ACK_TIMEOUT) {
@@ -48,13 +48,13 @@ void get_message_ack_callback(tc_iot_command_ack_status_e ack_status,
         return;
     }
 
+    message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
 
 void report_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
         tc_iot_message_data * md , void * session_context) {
-
-    tc_iot_mqtt_message* message = md->message;
+    tc_iot_mqtt_message* message = NULL;
 
     if (ack_status != TC_IOT_ACK_SUCCESS) {
         if (ack_status == TC_IOT_ACK_TIMEOUT) {
@@ -63,6 +63,7 @@ void report_message_ack_callback(tc_iot_command_ack_status_e ack_status,
         return;
     }
 
+    message = md->message;
     tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
 
@@ -370,7 +371,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     report_light(p_shadow_client, &g_light_status);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    LOG_INFO("[c->s] shadow_get\n");
+    LOG_INFO("[c->s] shadow_get");
     // 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态
     ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 2000, NULL);
 

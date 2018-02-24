@@ -6,6 +6,9 @@ extern "C" {
 
 int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
                         int len, int timeout_ms) {
+    int rc; 
+    int bytes = 0;
+
     struct timeval interval = {timeout_ms / 1000, (timeout_ms % 1000) * 1000};
     if (interval.tv_sec < 0 ||
         (interval.tv_sec == 0 && interval.tv_usec <= 0)) {
@@ -15,12 +18,11 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
 
     int socket_fd = network->net_context.fd;
 
-    setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (char*)&interval,
+    rc = setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (char*)&interval,
                sizeof(struct timeval));
 
-    int bytes = 0;
     while (bytes < len) {
-        int rc = recv(socket_fd, &buffer[bytes], (size_t)(len - bytes), 0);
+        rc = recv(socket_fd, &buffer[bytes], (size_t)(len - bytes), 0);
         if (rc == -1) {
             if (errno != EAGAIN && errno != EWOULDBLOCK) {
                 bytes = -1;
@@ -28,8 +30,11 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
             /* LOG_TRACE("recv rc=%d, errno=%d,str=%s,timeout=%d,ts=%d",rc, errno, strerror(errno), timeout_ms, time(NULL)); */
             break;
         } else if (rc == 0) {
-            bytes = 0;
-            break;
+            if (bytes > 0) {
+                return bytes;
+            } else {
+                return TC_IOT_NET_READ_ERROR;
+            }
         } else {
             bytes += rc;
         }
@@ -48,11 +53,13 @@ int tc_iot_hal_net_write(tc_iot_network_t* network, unsigned char* buffer,
 
     int socket_fd = network->net_context.fd;
 
-    tv.tv_sec = 0;
-    tv.tv_usec = timeout_ms * 1000;
+    /* if (timeout_ms > 0) { */
+        /* tv.tv_sec = 0; */
+        /* tv.tv_usec = timeout_ms * 1000; */
 
-    setsockopt(socket_fd, SOL_SOCKET, SO_SNDTIMEO, (char*)&tv,
-               sizeof(struct timeval));
+        /* setsockopt(socket_fd, SOL_SOCKET, SO_SNDTIMEO, (char*)&tv, */
+                /* sizeof(struct timeval)); */
+    /* } */
     int rc = write(socket_fd, buffer, len);
     return rc;
 }
