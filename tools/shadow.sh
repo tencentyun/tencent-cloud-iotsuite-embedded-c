@@ -2,7 +2,8 @@
 
 DEVICE_SECRET=${TENCENT_CLOUD_DEMO_DEVICE_SECRET}
 
-./bin/demo_shadow -s ${DEVICE_SECRET} --trace -p 1883
+# ./bin/demo_shadow -s ${DEVICE_SECRET} --trace -p 1883
+./bin/demo_shadow -s ${DEVICE_SECRET} --trace
 
 # gdb --args ./bin/demo_shadow -s ${DEVICE_SECRET} --trace -p 1883
 

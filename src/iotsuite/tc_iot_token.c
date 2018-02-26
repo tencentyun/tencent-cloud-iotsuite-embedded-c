@@ -60,9 +60,14 @@ int http_post_urlencoded(tc_iot_network_t* network,
 
 int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info) {
+    return http_refresh_auth_token_with_expire(api_url, root_ca_path, timestamp, nonce, p_device_info, 90);
+}
+
+int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path, long timestamp, long nonce,
+        tc_iot_device_info* p_device_info, long expire) {
+
     char sign_out[512];
     char http_resp[512];
-    long expire = 60;
     int sign_len;
     tc_iot_network_t network;
     tc_iot_http_request request;
@@ -70,6 +75,11 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timest
     int ret;
     char* rsp_body;
     tc_iot_net_context_init_t netcontext;
+
+    if (expire > TC_IOT_TOKEN_MAX_EXPIRE_SECOND) {
+        LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
+        expire = TC_IOT_TOKEN_MAX_EXPIRE_SECOND;
+    }
 
     memset(&netcontext, 0, sizeof(netcontext));
     // netcontext.eth = eth;

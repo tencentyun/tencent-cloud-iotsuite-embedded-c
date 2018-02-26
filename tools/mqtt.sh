@@ -13,5 +13,5 @@ DEVICE_SECRET=${TENCENT_CLOUD_DEMO_DEVICE_SECRET}
 #./bin/demo_mqtt -u test -P test
 
 
-./bin/demo_mqtt -s ${DEVICE_SECRET} --trace -p 1883
+./bin/demo_mqtt -s ${DEVICE_SECRET} --verbose -p 1883
 

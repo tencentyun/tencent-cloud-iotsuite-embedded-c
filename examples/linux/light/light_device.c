@@ -116,9 +116,17 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
 static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_light * light) {
     char buffer[512];
     int buffer_len = sizeof(buffer);
+    char reported[256];
+    int ret;
 
-    tc_iot_shadow_delete(p_shadow_client, buffer, buffer_len, NULL, TC_IOT_JSON_NULL, report_message_ack_callback, 0, NULL);
-    tc_iot_hal_printf("[c->s] shadow_delete_desired\n%s\n", buffer);
+    snprintf(reported, sizeof(reported), 
+            "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s,\"status\":\"normal\"}",
+            tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
+            g_light_status.color,g_light_status.brightness,
+            g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
+
+    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, report_message_ack_callback, 0, NULL);
+    tc_iot_hal_printf("[c->s] shadow_report_and_clean_desired\n%s\n", buffer);
 }
 
 
@@ -260,7 +268,6 @@ void _light_on_message_received(tc_iot_message_data* md) {
             }
         }
         operate_light(&g_light_status);
-        report_light(&client, &g_light_status);
         desired_light(&client, &g_light_status);
     }
 
@@ -328,10 +335,10 @@ int main(int argc, char** argv) {
 
     if (!token_defined) {
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
-        ret = http_refresh_auth_token(
+        ret = http_refresh_auth_token_with_expire(
                 TC_IOT_CONFIG_AUTH_API_URL, NULL,
                 timestamp, nonce,
-                &p_client_config->device_info);
+                &p_client_config->device_info, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
         if (ret != TC_IOT_SUCCESS) {
             tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
             return 0;
