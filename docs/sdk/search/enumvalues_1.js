@@ -50,6 +50,7 @@ var searchData=
   ['tc_5fiot_5fmqtt_5fwait_5fact_5ftimeout',['TC_IOT_MQTT_WAIT_ACT_TIMEOUT',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca9dc4e10d50a6631c43e5d75106f4d3e7',1,'tc_iot_const.h']]],
   ['tc_5fiot_5fnet_5fconnect_5ffailed',['TC_IOT_NET_CONNECT_FAILED',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccabcbeaa0b8fda8d9619c50f769fbec5d3',1,'tc_iot_const.h']]],
   ['tc_5fiot_5fnet_5fnothing_5fread',['TC_IOT_NET_NOTHING_READ',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca19b404b3495d7494b1875a5ac1ebf71b',1,'tc_iot_const.h']]],
+  ['tc_5fiot_5fnet_5fread_5ferror',['TC_IOT_NET_READ_ERROR',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca67958751f28d97bf141856b9204cf6ec',1,'tc_iot_const.h']]],
   ['tc_5fiot_5fnet_5fread_5ftimeout',['TC_IOT_NET_READ_TIMEOUT',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca955fd3f8f0943f292da1cfea57eed11d',1,'tc_iot_const.h']]],
   ['tc_5fiot_5fnet_5fsocket_5ffailed',['TC_IOT_NET_SOCKET_FAILED',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4244188b2e2751048388c0a9ac75eda5',1,'tc_iot_const.h']]],
   ['tc_5fiot_5fnet_5funknown_5fhost',['TC_IOT_NET_UNKNOWN_HOST',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaa9cea0361e8cebad62b4d03911d5a3d7',1,'tc_iot_const.h']]],

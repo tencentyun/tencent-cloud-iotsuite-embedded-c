@@ -21,6 +21,7 @@ var searchData=
   ['http_5fpost',['HTTP_POST',['../tc__iot__http__utils_8h.html#ad786c274cc31d7193adba110054555b7',1,'tc_iot_http_utils.h']]],
   ['http_5fput',['HTTP_PUT',['../tc__iot__http__utils_8h.html#ad0e84459f11d4b8762fa7c5adc775602',1,'tc_iot_http_utils.h']]],
   ['http_5frefresh_5fauth_5ftoken',['http_refresh_auth_token',['../tc__iot__token_8h.html#ae33c7cd10bfb63fb1bbacd91bcf6e221',1,'tc_iot_token.h']]],
+  ['http_5frefresh_5fauth_5ftoken_5fwith_5fexpire',['http_refresh_auth_token_with_expire',['../tc__iot__token_8h.html#a51e8ecbd22768be5f906f575c5b9d6d7',1,'tc_iot_token.h']]],
   ['http_5frequest_5fline_5ffmt',['HTTP_REQUEST_LINE_FMT',['../tc__iot__http__utils_8h.html#a8126f2dfe2f3bec70efac122501e303a',1,'tc_iot_http_utils.h']]],
   ['http_5fresponse_5fstate_5fprefix',['HTTP_RESPONSE_STATE_PREFIX',['../tc__iot__http__utils_8h.html#ac78ed6a739e3045aa2fbefae169a9086',1,'tc_iot_http_utils.h']]],
   ['http_5fresponse_5fstate_5fprefix_5flen',['HTTP_RESPONSE_STATE_PREFIX_LEN',['../tc__iot__http__utils_8h.html#a428da71aaf60722eba3aa76da0150af5',1,'tc_iot_http_utils.h']]],

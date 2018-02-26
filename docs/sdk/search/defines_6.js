@@ -36,5 +36,6 @@ var searchData=
   ['tc_5fiot_5fsha256_5fhash_5fsize',['TC_IOT_SHA256_HASH_SIZE',['../tc__iot__hmac_8h.html#ab8e387172b63c35f7ecc30d9860bf3c1',1,'tc_iot_hmac.h']]],
   ['tc_5fiot_5fsha256_5fkey_5fsize',['TC_IOT_SHA256_KEY_SIZE',['../tc__iot__hmac_8h.html#ab09ad456aa37030a52a07d7ed3801e79',1,'tc_iot_hmac.h']]],
   ['tc_5fiot_5fsha256_5flength_5fsize',['TC_IOT_SHA256_LENGTH_SIZE',['../tc__iot__hmac_8h.html#a03369e759fce092e3c07ff8da4470822',1,'tc_iot_hmac.h']]],
-  ['tc_5fiot_5fsha256_5fstate_5fsize',['TC_IOT_SHA256_STATE_SIZE',['../tc__iot__hmac_8h.html#a0d265b36acfe6167ee0014dbe2feddb4',1,'tc_iot_hmac.h']]]
+  ['tc_5fiot_5fsha256_5fstate_5fsize',['TC_IOT_SHA256_STATE_SIZE',['../tc__iot__hmac_8h.html#a0d265b36acfe6167ee0014dbe2feddb4',1,'tc_iot_hmac.h']]],
+  ['tc_5fiot_5ftoken_5fmax_5fexpire_5fsecond',['TC_IOT_TOKEN_MAX_EXPIRE_SECOND',['../tc__iot__token_8h.html#ab637b50d744aa929c9a86fdbb3a3ae83',1,'tc_iot_token.h']]]
 ];
