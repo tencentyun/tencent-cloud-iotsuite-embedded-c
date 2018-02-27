@@ -7,6 +7,7 @@ extern "C" {
 int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* c,
                                  tc_iot_mqtt_client_config* p_client_config) {
     int rc;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_client_config, TC_IOT_NULL_POINTER);
 
@@ -23,6 +24,7 @@ int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* c,
 int tc_iot_mqtt_client_connect(tc_iot_mqtt_client* c,
                                  tc_iot_mqtt_client_config* p_client_config) {
     int rc;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_client_config, TC_IOT_NULL_POINTER);
     

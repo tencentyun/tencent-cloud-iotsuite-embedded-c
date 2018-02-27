@@ -16,6 +16,7 @@ int http_post_urlencoded(tc_iot_network_t* network,
     int written_len;
     int read_len;
     int ret = tc_iot_url_parse(url, strlen(url), &result);
+
     if (ret < 0) {
         return ret;
     }
@@ -75,6 +76,32 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
     int ret;
     char* rsp_body;
     tc_iot_net_context_init_t netcontext;
+#ifdef ENABLE_TLS
+    tc_iot_tls_config_t* config;
+#endif
+
+    int username_start = 0;
+    int username_len = 0;
+
+    int password_start = 0;
+    int password_len = 0;
+
+    int expire_start = 0;
+    int expire_len = 0;
+
+    jsmn_parser p;
+    jsmntok_t t[20];
+    jsmntok_t* temp;
+
+    char temp_buf[256];
+    int returnCodeIndex = 0;
+    char num_buf[25];
+    int expire_index;
+    long ret_expire;
+    int password_index;
+    int r;
+    int username_index;
+
 
     if (expire > TC_IOT_TOKEN_MAX_EXPIRE_SECOND) {
         LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
@@ -100,8 +127,6 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
 #ifdef ENABLE_TLS
-        tc_iot_tls_config_t* config;
-
         netcontext.fd = -1;
         netcontext.use_tls = 1;
 
@@ -123,7 +148,6 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
         return TC_IOT_TLS_NOT_SUPPORTED;
 #endif
     } else {
-        tc_iot_net_context_init_t netcontext;
         memset(&netcontext, 0, sizeof(netcontext));
         tc_iot_hal_net_init(&network, &netcontext);
         LOG_TRACE("dirtect tcp network intialized.");
@@ -148,29 +172,6 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
     rsp_body = strstr(http_resp, "\r\n\r\n");
     if (rsp_body) {
         /* skip \r\n\r\n */
-
-        int username_start = 0;
-        int username_len = 0;
-
-        int password_start = 0;
-        int password_len = 0;
-
-        int expire_start = 0;
-        int expire_len = 0;
-
-        jsmn_parser p;
-        jsmntok_t t[20];
-        jsmntok_t* temp;
-
-        char temp_buf[256];
-        int returnCodeIndex = 0;
-        char num_buf[25];
-        int expire_index;
-        long expire;
-        int password_index;
-        int r;
-        int username_index;
-
         jsmn_init(&p);
 
         rsp_body += 4;
@@ -220,8 +221,8 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
-        expire = atol(num_buf);
-        p_device_info->token_expire_time = timestamp + expire;
+        ret_expire = atol(num_buf);
+        p_device_info->token_expire_time = timestamp + ret_expire;
 
         return TC_IOT_SUCCESS;
     } else {

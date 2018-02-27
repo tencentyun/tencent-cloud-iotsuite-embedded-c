@@ -9,7 +9,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
     int read_len = 0;
     int ret = 0;
-
+    char err_str[100];
     tc_iot_timer timer;
 
     IOT_FUNC_ENTRY;
@@ -41,7 +41,6 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
                    ret != MBEDTLS_ERR_SSL_TIMEOUT) {
             if (MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY == ret) {
             }
-            char err_str[100];
             mbedtls_strerror(ret, err_str, sizeof(err_str));
             LOG_TRACE("mbedtls_ssl_read returned %d/%s", ret, err_str);
             if (read_len > 0) {
@@ -124,6 +123,11 @@ static int net_prepare(void) {
 
 int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
                            uint16_t port) {
+    char port_str[6];
+    int ret = 0;
+    char* pers = "iot_client";
+    char info_buf[512];
+
     if (host) {
         network->net_context.host = host;
     }
@@ -132,14 +136,11 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
         network->net_context.port = port;
     }
 
-    char port_str[6];
     tc_iot_hal_snprintf(port_str, sizeof(port_str), "%d",
                         network->net_context.port);
 
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
     tc_iot_tls_config_t* tls_config = &(network->net_context.tls_config);
-
-    int ret = 0;
 
     if ((ret = net_prepare()) != 0) {
         return (ret);
@@ -153,7 +154,6 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
     mbedtls_entropy_init(&(tls_data->entropy));
 
     LOG_TRACE("mbedtls_ctr_drbg_seed running ...");
-    char* pers = "iot_client";
     if ((ret = mbedtls_ctr_drbg_seed(
              &(tls_data->ctr_drbg), mbedtls_entropy_func, &(tls_data->entropy),
              (const unsigned char*)pers, strlen(pers))) != 0) {
@@ -258,7 +258,6 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
 
     LOG_TRACE("Verifying peer X.509 certificate...");
 
-    char info_buf[512];
     if ((tls_data->flags = mbedtls_ssl_get_verify_result(
                     &(tls_data->ssl_context))) != 0) {
         info_buf[sizeof(info_buf) - 1] = '\0';

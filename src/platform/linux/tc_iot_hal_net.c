@@ -7,6 +7,7 @@ extern "C" {
 int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
                         int len, int timeout_ms) {
     int rc; 
+    int socket_fd = -1;
     int bytes = 0;
 
     struct timeval interval = {timeout_ms / 1000, (timeout_ms % 1000) * 1000};
@@ -16,7 +17,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
         interval.tv_usec = 100;
     }
 
-    int socket_fd = network->net_context.fd;
+    socket_fd = network->net_context.fd;
 
     rc = setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (char*)&interval,
                sizeof(struct timeval));
@@ -49,8 +50,8 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
 
 int tc_iot_hal_net_write(tc_iot_network_t* network, unsigned char* buffer,
                          int len, int timeout_ms) {
+    int rc;
     struct timeval tv;
-
     int socket_fd = network->net_context.fd;
 
     /* if (timeout_ms > 0) { */
@@ -60,7 +61,7 @@ int tc_iot_hal_net_write(tc_iot_network_t* network, unsigned char* buffer,
         /* setsockopt(socket_fd, SOL_SOCKET, SO_SNDTIMEO, (char*)&tv, */
                 /* sizeof(struct timeval)); */
     /* } */
-    int rc = write(socket_fd, buffer, len);
+    rc = write(socket_fd, buffer, len);
     return rc;
 }
 
@@ -90,13 +91,13 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
     int rc = -1;
     sa_family_t family = AF_INET;
     struct addrinfo* result = NULL;
+    struct addrinfo hints = {0, AF_UNSPEC, SOCK_STREAM, IPPROTO_TCP,
+                             0, NULL,      NULL,        NULL};
 
     if ((rc = net_prepare()) != 0) {
         return rc;
     }
 
-    struct addrinfo hints = {0, AF_UNSPEC, SOCK_STREAM, IPPROTO_TCP,
-                             0, NULL,      NULL,        NULL};
     if (host) {
         network->net_context.host = host;
     }

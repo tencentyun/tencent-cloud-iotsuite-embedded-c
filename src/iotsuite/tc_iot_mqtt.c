@@ -9,6 +9,7 @@ void tc_iot_init_mqtt_conn_data(MQTTPacket_connectData * conn_data)
     if (!conn_data) {
         return;
     }
+
     memset(conn_data, 0, sizeof(MQTTPacket_connectData));
     conn_data->struct_id[0] = 'M';
     conn_data->struct_id[1] = 'Q';
@@ -126,10 +127,10 @@ static int _get_next_pack_id(tc_iot_mqtt_client* c) {
 
 static int _send_packet(tc_iot_mqtt_client* c, int length,
                         tc_iot_timer* timer) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-
     int rc = TC_IOT_FAILURE;
     int sent = 0;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     while (sent < length && !tc_iot_hal_timer_is_expired(timer)) {
         rc = c->ipstack.do_write(&(c->ipstack), &c->buf[sent], length-sent,
@@ -153,15 +154,21 @@ static int _send_packet(tc_iot_mqtt_client* c, int length,
 
 int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
                      tc_iot_mqtt_client_config* p_client_config) {
+
+    int i;
+    int ret;
+    tc_iot_network_t* p_network; 
+    tc_iot_net_context_init_t netcontext;
+
+#ifdef ENABLE_TLS
+    tc_iot_tls_config_t* p_tls_config;
+#endif
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_client_config, TC_IOT_NULL_POINTER);
 
-    int i;
-
-    tc_iot_network_t* p_network = &(c->ipstack);
+    p_network = &(c->ipstack);
     memset(p_network, 0, sizeof(tc_iot_network_t));
-
-    tc_iot_net_context_init_t netcontext;
 
     netcontext.fd = -1;
     netcontext.use_tls = p_client_config->use_tls;
@@ -169,7 +176,6 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     netcontext.port = p_client_config->port;
     if (netcontext.use_tls) {
 #ifdef ENABLE_TLS
-        tc_iot_tls_config_t* p_tls_config;
         p_tls_config = &(netcontext.tls_config);
         if (netcontext.use_tls) {
             p_tls_config->verify_server = 0;
@@ -213,7 +219,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     c->client_init_time = tc_iot_hal_timestamp(NULL);
 
     tc_iot_mqtt_set_state(c, CLIENT_INTIALIAZED);
-    int ret = c->ipstack.do_connect(&(c->ipstack), NULL, 0);
+    ret = c->ipstack.do_connect(&(c->ipstack), NULL, 0);
     if (TC_IOT_SUCCESS == ret) {
         tc_iot_mqtt_set_state(c, CLIENT_NETWORK_READY);
     }
@@ -221,17 +227,18 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
 }
 
 static int decodePacket(tc_iot_mqtt_client* c, int* value, int timeout) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(value, TC_IOT_NULL_POINTER);
-
     unsigned char i;
     int multiplier = 1;
     int len = 0;
+    int rc = 0;
     const int MAX_NO_OF_REMAINING_LENGTH_BYTES = 4;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(value, TC_IOT_NULL_POINTER);
 
     *value = 0;
     do {
-        int rc = MQTTPACKET_READ_ERROR;
+        rc = MQTTPACKET_READ_ERROR;
 
         if (++len > MAX_NO_OF_REMAINING_LENGTH_BYTES) {
             rc = MQTTPACKET_READ_ERROR;
@@ -249,15 +256,14 @@ exit:
 }
 
 static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(timer, TC_IOT_NULL_POINTER);
-
     MQTTHeader header = {0};
     int len = 0;
     int rem_len = 0;
     int rc = 0;
     int timer_left_ms = tc_iot_hal_timer_left_ms(timer);
 
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(timer, TC_IOT_NULL_POINTER);
 
     if (timer_left_ms <= 0) {
         timer_left_ms = 1;
@@ -308,19 +314,24 @@ exit:
 /* # can only be at end */
 /* + and # can only be next to separator */
 static char isTopicMatched(char* topicFilter, MQTTString* topicName) {
+    char* curf; 
+    char* curn;
+    char* curn_end; 
+    char* nextpos; 
+
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicName, TC_IOT_NULL_POINTER);
 
-    char* curf = topicFilter;
-    char* curn = topicName->lenstring.data;
-    char* curn_end = curn + topicName->lenstring.len;
+    curf = topicFilter;
+    curn = topicName->lenstring.data;
+    curn_end = curn + topicName->lenstring.len;
 
     while (*curf && curn < curn_end) {
         if (*curn == '/' && *curf != '/') break;
         if (*curf != '+' && *curf != '#' && *curf != *curn) break;
         if (*curf ==
             '+') {
-            char* nextpos = curn + 1;
+            nextpos = curn + 1;
             while (nextpos < curn_end && *nextpos != '/') nextpos = ++curn + 1;
         } else if (*curf == '#') {
             curn = curn_end - 1;  /*  skip until end of string */
@@ -334,12 +345,13 @@ static char isTopicMatched(char* topicFilter, MQTTString* topicName) {
 
 int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
                    tc_iot_mqtt_message* message) {
+    int i;
+    int rc = TC_IOT_FAILURE;
+    tc_iot_message_data md;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicName, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
-
-    int i;
-    int rc = TC_IOT_FAILURE;
 
     /* we have to find the right message handler - indexed by topic */
     for (i = 0; i < TC_IOT_MAX_MESSAGE_HANDLERS; ++i) {
@@ -358,7 +370,6 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
     }
 
     if (rc == TC_IOT_FAILURE && c->default_msg_handler != NULL) {
-        tc_iot_message_data md;
         _on_new_message_data(&md, topicName, message, c->message_handlers[i].context);
         c->default_msg_handler(&md);
         rc = TC_IOT_SUCCESS;
@@ -368,9 +379,10 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
 }
 
 int keepalive(tc_iot_mqtt_client* c) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-
+    int len = 0;
     int rc = TC_IOT_SUCCESS;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     if (c->keep_alive_interval == 0) {
         goto exit;
@@ -388,7 +400,7 @@ int keepalive(tc_iot_mqtt_client* c) {
         } else {
             /* LOG_TRACE("keep alive heartbeat sending, ts=%ld", tc_iot_hal_timestamp(NULL)); */
             tc_iot_hal_timer_countdown_second(&c->ping_timer, c->keep_alive_interval);
-            int len = MQTTSerialize_pingreq(c->buf, c->buf_size);
+            len = MQTTSerialize_pingreq(c->buf, c->buf_size);
             if (len > 0 &&
                 (rc = _send_packet(c, len, &c->ping_timer)) == TC_IOT_SUCCESS) {
                 c->ping_outstanding = 1;
@@ -411,13 +423,19 @@ static void _close_session(tc_iot_mqtt_client* c) {
 }
 
 int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
+    int len = 0;
+    int rc = TC_IOT_SUCCESS;
+    int packet_type;
+    MQTTString topicName;
+    tc_iot_mqtt_message msg;
+    int intQoS;
+    unsigned short mypacketid;
+    unsigned char dup, type;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(timer, TC_IOT_NULL_POINTER);
 
-    int len = 0;
-    int rc = TC_IOT_SUCCESS;
-
-    int packet_type = readPacket(c, timer);
+    packet_type = readPacket(c, timer);
 
     switch (packet_type) {
         default:
@@ -441,9 +459,6 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         case UNSUBACK:
             break;
         case PUBLISH: {
-            MQTTString topicName;
-            tc_iot_mqtt_message msg;
-            int intQoS;
             msg.payloadlen = 0;
             if (MQTTDeserialize_publish(
                     &msg.dup, &intQoS, &msg.retained, &msg.id, &topicName,
@@ -474,8 +489,6 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         }
         case PUBREC:
         case PUBREL: {
-            unsigned short mypacketid;
-            unsigned char dup, type;
             if (MQTTDeserialize_ack(&type, &dup, &mypacketid, c->readbuf,
                                     c->readbuf_size) != 1) {
                 rc = TC_IOT_FAILURE;
@@ -563,10 +576,10 @@ int tc_iot_mqtt_yield(tc_iot_mqtt_client* c, int timeout_ms) {
 }
 
 int waitfor(tc_iot_mqtt_client* c, int packet_type, tc_iot_timer* timer) {
+    int rc = TC_IOT_FAILURE;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(timer, TC_IOT_NULL_POINTER);
-
-    int rc = TC_IOT_FAILURE;
 
     do {
         if (tc_iot_hal_timer_is_expired(timer)) {
@@ -580,22 +593,24 @@ int waitfor(tc_iot_mqtt_client* c, int packet_type, tc_iot_timer* timer) {
 }
 
 int tc_iot_mqtt_reconnect(tc_iot_mqtt_client* c) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-
     tc_iot_timer connect_timer;
     int len;
     int rc;
+    int ret;
     tc_iot_mqtt_connack_data temp;
     tc_iot_mqtt_connack_data* data = &temp;
+    tc_iot_mqtt_client_state_e state;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     if (tc_iot_mqtt_is_connected(c)) {
         rc = TC_IOT_SUCCESS;
         goto exit;
     }
 
-    tc_iot_mqtt_client_state_e state = tc_iot_mqtt_get_state(c);
+    state = tc_iot_mqtt_get_state(c);
     if (CLIENT_INTIALIAZED == state) {
-        int ret = c->ipstack.do_connect(&(c->ipstack), NULL, 0);
+        ret = c->ipstack.do_connect(&(c->ipstack), NULL, 0);
         if (TC_IOT_SUCCESS == ret) {
             tc_iot_mqtt_set_state(c, CLIENT_NETWORK_READY);
         } else {
@@ -671,13 +686,13 @@ exit:
 int tc_iot_mqtt_connect_with_results(tc_iot_mqtt_client* c,
                                      MQTTPacket_connectData* options,
                                      tc_iot_mqtt_connack_data* data) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
-
     tc_iot_timer connect_timer;
     int rc = TC_IOT_FAILURE;
     MQTTPacket_connectData default_options;
     int len = 0;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
 
     if (tc_iot_mqtt_is_connected(c)) {
         rc = TC_IOT_SUCCESS;
@@ -756,9 +771,8 @@ exit:
 
 int tc_iot_mqtt_connect(tc_iot_mqtt_client* c,
                         MQTTPacket_connectData* options) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-
     tc_iot_mqtt_connack_data data;
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     return tc_iot_mqtt_connect_with_results(c, options, &data);
 }
 
@@ -768,12 +782,13 @@ int tc_iot_mqtt_set_message_handler(tc_iot_mqtt_client* c,
                                     message_handler msg_handler,
                                     void * context
                                     ) {
+    int rc = TC_IOT_FAILURE;
+    int i = -1;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(msg_handler, TC_IOT_NULL_POINTER);
 
-    int rc = TC_IOT_FAILURE;
-    int i = -1;
 
     for (i = 0; i < TC_IOT_MAX_MESSAGE_HANDLERS; ++i) {
         if (c->message_handlers[i].topicFilter != NULL &&
@@ -811,14 +826,17 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
                                        message_handler message_handler,
                                        void * context,
                                        tc_iot_mqtt_suback_data* data) {
+    int rc = TC_IOT_FAILURE;
+    tc_iot_timer timer;
+    int len = 0;
+    int count = 0;
+    unsigned short mypacketid;
+    MQTTString topic = MQTTString_initializer;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(data, TC_IOT_NULL_POINTER);
 
-    int rc = TC_IOT_FAILURE;
-    tc_iot_timer timer;
-    int len = 0;
-    MQTTString topic = MQTTString_initializer;
     topic.cstring = (char*)topicFilter;
 
     rc = _check_connection(c);
@@ -840,8 +858,6 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
     }
 
     if (waitfor(c, SUBACK, &timer) == SUBACK) {
-        int count = 0;
-        unsigned short mypacketid;
         data->grantedQoS = TC_IOT_QOS0;
         if (MQTTDeserialize_suback(&mypacketid, 1, &count,
                                    (int*)&data->grantedQoS, c->readbuf,
@@ -882,22 +898,25 @@ int tc_iot_mqtt_subscribe(tc_iot_mqtt_client* c, const char* topicFilter,
                           tc_iot_mqtt_qos_e qos,
                           message_handler message_handler,
                           void * context) {
+    tc_iot_mqtt_suback_data data;
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
-    tc_iot_mqtt_suback_data data;
     return tc_iot_mqtt_subscribe_with_results(c, topicFilter, qos,
                                               message_handler, context, &data);
 }
 
 int tc_iot_mqtt_unsubscribe(tc_iot_mqtt_client* c, const char* topicFilter) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
 
     int rc = TC_IOT_FAILURE;
     tc_iot_timer timer;
     MQTTString topic = MQTTString_initializer;
-    topic.cstring = (char*)topicFilter;
     int len = 0;
+    unsigned short mypacketid;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
+
+    topic.cstring = (char*)topicFilter;
 
     rc = _check_connection(c);
     if (rc != TC_IOT_SUCCESS) {
@@ -919,7 +938,6 @@ int tc_iot_mqtt_unsubscribe(tc_iot_mqtt_client* c, const char* topicFilter) {
     }
 
     if (waitfor(c, UNSUBACK, &timer) == UNSUBACK) {
-        unsigned short mypacketid;
         if (MQTTDeserialize_unsuback(&mypacketid, c->readbuf,
                                      c->readbuf_size) == 1) {
             tc_iot_mqtt_set_message_handler(c, topicFilter, TC_IOT_QOS0, NULL, NULL);
@@ -945,15 +963,18 @@ exit:
 
 int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
                         tc_iot_mqtt_message* message) {
+    int rc = TC_IOT_FAILURE;
+    tc_iot_timer timer;
+    MQTTString topic = MQTTString_initializer;
+    int len = 0;
+    unsigned short mypacketid;
+    unsigned char dup, type;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicName, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
 
-    int rc = TC_IOT_FAILURE;
-    tc_iot_timer timer;
-    MQTTString topic = MQTTString_initializer;
     topic.cstring = (char*)topicName;
-    int len = 0;
 
     rc = _check_connection(c);
     if (rc != TC_IOT_SUCCESS) {
@@ -981,8 +1002,6 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
 
     if (message->qos == TC_IOT_QOS1) {
         if (waitfor(c, PUBACK, &timer) == PUBACK) {
-            unsigned short mypacketid;
-            unsigned char dup, type;
             if (MQTTDeserialize_ack(&type, &dup, &mypacketid, c->readbuf,
                                     c->readbuf_size) != 1) {
                 rc = TC_IOT_FAILURE;
@@ -993,8 +1012,6 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
         }
     } else if (message->qos == TC_IOT_QOS2) {
         if (waitfor(c, PUBCOMP, &timer) == PUBCOMP) {
-            unsigned short mypacketid;
-            unsigned char dup, type;
             if (MQTTDeserialize_ack(&type, &dup, &mypacketid, c->readbuf,
                                     c->readbuf_size) != 1) {
                 rc = TC_IOT_FAILURE;
