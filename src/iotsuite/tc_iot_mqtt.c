@@ -46,6 +46,9 @@ static void _on_new_message_data(tc_iot_message_data* md, MQTTString* topic,
 }
 
 static int _handle_reconnect(tc_iot_mqtt_client* c) {
+    int i = 0;
+    int rc = 0;
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     if (!tc_iot_hal_timer_is_expired(&(c->reconnect_timer))) {
         return TC_IOT_MQTT_RECONNECT_IN_PROGRESS;
@@ -57,9 +60,28 @@ static int _handle_reconnect(tc_iot_mqtt_client* c) {
     }
 
     LOG_TRACE("trying to reconnect.");
-    int rc = tc_iot_mqtt_reconnect(c);
+    rc = tc_iot_mqtt_reconnect(c);
     if (rc == TC_IOT_SUCCESS) {
         LOG_TRACE("mqtt reconnect success.");
+        if (c->clean_session) {
+            for (i = 0; i < TC_IOT_MAX_MESSAGE_HANDLERS; ++i) {
+                if ( c->message_handlers[i].topicFilter != NULL) {
+                    rc = tc_iot_mqtt_subscribe(c, 
+                            c->message_handlers[i].topicFilter,
+                            c->message_handlers[i].qos,
+                            c->message_handlers[i].fp,
+                            c->message_handlers[i].context
+                            );
+
+                    if (rc == TC_IOT_SUCCESS) {
+                        LOG_TRACE("re-subscribe for topic=%s success", c->message_handlers[i].topicFilter);
+                    } else {
+                        LOG_ERROR("re-subscribe for topic=%s failed", c->message_handlers[i].topicFilter);
+                    }
+
+                }
+            }
+        }
         return TC_IOT_SUCCESS;
     } else {
         LOG_ERROR("attempt to reconnect failed, errCode: %d", rc);
@@ -387,12 +409,6 @@ static void _close_session(tc_iot_mqtt_client* c) {
     }
 
     c->ping_outstanding = 0;
-    if (c->clean_session) {
-        int i = 0;
-        for (i = 0; i < TC_IOT_MAX_MESSAGE_HANDLERS; ++i) {
-            c->message_handlers[i].topicFilter = NULL;
-        }
-    }
 }
 
 int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
@@ -749,6 +765,7 @@ int tc_iot_mqtt_connect(tc_iot_mqtt_client* c,
 
 int tc_iot_mqtt_set_message_handler(tc_iot_mqtt_client* c,
                                     const char* topicFilter,
+                                    tc_iot_mqtt_qos_e qos,
                                     message_handler msg_handler,
                                     void * context
                                     ) {
@@ -782,6 +799,7 @@ int tc_iot_mqtt_set_message_handler(tc_iot_mqtt_client* c,
         if (i < TC_IOT_MAX_MESSAGE_HANDLERS) {
             c->message_handlers[i].topicFilter = topicFilter;
             c->message_handlers[i].fp = msg_handler;
+            c->message_handlers[i].qos = qos;
             c->message_handlers[i].context = context;
         }
     }
@@ -834,7 +852,7 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
             data->grantedQoS &= 0xFF;
             /* LOG_TRACE("grantedQoS = 0x%x", data->grantedQoS); */
             if (data->grantedQoS != TC_IOT_SUBFAIL) {
-                rc = tc_iot_mqtt_set_message_handler(c, topicFilter,
+                rc = tc_iot_mqtt_set_message_handler(c, topicFilter, qos,
                                                      message_handler, context);
             } else {
                 rc = TC_IOT_MQTT_SUBACK_FAILED;
@@ -905,7 +923,7 @@ int tc_iot_mqtt_unsubscribe(tc_iot_mqtt_client* c, const char* topicFilter) {
         unsigned short mypacketid;
         if (MQTTDeserialize_unsuback(&mypacketid, c->readbuf,
                                      c->readbuf_size) == 1) {
-            tc_iot_mqtt_set_message_handler(c, topicFilter, NULL, NULL);
+            tc_iot_mqtt_set_message_handler(c, topicFilter, TC_IOT_QOS0, NULL, NULL);
         }
     } else {
         LOG_TRACE("waitfor UNSUBACK timeout");
@@ -1056,6 +1074,15 @@ int tc_iot_mqtt_disconnect(tc_iot_mqtt_client* c) {
         c->disconnect_handler(c, NULL);
     }
     return rc;
+}
+
+void tc_iot_mqtt_destroy(tc_iot_mqtt_client* c) {
+    int i = 0;
+    if (c->clean_session) {
+        for (i = 0; i < TC_IOT_MAX_MESSAGE_HANDLERS; ++i) {
+            c->message_handlers[i].topicFilter = NULL;
+        }
+    }
 }
 
 #ifdef __cplusplus

@@ -138,6 +138,7 @@ typedef struct _tc_iot_mqtt_client {
 
     struct MessageHandlers {
         const char* topicFilter;
+        tc_iot_mqtt_qos_e qos;
         message_handler fp;
         void * context;
     } message_handlers[TC_IOT_MAX_MESSAGE_HANDLERS]; /**< 订阅消息回调*/
@@ -213,6 +214,7 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* client, const char*,
                         tc_iot_mqtt_message*);
 int tc_iot_mqtt_set_message_handler(tc_iot_mqtt_client* c,
                                     const char* topicFilter,
+                                    tc_iot_mqtt_qos_e qos,
                                     message_handler message_handler,
                                     void * context);
 int tc_iot_mqtt_subscribe(tc_iot_mqtt_client* client, const char* topicFilter,
@@ -234,5 +236,6 @@ char tc_iot_mqtt_get_auto_reconnect(tc_iot_mqtt_client* client);
 int tc_iot_mqtt_set_auto_reconnect(tc_iot_mqtt_client* client,
                                    char auto_reconnect);
 void tc_iot_init_mqtt_conn_data(MQTTPacket_connectData * conn_data);
+void tc_iot_mqtt_destroy(tc_iot_mqtt_client* c);
 
 #endif /* end of include guard */

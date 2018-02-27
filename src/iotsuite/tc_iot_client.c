@@ -52,7 +52,9 @@ int tc_iot_mqtt_client_connect(tc_iot_mqtt_client* c,
     return rc;
 }
 
-void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* c) {}
+void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* c) {
+    tc_iot_mqtt_destroy(c);
+}
 
 char tc_iot_mqtt_client_is_connected(tc_iot_mqtt_client* c) {
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);

@@ -141,11 +141,24 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
 
     int ret = 0;
 
+    if ((ret = net_prepare()) != 0) {
+        return (ret);
+    }
+
     mbedtls_ssl_init(&(tls_data->ssl_context));
     mbedtls_net_init(&(tls_data->ssl_fd));
 
-    if ((ret = net_prepare()) != 0) {
-        return (ret);
+    mbedtls_ssl_config_init(&(tls_data->conf));
+    mbedtls_ctr_drbg_init(&(tls_data->ctr_drbg));
+    mbedtls_entropy_init(&(tls_data->entropy));
+
+    LOG_TRACE("mbedtls_ctr_drbg_seed running ...");
+    char* pers = "iot_client";
+    if ((ret = mbedtls_ctr_drbg_seed(
+             &(tls_data->ctr_drbg), mbedtls_entropy_func, &(tls_data->entropy),
+             (const unsigned char*)pers, strlen(pers))) != 0) {
+        LOG_ERROR("mbedtls_ctr_drbg_seed returned %d", ret);
+        return TC_IOT_CTR_DRBG_SEED_FAILED;
     }
 
     LOG_TRACE("Connecting to %s/%s...", network->net_context.host, port_str);
@@ -291,6 +304,11 @@ int tc_iot_hal_tls_disconnect(tc_iot_network_t* network) {
     mbedtls_ssl_free(&(tls_data->ssl_context));
     mbedtls_net_free(&(tls_data->ssl_fd));
 
+    mbedtls_ssl_config_free(&(tls_data->conf));
+    mbedtls_ctr_drbg_free(&(tls_data->ctr_drbg));
+    mbedtls_entropy_free(&(tls_data->entropy));
+
+
     network->net_context.is_connected = 0;
     LOG_TRACE("network disconnected");
     return TC_IOT_SUCCESS;
@@ -308,15 +326,13 @@ int tc_iot_hal_tls_destroy(tc_iot_network_t* network) {
     mbedtls_x509_crt_free(&(tls_data->clicert));
     mbedtls_x509_crt_free(&(tls_data->cacert));
     mbedtls_pk_free(&(tls_data->pkey));
-    mbedtls_ssl_config_free(&(tls_data->conf));
-    mbedtls_ctr_drbg_free(&(tls_data->ctr_drbg));
-    mbedtls_entropy_free(&(tls_data->entropy));
-
     LOG_TRACE("network destroied...");
 }
 
 int tc_iot_hal_tls_init(tc_iot_network_t* network,
                         tc_iot_net_context_init_t* net_context) {
+    int ret = 0;
+
     if (NULL == network) {
         return TC_IOT_NETWORK_PTR_NULL;
     }
@@ -335,23 +351,10 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
 
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
 
-    mbedtls_ssl_config_init(&(tls_data->conf));
-    mbedtls_ctr_drbg_init(&(tls_data->ctr_drbg));
     mbedtls_x509_crt_init(&(tls_data->cacert));
     mbedtls_x509_crt_init(&(tls_data->clicert));
-
     mbedtls_pk_init(&(tls_data->pkey));
-    mbedtls_entropy_init(&(tls_data->entropy));
 
-    LOG_TRACE("mbedtls_ctr_drbg_seed running ...");
-    int ret = 0;
-    char* pers = "iot_client";
-    if ((ret = mbedtls_ctr_drbg_seed(
-             &(tls_data->ctr_drbg), mbedtls_entropy_func, &(tls_data->entropy),
-             (const unsigned char*)pers, strlen(pers))) != 0) {
-        LOG_ERROR("mbedtls_ctr_drbg_seed returned %d", ret);
-        return TC_IOT_CTR_DRBG_SEED_FAILED;
-    }
 
     if (tls_config->root_ca_in_mem) {
         LOG_TRACE("Loading preset root CA cert...");
