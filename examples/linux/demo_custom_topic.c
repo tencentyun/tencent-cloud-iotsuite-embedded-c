@@ -15,7 +15,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config);
 
 tc_iot_mqtt_client_config g_client_config = {
     {
-        // device info
+        /* device info*/
         TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
         TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
         TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
@@ -93,7 +93,7 @@ void _refresh_token() {
 }
 
 void my_disconnect_handler(tc_iot_mqtt_client* c, void* ctx) {
-    // 自动刷新 password
+    /* 自动刷新 password*/
     if (!use_static_token && tc_iot_mqtt_get_auto_reconnect(c)) {
         /* _refresh_token(); */
     }
@@ -148,7 +148,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     tc_iot_mqtt_client_yield(p_client, timeout);
 
     while (!stop) {
-        // 具体消息格式可自行定义，注意保持为 JSON 格式
+        /* 具体消息格式可自行定义，注意保持为 JSON 格式*/
         action_get = "{\"method\":\"notify\", \"device_status\":{\"light\":\"on\",\"level\":8}}";
 
         tc_iot_mqtt_message pubmsg;

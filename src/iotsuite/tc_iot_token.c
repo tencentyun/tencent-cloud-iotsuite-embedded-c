@@ -82,8 +82,6 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
     }
 
     memset(&netcontext, 0, sizeof(netcontext));
-    // netcontext.eth = eth;
-
 
     IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_device_info, TC_IOT_NULL_POINTER);
@@ -149,7 +147,7 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 
     rsp_body = strstr(http_resp, "\r\n\r\n");
     if (rsp_body) {
-        // skip \r\n\r\n
+        /* skip \r\n\r\n */
 
         int username_start = 0;
         int username_len = 0;

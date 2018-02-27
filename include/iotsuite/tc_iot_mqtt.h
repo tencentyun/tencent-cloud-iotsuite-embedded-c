@@ -170,7 +170,6 @@ typedef struct _tc_iot_device_info {
     char device_name[TC_IOT_MAX_DEVICE_NAME_LEN];  /**< 设备 Device Name*/
     char client_id[TC_IOT_MAX_CLIENT_ID_LEN]; /**< 设备 Client Id*/
 
-    // int  auth_mode; [>* 登陆模式<]
     char username[TC_IOT_MAX_USER_NAME_LEN]; /**< 连接 MQ 服务端的 Username*/
     char password[TC_IOT_MAX_PASSWORD_LEN]; /**< 连接 MQ 服务端的 Password*/
     long token_expire_time;  /**< username & password 超时时间*/

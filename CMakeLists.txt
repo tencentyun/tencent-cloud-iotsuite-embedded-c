@@ -40,7 +40,7 @@ file(COPY tools/tc_iot_shadow_cli.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTOR
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     option(ENABLE_TLS "use mqtt/http over tls" OFF) 
-    # add_definitions(-std=c89)
+    add_definitions(-std=c89)
 else()
     option(ENABLE_TLS "use mqtt/http over tls" ON) 
 endif()

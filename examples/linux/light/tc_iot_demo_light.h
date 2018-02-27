@@ -9,7 +9,7 @@ typedef struct _tc_iot_demo_light {
     bool          light_switch; /* true means light on, false means light off. */
     char          name[TC_IOT_LIGHT_NAME_LEN];  /* name or id */
     unsigned int  color; /* color RGB */
-    float         brightness; // percentage 0.00 ~ 100.00
+    float         brightness; /* percentage 0.00 ~ 100.00*/
 }tc_iot_demo_light;
 
 #endif /* end of include guard */

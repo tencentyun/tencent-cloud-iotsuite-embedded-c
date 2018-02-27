@@ -298,17 +298,15 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     rc = header.bits.type;
     if (c->keep_alive_interval > 0) {
         tc_iot_hal_timer_countdown_second(
-            &c->last_received, c->keep_alive_interval);  // record the fact that
-                                                         // we have successfully
-                                                         // received a packet
+            &c->last_received, c->keep_alive_interval);
     }
 exit:
     return rc;
 }
 
-// assume topic filter and name is in correct format
-// # can only be at end
-// + and # can only be next to separator
+/* assume topic filter and name is in correct format */
+/* # can only be at end */
+/* + and # can only be next to separator */
 static char isTopicMatched(char* topicFilter, MQTTString* topicName) {
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicName, TC_IOT_NULL_POINTER);
@@ -321,11 +319,12 @@ static char isTopicMatched(char* topicFilter, MQTTString* topicName) {
         if (*curn == '/' && *curf != '/') break;
         if (*curf != '+' && *curf != '#' && *curf != *curn) break;
         if (*curf ==
-            '+') {  // skip until we meet the next separator, or end of string
+            '+') {
             char* nextpos = curn + 1;
             while (nextpos < curn_end && *nextpos != '/') nextpos = ++curn + 1;
-        } else if (*curf == '#')
-            curn = curn_end - 1;  // skip until end of string
+        } else if (*curf == '#') {
+            curn = curn_end - 1;  /*  skip until end of string */
+        }
         curf++;
         curn++;
     };
@@ -342,7 +341,7 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
     int i;
     int rc = TC_IOT_FAILURE;
 
-    // we have to find the right message handler - indexed by topic
+    /* we have to find the right message handler - indexed by topic */
     for (i = 0; i < TC_IOT_MAX_MESSAGE_HANDLERS; ++i) {
         if (c->message_handlers[i].topicFilter != 0 &&
             (MQTTPacket_equals(topicName,
@@ -486,13 +485,13 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
                             mypacketid)) <= 0) {
                 rc = TC_IOT_FAILURE;
             } else if ((rc = _send_packet(c, len, timer)) !=
-                       TC_IOT_SUCCESS)  // send the PUBREL packet
+                       TC_IOT_SUCCESS)  /* send the PUBREL packet */
             {
                 LOG_TRACE("_send_packet failed, may network unstable.");
-                rc = TC_IOT_FAILURE;  // there was a problem
+                rc = TC_IOT_FAILURE;  /* there was a problem */
             }
             if (rc == TC_IOT_FAILURE) {
-                goto exit;  // there was a problem
+                goto exit;  /* there was a problem */
             }
             break;
         }
@@ -571,7 +570,7 @@ int waitfor(tc_iot_mqtt_client* c, int packet_type, tc_iot_timer* timer) {
 
     do {
         if (tc_iot_hal_timer_is_expired(timer)) {
-            break;  // we timed out
+            break;
         }
         /* LOG_TRACE("calling cycle, packet_type=%d", packet_type); */
         rc = cycle(c, timer);

@@ -167,8 +167,8 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
     memset(field_buf, 0, sizeof(field_buf));
 
     for (i = 0; i < tok_count/2; i++) {
-        // 位置 0 是object对象，所以要从位置 1 开始取数据
-        // 2*i+1 为 key 字段，2*i + 2 为 value 字段
+        /* 位置 0 是object对象，所以要从位置 1 开始取数据*/
+        /* 2*i+1 为 key 字段，2*i + 2 为 value 字段*/
         key_tok = &(json_token[2*i + 1]);
         key_start = doc_start + key_tok->start;
         key_len = key_tok->end - key_tok->start;
@@ -327,7 +327,7 @@ void _light_on_message_received(tc_iot_message_data* md) {
 tc_iot_shadow_config g_client_config = {
     {
         {
-            // device info
+            /* device info*/
             TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
             TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
             TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
@@ -430,7 +430,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     /* tc_iot_shadow_yield(p_shadow_client, timeout); */
 
     LOG_INFO("[c->s] shadow_get");
-    // 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态
+    /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
     ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 2000, NULL);
 
     while (!stop) {

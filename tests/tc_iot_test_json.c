@@ -11,17 +11,17 @@ TEST(testjson, test_json_unescape)
 
     input = "good";
     ret = tc_iot_json_unescape(output, sizeof(output), input, strlen(input));
-    // printf("'%s' -> '%s'\n", input, output);
+    /* printf("'%s' -> '%s'\n", input, output);*/
     STRCMP_EQUAL(output, "good");
 
     input = "\\\\,\\/good";
     ret = tc_iot_json_unescape(output, sizeof(output), input, strlen(input));
-    // printf("'%s' -> '%s'\n", input, output);
+    /* printf("'%s' -> '%s'\n", input, output);*/
     STRCMP_EQUAL(output, "\\,/good");
 
     input = "\\r\\n\\b\\t\\fgood";
     ret = tc_iot_json_unescape(output, sizeof(output), input, strlen(input));
-    // printf("'%s' -> '%s'\n", input, output);
+    /* printf("'%s' -> '%s'\n", input, output);*/
     STRCMP_EQUAL(output, "\r\n\b\t\fgood");
 
     input = "\\u000agood\\u000d\\u000a";
@@ -41,7 +41,7 @@ TEST(testjson, test_json_escape)
 
     input = "good";
     ret = tc_iot_json_escape(output, sizeof(output), input, strlen(input));
-    // printf("'%s' -> '%s'\n", input, output);
+    /* printf("'%s' -> '%s'\n", input, output);*/
     STRCMP_EQUAL(output, "good");
 
     input = "\\,/\"good"; 
@@ -51,7 +51,7 @@ TEST(testjson, test_json_escape)
 
     input = "\r\n\b\t\fgood";
     ret = tc_iot_json_escape(output, sizeof(output), input, strlen(input));
-    //printf("'%s' -> '%s'\n", input, output);
+    /*printf("'%s' -> '%s'\n", input, output);*/
     STRCMP_EQUAL(output, "\\r\\n\\b\\t\\fgood");
 
     input = "\ngood\r\n";
@@ -79,7 +79,7 @@ TEST(testjson, test_json_property)
     int ret = tc_iot_json_property_printf(buffer, sizeof(buffer), 10, 
         &prop_int8, &prop_int16, &prop_int32, &prop_uint8, &prop_uint16, &prop_uint32,
         &prop_float, &prop_double, &prop_bool, &prop_str); 
-    //printf("json: %s\n", buffer);
+    /*printf("json: %s\n", buffer);*/
     STRCMP_EQUAL(buffer, expected);
 }
 

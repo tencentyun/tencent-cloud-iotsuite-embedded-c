@@ -9,7 +9,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config);
 
 tc_iot_mqtt_client_config g_client_config = {
     {
-        // device info
+        /* device info*/
         TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
         TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
         TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,

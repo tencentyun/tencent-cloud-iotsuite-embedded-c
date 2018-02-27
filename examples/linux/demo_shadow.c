@@ -46,7 +46,7 @@ void _message_ack_callback(tc_iot_command_ack_status_e ack_status,
 tc_iot_shadow_config g_client_config = {
     {
         {
-            // device info
+            /* device info*/
             TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
             TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
             TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
