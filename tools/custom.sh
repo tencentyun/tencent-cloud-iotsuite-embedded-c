@@ -14,4 +14,4 @@ DEVICE_SECRET=${TENCENT_CLOUD_DEMO_DEVICE_SECRET}
 # ./bin/demo_custom_topic -u test -P test
 
 
-./bin/demo_custom_topic -s ${DEVICE_SECRET} --trace --port=1883 -h localhost
+./bin/demo_custom_topic -s ${DEVICE_SECRET} --trace --port=1883

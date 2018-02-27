@@ -264,8 +264,8 @@ tc_iot_mqtt.h 的引用(Include)关系图:</div>
 <tr class="separator:a9cd8498567c160f3efa2515bc6f1e2c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff60879368cf2b2423d6b945c043d68d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__mqtt_8h.html#aff60879368cf2b2423d6b945c043d68d">tc_iot_mqtt_publish</a> (<a class="el" href="tc__iot__mqtt_8h.html#a77c4ce58b6b42a86a23a78ecf4dbdbac">tc_iot_mqtt_client</a> *client, const char *, <a class="el" href="tc__iot__mqtt_8h.html#a7465cd5772185e750ef5c75eba011a2f">tc_iot_mqtt_message</a> *)</td></tr>
 <tr class="separator:aff60879368cf2b2423d6b945c043d68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a026932ce4d85713fc8a4d4571ecd63a3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__mqtt_8h.html#a026932ce4d85713fc8a4d4571ecd63a3">tc_iot_mqtt_set_message_handler</a> (<a class="el" href="tc__iot__mqtt_8h.html#a77c4ce58b6b42a86a23a78ecf4dbdbac">tc_iot_mqtt_client</a> *c, const char *topicFilter, <a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a> <a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a>, void *context)</td></tr>
-<tr class="separator:a026932ce4d85713fc8a4d4571ecd63a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67784ffb864b8269a0bf277892a822e0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__mqtt_8h.html#a67784ffb864b8269a0bf277892a822e0">tc_iot_mqtt_set_message_handler</a> (<a class="el" href="tc__iot__mqtt_8h.html#a77c4ce58b6b42a86a23a78ecf4dbdbac">tc_iot_mqtt_client</a> *c, const char *topicFilter, <a class="el" href="tc__iot__mqtt_8h.html#a9ca8591a18aa8241856597866b37a366">tc_iot_mqtt_qos_e</a> qos, <a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a> <a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a>, void *context)</td></tr>
+<tr class="separator:a67784ffb864b8269a0bf277892a822e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac424836552c47e85beeb333f64c1aef7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__mqtt_8h.html#ac424836552c47e85beeb333f64c1aef7">tc_iot_mqtt_subscribe</a> (<a class="el" href="tc__iot__mqtt_8h.html#a77c4ce58b6b42a86a23a78ecf4dbdbac">tc_iot_mqtt_client</a> *client, const char *topicFilter, <a class="el" href="tc__iot__mqtt_8h.html#a9ca8591a18aa8241856597866b37a366">tc_iot_mqtt_qos_e</a>, <a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a>, void *context)</td></tr>
 <tr class="separator:ac424836552c47e85beeb333f64c1aef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e3579ac55dd277e97bf55a7cc426546"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__mqtt_8h.html#a2e3579ac55dd277e97bf55a7cc426546">tc_iot_mqtt_subscribe_with_results</a> (<a class="el" href="tc__iot__mqtt_8h.html#a77c4ce58b6b42a86a23a78ecf4dbdbac">tc_iot_mqtt_client</a> *client, const char *topicFilter, <a class="el" href="tc__iot__mqtt_8h.html#a9ca8591a18aa8241856597866b37a366">tc_iot_mqtt_qos_e</a>, <a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a>, void *context, <a class="el" href="tc__iot__mqtt_8h.html#ad0557ff0ca2bfbaec413b8477fc788ea">tc_iot_mqtt_suback_data</a> *data)</td></tr>
@@ -288,6 +288,8 @@ tc_iot_mqtt.h 的引用(Include)关系图:</div>
 <tr class="separator:a37f3b31442896fa3d375e3325c0d366b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c1b400415992be1b7ae59042869ab07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__mqtt_8h.html#a3c1b400415992be1b7ae59042869ab07">tc_iot_init_mqtt_conn_data</a> (MQTTPacket_connectData *conn_data)</td></tr>
 <tr class="separator:a3c1b400415992be1b7ae59042869ab07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e0a88478bf6530a1b96b7b68dec83f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__mqtt_8h.html#a9e0a88478bf6530a1b96b7b68dec83f7">tc_iot_mqtt_destroy</a> (<a class="el" href="tc__iot__mqtt_8h.html#a77c4ce58b6b42a86a23a78ecf4dbdbac">tc_iot_mqtt_client</a> *c)</td></tr>
+<tr class="separator:a9e0a88478bf6530a1b96b7b68dec83f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
 <a class="anchor" id="a3366e60d76472dcc6d22337f83fdd715"></a>
@@ -689,6 +691,22 @@ tc_iot_mqtt.h 的引用(Include)关系图:</div>
 
 </div>
 </div>
+<a class="anchor" id="a9e0a88478bf6530a1b96b7b68dec83f7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tc_iot_mqtt_destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__mqtt_8h.html#a77c4ce58b6b42a86a23a78ecf4dbdbac">tc_iot_mqtt_client</a> *&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8451fc538c5eff7be483b3de7a1743dc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -853,7 +871,7 @@ tc_iot_mqtt.h 的引用(Include)关系图:</div>
 
 </div>
 </div>
-<a class="anchor" id="a026932ce4d85713fc8a4d4571ecd63a3"></a>
+<a class="anchor" id="a67784ffb864b8269a0bf277892a822e0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -868,6 +886,12 @@ tc_iot_mqtt.h 的引用(Include)关系图:</div>
           <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>topicFilter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="tc__iot__mqtt_8h.html#a9ca8591a18aa8241856597866b37a366">tc_iot_mqtt_qos_e</a>&#160;</td>
+          <td class="paramname"><em>qos</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
