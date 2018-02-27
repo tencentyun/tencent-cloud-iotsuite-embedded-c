@@ -17,13 +17,18 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
 
+    if (timeout_ms == 0) {
+        LOG_WARN("tls read timeout=%d, network maybe hang forever.", timeout_ms);
+        timeout_ms = 1;
+    }
+
     mbedtls_ssl_conf_read_timeout(&(tls_data->conf), timeout_ms);
     while (read_len < len) {
         ret = mbedtls_ssl_read(&(tls_data->ssl_context), buffer + read_len,
                                len - read_len);
         if (ret > 0) {
             read_len += ret;
-            // LOG_TRACE("ret=%d, read_len=%d", ret, read_len);
+            LOG_TRACE("ret=%d, read_len=%d", ret, read_len);
         } else if (ret == 0) {
             LOG_TRACE("server closed connection, read_len = %d", read_len);
             if (read_len > 0) {
@@ -42,7 +47,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             if (read_len > 0) {
                 IOT_FUNC_EXIT_RC(read_len);
             } else {
-                IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_READ_FAILED);
+                IOT_FUNC_EXIT_RC(TC_IOT_NET_READ_ERROR);
             }
         } else {
             if (tc_iot_hal_timer_is_expired(&timer)) {
@@ -54,6 +59,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     }
 
     if (read_len == 0) {
+        /* LOG_TRACE("nothing read."); */
         return TC_IOT_NET_NOTHING_READ;
     } else if (read_len != len) {
         return TC_IOT_NET_READ_TIMEOUT;
@@ -134,6 +140,9 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
     tc_iot_tls_config_t* tls_config = &(network->net_context.tls_config);
 
     int ret = 0;
+
+    mbedtls_ssl_init(&(tls_data->ssl_context));
+    mbedtls_net_init(&(tls_data->ssl_fd));
 
     if ((ret = net_prepare()) != 0) {
         return (ret);
@@ -279,6 +288,9 @@ int tc_iot_hal_tls_disconnect(tc_iot_network_t* network) {
         ret = mbedtls_ssl_close_notify(&(tls_data->ssl_context));
     } while (ret == MBEDTLS_ERR_SSL_WANT_WRITE);
 
+    mbedtls_ssl_free(&(tls_data->ssl_context));
+    mbedtls_net_free(&(tls_data->ssl_fd));
+
     network->net_context.is_connected = 0;
     LOG_TRACE("network disconnected");
     return TC_IOT_SUCCESS;
@@ -293,12 +305,9 @@ int tc_iot_hal_tls_destroy(tc_iot_network_t* network) {
 
     LOG_TRACE("network destroying...");
 
-    mbedtls_net_free(&(tls_data->ssl_fd));
-
     mbedtls_x509_crt_free(&(tls_data->clicert));
     mbedtls_x509_crt_free(&(tls_data->cacert));
     mbedtls_pk_free(&(tls_data->pkey));
-    mbedtls_ssl_free(&(tls_data->ssl_context));
     mbedtls_ssl_config_free(&(tls_data->conf));
     mbedtls_ctr_drbg_free(&(tls_data->ctr_drbg));
     mbedtls_entropy_free(&(tls_data->entropy));
@@ -326,8 +335,6 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
 
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
 
-    mbedtls_net_init(&(tls_data->ssl_fd));
-    mbedtls_ssl_init(&(tls_data->ssl_context));
     mbedtls_ssl_config_init(&(tls_data->conf));
     mbedtls_ctr_drbg_init(&(tls_data->ctr_drbg));
     mbedtls_x509_crt_init(&(tls_data->cacert));

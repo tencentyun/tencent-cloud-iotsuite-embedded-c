@@ -110,7 +110,7 @@ static int _send_packet(tc_iot_mqtt_client* c, int length,
     int sent = 0;
 
     while (sent < length && !tc_iot_hal_timer_is_expired(timer)) {
-        rc = c->ipstack.do_write(&(c->ipstack), &c->buf[sent], length,
+        rc = c->ipstack.do_write(&(c->ipstack), &c->buf[sent], length-sent,
                                  tc_iot_hal_timer_left_ms(timer));
         if (rc < 0) {
             break;
@@ -123,6 +123,7 @@ static int _send_packet(tc_iot_mqtt_client* c, int length,
                                           c->keep_alive_interval);
         rc = TC_IOT_SUCCESS;
     } else {
+        LOG_TRACE("sent = %d, lenght=%d", sent, length);
         rc = TC_IOT_SEND_PACK_FAILED;
     }
     return rc;
@@ -232,9 +233,16 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     MQTTHeader header = {0};
     int len = 0;
     int rem_len = 0;
+    int rc = 0;
+    int timer_left_ms = tc_iot_hal_timer_left_ms(timer);
+
+
+    if (timer_left_ms <= 0) {
+        timer_left_ms = 1;
+    }
 
     /* 1. read the header byte.  This has the packet type in it */
-    int rc = c->ipstack.do_read(&(c->ipstack), c->readbuf, 1, tc_iot_hal_timer_left_ms(timer));
+    rc = c->ipstack.do_read(&(c->ipstack), c->readbuf, 1, timer_left_ms);
     if (rc != 1){
         goto exit;
     }
