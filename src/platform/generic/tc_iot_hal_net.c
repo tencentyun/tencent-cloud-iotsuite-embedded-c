@@ -6,7 +6,10 @@ extern "C" {
 
 int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
                         int len, int timeout_ms) {
-    LOG_ERROR("not implemented");  
+													
+		IF_NULL_RETURN(network, TC_IOT_NULL_POINTER);
+													
+    LOG_ERROR("not implemented");
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
@@ -14,11 +17,6 @@ int tc_iot_hal_net_write(tc_iot_network_t* network, unsigned char* buffer,
                          int len, int timeout_ms) {
     LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
-}
-
-static int net_prepare(void) {
-    LOG_ERROR("not implemented");  
-    return (0);
 }
 
 int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
@@ -55,6 +53,7 @@ int tc_iot_copy_net_context(tc_iot_net_context_t * net_context, tc_iot_net_conte
 #ifdef ENABLE_TLS
     net_context->tls_config = init->tls_config;
 #endif
+	  return TC_IOT_SUCCESS;
 }
 
 int tc_iot_hal_net_init(tc_iot_network_t* network,

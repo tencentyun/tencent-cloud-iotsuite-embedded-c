@@ -24,6 +24,7 @@ int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* c,
 int tc_iot_mqtt_client_connect(tc_iot_mqtt_client* c,
                                  tc_iot_mqtt_client_config* p_client_config) {
     int rc;
+	MQTTPacket_connectData* data;
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_client_config, TC_IOT_NULL_POINTER);
@@ -32,7 +33,7 @@ int tc_iot_mqtt_client_connect(tc_iot_mqtt_client* c,
         return TC_IOT_SUCCESS;
     }
 
-    MQTTPacket_connectData* data = &(c->connect_options);
+    data = &(c->connect_options);
     tc_iot_init_mqtt_conn_data(data);;
     data->willFlag = p_client_config->willFlag;
     data->will = p_client_config->will;
@@ -59,13 +60,15 @@ void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* c) {
 }
 
 char tc_iot_mqtt_client_is_connected(tc_iot_mqtt_client* c) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    if (!c) {
+		    return 0;
+		}
     return tc_iot_mqtt_is_connected(c);
 }
 
 int tc_iot_mqtt_client_yield(tc_iot_mqtt_client* c, int timeout_ms) {
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-    tc_iot_mqtt_yield(c, timeout_ms);
+    return tc_iot_mqtt_yield(c, timeout_ms);
 }
 
 int tc_iot_mqtt_client_publish(tc_iot_mqtt_client* c, const char* topic,

@@ -175,10 +175,10 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
-    tc_iot_hmac_sha256(buf, data_len, secret, secret_len, sha256_digest);
+    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)secret, secret_len, (unsigned char *)sha256_digest);
 
     
-    ret = tc_iot_base64_encode(sha256_digest, sizeof(sha256_digest), b64_buf,
+    ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
     /* LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret, sign_out, url_ret);  */
@@ -241,8 +241,8 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
                                     long nonce, const char* product_id,
                                     int product_id_len, long timestamp) {
     tc_iot_yabuffer_t form_buf;
-    int ret = 0;
     int total = 0;
+	
     IF_NULL_RETURN(form, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(secret, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(client_id, TC_IOT_NULL_POINTER);

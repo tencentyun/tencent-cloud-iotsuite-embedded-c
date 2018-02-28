@@ -11,7 +11,7 @@ void tc_iot_hal_timer_init(tc_iot_timer* timer) {
 
 char tc_iot_hal_timer_is_expired(tc_iot_timer* timer) {
     LOG_ERROR("not implemented");  
-    return TC_IOT_FUCTION_NOT_IMPLEMENTED;
+    return 1;
 }
 
 void tc_iot_hal_timer_countdown_ms(tc_iot_timer* timer, unsigned int timeout) {

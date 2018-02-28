@@ -40,8 +40,9 @@ const char * tc_iot_json_token_type_str(int type) {
 }
 
 void tc_iot_json_print_node(const char *prefix, const char *json, const jsmntok_t *root_node, int node_index) {
-    const jsmntok_t * node = root_node + node_index;
+    const jsmntok_t * node;
 
+	node = root_node + node_index;
     LOG_TRACE("%s id=%d,type=%s,start=%d,end=%d,size(child_count)=%d,parent=%d\t %.*s",
     prefix, node_index,
     tc_iot_json_token_type_str(node->type), 
@@ -250,7 +251,6 @@ char *tc_iot_json_inline_escape(char *dest, int dest_len, const char *src) {
 }
 
 int tc_iot_json_escape(char *dest, int dest_len, const char *src, int src_len) {
-    int ret;
     int src_index;
     int dest_index;
 
@@ -300,18 +300,15 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
     const char *name_start = path;
     int tok_index = 0;
     int parent_index = 0;
-    int j;
     int child_count;
     int visited_child;
     int token_name_len = 0;
-    char is_last = 0;
     int val_len = 0;
     const char *pos;
 
     IF_NULL_RETURN(json, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(root_token, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(path, TC_IOT_NULL_POINTER);
-    /* IF_NULL_RETURN(result, TC_IOT_NULL_POINTER); */
 
     for (tok_index = 0; tok_index < count;) {
         pos = strstr(name_start, ".");
@@ -380,6 +377,8 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
         name_start = pos + 1;
         /* LOG_TRACE("searching sub path: %s", name_start); */
     }
+		
+		return TC_IOT_JSON_PATH_NO_MATCH;
 }
 
 int tc_iot_json_parse(const char * json, int json_len, jsmntok_t * tokens, int token_count) {

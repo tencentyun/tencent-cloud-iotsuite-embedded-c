@@ -293,13 +293,15 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
 
     /* 3. read the rest of the buffer using a callback to supply the rest of the
      * data */
-    if (rem_len > 0 &&
-        (rc = c->ipstack.do_read(&(c->ipstack), c->readbuf + len, rem_len,
-                                 tc_iot_hal_timer_left_ms(timer)) != rem_len)) {
-        rc = 0;
-        goto exit;
-    }
-
+    if (rem_len > 0) {
+	
+		rc = c->ipstack.do_read(&(c->ipstack), c->readbuf + len, rem_len,
+                                 tc_iot_hal_timer_left_ms(timer));
+        if (rc != rem_len) {
+            rc = 0;
+            goto exit;
+		}
+	}
     header.byte = c->readbuf[0];
     rc = header.bits.type;
     if (c->keep_alive_interval > 0) {
@@ -319,8 +321,8 @@ static char isTopicMatched(char* topicFilter, MQTTString* topicName) {
     char* curn_end; 
     char* nextpos; 
 
-    IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(topicName, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(topicFilter, 0);
+    IF_NULL_RETURN(topicName, 0);
 
     curf = topicFilter;
     curn = topicName->lenstring.data;

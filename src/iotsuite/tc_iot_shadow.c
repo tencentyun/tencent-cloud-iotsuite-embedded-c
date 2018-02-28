@@ -49,9 +49,6 @@ static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
 
 int tc_iot_shadow_construct(tc_iot_shadow_client *c,
                             tc_iot_shadow_config *p_cfg) {
-    
-    char *product_id;
-    char *device_name;
     int rc;
     tc_iot_mqtt_client_config *p_config;
     tc_iot_mqtt_client *p_mqtt_client;
@@ -63,10 +60,6 @@ int tc_iot_shadow_construct(tc_iot_shadow_client *c,
 
     c->p_shadow_config = p_cfg;
     p_config = &(p_cfg->mqtt_client_config);
-
-    product_id = p_config->device_info.product_id;
-    device_name = p_config->device_info.device_name;
-
 
     p_mqtt_client = &(c->mqtt_client);
     rc = tc_iot_mqtt_client_construct(p_mqtt_client, p_config);
@@ -124,9 +117,13 @@ static int _tc_iot_check_expired_session(tc_iot_shadow_client *c) {
 }
 
 int tc_iot_shadow_yield(tc_iot_shadow_client *c, int timeout_ms) {
+	int ret;
+	
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-    tc_iot_mqtt_client_yield(&(c->mqtt_client), timeout_ms);
+    ret = tc_iot_mqtt_client_yield(&(c->mqtt_client), timeout_ms);
     _tc_iot_check_expired_session(c);
+	
+	return ret;
 }
 
 tc_iot_shadow_session * tc_iot_find_empty_session(tc_iot_shadow_client *c) {
@@ -148,7 +145,6 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
          message_ack_handler callback, int timeout_ms, void * session_context) {
     char *pub_topic ;
     int rc ;
-    char session_id[TC_IOT_SESSION_ID_LEN+1];
     tc_iot_shadow_session * p_session;
     tc_iot_mqtt_message pubmsg;
 
@@ -191,7 +187,6 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         message_ack_handler callback, int timeout_ms, void * session_context) {
     char *pub_topic ;
     int rc ;
-    char session_id[TC_IOT_SESSION_ID_LEN+1];
     tc_iot_shadow_session * p_session;
     tc_iot_mqtt_message pubmsg;
 
@@ -236,7 +231,6 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len,
 
     char *pub_topic ;
     int rc ;
-    char session_id[TC_IOT_SESSION_ID_LEN+1];
     tc_iot_shadow_session * p_session;
     tc_iot_mqtt_message pubmsg;
 
@@ -486,7 +480,6 @@ int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len, const char * rep
 int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_client *c) {
     int ret;
     int buffer_used = 0;
-    int sid_len = 0;
 
     ret = tc_iot_hal_snprintf(buffer, buffer_len, "}");
 

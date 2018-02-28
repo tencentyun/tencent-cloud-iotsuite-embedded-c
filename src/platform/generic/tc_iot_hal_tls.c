@@ -16,10 +16,6 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
-static int net_prepare(void) {
-    return (0);
-}
-
 int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
                            uint16_t port) {
     LOG_ERROR("not implemented");  
@@ -54,7 +50,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     network->is_connected = tc_iot_hal_tls_is_connected;
     network->do_destroy = tc_iot_hal_tls_destroy;
 
-    tc_iot_copy_net_context(&(network->net_context), net_context);
+    /*tc_iot_copy_net_context(&(network->net_context), net_context);*/
     network->net_context.is_connected = 0;
 
     LOG_ERROR("not implemented");  

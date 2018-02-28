@@ -18,7 +18,7 @@ typedef enum _tc_iot_log_level_e{
 } tc_iot_log_level_e;
 
 void tc_iot_set_log_level(tc_iot_log_level_e log_level);
-tc_iot_log_level_e tc_iot_get_log_level();
+tc_iot_log_level_e tc_iot_get_log_level(void);
 char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 
 #ifdef ENABLE_LOG_TRACE

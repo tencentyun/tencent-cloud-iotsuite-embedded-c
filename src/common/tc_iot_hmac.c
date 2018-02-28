@@ -153,20 +153,6 @@ static void tc_iot_sha256_finish(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
     }
 }
 
-static void tc_iot_sha256_get(uint8_t *hash, const uint8_t *buffer, int len) {
-    tc_iot_sha256_t sha;
-    if (!hash) {
-        return;
-    }
-
-    if (!buffer) {
-        return;
-    }
-    tc_iot_sha256_init(&sha);
-    tc_iot_sha256_finish(&sha, buffer, len);
-    memcpy(hash, sha.hash, TC_IOT_SHA256_HASH_SIZE);
-}
-
 static void tc_iot_hmac_sha256_init(tc_iot_hmac_sha256_t *hmac,
                                     const uint8_t *key, int len) {
     int i;
@@ -193,10 +179,6 @@ static void tc_iot_hmac_sha256_init(tc_iot_hmac_sha256_t *hmac,
     tc_iot_sha256_update(&(hmac->sha), hmac->key, TC_IOT_SHA256_KEY_SIZE);
 }
 
-static void tc_iot_hmac_sha256_update(tc_iot_hmac_sha256_t *hmac,
-                                      const uint8_t *buffer, int len) {
-    tc_iot_sha256_update(&(hmac->sha), buffer, len);
-}
 
 static void tc_iot_hmac_sha256_finish(tc_iot_hmac_sha256_t *hmac,
                                       const uint8_t *buffer, int len) {

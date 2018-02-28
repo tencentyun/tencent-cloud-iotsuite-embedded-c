@@ -48,10 +48,10 @@ int http_post_urlencoded(tc_iot_network_t* network,
     LOG_TRACE("remote=%s:%d", temp_host, result.port);
 
     network->do_connect(network, temp_host, result.port);
-    written_len = network->do_write(network, request->buf.data,
+    written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
     LOG_TRACE("request with:\n%.*s", written_len, request->buf.data);
-    read_len = network->do_read(network, resp, resp_max_len, timeout_ms);
+    read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
     LOG_TRACE("response with:\n%.*s", read_len, resp);
 
     network->do_disconnect(network);
@@ -80,18 +80,8 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
     tc_iot_tls_config_t* config;
 #endif
 
-    int username_start = 0;
-    int username_len = 0;
-
-    int password_start = 0;
-    int password_len = 0;
-
-    int expire_start = 0;
-    int expire_len = 0;
-
     jsmn_parser p;
     jsmntok_t t[20];
-    jsmntok_t* temp;
 
     char temp_buf[256];
     int returnCodeIndex = 0;
@@ -155,7 +145,7 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 
     /* request init begin */
 
-    tc_iot_yabuffer_init(&request.buf, http_request_buffer,
+    tc_iot_yabuffer_init(&request.buf, (char *)http_request_buffer,
                          sizeof(http_request_buffer));
     /* request init end */
 
