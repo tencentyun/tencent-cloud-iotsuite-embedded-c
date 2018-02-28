@@ -16,8 +16,12 @@ device_name=light001
 
 cmd_cfg="--product_id=$prodcut_id --device_name=$device_name -u ${SECRET_ID} -p ${SECRET_KEY}"
 
-# 通过控制台接口设定设备影子属性数据
-./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"name":"new light year","color":16777215,"brightness":89,"light_switch":true}}' 
+# 通过控制台接口删除设备影子属性数据
+# ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":null,"reported":null}' 
+
+# 通过控制台接口更新设备影子属性数据
+./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"name":"light abc","color":256,"brightness":89,"light_switch":true}}' 
 
 # 获取最新设备影子数据
 ./bin/tc_iot_shadow_cli.py GetIotShadow $cmd_cfg 
+
