@@ -1,6 +1,6 @@
-# 如何运行本 Demo
+# 操作指南
 ## 准备工作
-参见 (开发准备)[https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md] ，创建一个设备，配置 tc_iot_device_config.h 。
+参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建一个设备，配置 tc_iot_device_config.h 。
 
 ## 运行程序
 编译完成后，在 build/bin/ 目录下，会产生一个 light_device 程序。
