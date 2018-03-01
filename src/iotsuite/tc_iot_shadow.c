@@ -28,6 +28,7 @@ static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
             session = &(c->sessions[i]);
             if (session->sid[0] != '\0' && strncmp(session->sid, session_id, strlen(session_id)) == 0) {
                 if (session->handler) {
+                    /* LOG_TRACE("session:%s response received", session->sid); */
                     session->handler(TC_IOT_ACK_SUCCESS, md, session->session_context);
                 } else {
                     LOG_ERROR("session:%s handler not found", session->sid);
@@ -151,6 +152,9 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     if (callback) {
+        if (timeout_ms <= 0) {
+            LOG_ERROR("callback handler given, but timeout_ms=%d", timeout_ms);
+        }
         p_session = tc_iot_find_empty_session(c);
         if (!p_session) {
             LOG_ERROR("no more empty session.");
@@ -193,6 +197,9 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     if (callback) {
+        if (timeout_ms <= 0) {
+            LOG_ERROR("callback handler given, but timeout_ms=%d", timeout_ms);
+        }
         p_session = tc_iot_find_empty_session(c);
         if (!p_session) {
             LOG_ERROR("no more empty session.");
@@ -237,6 +244,9 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len,
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     if (callback) {
+        if (timeout_ms <= 0) {
+            LOG_ERROR("callback handler given, but timeout_ms=%d", timeout_ms);
+        }
         p_session = tc_iot_find_empty_session(c);
         if (!p_session) {
             LOG_ERROR("no more empty session.");

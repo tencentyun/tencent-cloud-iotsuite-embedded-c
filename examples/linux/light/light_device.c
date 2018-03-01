@@ -160,7 +160,7 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
             g_light_state.color,g_light_state.brightness,
             g_light_state.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
     /* 此时由于 desired 状态未知，仅上报 reported ，不处理 desired 。 */
-    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, NULL, report_message_ack_callback, 0, NULL);
+    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, NULL, report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL);
     LOG_TRACE("[c->s] shadow_update_reported\n%s\n", buffer);
 }
 
@@ -185,7 +185,7 @@ static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_li
             g_light_state.color,g_light_state.brightness,
             g_light_state.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
 
-    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, report_message_ack_callback, 0, NULL);
+    tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL);
     LOG_TRACE("[c->s] shadow_report_and_clean_desired\n%s\n", buffer);
 }
 
@@ -375,9 +375,9 @@ void _light_on_message_received(tc_iot_message_data* md) {
     /* 如果设备无本地存储，则设备重启后需要先同步之前上
      * 报的状态。
      *
-     * 如果设备有本地存储，一般情况下，重启后本地状态应
-     * 和服务端一致，不一致时，以本地设备状态优先，还是
-     * 以服务端优先，可根据实际业务情况进行分析处理。
+     * 如果设备有本地存储，一般情况下，重启后本地状态还会
+     * 和服务端一致。不一致时，以本地设备状态优先，还是
+     * 以服务端优先，可根据实际业务情况进行分析，谨慎处理。
      * */
     if (reported_start) {
         ret = tc_iot_json_parse(reported_start,reported_len, json_token, TC_IOT_ARRAY_LENGTH(json_token));
@@ -527,7 +527,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("yield waiting for server finished.\n");
 
     /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
-    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 2000, NULL);
+    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL);
     LOG_TRACE("[c->s] shadow_get\n%s\n", buffer);
 
     /* 循环等待控制指令 */
