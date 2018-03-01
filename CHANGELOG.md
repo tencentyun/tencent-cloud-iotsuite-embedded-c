@@ -1,6 +1,6 @@
 # 变更记录
 
-## [1.0.6] - 2018-02-26
+## [1.0.6] - 2018-03-01
 ### 新增
 - 设备影子 get、update、delete 接口，支持单个请求独立指定回调，用来定向回调，
 以及判定设备影子请求是否超时。
@@ -11,6 +11,7 @@
 ### 变更
 - tc_iot_mqtt_client_subscribe 接口新增 session_context 字段，用来做回调回传
 ，如果不需要回传，session_context 字段传 NULL 即可。
+- tc_iot_shadow_get, tc_iot_shadow_update, tc_iot_shadow_delete 接口调用方式变更
 - samples 目录变更为 examples
 - bug fix 。
 
