@@ -22,13 +22,15 @@ cmd_cfg="--product_id=$prodcut_id --device_name=$device_name -u ${SECRET_ID} -p 
 
 # 通过控制台接口更新设备影子属性数据
 # 开灯
-./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"light_switch":true}}' 
+echo control command '{"desired":{"light_switch":true}}'
+./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"light_switch":true}}'  > /dev/null
 
 while [ 1 ]; 
 # 随机变化颜色
 brightness=`expr $RANDOM % 100`
 color=`expr $RANDOM % 256`
-do  ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow="{\"desired\":{\"color\":$color,\"brightness\":$brightness}}" ;
+echo control command "{\"desired\":{\"color\":$color,\"brightness\":$brightness}}"
+do  ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow="{\"desired\":{\"color\":$color,\"brightness\":$brightness}}" > /dev/null;
 test $? -gt 128 && break;
 sleep 5
 done

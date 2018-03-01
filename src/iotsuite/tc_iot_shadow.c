@@ -101,7 +101,7 @@ static int _tc_iot_check_expired_session(tc_iot_shadow_client *c) {
         session = &(c->sessions[i]);
         if (session->sid[0] != 0) {
             if (tc_iot_hal_timer_is_expired(&(session->timer))) {
-                LOG_TRACE("session:%s expired", session->sid);
+                LOG_WARN("session:%s expired", session->sid);
                 if (session->handler) {
                     session->handler(TC_IOT_ACK_TIMEOUT, NULL, session->session_context);
                 } else {
