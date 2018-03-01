@@ -36,6 +36,10 @@
 
 ```
 
+根据控制端的指令，可以看到 light_device 程序，输出的状态数据，对应发生的变化：
+![light-demo-running-snapshot](https://user-images.githubusercontent.com/990858/36832414-5ff5c806-1d66-11e8-8638-cdd31aaf4486.png)
+
+
 自动随机更新数据脚本，可参见 tools/light_controller.sh 。
 
 
