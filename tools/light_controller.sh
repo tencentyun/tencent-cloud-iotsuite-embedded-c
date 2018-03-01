@@ -16,12 +16,25 @@ device_name=light001
 
 cmd_cfg="--product_id=$prodcut_id --device_name=$device_name -u ${SECRET_ID} -p ${SECRET_KEY}"
 
+
 # 通过控制台接口删除设备影子属性数据
 # ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":null,"reported":null}' 
 
 # 通过控制台接口更新设备影子属性数据
-./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"name":"light abc","color":256,"brightness":89,"light_switch":true}}' 
+# 开灯
+./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"light_switch":true}}' 
+
+while [ 1 ]; 
+# 随机变化颜色
+brightness=`expr $RANDOM % 100`
+color=`expr $RANDOM % 256`
+do  ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow="{\"desired\":{\"color\":$color,\"brightness\":$brightness}}" ;
+test $? -gt 128 && break;
+sleep 5
+done
+
+# 关灯
+# ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"light_switch":false}}' 
 
 # 获取最新设备影子数据
-./bin/tc_iot_shadow_cli.py GetIotShadow $cmd_cfg 
-
+# ./bin/tc_iot_shadow_cli.py GetIotShadow $cmd_cfg 
