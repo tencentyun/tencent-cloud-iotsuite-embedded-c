@@ -2,9 +2,13 @@
 #include "tc_iot_demo_light.h"
 #include "tc_iot_export.h"
 
+
+/* anis color control codes */
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
+#define ANSI_COLOR_256_FORMAT   "\x1b[38;5;%dm"
+
 #define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
 
 extern void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv);
@@ -14,13 +18,18 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
 void _light_on_message_received(tc_iot_message_data* md);
 int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, jsmntok_t * json_token, int tok_count);
 
-static tc_iot_demo_light g_light_status = {
-    false, "colorful light", 0xFFFFFF, 100.00,
+/* 灯状态数据 */
+static tc_iot_demo_light g_light_state = {
+    false,  /* 开关状态 */
+    "colorful light", /* 灯标识 */
+    2, /* 灯光颜色控制 */
+    100.00, /* 亮度 */
 };
 
+/* 影子数据 Client  */
 tc_iot_shadow_client client;
 
-
+/* 循环退出标识 */
 static volatile int stop = 0;
 void sig_handler(int sig) {
     if (sig == SIGINT) {
@@ -38,6 +47,14 @@ void sig_handler(int sig) {
     }
 }
 
+
+/**
+ * @brief get_message_ack_callback shadow_get 回调函数
+ *
+ * @param ack_status 回调状态，标识消息是否正常收到响应，还是已经超时等。
+ * @param md 回调状态为 TC_IOT_ACK_SUCCESS 时，用来传递影子数据请求响应消息。
+ * @param session_context 回调 context。
+ */
 void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
         tc_iot_message_data * md , void * session_context) {
 
@@ -45,61 +62,92 @@ void get_message_ack_callback(tc_iot_command_ack_status_e ack_status,
 
     if (ack_status != TC_IOT_ACK_SUCCESS) {
         if (ack_status == TC_IOT_ACK_TIMEOUT) {
-            tc_iot_hal_printf("request timeout");
+            LOG_ERROR("request timeout");
         }
         return;
     }
 
     message = md->message;
-    /* tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload); */
     _light_on_message_received(md);
 }
 
+/**
+ * @brief report_message_ack_callback shadow_update 上报消息回调
+ *
+ * @param ack_status 回调状态，标识消息是否正常收到响应，还是已经超时等。
+ * @param md 回调状态为 TC_IOT_ACK_SUCCESS 时，用来传递影子数据请求响应消息。
+ * @param session_context 回调 context。
+ */
 void report_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
         tc_iot_message_data * md , void * session_context) {
     tc_iot_mqtt_message* message = NULL;
 
     if (ack_status != TC_IOT_ACK_SUCCESS) {
         if (ack_status == TC_IOT_ACK_TIMEOUT) {
-            tc_iot_hal_printf("request timeout");
+            LOG_ERROR("request timeout");
         }
         return;
     }
 
     message = md->message;
-    tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+    LOG_TRACE("[s->c] %.*s", (int)message->payloadlen, (char*)message->payload);
 }
 
+
+/**
+ * @brief operate_light 操作灯光控制开关
+ *
+ * @param light 灯状态数据
+ */
 static void operate_light(tc_iot_demo_light * light) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
+    int color = light->color & 0xFF;
+    static const char * brightness_bar      = "||||||||||||||||||||";
+    static const char * brightness_bar_left = "--------------------";
+    int brightness_bar_len = strlen(brightness_bar);
+    int brightness_bar_left_len = 0;
+
+    /* 灯光亮度显示条 */
+    brightness_bar_len = light->brightness >= 100?brightness_bar_len:(int)((light->brightness/100) * brightness_bar_len);
+    brightness_bar_left_len = strlen(brightness_bar) - brightness_bar_len;
 
     if (light->light_switch) {
-        tc_iot_hal_printf( ANSI_COLOR_GREEN "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET, 
+        /* 灯光开启式，按照控制参数展示 */
+        tc_iot_hal_printf( ANSI_COLOR_256_FORMAT "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET, 
+                color,
                 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         tc_iot_hal_printf(
-                ANSI_COLOR_GREEN 
-                "light status:[name=%s]|[switch:on]|[color rgb:0x%X]|[brightness:%f]\n" 
+                ANSI_COLOR_256_FORMAT 
+                "[%s]|[  lighting  ]|[color:%03d]|[brightness:%.*s%.*s]\n" 
                 ANSI_COLOR_RESET, 
+                color,
                 light->name,
-                light->color,
-                light->brightness
+                color,
+                brightness_bar_len, brightness_bar,
+                brightness_bar_left_len,brightness_bar_left
                 );
     } else {
+        /* 灯处于关闭状态时的展示 */
         tc_iot_hal_printf( ANSI_COLOR_RED "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET, 
                 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         tc_iot_hal_printf(
-                ANSI_COLOR_RED 
-                "light status:[name=%s]|[switch:off]|[color rgb:0x%X]|[brightness:%f]\n" 
-                ANSI_COLOR_RESET, 
+                ANSI_COLOR_RED "[%s]|[" "light is off" "]|[color:%03d]|[brightness:%.*s%.*s]\n" ANSI_COLOR_RESET , 
                 light->name,
-                light->color,
-                light->brightness
+                color,
+                brightness_bar_len, brightness_bar,
+                brightness_bar_left_len, brightness_bar_left
                 );
     }
-    tc_iot_hal_printf("-----------------------------------------------------");
 }
 
+
+/**
+ * @brief report_light 上报灯数据，用于初始状态上报
+ *
+ * @param p_shadow_client shadow 控制句柄
+ * @param light 灯状态数据
+ */
 static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_light * light) {
     char buffer[512];
     int buffer_len = sizeof(buffer);
@@ -108,14 +156,23 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
 
     snprintf(reported, sizeof(reported), 
             "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s,\"status\":\"normal\"}",
-            tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
-            g_light_status.color,g_light_status.brightness,
-            g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
-    /* tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, NULL, 0, NULL); */
+            tc_iot_json_inline_escape(buffer, buffer_len, g_light_state.name),
+            g_light_state.color,g_light_state.brightness,
+            g_light_state.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
+    /* 此时由于 desired 状态未知，仅上报 reported ，不处理 desired 。 */
     tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, NULL, report_message_ack_callback, 0, NULL);
-    tc_iot_hal_printf("[c->s] shadow_update_reported\n%s\n", buffer);
+    LOG_TRACE("[c->s] shadow_update_reported\n%s\n", buffer);
 }
 
+
+/**
+ * @brief desired_light 接收 control 指令，对灯进行状态变更后，上报数据。
+ * reported 状态此时已经和 desired 状态一直，同时上报 "desired":null，
+ * 要求服务端清除 desired 状态数据，避免重复下发指令。
+ *
+ * @param p_shadow_client shadow 控制句柄
+ * @param light 灯状态数据
+ */
 static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_light * light) {
     char buffer[512];
     int buffer_len = sizeof(buffer);
@@ -124,14 +181,26 @@ static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_li
 
     snprintf(reported, sizeof(reported), 
             "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s,\"status\":\"normal\"}",
-            tc_iot_json_inline_escape(buffer, buffer_len, g_light_status.name),
-            g_light_status.color,g_light_status.brightness,
-            g_light_status.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
+            tc_iot_json_inline_escape(buffer, buffer_len, g_light_state.name),
+            g_light_state.color,g_light_state.brightness,
+            g_light_state.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
 
     tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, report_message_ack_callback, 0, NULL);
-    tc_iot_hal_printf("[c->s] shadow_report_and_clean_desired\n%s\n", buffer);
+    LOG_TRACE("[c->s] shadow_report_and_clean_desired\n%s\n", buffer);
 }
 
+
+/**
+ * @brief _light_sync_state 根据服务端下发的影子数据，同步到本地灯状态数据，并进
+ * 行上报。
+ *
+ * @param light_state 灯状态数据
+ * @param doc_start reported or desired 数据起始位置。
+ * @param json_token json token 数组起始位置
+ * @param tok_count 有效 json token 数量
+ *
+ * @return 
+ */
 int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, jsmntok_t * json_token, int tok_count) {
     int i;
     jsmntok_t  * key_tok = NULL;
@@ -177,6 +246,7 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
         val_start = doc_start + val_tok->start;
         val_len = val_tok->end - val_tok->start;
 
+        /* 同步名称 */
         if (strncmp("name", key_start, key_len) == 0)  {
             if (val_len > TC_IOT_LIGHT_NAME_LEN) {
                 LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
@@ -188,6 +258,7 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
             light_state->name[val_len] = '\0';
         }
 
+        /* 同步亮度 */
         if (strncmp("brightness", key_start, key_len) == 0)  {
             if (val_len > field_len) {
                 LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
@@ -200,6 +271,7 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
             light_state->brightness = atof(field_buf);
         }
 
+        /* 同步开关状态 */
         if (strncmp("light_switch", key_start, key_len) == 0)  {
             if (val_len > field_len) {
                 LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
@@ -212,6 +284,7 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
             light_state->light_switch = (strncmp(TC_IOT_JSON_TRUE, field_buf, val_len) == 0);
         }
 
+        /* 同步颜色设置 */
         if (strncmp("color", key_start, key_len) == 0)  {
             if (val_len > field_len) {
                 LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
@@ -229,6 +302,13 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
 }
 
 
+
+/**
+ * @brief _light_on_message_received 数据回调，处理 shadow_get 获取最新状态，或
+ * 者影子服务推送的最新控制指令数据。
+ *
+ * @param md 影子数据消息
+ */
 void _light_on_message_received(tc_iot_message_data* md) {
     jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
     jsmntok_t  * key_tok = NULL;
@@ -250,8 +330,9 @@ void _light_on_message_received(tc_iot_message_data* md) {
     memset(field_buf, 0, sizeof(field_buf));
 
     tc_iot_mqtt_message* message = md->message;
-    LOG_INFO("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+    LOG_TRACE("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 
+    /* 有效性检查 */
     ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));
     if (ret <= 0) {
         return ;
@@ -269,6 +350,7 @@ void _light_on_message_received(tc_iot_message_data* md) {
         LOG_TRACE("Reply pack recevied.");
     }
 
+    /* 检查 reported 字段是否存在 */
     field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, 
             "payload.state.reported", NULL, 0);
     if (field_index <= 0 ) {
@@ -279,6 +361,7 @@ void _light_on_message_received(tc_iot_message_data* md) {
         LOG_TRACE("payload.state.reported found:%.*s", reported_len, reported_start);
     }
 
+    /* 检查 desired 字段是否存在 */
     field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, 
             "payload.state.desired", NULL, 0);
     if (field_index <= 0 ) {
@@ -289,25 +372,33 @@ void _light_on_message_received(tc_iot_message_data* md) {
         LOG_TRACE("payload.state.desired found:%.*s", desired_len, desired_start);
     }
 
-    /* 如果设备无本地存储，则需要先同步之前上报的状态 */
+    /* 如果设备无本地存储，则设备重启后需要先同步之前上
+     * 报的状态。
+     *
+     * 如果设备有本地存储，一般情况下，重启后本地状态应
+     * 和服务端一致，不一致时，以本地设备状态优先，还是
+     * 以服务端优先，可根据实际业务情况进行分析处理。
+     * */
     if (reported_start) {
         ret = tc_iot_json_parse(reported_start,reported_len, json_token, TC_IOT_ARRAY_LENGTH(json_token));
         if (ret <= 0) {
             return ;
         }
-        _light_sync_state(&g_light_status, reported_start, json_token, ret);
+        _light_sync_state(&g_light_state, reported_start, json_token, ret);
     }
 
-    /* 然后，根据控制台或者APP端的指令，设定设备状态 */
+    /* 根据控制台或者 APP 端的指令，设定设备状态 */
     if (desired_start) {
         ret = tc_iot_json_parse(desired_start,desired_len, json_token, TC_IOT_ARRAY_LENGTH(json_token));
         if (ret <= 0) {
             return ;
         }
-        _light_sync_state(&g_light_status, desired_start, json_token, ret);
+        _light_sync_state(&g_light_state, desired_start, json_token, ret);
     }
 
-    operate_light(&g_light_status);
+    /* 根据最新状态数据，对灯进行控制：开关、改变颜色
+     * 亮度等。*/
+    operate_light(&g_light_state);
 
     /* 如果状态发生变化，则更新设备状态 */
     if (reported_start || desired_start) {
@@ -315,15 +406,16 @@ void _light_on_message_received(tc_iot_message_data* md) {
          * desired 数据，避免指令重复下发。 
          * */
         if (desired_start) {
-            desired_light(&client, &g_light_status);
+            desired_light(&client, &g_light_state);
         }
     } else {
         /* 服务端无 reported 和 desired 状态，
          * 说明设备首次启动或数据被重置，重新上报初始状态 */
-        report_light(&client, &g_light_status);
+        report_light(&client, &g_light_state);
     }
 }
 
+/* 设备初始配置 */
 tc_iot_shadow_config g_client_config = {
     {
         {
@@ -363,6 +455,7 @@ int main(int argc, char** argv) {
     tc_iot_hal_srandom(timestamp);
     long nonce = tc_iot_hal_random();
 
+    /* 设定 will ，当灯设备异常退出时，MQ 服务端自动往设备影子数据中，写入 abnormal_exit 的离线状态。 */
     static const char * will_message = "{\"method\":\"update\",\"state\":{\"reported\":{\"status\":\"abnormal_exit\"}}}";
 
     signal(SIGINT, sig_handler);
@@ -370,13 +463,17 @@ int main(int argc, char** argv) {
 
     p_client_config = &(g_client_config.mqtt_client_config);
 
+    /* 解析命令行参数 */
     parse_command(p_client_config, argc, argv);
+
+    /* 根据 product id 和device name 定义，生成发布和订阅的 Topic 名称。 */
     snprintf(g_client_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
     snprintf(g_client_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-    token_defined = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
 
+    /* 判断是否需要获取动态 token */
+    token_defined = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
     
     p_client_config->willFlag = 1;
     p_client_config->will.message.cstring = (char*)will_message;
@@ -385,6 +482,7 @@ int main(int argc, char** argv) {
     p_client_config->will.topicName.cstring = (char*)g_client_config.pub_topic;
 
     if (!token_defined) {
+        /* 获取动态 token */
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
         ret = http_refresh_auth_token_with_expire(
                 TC_IOT_CONFIG_AUTH_API_URL, NULL,
@@ -414,6 +512,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     char desired[256];
     tc_iot_shadow_client* p_shadow_client = &client;
 
+    /* 初始化 shadow client */
     tc_iot_hal_printf("constructing mqtt shadow client.\n");
     ret = tc_iot_shadow_construct(p_shadow_client, p_client_config);
     if (ret != TC_IOT_SUCCESS) {
@@ -423,13 +522,15 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
 
     tc_iot_hal_printf("construct mqtt shadow client success.\n");
     tc_iot_hal_printf("yield waiting for server push.\n");
+    /* 执行 yield 收取影子服务端前序指令消息，清理历史状态。 */
     tc_iot_shadow_yield(p_shadow_client, timeout);
     tc_iot_hal_printf("yield waiting for server finished.\n");
 
     /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
     ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 2000, NULL);
-    tc_iot_hal_printf("[c->s] shadow_get\n%s\n", buffer);
+    LOG_TRACE("[c->s] shadow_get\n%s\n", buffer);
 
+    /* 循环等待控制指令 */
     while (!stop) {
         tc_iot_shadow_yield(p_shadow_client, timeout);
     }
@@ -439,3 +540,4 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("Exit success.\n");
     return 0;
 }
+

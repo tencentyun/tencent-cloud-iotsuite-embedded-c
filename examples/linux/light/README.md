@@ -29,11 +29,14 @@
 # https://console.qcloud.com/iotsuite/product
 
 # 更新影子数据
-./tc_iot_shadow_cli.py UpdateIotShadow --product_id=iot-abc --device_name=device_abc -u secret_id -p secret_key --shadow={"desired":{"name":"light abc","color":256,"brightness":89,"light_switch":true}}
+./tc_iot_shadow_cli.py UpdateIotShadow --product_id=iot-abc --device_name=device_abc -u secret_id -p secret_key --shadow={"desired":{"name":"light abc","color":4,"brightness":89,"light_switch":true}}
 
 # 查询影子数据
 ./tc_iot_shadow_cli.py GetIotShadow --product_id=iot-abc --device_name=device_abc -u secret_id -p secret_key
 
 ```
+
+自动随机更新数据脚本，可参见 tools/light_controller.sh 。
+
 
 
