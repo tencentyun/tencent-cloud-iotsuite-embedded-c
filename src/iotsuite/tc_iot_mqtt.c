@@ -244,6 +244,9 @@ static int decodePacket(tc_iot_mqtt_client* c, int* value, int timeout) {
             rc = MQTTPACKET_READ_ERROR;
             goto exit;
         }
+        if (timeout <= 0) {
+            timeout = 1;
+        }
         rc = c->ipstack.do_read(&(c->ipstack), &i, 1, timeout);
         if (rc != 1) {
             goto exit;
@@ -277,7 +280,11 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
 
     len = 1;
     /* 2. read the remaining length.  This is variable in itself */
-    decodePacket(c, &rem_len, tc_iot_hal_timer_left_ms(timer));
+    timer_left_ms = tc_iot_hal_timer_left_ms(timer);
+    if (timer_left_ms <= 0) {
+        timer_left_ms = 1;
+    }
+    decodePacket(c, &rem_len, timer_left_ms);
     len += MQTTPacket_encode(
         c->readbuf + 1,
         rem_len); /* put the original remaining length back into the buffer */
@@ -295,8 +302,12 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
      * data */
     if (rem_len > 0) {
 	
-		rc = c->ipstack.do_read(&(c->ipstack), c->readbuf + len, rem_len,
-                                 tc_iot_hal_timer_left_ms(timer));
+        timer_left_ms = tc_iot_hal_timer_left_ms(timer);
+        if (timer_left_ms <= 0) {
+            timer_left_ms = 1;
+        }
+        rc = c->ipstack.do_read(&(c->ipstack), c->readbuf + len, rem_len,
+                timer_left_ms);
         if (rc != rem_len) {
             rc = 0;
             goto exit;

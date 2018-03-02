@@ -261,7 +261,7 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
         /* 同步亮度 */
         if (strncmp("brightness", key_start, key_len) == 0)  {
             if (val_len > field_len) {
-                LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
+                LOG_WARN("brightness[%.*s] to long, will be truncated to: %.*s", 
                         val_len, val_start, field_len, val_start);
                 val_len = field_len;
             }
@@ -274,7 +274,7 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
         /* 同步开关状态 */
         if (strncmp("light_switch", key_start, key_len) == 0)  {
             if (val_len > field_len) {
-                LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
+                LOG_WARN("light_switch[%.*s] to long, will be truncated to: %.*s", 
                         val_len, val_start, field_len, val_start);
                 val_len = field_len;
             }
@@ -287,14 +287,14 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
         /* 同步颜色设置 */
         if (strncmp("color", key_start, key_len) == 0)  {
             if (val_len > field_len) {
-                LOG_WARN("name[%.*s] to long, will be truncated to: %.*s", 
+                LOG_WARN("color[%.*s] to long, will be truncated to: %.*s", 
                         val_len, val_start, field_len, val_start);
                 val_len = field_len;
             }
             strncpy(field_buf, val_start, val_len);
             field_buf[val_len] = '\0';
             temp_color = atoi(field_buf);
-            LOG_TRACE("state change:[brightness|0x%x -> 0x%x]", light_state->color, temp_color);
+            LOG_TRACE("state change:[color|%d -> %d]", light_state->color, temp_color);
             
             light_state->color = temp_color;
         }
@@ -372,20 +372,20 @@ void _light_on_message_received(tc_iot_message_data* md) {
         LOG_TRACE("payload.state.desired found:%.*s", desired_len, desired_start);
     }
 
-    /* 如果设备无本地存储，则设备重启后需要先同步之前上
+    /* 如果设备无本地存储，则设备重启后可先同步之前上
      * 报的状态。
      *
      * 如果设备有本地存储，一般情况下，重启后本地状态还会
      * 和服务端一致。不一致时，以本地设备状态优先，还是
-     * 以服务端优先，可根据实际业务情况进行分析，谨慎处理。
+     * 以服务端优先，可根据实际业务情况进行分析处理。
      * */
-    if (reported_start) {
-        ret = tc_iot_json_parse(reported_start,reported_len, json_token, TC_IOT_ARRAY_LENGTH(json_token));
-        if (ret <= 0) {
-            return ;
-        }
-        _light_sync_state(&g_light_state, reported_start, json_token, ret);
-    }
+    /* if (reported_start) { */
+        /* ret = tc_iot_json_parse(reported_start,reported_len, json_token, TC_IOT_ARRAY_LENGTH(json_token)); */
+        /* if (ret <= 0) { */
+            /* return ; */
+        /* } */
+        /* _light_sync_state(&g_light_state, reported_start, json_token, ret); */
+    /* } */
 
     /* 根据控制台或者 APP 端的指令，设定设备状态 */
     if (desired_start) {
