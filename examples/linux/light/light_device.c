@@ -377,15 +377,15 @@ void _light_on_message_received(tc_iot_message_data* md) {
      *
      * 如果设备有本地存储，一般情况下，重启后本地状态还会
      * 和服务端一致。不一致时，以本地设备状态优先，还是
-     * 以服务端优先，可根据实际业务情况进行分析处理。
+     * 以服务端优先，可根据实际业务情况进行区别处理。
      * */
-    /* if (reported_start) { */
-        /* ret = tc_iot_json_parse(reported_start,reported_len, json_token, TC_IOT_ARRAY_LENGTH(json_token)); */
-        /* if (ret <= 0) { */
-            /* return ; */
-        /* } */
-        /* _light_sync_state(&g_light_state, reported_start, json_token, ret); */
-    /* } */
+    if (reported_start) {
+        ret = tc_iot_json_parse(reported_start,reported_len, json_token, TC_IOT_ARRAY_LENGTH(json_token));
+        if (ret <= 0) {
+            return ;
+        }
+        _light_sync_state(&g_light_state, reported_start, json_token, ret);
+    }
 
     /* 根据控制台或者 APP 端的指令，设定设备状态 */
     if (desired_start) {

@@ -480,7 +480,6 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
                 goto exit;
             }
             msg.qos = (tc_iot_mqtt_qos_e)intQoS;
-            deliverMessage(c, &topicName, &msg);
             if (msg.qos != TC_IOT_QOS0) {
                 if (msg.qos == TC_IOT_QOS1) {
                     len = MQTTSerialize_ack(c->buf, c->buf_size, PUBACK, 0,
@@ -494,9 +493,14 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
                 } else {
                     rc = _send_packet(c, len, timer);
                 }
+
+                deliverMessage(c, &topicName, &msg);
+
                 if (rc == TC_IOT_FAILURE) {
                     goto exit;
                 }
+            } else { 
+                deliverMessage(c, &topicName, &msg);
             }
             break;
         }
