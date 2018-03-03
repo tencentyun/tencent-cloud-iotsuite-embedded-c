@@ -161,7 +161,7 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
             g_light_state.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
     /* 此时由于 desired 状态未知，仅上报 reported ，不处理 desired 。 */
     tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, NULL, report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL);
-    LOG_TRACE("[c->s] shadow_update_reported\n%s\n", buffer);
+    LOG_TRACE("[c->s] shadow_update_reported\n%s", buffer);
 }
 
 
@@ -186,7 +186,7 @@ static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_li
             g_light_state.light_switch?TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
 
     tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, TC_IOT_JSON_NULL, report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL);
-    LOG_TRACE("[c->s] shadow_report_and_clean_desired\n%s\n", buffer);
+    LOG_TRACE("[c->s] shadow_report_and_clean_desired\n%s", buffer);
 }
 
 
@@ -330,7 +330,7 @@ void _light_on_message_received(tc_iot_message_data* md) {
     memset(field_buf, 0, sizeof(field_buf));
 
     tc_iot_mqtt_message* message = md->message;
-    LOG_TRACE("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+    LOG_TRACE("[s->c] %.*s", (int)message->payloadlen, (char*)message->payload);
 
     /* 有效性检查 */
     ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));
@@ -528,7 +528,7 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
 
     /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
     ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL);
-    LOG_TRACE("[c->s] shadow_get\n%s\n", buffer);
+    LOG_TRACE("[c->s] shadow_get\n%s", buffer);
 
     /* 循环等待控制指令 */
     while (!stop) {

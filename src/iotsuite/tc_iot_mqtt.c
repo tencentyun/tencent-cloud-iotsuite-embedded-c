@@ -132,6 +132,7 @@ static int _send_packet(tc_iot_mqtt_client* c, int length,
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
+    LOG_TRACE("entry length=%d", length);
     while (sent < length && !tc_iot_hal_timer_is_expired(timer)) {
         rc = c->ipstack.do_write(&(c->ipstack), &c->buf[sent], length-sent,
                                  tc_iot_hal_timer_left_ms(timer));
@@ -146,9 +147,10 @@ static int _send_packet(tc_iot_mqtt_client* c, int length,
                                           c->keep_alive_interval);
         rc = TC_IOT_SUCCESS;
     } else {
-        LOG_TRACE("sent = %d, lenght=%d", sent, length);
+        LOG_TRACE("sent=%d, length=%d", sent, length);
         rc = TC_IOT_SEND_PACK_FAILED;
     }
+    LOG_TRACE("rc=%d", rc);
     return rc;
 }
 
