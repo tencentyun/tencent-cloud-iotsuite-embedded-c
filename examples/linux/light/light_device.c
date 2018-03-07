@@ -152,7 +152,6 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_lig
     char buffer[512];
     int buffer_len = sizeof(buffer);
     char reported[256];
-    int ret;
 
     snprintf(reported, sizeof(reported), 
             "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s,\"status\":\"normal\"}",
@@ -177,7 +176,6 @@ static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_demo_li
     char buffer[512];
     int buffer_len = sizeof(buffer);
     char reported[256];
-    int ret;
 
     snprintf(reported, sizeof(reported), 
             "{\"name\":\"%s\",\"color\":%d,\"brightness\":%f,\"light_switch\":%s,\"status\":\"normal\"}",
@@ -207,7 +205,6 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
     jsmntok_t  * val_tok = NULL;
     char field_buf[TC_IOT_LIGHT_NAME_LEN+1];
     int field_len = sizeof(field_buf);
-    int field_index = 0;
     int temp_color = 0;
     int  key_len = 0, val_len = 0;
     const char * key_start;
@@ -299,6 +296,7 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
             light_state->color = temp_color;
         }
     }
+    return 0;
 }
 
 
@@ -311,21 +309,13 @@ int _light_sync_state(tc_iot_demo_light * light_state, const char * doc_start, j
  */
 void _light_on_message_received(tc_iot_message_data* md) {
     jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
-    jsmntok_t  * key_tok = NULL;
-    jsmntok_t  * val_tok = NULL;
     char field_buf[TC_IOT_LIGHT_NAME_LEN+1];
-    int field_len = sizeof(field_buf);
     int field_index = 0;
     const char * reported_start = NULL;
     int reported_len = 0;
     const char * desired_start = NULL;
     int desired_len = 0;
     int ret = 0;
-    int i = 0;
-    int temp_color = 0;
-    int  key_len = 0, val_len = 0;
-    const char * key_start;
-    const char * val_start;
 
     memset(field_buf, 0, sizeof(field_buf));
 
@@ -508,8 +498,6 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     int ret = 0;
     char buffer[512];
     int buffer_len = sizeof(buffer);
-    char reported[256];
-    char desired[256];
     tc_iot_shadow_client* p_shadow_client = &client;
 
     /* 初始化 shadow client */
