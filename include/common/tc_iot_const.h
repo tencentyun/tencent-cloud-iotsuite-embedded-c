@@ -66,6 +66,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_HTTP_RESPONSE_INVALID = -1007, /**< 服务端相应的 HTTP 数据格式非法 */
     TC_IOT_SHADOW_SESSION_NOT_ENOUGH = -1008, /**< 影子回调会话空间不够，请检查是否发送过多并发请求，
                                                 合理设置 TC_IOT_MAX_SESSION_COUNT 的值*/
+    TC_IOT_HTTP_REDIRECT_TOO_MANY = -1009, /**< HTTP 跳转次数过多，有可能是跳转循环 */
 
 } tc_iot_sys_code_e;
 

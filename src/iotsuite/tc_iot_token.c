@@ -90,7 +90,10 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
     long ret_expire;
     int password_index;
     int r;
+    int i;
+    int temp_len;
     int username_index;
+    int redirect_count = 0;
 
 
     if (expire > TC_IOT_TOKEN_MAX_EXPIRE_SECOND) {
@@ -115,6 +118,9 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 
     memset(&network, 0, sizeof(network));
 
+parse_url:
+
+    LOG_TRACE("request url=%s", api_url);
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
 #ifdef ENABLE_TLS
         netcontext.fd = -1;
@@ -150,12 +156,47 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
     /* request init end */
 
     memset(http_resp, 0, sizeof(http_resp));
+    LOG_TRACE("request url=%s", api_url);
     ret = http_post_urlencoded(&network, &request, api_url, sign_out, http_resp,
                                sizeof(http_resp), 2000);
 
     ret = tc_iot_parse_http_response_code(http_resp);
     if (ret != 200) {
-        LOG_WARN("http response status code=%d", ret);
+        if (ret == 301 || ret == 302) {
+
+            if (redirect_count < 5) {
+                redirect_count++;
+            } else {
+                LOG_ERROR("http code %d, redirect exceed maxcount=%d.", ret, redirect_count);
+                return TC_IOT_HTTP_REDIRECT_TOO_MANY;
+            }
+
+            rsp_body = strstr(http_resp, "Location: ");
+            if (rsp_body) {
+                rsp_body += strlen("Location: ");
+                temp_len = strlen(rsp_body);
+                
+                for (i = 0; i < temp_len; i++) {
+                    temp_buf[i] = rsp_body[i];
+                    if (temp_buf[i] == '\r') {
+                        LOG_TRACE("truncate api url");
+                        temp_buf[i] = '\0';
+                    }
+                    if (temp_buf[i] == '\0') {
+                        break;
+                    }
+                }
+                api_url = temp_buf;
+                memset(&netcontext, 0, sizeof(netcontext));
+                LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", ret, redirect_count, api_url);
+            } else {
+                LOG_ERROR("http code %d, Location header not found.", ret);
+            }
+
+            goto parse_url;
+        } else {
+            LOG_WARN("http response status code=%d", ret);
+        }
         return TC_IOT_REFRESH_TOKEN_FAILED;
     }
 
