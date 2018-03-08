@@ -116,8 +116,6 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     int buffer_len = sizeof(buffer);
     char reported[256];
     char desired[256];
-    char session_id[TC_IOT_SESSION_ID_LEN+1];
-    int session_id_len = sizeof(session_id);
     tc_iot_shadow_client client;
     tc_iot_shadow_client* p_shadow_client = &client;
 

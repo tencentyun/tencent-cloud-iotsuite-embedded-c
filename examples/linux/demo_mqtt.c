@@ -141,5 +141,6 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     }
 
     tc_iot_mqtt_client_disconnect(p_client);
+    return 0;
 }
 
