@@ -10,8 +10,8 @@
 #define ANSI_COLOR_256_FORMAT   "\x1b[38;5;%dm"
 
 int run_shadow(tc_iot_shadow_config * p_client_config);
-void _light_on_message_received(tc_iot_message_data* md);
 void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) ;
+extern tc_iot_shadow_config g_client_config;
 
 #define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
 
@@ -80,38 +80,6 @@ static void operate_light(tc_iot_shadow_local_data * light) {
                 );
     }
 }
-
-/* 设备初始配置 */
-tc_iot_shadow_config g_client_config = {
-    {
-        {
-            /* device info*/
-            TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
-            TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
-            TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
-        },
-        TC_IOT_CONFIG_SERVER_HOST,
-        TC_IOT_CONFIG_SERVER_PORT,
-        TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
-        TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
-        TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
-        TC_IOT_CONFIG_CLEAN_SESSION,
-        TC_IOT_CONFIG_USE_TLS,
-        TC_IOT_CONFIG_AUTO_RECONNECT,
-        TC_IOT_CONFIG_ROOT_CA,
-        TC_IOT_CONFIG_CLIENT_CRT,
-        TC_IOT_CONFIG_CLIENT_KEY,
-        NULL,
-        NULL,
-        0,  /* send will */
-        { 
-            {'M', 'Q', 'T', 'W'}, 0, {NULL, {0, NULL}}, {NULL, {0, NULL}}, 0, 0, 
-        }
-    },
-    TC_IOT_SUB_TOPIC_DEF,
-    TC_IOT_PUB_TOPIC_DEF,
-    _light_on_message_received,
-};
 
 int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;

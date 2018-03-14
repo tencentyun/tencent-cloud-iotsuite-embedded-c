@@ -11,26 +11,58 @@
 
 
 void _light_on_message_received(tc_iot_message_data* md);
-int _light_sync_state(tc_iot_shadow_local_data * light_state, const char * doc_start, jsmntok_t * json_token, int tok_count);
+int _tc_iot_sync_shadow_property(tc_iot_shadow_property properties[], const char * doc_start, jsmntok_t * json_token, int tok_count);
+
 
 volatile int stop;
 
-/* 灯状态数据 */
+/* 设备初始配置 */
+tc_iot_shadow_config g_client_config = {
+    {
+        {
+            /* device info*/
+            TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
+            TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
+            TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
+        },
+        TC_IOT_CONFIG_SERVER_HOST,
+        TC_IOT_CONFIG_SERVER_PORT,
+        TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
+        TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
+        TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
+        TC_IOT_CONFIG_CLEAN_SESSION,
+        TC_IOT_CONFIG_USE_TLS,
+        TC_IOT_CONFIG_AUTO_RECONNECT,
+        TC_IOT_CONFIG_ROOT_CA,
+        TC_IOT_CONFIG_CLIENT_CRT,
+        TC_IOT_CONFIG_CLIENT_KEY,
+        NULL,
+        NULL,
+        0,  /* send will */
+        { 
+            {'M', 'Q', 'T', 'W'}, 0, {NULL, {0, NULL}}, {NULL, {0, NULL}}, 0, 0, 
+        }
+    },
+    TC_IOT_SUB_TOPIC_DEF,
+    TC_IOT_PUB_TOPIC_DEF,
+    _light_on_message_received,
+};
+
+/* 设备状态数据 */
 static tc_iot_shadow_control g_device_vars = 
 {
     /* current  */
     {
         false,  /* 开关状态 */
-        "colorful light", /* 灯标识 */
-        2, /* 灯光颜色控制 */
+        "colorful light", /* 设备标识 */
+        2, /* 设备光颜色控制 */
         100, /* 亮度 */
     },
     /* reported data */
     {
-
         false,  /* 开关状态 */
-        "", /* 灯标识 */
-        0, /* 灯光颜色控制 */
+        "", /* 设备标识 */
+        0, /* 设备光颜色控制 */
         0, /* 亮度 */
     }
 }
@@ -44,16 +76,50 @@ typedef enum _tc_iot_shadow_property_index_e {
     TC_IOT_PROP_MAX,
 } tc_iot_shadow_property_index_e;
 
+void _tc_iot_shadow_property_control_callback(void * p_prop);
+
+#define DECLARE_PROPERTY_DEF(var, name, shadow_type, callback) {#name, TC_IOT_PROP_ ## name, sizeof(var), shadow_type, &var, callback}
+
 static tc_iot_shadow_property g_device_property_defs[] = {
-    {"light_switch", TC_IOT_PROP_light_switch, sizeof(g_device_vars.current.light_switch), TC_IOT_SHADOW_TYPE_BOOL, &g_device_vars.current.light_switch},
-    {"name",TC_IOT_PROP_name, sizeof(g_device_vars.current.name), TC_IOT_SHADOW_TYPE_STRING, &g_device_vars.current.name},
-    {"color",TC_IOT_PROP_color, sizeof(g_device_vars.current.color), TC_IOT_SHADOW_TYPE_NUMBER, &g_device_vars.current.color},
-    {"brightness",TC_IOT_PROP_brightness, sizeof(g_device_vars.current.brightness), TC_IOT_SHADOW_TYPE_NUMBER, &g_device_vars.current.brightness},
-    {"",TC_IOT_PROP_MAX, sizeof(g_device_vars.current), TC_IOT_SHADOW_TYPE_INVALID, &g_device_vars.current},
+    DECLARE_PROPERTY_DEF(g_device_vars.current.light_switch, light_switch, TC_IOT_SHADOW_TYPE_BOOL, _tc_iot_shadow_property_control_callback),
+    DECLARE_PROPERTY_DEF(g_device_vars.current.name, name, TC_IOT_SHADOW_TYPE_STRING, _tc_iot_shadow_property_control_callback),
+    DECLARE_PROPERTY_DEF(g_device_vars.current.color, color, TC_IOT_SHADOW_TYPE_NUMBER, _tc_iot_shadow_property_control_callback),
+    DECLARE_PROPERTY_DEF(g_device_vars.current.brightness, brightness, TC_IOT_SHADOW_TYPE_NUMBER, _tc_iot_shadow_property_control_callback),
+};
+
+static tc_iot_shadow_property g_device_reported_property_defs[] = {
+    DECLARE_PROPERTY_DEF(g_device_vars.reported.light_switch, light_switch, TC_IOT_SHADOW_TYPE_BOOL, NULL),
+    DECLARE_PROPERTY_DEF(g_device_vars.reported.name, name, TC_IOT_SHADOW_TYPE_STRING, NULL),
+    DECLARE_PROPERTY_DEF(g_device_vars.reported.color, color, TC_IOT_SHADOW_TYPE_NUMBER, NULL),
+    DECLARE_PROPERTY_DEF(g_device_vars.reported.brightness, brightness, TC_IOT_SHADOW_TYPE_NUMBER, NULL),
 };
 
 /* 影子数据 Client  */
 tc_iot_shadow_client client;
+
+void _tc_iot_shadow_property_control_callback(void * p_prop) {
+    tc_iot_shadow_property * p_property = (tc_iot_shadow_property *) p_prop;
+    if (!p_property) {
+        return;
+    }
+    switch (p_property->id) {
+        case TC_IOT_PROP_light_switch:
+            LOG_TRACE("do something for light_switch change");
+            break;
+        case TC_IOT_PROP_name:
+            LOG_TRACE("do something for name change");
+            break;
+        case TC_IOT_PROP_color:
+            LOG_TRACE("do something for color change");
+            break;
+        case TC_IOT_PROP_brightness:
+            LOG_TRACE("do something for brightness change");
+            break;
+        default:
+            LOG_WARN("unkown property id = %d", p_property->id);
+            break;
+    }
+}
 
 /**
  * @brief get_message_ack_callback shadow_get 回调函数
@@ -102,9 +168,9 @@ void report_message_ack_callback(tc_iot_command_ack_status_e ack_status,
 
 
 /**
- * @brief operate_light 操作灯光控制开关
+ * @brief operate_light 操作设备光控制开关
  *
- * @param light 灯状态数据
+ * @param light 设备状态数据
  */
 static void operate_light(tc_iot_shadow_local_data * light) {
     time_t t = time(NULL);
@@ -115,12 +181,12 @@ static void operate_light(tc_iot_shadow_local_data * light) {
     int brightness_bar_len = strlen(brightness_bar);
     int brightness_bar_left_len = 0;
 
-    /* 灯光亮度显示条 */
+    /* 设备光亮度显示条 */
     brightness_bar_len = light->brightness >= 100?brightness_bar_len:(int)((light->brightness/100) * brightness_bar_len);
     brightness_bar_left_len = strlen(brightness_bar) - brightness_bar_len;
 
     if (light->light_switch) {
-        /* 灯光开启式，按照控制参数展示 */
+        /* 设备光开启式，按照控制参数展示 */
         tc_iot_hal_printf( ANSI_COLOR_256_FORMAT "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET, 
                 color,
                 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
@@ -135,7 +201,7 @@ static void operate_light(tc_iot_shadow_local_data * light) {
                 brightness_bar_left_len,brightness_bar_left
                 );
     } else {
-        /* 灯处于关闭状态时的展示 */
+        /* 设备处于关闭状态时的展示 */
         tc_iot_hal_printf( ANSI_COLOR_RED "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET, 
                 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         tc_iot_hal_printf(
@@ -150,10 +216,10 @@ static void operate_light(tc_iot_shadow_local_data * light) {
 
 
 /**
- * @brief report_light 上报灯数据，用于初始状态上报
+ * @brief report_light 上报设备数据，用于初始状态上报
  *
  * @param p_shadow_client shadow 控制句柄
- * @param light 灯状态数据
+ * @param light 设备状态数据
  */
 static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_shadow_local_data * light) {
     char buffer[512];
@@ -172,12 +238,12 @@ static void report_light(tc_iot_shadow_client * p_shadow_client, tc_iot_shadow_l
 
 
 /**
- * @brief desired_light 接收 control 指令，对灯进行状态变更后，上报数据。
+ * @brief desired_light 接收 control 指令，对设备进行状态变更后，上报数据。
  * reported 状态此时已经和 desired 状态一直，同时上报 "desired":null，
  * 要求服务端清除 desired 状态数据，避免重复下发指令。
  *
  * @param p_shadow_client shadow 控制句柄
- * @param light 灯状态数据
+ * @param light 设备状态数据
  */
 static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_shadow_local_data * light) {
     char buffer[512];
@@ -196,29 +262,30 @@ static void desired_light(tc_iot_shadow_client * p_shadow_client, tc_iot_shadow_
 
 
 /**
- * @brief _light_sync_state 根据服务端下发的影子数据，同步到本地灯状态数据，并进
+ * @brief _tc_iot_sync_shadow_property 根据服务端下发的影子数据，同步到本地设备状态数据，并进
  * 行上报。
  *
- * @param light_state 灯状态数据
+ * @param light_state 设备状态数据
  * @param doc_start reported or desired 数据起始位置。
  * @param json_token json token 数组起始位置
  * @param tok_count 有效 json token 数量
  *
  * @return 
  */
-int _light_sync_state(tc_iot_shadow_local_data * light_state, const char * doc_start, jsmntok_t * json_token, int tok_count) {
+int _tc_iot_sync_shadow_property(tc_iot_shadow_property properties[], const char * doc_start, jsmntok_t * json_token, int tok_count) {
     int i,j;
     jsmntok_t  * key_tok = NULL;
     jsmntok_t  * val_tok = NULL;
     char field_buf[TC_IOT_LIGHT_NAME_LEN+1];
     int field_len = sizeof(field_buf);
-    int temp_color = 0;
+    int new_number = 0;
+    bool new_bool = 0;
     int  key_len = 0, val_len = 0;
     const char * key_start;
     const char * val_start;
     tc_iot_shadow_property * p_prop = NULL;
 
-    if (!light_state) {
+    if (!properties) {
         LOG_ERROR("light_state is null");
         return TC_IOT_NULL_POINTER;
     }
@@ -251,7 +318,12 @@ int _light_sync_state(tc_iot_shadow_local_data * light_state, const char * doc_s
         val_start = doc_start + val_tok->start;
         val_len = val_tok->end - val_tok->start;
         for(j = 0; j < TC_IOT_PROP_MAX; j++) {
-            p_prop = &g_device_property_defs[j];
+            p_prop = &properties[j];
+            if (!p_prop->ptr) {
+                LOG_ERROR("No.%d property ptr invalid.", j);
+                continue;
+            }
+
             if (strncmp(p_prop->name, key_start, key_len) == 0)  {
                 if (p_prop->type == TC_IOT_SHADOW_TYPE_STRING) {
                     if (val_len > p_prop->len) {
@@ -261,21 +333,32 @@ int _light_sync_state(tc_iot_shadow_local_data * light_state, const char * doc_s
                     }
                     strncpy(field_buf, val_start, val_len);
                     field_buf[val_len] = '\0';
-                    LOG_TRACE("state change:[%s|%s -> %s]", p_prop->name, (const char *) p_prop->ptr, field_buf);
-                    strncpy(p_prop->ptr, val_start, val_len);
+                    if (strncmp(p_prop->ptr, field_buf, val_len) != 0) {
+                        LOG_TRACE("state change:[%s|%s -> %s]", p_prop->name, (const char *) p_prop->ptr, field_buf);
+                        strncpy(p_prop->ptr, field_buf, val_len + 1);
+                    }
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_BOOL) {
                     strncpy(field_buf, val_start, val_len);
                     field_buf[val_len] = '\0';
-                    LOG_TRACE("state change:[%s|%s -> %s]", p_prop->name, (*(bool *) p_prop->ptr)?"true":"false", field_buf);
-                    *(bool *)p_prop->ptr = (strncmp(TC_IOT_JSON_TRUE, field_buf, val_len) == 0);
+                    new_bool = (strncmp(TC_IOT_JSON_TRUE, field_buf, val_len) == 0);
+                    if (new_bool != (*(bool *)p_prop->ptr)) {
+                        LOG_TRACE("state change:[%s|%s -> %s]", p_prop->name, (*(bool *) p_prop->ptr)?"true":"false", field_buf);
+                        *(bool *)p_prop->ptr = new_bool;
+                    }
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_NUMBER) {
                     strncpy(field_buf, val_start, val_len);
                     field_buf[val_len] = '\0';
-                    LOG_TRACE("state change:[%s|%d -> %s]", p_prop->name, (*( unsigned int *) p_prop->ptr), field_buf);
-                    *(unsigned int *)p_prop->ptr = atoi(field_buf);
+                    new_number = atoi(field_buf);
+                    if (new_number != (*(unsigned int *)p_prop->ptr)) {
+                        LOG_TRACE("state change:[%s|%d -> %s]", p_prop->name, (*( unsigned int *) p_prop->ptr), field_buf);
+                        *(unsigned int *)p_prop->ptr = new_number;
+                    }
                 } else {
                     LOG_ERROR("%s type=%d invalid.", p_prop->name, p_prop->type);
                     continue;
+                }
+                if (p_prop->fn_change_notify) {
+                    p_prop->fn_change_notify(p_prop);
                 }
             }
         }
@@ -358,7 +441,9 @@ void _light_on_message_received(tc_iot_message_data* md) {
         if (ret <= 0) {
             return ;
         }
-        _light_sync_state(&g_device_vars.current, reported_start, json_token, ret);
+        LOG_TRACE("---synchronizing reported status---");
+        _tc_iot_sync_shadow_property(g_device_reported_property_defs, reported_start, json_token, ret);
+        LOG_TRACE("---synchronizing reported status success---");
     }
 
     /* 根据控制台或者 APP 端的指令，设定设备状态 */
@@ -367,10 +452,12 @@ void _light_on_message_received(tc_iot_message_data* md) {
         if (ret <= 0) {
             return ;
         }
-        _light_sync_state(&g_device_vars.current, desired_start, json_token, ret);
+        LOG_TRACE("---synchronizing desired status---");
+        _tc_iot_sync_shadow_property(g_device_property_defs, desired_start, json_token, ret);
+        LOG_TRACE("---synchronizing desired status success---");
     }
 
-    /* 根据最新状态数据，对灯进行控制：开关、改变颜色
+    /* 根据最新状态数据，对设备进行控制：开关、改变颜色
      * 亮度等。*/
     operate_light(&g_device_vars.current);
 

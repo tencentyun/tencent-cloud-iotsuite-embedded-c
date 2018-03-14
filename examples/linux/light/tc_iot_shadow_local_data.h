@@ -12,6 +12,7 @@ typedef struct _tc_iot_shadow_local_data {
     unsigned int         brightness; /* light brightness*/
 }tc_iot_shadow_local_data;
 
+
 #define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
 
 typedef struct _tc_iot_shadow_control {
