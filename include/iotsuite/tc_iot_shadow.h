@@ -118,5 +118,21 @@ int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len,
         const char * desired);
 int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_client *c);
 
+typedef enum _tc_iot_shadow_data_type_e {
+    TC_IOT_SHADOW_TYPE_INVALID,
+    TC_IOT_SHADOW_TYPE_BOOL,
+    TC_IOT_SHADOW_TYPE_NUMBER,
+    TC_IOT_SHADOW_TYPE_ENUM,
+    TC_IOT_SHADOW_TYPE_STRING,
+} tc_iot_shadow_data_type_e;
+
+typedef struct _tc_iot_shadow_property {
+    const char *name;
+    int  id;
+    int  len;
+    int  type;
+    void *ptr;
+} tc_iot_shadow_property;
+
 #endif /* end of include guard */
 
