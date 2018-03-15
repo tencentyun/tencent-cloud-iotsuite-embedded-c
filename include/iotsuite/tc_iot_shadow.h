@@ -123,12 +123,11 @@ typedef enum _tc_iot_shadow_data_type_e {
     TC_IOT_SHADOW_TYPE_BOOL,
     TC_IOT_SHADOW_TYPE_NUMBER,
     TC_IOT_SHADOW_TYPE_ENUM,
-    TC_IOT_SHADOW_TYPE_STRING,
 } tc_iot_shadow_data_type_e;
 
 typedef int tc_iot_shadow_number;
+typedef int tc_iot_shadow_enum;
 typedef bool tc_iot_shadow_bool;
-typedef char * tc_iot_shadow_string;
 
 typedef struct _tc_iot_shadow_property_def {
     const char *name;

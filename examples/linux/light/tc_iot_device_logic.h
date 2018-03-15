@@ -6,19 +6,23 @@
 #define TC_IOT_DEVICE_NAME_LEN  25
 
 typedef struct _tc_iot_shadow_local_data {
-    tc_iot_shadow_bool         device_switch; /* true means on, false means off. */
-    char         name[TC_IOT_DEVICE_NAME_LEN];  /* name or id */
-    tc_iot_shadow_number color; /* ansi color index: 0~255, if greater use color=color%256 */
+    tc_iot_shadow_bool device_switch; /* true means on, false means off. */
+    tc_iot_shadow_enum color; /* ansi color index: 0~255, if greater use color=color%256 */
     tc_iot_shadow_number brightness; /* light brightness*/
 }tc_iot_shadow_local_data;
 
 typedef enum _tc_iot_shadow_property_index_e {
-    TC_IOT_PROP_device_switch = 0,
-    TC_IOT_PROP_name = 1,
-    TC_IOT_PROP_color = 2,
-    TC_IOT_PROP_brightness = 3,
+    TC_IOT_PROP_device_switch,
+    TC_IOT_PROP_color,
+    TC_IOT_PROP_brightness,
     TC_IOT_PROP_TOTAL,
 } tc_iot_shadow_property_index_e;
+
+
+#define TC_IOT_PROP_color_red 0
+#define TC_IOT_PROP_color_green 1
+#define TC_IOT_PROP_color_blue 2
+
 
 
 #define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
