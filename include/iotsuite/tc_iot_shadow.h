@@ -126,16 +126,19 @@ typedef enum _tc_iot_shadow_data_type_e {
     TC_IOT_SHADOW_TYPE_STRING,
 } tc_iot_shadow_data_type_e;
 
-typedef void (*tc_iot_noitfy_property_change)(void * p_prop); 
+typedef int tc_iot_shadow_number;
+typedef bool tc_iot_shadow_bool;
+typedef char * tc_iot_shadow_string;
 
-typedef struct _tc_iot_shadow_property {
+typedef struct _tc_iot_shadow_property_def {
     const char *name;
     int  id;
     int  len;
     int  type;
     void *ptr;
-    tc_iot_noitfy_property_change fn_change_notify;
-} tc_iot_shadow_property;
+    void *reported_ptr;
+    tc_iot_event_handler fn_change_notify;
+} tc_iot_shadow_property_def;
 
 
 #endif /* end of include guard */

@@ -39,7 +39,7 @@ void sig_handler(int sig) {
  *
  * @param light 灯状态数据
  */
-static void operate_light(tc_iot_shadow_local_data * light) {
+void operate_device(tc_iot_shadow_local_data * light) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     int color = light->color & 0xFF;
@@ -49,10 +49,10 @@ static void operate_light(tc_iot_shadow_local_data * light) {
     int brightness_bar_left_len = 0;
 
     /* 灯光亮度显示条 */
-    brightness_bar_len = light->brightness >= 100?brightness_bar_len:(int)((light->brightness/100) * brightness_bar_len);
+    brightness_bar_len = light->brightness >= 100?brightness_bar_len:(int)((light->brightness * brightness_bar_len)/100);
     brightness_bar_left_len = strlen(brightness_bar) - brightness_bar_len;
 
-    if (light->light_switch) {
+    if (light->device_switch) {
         /* 灯光开启式，按照控制参数展示 */
         tc_iot_hal_printf( ANSI_COLOR_256_FORMAT "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET, 
                 color,
