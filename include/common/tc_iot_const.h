@@ -97,6 +97,6 @@ typedef struct _tc_iot_event_message {
 *
 * @return @see tc_iot_sys_code_e
 */
-typedef int (*tc_iot_event_handler)(tc_iot_event_message *msg, const char * src,  void * context);
+typedef int (*tc_iot_event_handler)(tc_iot_event_message *msg, void * client,  void * context);
 
 #endif /* end of include guard */

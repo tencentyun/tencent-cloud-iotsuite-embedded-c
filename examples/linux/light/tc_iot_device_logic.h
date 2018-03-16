@@ -11,14 +11,14 @@ typedef struct _tc_iot_shadow_local_data {
     tc_iot_shadow_number brightness; /* light brightness*/
 }tc_iot_shadow_local_data;
 
-typedef enum _tc_iot_shadow_property_index_e {
-    TC_IOT_PROP_device_switch,
-    TC_IOT_PROP_color,
-    TC_IOT_PROP_brightness,
-    TC_IOT_PROP_TOTAL,
-} tc_iot_shadow_property_index_e;
+// data point id 
+#define TC_IOT_PROP_device_switch 0
+#define TC_IOT_PROP_color 1
+#define TC_IOT_PROP_brightness 2
+#define TC_IOT_PROP_TOTAL 3
 
 
+// enum for color
 #define TC_IOT_PROP_color_red 0
 #define TC_IOT_PROP_color_green 1
 #define TC_IOT_PROP_color_blue 2
@@ -26,8 +26,9 @@ typedef enum _tc_iot_shadow_property_index_e {
 #define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
 
 
-int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, const char * src,  void * context);
+int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context);
 
+extern tc_iot_shadow_client g_tc_iot_shadow_client;
 extern tc_iot_shadow_property_def g_device_property_defs[];
 #define DECLARE_PROPERTY_DEF(name, type, callback) {#name, TC_IOT_PROP_ ## name, type, callback}
 

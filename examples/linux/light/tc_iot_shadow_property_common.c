@@ -5,7 +5,6 @@
 
 void _device_on_message_received(tc_iot_message_data* md);
 int _tc_iot_sync_shadow_property(tc_iot_shadow_property_def * properties, const char * doc_start, jsmntok_t * json_token, int tok_count);
-/* bool tc_iot_device_sync_reported(tc_iot_shadow_property_def * properties); */
 
 volatile int stop;
 
@@ -138,88 +137,6 @@ void report_message_ack_callback(tc_iot_command_ack_status_e ack_status,
     /* tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, desired, report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL); */
     /* LOG_TRACE("[c->s] shadow_update\n%s", buffer); */
 /* } */
-
-int tc_iot_shadow_add_state(char * buffer, int buffer_len, tc_iot_shadow_property_def * properties, const char * state_name, uint8_t count, ...) {
-    int ret = 0;
-    int i = 0;
-    int pos = 0;
-    va_list p_args;
-    tc_iot_shadow_property_def * current = NULL;
-    int p_prop_index = 0;
-    void * p_prop;
-
-    va_start(p_args, count);
-
-    if(buffer == NULL) {
-        return TC_IOT_NULL_POINTER;
-    }
-
-    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len - pos, "\"%s\":{", state_name);
-    if(ret <= 0) {
-        return TC_IOT_BUFFER_OVERFLOW;
-    }
-    pos += ret;
-
-    for(i = 0; i < count; i++) {
-        p_prop_index = va_arg (p_args, tc_iot_shadow_property_index_e);
-        if (p_prop_index >= TC_IOT_PROP_TOTAL) {
-            LOG_ERROR("%dth param as prop index overflow, index=%d", i, p_prop_index);
-            return TC_IOT_INVALID_PARAMETER;
-        }
-
-        current = &properties[p_prop_index];
-        p_prop = va_arg (p_args, void *);
-        if (i > 0) {
-            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,",");
-            if(ret <= 0) {
-                return TC_IOT_BUFFER_OVERFLOW;
-            }
-            pos += ret;
-        }
-
-        if (p_prop == NULL) {
-            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%s",
-                    current->name, TC_IOT_JSON_NULL);
-            if(ret <= 0) {
-                return TC_IOT_BUFFER_OVERFLOW;
-            }
-            pos += ret;
-            continue;
-        }
-
-        if (current->type == TC_IOT_SHADOW_TYPE_NUMBER) {
-            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%d",
-                    current->name, *(tc_iot_shadow_number *)p_prop);
-            if(ret <= 0) {
-                return TC_IOT_BUFFER_OVERFLOW;
-            }
-            pos += ret;
-        } else if (current->type == TC_IOT_SHADOW_TYPE_ENUM) {
-            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%d",
-                    current->name, *(tc_iot_shadow_enum *)p_prop);
-            if(ret <= 0) {
-                return TC_IOT_BUFFER_OVERFLOW;
-            }
-            pos += ret;
-        } else if (current->type == TC_IOT_SHADOW_TYPE_BOOL) {
-            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%s",
-                    current->name, *(tc_iot_shadow_bool *)p_prop ? TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
-            if(ret <= 0) {
-                return TC_IOT_BUFFER_OVERFLOW;
-            }
-            pos += ret;
-        } else {
-            LOG_ERROR("%s type=%d unkown.", current->name, current->type);
-            return TC_IOT_INVALID_PARAMETER;
-        }
-    }
-
-    va_end(p_args);
-
-    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"}");
-    pos += ret;
-    return ret;
-}
 
 
 
@@ -427,42 +344,4 @@ void _device_on_message_received(tc_iot_message_data* md) {
         /* tc_iot_shadow_sync_to_server(&g_tc_iot_shadow_client, g_device_property_defs, NULL); */
     }
 }
-
-/* bool tc_iot_device_sync_reported(tc_iot_shadow_property_def * properties) { */
-    /* int i = 0; */
-    /* int data_len = 0; */
-    /* bool reported_changed = false; */
-    /* tc_iot_shadow_property_def * current = NULL; */
-    
-    /* // 对比差异，并同步数据 */
-    /* for (i = 0; i < TC_IOT_PROP_TOTAL; i++ ) { */
-        /* current = &properties[i]; */
-        /* if (current->type == TC_IOT_SHADOW_TYPE_NUMBER) { */
-            /* data_len = sizeof(tc_iot_shadow_number); */
-            /* if (memcmp(current->ptr, current->reported_ptr, t->len) != 0) { */
-                /* LOG_TRACE("%s changed", current->name); */
-                /* reported_changed = true; */
-                /* memcpy(current->reported_ptr, current->ptr, current->len); */
-            /* } */
-        /* } else if (current->type == TC_IOT_SHADOW_TYPE_ENUM) { */
-            /* data_len = sizeof(tc_iot_shadow_enum); */
-            /* if (memcmp(current->ptr, current->reported_ptr, current->len) != 0) { */
-                /* LOG_TRACE("%s changed", current->name); */
-                /* reported_changed = true; */
-                /* memcpy(current->reported_ptr, current->ptr, current->len); */
-            /* } */
-        /* } else if (current->type == TC_IOT_SHADOW_TYPE_BOOL) { */
-            /* data_len = sizeof(tc_iot_shadow_bool); */
-            /* if (memcmp(current->ptr, current->reported_ptr, current->len) != 0) { */
-                /* LOG_TRACE("%s changed", current->name); */
-                /* reported_changed = true; */
-                /* memcpy(current->reported_ptr, current->ptr, current->len); */
-            /* } */
-        /* } else { */
-            /* LOG_ERROR("%s type=%d unkown.", current->name, current->type); */
-        /* } */
-    /* } */
-
-    /* return reported_changed; */
-/* } */
 

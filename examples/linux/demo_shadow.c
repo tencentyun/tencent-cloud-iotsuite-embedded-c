@@ -157,10 +157,6 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("[c->s] shadow_update_desired\n%s\n", buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    tc_iot_shadow_delete(p_shadow_client, buffer, buffer_len, TC_IOT_JSON_NULL, TC_IOT_JSON_NULL, NULL, 0, NULL);
-    tc_iot_hal_printf("[c->s] shadow_delete\n%s\n", buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-
     tc_iot_hal_printf("Stopping\n");
     tc_iot_shadow_destroy(p_shadow_client);
     tc_iot_hal_printf("Exit success.\n");

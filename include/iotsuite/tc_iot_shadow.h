@@ -136,6 +136,9 @@ typedef struct _tc_iot_shadow_property_def {
     tc_iot_event_handler fn_change_notify;
 } tc_iot_shadow_property_def;
 
+int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+        message_ack_handler callback, int timeout_ms, void * session_context, 
+        tc_iot_shadow_property_def * properties, const char * state_name, uint8_t count, ...);
 
 #endif /* end of include guard */
 
