@@ -3,7 +3,6 @@
 #include "tc_iot_export.h"
 
 void _device_on_message_received(tc_iot_message_data* md);
-int _tc_iot_sync_shadow_property(tc_iot_shadow_property_def properties[], bool reported, const char * doc_start, jsmntok_t * json_token, int tok_count);
 bool tc_iot_device_sync_reported(tc_iot_shadow_property_def properties[]);
 
 void operate_device(tc_iot_shadow_local_data * device);
@@ -24,8 +23,6 @@ tc_iot_shadow_property_def g_device_property_defs[] = {
 };
 
 int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context) {
-    char buffer[512];
-    int buffer_len = sizeof(buffer);
     tc_iot_shadow_property_def * p_property = NULL;
     tc_iot_shadow_bool device_switch = false;
     tc_iot_shadow_enum color  = TC_IOT_PROP_color_red;
@@ -80,9 +77,15 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
                 LOG_WARN("unkown property id = %d", p_property->id);
                 return TC_IOT_SUCCESS;
         }
-        tc_iot_shadow_update_state(&g_tc_iot_shadow_client, buffer, buffer_len,  
-                NULL, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL,
-                g_device_property_defs, "reported", 1, p_property->id, msg->data);
+
+        //tc_iot_shadow_update_reported_propeties( 1, p_property->id, msg->data);
+        tc_iot_shadow_update_reported_propeties( 
+                3
+                ,TC_IOT_PROP_device_switch , &g_device_vars.device_switch
+                ,TC_IOT_PROP_color , &g_device_vars.color
+                ,TC_IOT_PROP_brightness , &g_device_vars.brightness
+                );
+
         LOG_TRACE("operating device");
         operate_device(&g_device_vars);
     } else {

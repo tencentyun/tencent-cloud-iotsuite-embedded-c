@@ -384,7 +384,7 @@ int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len, const char * rep
     return buffer_used;
 }
 
-int tc_iot_shadow_add_report_state(char * buffer, int buffer_len, tc_iot_shadow_property_def * properties, uint8_t count, va_list p_args)  {
+int tc_iot_shadow_add_properties(char * buffer, int buffer_len, tc_iot_shadow_property_def * properties, int property_count, va_list p_args)  {
     int ret = 0;
     int i = 0;
     int pos = 0;
@@ -402,13 +402,8 @@ int tc_iot_shadow_add_report_state(char * buffer, int buffer_len, tc_iot_shadow_
     }
     pos += ret;
 
-    for(i = 0; i < count; i++) {
+    for(i = 0; i < property_count; i++) {
         prop_index = va_arg (p_args, int);
-        /* if (prop_index >= TC_IOT_PROP_TOTAL) { */
-            /* LOG_ERROR("%dth param as prop index overflow, index=%d", i, prop_index); */
-            /* return TC_IOT_INVALID_PARAMETER; */
-        /* } */
-
         LOG_TRACE("%dth param as prop index=%d", i, prop_index);
         current = &properties[prop_index];
         p_prop = va_arg (p_args, void *);
@@ -466,52 +461,9 @@ int tc_iot_shadow_add_report_state(char * buffer, int buffer_len, tc_iot_shadow_
     return pos;
 }
 
-int tc_iot_shadow_add_desire_state(char * buffer, int buffer_len, tc_iot_shadow_property_def * properties, uint8_t count, va_list p_args)  {
-    int ret = 0;
-    int i = 0;
-    int pos = 0;
-    tc_iot_shadow_property_def * current = NULL;
-    int prop_index = 0;
-    void * p_prop;
-
-    if(buffer == NULL) {
-        return TC_IOT_NULL_POINTER;
-    }
-
-    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len - pos, "{");
-    if(ret <= 0) {
-        return TC_IOT_BUFFER_OVERFLOW;
-    }
-    pos += ret;
-
-    for(i = 0; i < count; i++) {
-        prop_index = va_arg (p_args, int);
-        LOG_TRACE("%dth param as prop index=%d", i, prop_index);
-        current = &properties[prop_index];
-        p_prop = va_arg (p_args, void *);
-        if (i > 0) {
-            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,",");
-            if(ret <= 0) {
-                return TC_IOT_BUFFER_OVERFLOW;
-            }
-            pos += ret;
-        }
-        ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%s",
-                current->name, TC_IOT_JSON_NULL);
-        if(ret <= 0) {
-            return TC_IOT_BUFFER_OVERFLOW;
-        }
-        pos += ret;
-    }
-
-    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"}");
-    pos += ret;
-    return pos;
-}
-
 int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
         message_ack_handler callback, int timeout_ms, void * session_context, 
-        tc_iot_shadow_property_def * properties, const char * state_name, uint8_t property_count, ...) {
+        tc_iot_shadow_property_def * properties, const char * state_name, int property_count,va_list p_args) {
     char *pub_topic ;
     int rc ;
     tc_iot_shadow_session * p_session;
@@ -520,21 +472,12 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
     int ret = 0;
     int i = 0;
     int pos = 0;
-    va_list p_args;
+    
     tc_iot_shadow_property_def * current = NULL;
     int prop_index = 0;
     void * p_prop;
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
-
-    /* if (!callback) { */
-        /* LOG_ERROR("callback handler given, but timeout_ms=%d", timeout_ms); */
-        /* return TC_IOT_INVALID_PARAMETER; */
-    /* } */
-    /* if (timeout_ms <= 0) { */
-        /* LOG_ERROR("callback handler given, but timeout_ms=%d", timeout_ms); */
-        /* return TC_IOT_INVALID_PARAMETER; */
-    /* } */
 
     p_session = tc_iot_find_empty_session(c);
     if (!p_session) {
@@ -554,13 +497,11 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
     }
     pos += ret;
 
-    va_start(p_args, property_count);
-    ret = tc_iot_shadow_add_report_state(buffer + pos, buffer_len - pos, properties, property_count, p_args);
+    ret = tc_iot_shadow_add_properties(buffer + pos, buffer_len - pos, properties, property_count, p_args);
     if (ret <= 0) {
         return TC_IOT_BUFFER_OVERFLOW;
     }
     pos += ret;
-    va_end(p_args);
 
     /* ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"desired\":"); */
     /* if (ret <= 0) { */
@@ -607,21 +548,6 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
         LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
     return rc;
-}
-
-int tc_iot_shadow_doc_pack_for_update_state_with_sid(char *buffer, int buffer_len,
-                                    char * session_id, int session_id_len,
-                                    const char * reported, const char * desired,
-                                    tc_iot_shadow_client *c) {
-    int ret;
-    int buffer_used = 0;
-    ret = tc_iot_shadow_doc_pack_start(buffer, buffer_len, session_id, session_id_len, TC_IOT_MQTT_METHOD_UPDATE, c);
-    buffer_used += ret;
-    ret = tc_iot_shadow_doc_pack_format(buffer+buffer_used, buffer_len-buffer_used, reported, desired);
-    buffer_used += ret;
-    ret = tc_iot_shadow_doc_pack_end(buffer+buffer_used, buffer_len-buffer_used, c);
-    buffer_used += ret;
-    return buffer_used;
 }
 
 

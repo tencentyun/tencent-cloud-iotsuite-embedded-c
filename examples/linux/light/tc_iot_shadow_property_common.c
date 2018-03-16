@@ -3,9 +3,6 @@
 #include "tc_iot_export.h"
 
 
-void _device_on_message_received(tc_iot_message_data* md);
-int _tc_iot_sync_shadow_property(tc_iot_shadow_property_def * properties, const char * doc_start, jsmntok_t * json_token, int tok_count);
-
 volatile int stop;
 
 /* 设备初始配置 */
@@ -345,3 +342,32 @@ void _device_on_message_received(tc_iot_message_data* md) {
     }
 }
 
+int tc_iot_shadow_update_reported_propeties(int property_count, ...) {
+    char buffer[512];
+    int buffer_len = sizeof(buffer);
+
+    int ret = 0;
+    va_list p_args;
+
+    va_start(p_args, property_count);
+    ret = tc_iot_shadow_update_state(&g_tc_iot_shadow_client, buffer, buffer_len,  
+            report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL,
+            g_device_property_defs, "reported", property_count, p_args);
+    va_end( p_args);
+    return ret;
+}
+
+int tc_iot_shadow_update_desired_propeties(int property_count, ...) {
+    char buffer[512];
+    int buffer_len = sizeof(buffer);
+
+    int ret = 0;
+    va_list p_args;
+
+    va_start(p_args, property_count);
+    ret = tc_iot_shadow_update_state(&g_tc_iot_shadow_client, buffer, buffer_len,  
+            report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL,
+            g_device_property_defs, "desired", property_count, p_args);
+    va_end( p_args);
+    return ret;
+}
