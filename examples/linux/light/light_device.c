@@ -173,7 +173,8 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("yield waiting for server finished.\n");
 
     /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
-    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL);
+    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 
+            TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, p_shadow_client);
     LOG_TRACE("[c->s] shadow_get\n%s", buffer);
 
     /* 循环等待控制指令 */

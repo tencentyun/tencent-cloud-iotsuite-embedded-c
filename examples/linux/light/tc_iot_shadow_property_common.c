@@ -2,6 +2,11 @@
 #include "tc_iot_device_logic.h"
 #include "tc_iot_export.h"
 
+ /* 长度需要足够存放：
+  * 1) 2^64 的十进制数据值。
+  * 2) true or false 布尔字符串。
+  * 3) method 字段数据: get, update, update_firm_info, report_firm_info, reply */
+#define TC_IOT_MAX_FIELD_LEN  22
 
 volatile int stop;
 
@@ -76,6 +81,8 @@ void report_message_ack_callback(tc_iot_command_ack_status_e ack_status,
     if (ack_status != TC_IOT_ACK_SUCCESS) {
         if (ack_status == TC_IOT_ACK_TIMEOUT) {
             LOG_ERROR("request timeout");
+        } else {
+            LOG_ERROR("request return ack_status=%d", ack_status);
         }
         return;
     }
@@ -154,7 +161,7 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_property_def * properties, const 
     int i,j;
     jsmntok_t  * key_tok = NULL;
     jsmntok_t  * val_tok = NULL;
-    char field_buf[TC_IOT_DEVICE_NAME_LEN+1];
+    char field_buf[TC_IOT_MAX_FIELD_LEN];
     int field_len = sizeof(field_buf);
     tc_iot_shadow_number new_number = 0;
     tc_iot_shadow_bool new_bool = 0;
@@ -244,7 +251,7 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_property_def * properties, const 
  */
 void _device_on_message_received(tc_iot_message_data* md) {
     jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
-    char field_buf[TC_IOT_DEVICE_NAME_LEN+1];
+    char field_buf[TC_IOT_MAX_FIELD_LEN];
     int field_index = 0;
     const char * reported_start = NULL;
     int reported_len = 0;

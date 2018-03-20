@@ -78,14 +78,15 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
                 return TC_IOT_SUCCESS;
         }
 
-        //tc_iot_shadow_update_reported_propeties( 1, p_property->id, msg->data);
-        tc_iot_shadow_update_reported_propeties( 
-                3
-                ,TC_IOT_PROP_device_switch , &g_device_vars.device_switch
-                ,TC_IOT_PROP_color , &g_device_vars.color
-                ,TC_IOT_PROP_brightness , &g_device_vars.brightness
-                );
+        /* 上报所有状态 */
+        /* tc_iot_shadow_update_reported_propeties(  */
+                /* 3 */
+                /* ,TC_IOT_PROP_device_switch , &g_device_vars.device_switch */
+                /* ,TC_IOT_PROP_color , &g_device_vars.color */
+                /* ,TC_IOT_PROP_brightness , &g_device_vars.brightness */
+                /* ); */
 
+        tc_iot_shadow_update_reported_propeties( 1, p_property->id, msg->data);
         LOG_TRACE("operating device");
         operate_device(&g_device_vars);
     } else {

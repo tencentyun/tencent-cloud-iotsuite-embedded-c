@@ -97,4 +97,6 @@
 /* 客户端私钥路径*/
 #define TC_IOT_CONFIG_CLIENT_KEY NULL
 
+#define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
+
 #endif /* end of include guard */

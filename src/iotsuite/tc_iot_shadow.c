@@ -404,7 +404,7 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, tc_iot_shadow_pr
 
     for(i = 0; i < property_count; i++) {
         prop_index = va_arg (p_args, int);
-        LOG_TRACE("%dth param as prop index=%d", i, prop_index);
+        LOG_TRACE("No.%d param as prop index=%d", i, prop_index);
         current = &properties[prop_index];
         p_prop = va_arg (p_args, void *);
         if (i > 0) {
@@ -433,7 +433,7 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, tc_iot_shadow_pr
                 return TC_IOT_BUFFER_OVERFLOW;
             }
             pos += ret;
-            LOG_TRACE("buffer=%s", buffer);
+            /* LOG_TRACE("buffer=%s", buffer); */
         } else if (current->type == TC_IOT_SHADOW_TYPE_ENUM) {
             ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%d",
                     current->name, *(tc_iot_shadow_enum *)p_prop);
@@ -441,7 +441,7 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, tc_iot_shadow_pr
                 return TC_IOT_BUFFER_OVERFLOW;
             }
             pos += ret;
-            LOG_TRACE("buffer=%s", buffer);
+            //LOG_TRACE("buffer=%s", buffer);
         } else if (current->type == TC_IOT_SHADOW_TYPE_BOOL) {
             ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%s",
                     current->name, *(tc_iot_shadow_bool *)p_prop ? TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
@@ -449,7 +449,7 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, tc_iot_shadow_pr
                 return TC_IOT_BUFFER_OVERFLOW;
             }
             pos += ret;
-            LOG_TRACE("buffer=%s", buffer);
+            /* LOG_TRACE("buffer=%s", buffer); */
         } else {
             LOG_ERROR("%s type=%d unkown.", current->name, current->type);
             return TC_IOT_INVALID_PARAMETER;
