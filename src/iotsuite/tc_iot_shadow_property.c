@@ -57,7 +57,7 @@ void _tc_iot_report_message_ack_callback(tc_iot_command_ack_status_e ack_status,
     }
 
     message = md->message;
-    LOG_TRACE("[s->c] %.*s", (int)message->payloadlen, (char*)message->payload);
+    LOG_TRACE("[s->c] %s", (char*)message->payload);
 }
 
 
@@ -181,7 +181,7 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
     memset(field_buf, 0, sizeof(field_buf));
 
     tc_iot_mqtt_message* message = md->message;
-    LOG_TRACE("[s->c] %.*s", (int)message->payloadlen, (char*)message->payload);
+    LOG_TRACE("[s->c] %s", (char*)message->payload);
 
     /* 有效性检查 */
     ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));
@@ -191,7 +191,7 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
 
     field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, "method", field_buf, sizeof(field_buf));
     if (field_index <= 0 ) {
-        LOG_ERROR("field method not found in JSON: %.*s", (int)message->payloadlen, (char*)message->payload);
+        LOG_ERROR("field method not found in JSON: %s", (char*)message->payload);
         return ;
     }
 

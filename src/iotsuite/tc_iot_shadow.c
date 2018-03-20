@@ -17,7 +17,7 @@ static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
 
     ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));
     if (ret <= 0) {
-        LOG_ERROR("BADFORMAT ->%.*s", (int)message->payloadlen, (char *)message->payload);
+        LOG_ERROR("BADFORMAT ->%s", (char *)message->payload);
         return ;
     }
 
@@ -44,7 +44,7 @@ static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
     if (c && c->p_shadow_config && c->p_shadow_config->on_receive_msg) {
         c->p_shadow_config->on_receive_msg(md);
     } else {
-        LOG_ERROR("UNHANDLED ->%.*s", (int)message->payloadlen, (char *)message->payload);
+        LOG_ERROR("UNHANDLED ->%s", (char *)message->payload);
     }
 }
 
@@ -176,8 +176,7 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
     pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
-    LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
-              (char *)pubmsg.payload);
+    LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);
     pub_topic = c->p_shadow_config->pub_topic;
     rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
@@ -222,8 +221,7 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
     pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
-    LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
-              (char *)pubmsg.payload);
+    LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);
     pub_topic = c->p_shadow_config->pub_topic;
     rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
@@ -339,13 +337,11 @@ int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
             memset(session_id, '0', TC_IOT_SESSION_ID_LEN);
             sid_len = TC_IOT_SESSION_ID_LEN;
         } else {
-            /* LOG_TRACE("sid_len=%d, sid=%.*s, ss=%s", sid_len, sid_len, session_id, session_id); */
         }
 
         ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len,
-                "{\"method\":\"%s\",\"passthrough\":{\"sid\":\"%.*s\"}", 
+                "{\"method\":\"%s\",\"passthrough\":{\"sid\":\"%s\"}", 
                 method,
-                sid_len,
                 session_id
                 );
     } else {
@@ -505,20 +501,6 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
     }
     pos += ret;
 
-    /* ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"desired\":"); */
-    /* if (ret <= 0) { */
-        /* return TC_IOT_BUFFER_OVERFLOW; */
-    /* } */
-    /* pos += ret; */
-
-    /* va_start(p_args, property_count); */
-    /* ret = tc_iot_shadow_add_desire_state(buffer + pos, buffer_len - pos, properties, property_count, p_args); */
-    /* if (ret <= 0) { */
-        /* return TC_IOT_BUFFER_OVERFLOW; */
-    /* } */
-    /* pos += ret; */
-    /* va_end(p_args); */
-
     ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "}");
     if (ret <= 0) {
         return TC_IOT_BUFFER_OVERFLOW;
@@ -542,8 +524,7 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
     pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
-    LOG_TRACE("requesting with: %.*s", (int)pubmsg.payloadlen,
-              (char *)pubmsg.payload);
+    LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);
     pub_topic = c->p_shadow_config->pub_topic;
     rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {

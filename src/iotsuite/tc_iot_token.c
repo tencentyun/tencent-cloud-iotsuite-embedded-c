@@ -50,9 +50,9 @@ int http_post_urlencoded(tc_iot_network_t* network,
     network->do_connect(network, temp_host, result.port);
     written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
-    LOG_TRACE("request with:\n%.*s", written_len, request->buf.data);
+    LOG_TRACE("request with:\n%s", request->buf.data);
     read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
-    LOG_TRACE("response with:\n%.*s", read_len, resp);
+    LOG_TRACE("response with:\n%s", resp);
 
     network->do_disconnect(network);
 
@@ -114,7 +114,7 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
         p_device_info->product_id, strlen(p_device_info->product_id),
         timestamp);
 
-    LOG_TRACE("signed request form:\n%.*s", sign_len, sign_out);
+    LOG_TRACE("signed request form:\n%s", sign_out);
 
     memset(&network, 0, sizeof(network));
 
