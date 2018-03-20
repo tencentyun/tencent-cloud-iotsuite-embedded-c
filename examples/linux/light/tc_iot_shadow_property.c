@@ -13,13 +13,13 @@
 tc_iot_shadow_client g_tc_iot_shadow_client;
 
 /**
- * @brief get_message_ack_callback shadow_get 回调函数
+ * @brief _tc_iot_get_message_ack_callback shadow_get 回调函数
  *
  * @param ack_status 回调状态，标识消息是否正常收到响应，还是已经超时等。
  * @param md 回调状态为 TC_IOT_ACK_SUCCESS 时，用来传递影子数据请求响应消息。
  * @param session_context 回调 context。
  */
-void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * session_context) {
+void _tc_iot_get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * session_context) {
 
     tc_iot_mqtt_message* message = NULL;
 
@@ -31,17 +31,17 @@ void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc_iot_mes
     }
 
     message = md->message;
-    _device_on_message_received(md);
+    _tc_iot_device_on_message_received(md);
 }
 
 /**
- * @brief report_message_ack_callback shadow_update 上报消息回调
+ * @brief _tc_iot_report_message_ack_callback shadow_update 上报消息回调
  *
  * @param ack_status 回调状态，标识消息是否正常收到响应，还是已经超时等。
  * @param md 回调状态为 TC_IOT_ACK_SUCCESS 时，用来传递影子数据请求响应消息。
  * @param session_context 回调 context。
  */
-void report_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
+void _tc_iot_report_message_ack_callback(tc_iot_command_ack_status_e ack_status, 
         tc_iot_message_data * md , void * session_context) {
     tc_iot_mqtt_message* message = NULL;
 
@@ -105,7 +105,7 @@ void report_message_ack_callback(tc_iot_command_ack_status_e ack_status,
     /* ret = tc_iot_hal_snprintf(&reported[pos], reported_len-pos,"}"); */
     /* pos += ret; */
 
-    /* tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, desired, report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL); */
+    /* tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, reported, desired, _tc_iot_report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL); */
     /* LOG_TRACE("[c->s] shadow_update\n%s", buffer); */
 /* } */
 
@@ -211,12 +211,12 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_property_def * properties, const 
 
 
 /**
- * @brief _device_on_message_received 数据回调，处理 shadow_get 获取最新状态，或
+ * @brief _tc_iot_device_on_message_received 数据回调，处理 shadow_get 获取最新状态，或
  * 者影子服务推送的最新控制指令数据。
  *
  * @param md 影子数据消息
  */
-void _device_on_message_received(tc_iot_message_data* md) {
+void _tc_iot_device_on_message_received(tc_iot_message_data* md) {
     jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
     char field_buf[TC_IOT_MAX_FIELD_LEN];
     int field_index = 0;
@@ -292,7 +292,7 @@ int tc_iot_shadow_update_reported_propeties(int property_count, ...) {
 
     va_start(p_args, property_count);
     ret = tc_iot_shadow_update_state(&g_tc_iot_shadow_client, buffer, buffer_len,  
-            report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL,
+            _tc_iot_report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL,
             g_device_property_defs, "reported", property_count, p_args);
     va_end( p_args);
     return ret;
@@ -307,7 +307,7 @@ int tc_iot_shadow_update_desired_propeties(int property_count, ...) {
 
     va_start(p_args, property_count);
     ret = tc_iot_shadow_update_state(&g_tc_iot_shadow_client, buffer, buffer_len,  
-            report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL,
+            _tc_iot_report_message_ack_callback, TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, NULL,
             g_device_property_defs, "desired", property_count, p_args);
     va_end( p_args);
     return ret;
@@ -333,7 +333,7 @@ int tc_iot_server_init(tc_iot_shadow_config * p_client_config) {
     LOG_INFO("yield waiting for server finished.");
 
     /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
-    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 
+    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, _tc_iot_get_message_ack_callback, 
             TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, p_shadow_client);
     LOG_TRACE("[c->s] shadow_get%s", buffer);
 

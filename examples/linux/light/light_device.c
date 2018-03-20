@@ -45,7 +45,7 @@ tc_iot_shadow_config g_client_config = {
     },
     TC_IOT_SUB_TOPIC_DEF,
     TC_IOT_PUB_TOPIC_DEF,
-    _device_on_message_received,
+    _tc_iot_device_on_message_received,
 };
 
 /* 循环退出标识 */
