@@ -30,7 +30,7 @@ void tc_iot_hal_free(void *ptr);
  *
  * @return 输出字节数
  */
-int tc_iot_hal_printf(const char *format, ...);
+// int tc_iot_hal_printf(const char *format, ...);
 
 /**
  * @brief tc_iot_hal_snprintf 发送格式化输出到字符串

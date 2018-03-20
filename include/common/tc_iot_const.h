@@ -72,4 +72,31 @@ typedef enum _tc_iot_sys_code_e {
 
 #define TC_IOT_ARRAY_LENGTH(a)  (sizeof(a)/sizeof(a[0]))
 
+
+typedef enum _tc_iot_event_e {
+    TC_IOT_EVENT_UNKNOWN = 0,
+    TC_IOT_SYS_EVENT_BASE = 1,
+    TC_IOT_MQTT_EVENT_BASE = 50,
+    TC_IOT_SHADOW_EVENT_BASE = 100,
+    TC_IOT_SHADOW_EVENT_SERVER_CONTROL,
+    TC_IOT_USER_EVENT_BASE = 200,
+} tc_iot_event_e;
+
+
+typedef struct _tc_iot_event_message {
+    tc_iot_event_e  event;
+    void * data;
+} tc_iot_event_message;
+
+/**
+* @brief tc_iot_event_handler 通用事件回调原型 
+*
+* @param msg 消息内容
+* @param src 触发事件的来源
+* @param context 附加 context 信息。
+*
+* @return @see tc_iot_sys_code_e
+*/
+typedef int (*tc_iot_event_handler)(tc_iot_event_message *msg, void * client,  void * context);
+
 #endif /* end of include guard */

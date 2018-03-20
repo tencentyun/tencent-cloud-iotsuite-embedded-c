@@ -116,8 +116,6 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     int buffer_len = sizeof(buffer);
     char reported[256];
     char desired[256];
-    char session_id[TC_IOT_SESSION_ID_LEN+1];
-    int session_id_len = sizeof(session_id);
     tc_iot_shadow_client client;
     tc_iot_shadow_client* p_shadow_client = &client;
 
@@ -157,10 +155,6 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
 
     tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, NULL, desired, _message_ack_callback, 6000, NULL);
     tc_iot_hal_printf("[c->s] shadow_update_desired\n%s\n", buffer);
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-
-    tc_iot_shadow_delete(p_shadow_client, buffer, buffer_len, TC_IOT_JSON_NULL, TC_IOT_JSON_NULL, NULL, 0, NULL);
-    tc_iot_hal_printf("[c->s] shadow_delete\n%s\n", buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     tc_iot_hal_printf("Stopping\n");

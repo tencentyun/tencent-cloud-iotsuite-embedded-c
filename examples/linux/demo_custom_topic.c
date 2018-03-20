@@ -39,7 +39,6 @@ char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_SUB_TOPIC_DEF;
 char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_PUB_TOPIC_DEF;
 
 int main(int argc, char** argv) {
-    int ret = 0;
     tc_iot_mqtt_client_config * p_client_config;
 
     p_client_config = &(g_client_config);
@@ -174,5 +173,6 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     }
 
     tc_iot_mqtt_client_disconnect(p_client);
+    return 0;
 }
 

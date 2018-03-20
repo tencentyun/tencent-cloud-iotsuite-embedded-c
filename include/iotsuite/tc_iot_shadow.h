@@ -1,6 +1,24 @@
 #ifndef TC_IOT_SHADOW_H
 #define TC_IOT_SHADOW_H
 
+typedef int tc_iot_shadow_number;
+typedef int tc_iot_shadow_enum;
+typedef bool tc_iot_shadow_bool;
+
+typedef enum _tc_iot_shadow_data_type_e {
+    TC_IOT_SHADOW_TYPE_INVALID = 0,
+    TC_IOT_SHADOW_TYPE_BOOL = 1,
+    TC_IOT_SHADOW_TYPE_NUMBER = 2,
+    TC_IOT_SHADOW_TYPE_ENUM = 3,
+} tc_iot_shadow_data_type_e;
+
+typedef struct _tc_iot_shadow_property_def {
+    const char * name;
+    int id; // tc_iot_shadow_property_index_e
+    tc_iot_shadow_data_type_e  type;
+    tc_iot_event_handler fn_change_notify;
+} tc_iot_shadow_property_def;
+
 
 /**
  * @brief 影子设备配置
@@ -10,6 +28,8 @@ typedef struct _tc_iot_shadow_config {
     char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN]; /**< 影子设备订阅 Topic*/
     char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN];  /**< 影子设备消息 Publish Topic*/
     message_handler on_receive_msg; /**< 影子设备消息回调*/
+    int property_total;
+    tc_iot_shadow_property_def * properties;
 } tc_iot_shadow_config;
 
 typedef enum _tc_iot_command_ack_status_e {
@@ -117,6 +137,21 @@ int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len,
         const char * reported, 
         const char * desired);
 int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_client *c);
+
+int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+        message_ack_handler callback, int timeout_ms, void * session_context, 
+         const char * state_name, int count, va_list p_args);
+
+void _device_on_message_received(tc_iot_message_data* md);
+int _tc_iot_sync_shadow_property(int property_total, tc_iot_shadow_property_def * properties, 
+        const char * doc_start, jsmntok_t * json_token, int tok_count);
+int tc_iot_shadow_update_reported_propeties(int property_count, ...);
+int tc_iot_shadow_update_desired_propeties(int property_count, ...); 
+void tc_iot_device_on_message_received(tc_iot_message_data* md);
+
+int tc_iot_server_init(tc_iot_shadow_config * p_client_config);
+int tc_iot_server_loop(int yield_timeout);
+int tc_iot_server_destroy(void);
 
 #endif /* end of include guard */
 
