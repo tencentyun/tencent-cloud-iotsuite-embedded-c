@@ -16,38 +16,6 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) ;
 void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * session_context);
 extern tc_iot_shadow_config g_client_config;
 
-/* 设备初始配置 */
-tc_iot_shadow_config g_client_config = {
-    {
-        {
-            /* device info*/
-            TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
-            TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
-            TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
-        },
-        TC_IOT_CONFIG_SERVER_HOST,
-        TC_IOT_CONFIG_SERVER_PORT,
-        TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
-        TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
-        TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
-        TC_IOT_CONFIG_CLEAN_SESSION,
-        TC_IOT_CONFIG_USE_TLS,
-        TC_IOT_CONFIG_AUTO_RECONNECT,
-        TC_IOT_CONFIG_ROOT_CA,
-        TC_IOT_CONFIG_CLIENT_CRT,
-        TC_IOT_CONFIG_CLIENT_KEY,
-        NULL,
-        NULL,
-        0,  /* send will */
-        { 
-            {'M', 'Q', 'T', 'W'}, 0, {NULL, {0, NULL}}, {NULL, {0, NULL}}, 0, 0, 
-        }
-    },
-    TC_IOT_SUB_TOPIC_DEF,
-    TC_IOT_PUB_TOPIC_DEF,
-    _tc_iot_device_on_message_received,
-};
-
 /* 循环退出标识 */
 volatile int stop = 0;
 void sig_handler(int sig) {
@@ -175,6 +143,7 @@ int main(int argc, char** argv) {
 
     ret = tc_iot_server_init(&g_client_config);
     if (ret != TC_IOT_SUCCESS) {
+        tc_iot_hal_printf("tc_iot_server_init failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
         return 0;
     }
 

@@ -4,6 +4,48 @@
 
 void operate_device(tc_iot_shadow_local_data * device);
 
+/* 设备本地数据类型及地址、回调函数等相关定义 */
+tc_iot_shadow_property_def g_device_property_defs[] = {
+    DECLARE_PROPERTY_DEF(device_switch, TC_IOT_SHADOW_TYPE_BOOL, _tc_iot_shadow_property_control_callback),
+    DECLARE_PROPERTY_DEF(color, TC_IOT_SHADOW_TYPE_ENUM, _tc_iot_shadow_property_control_callback),
+    DECLARE_PROPERTY_DEF(brightness, TC_IOT_SHADOW_TYPE_NUMBER, _tc_iot_shadow_property_control_callback),
+};
+
+/* 设备初始配置 */
+tc_iot_shadow_config g_client_config = {
+    {
+        {
+            /* device info*/
+            TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
+            TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
+            TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
+        },
+        TC_IOT_CONFIG_SERVER_HOST,
+        TC_IOT_CONFIG_SERVER_PORT,
+        TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
+        TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
+        TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
+        TC_IOT_CONFIG_CLEAN_SESSION,
+        TC_IOT_CONFIG_USE_TLS,
+        TC_IOT_CONFIG_AUTO_RECONNECT,
+        TC_IOT_CONFIG_ROOT_CA,
+        TC_IOT_CONFIG_CLIENT_CRT,
+        TC_IOT_CONFIG_CLIENT_KEY,
+        NULL,
+        NULL,
+        0,  /* send will */
+        { 
+            {'M', 'Q', 'T', 'W'}, 0, {NULL, {0, NULL}}, {NULL, {0, NULL}}, 0, 0, 
+        }
+    },
+    TC_IOT_SUB_TOPIC_DEF,
+    TC_IOT_PUB_TOPIC_DEF,
+    tc_iot_device_on_message_received,
+    TC_IOT_PROP_TOTAL,
+    &g_device_property_defs[0],
+};
+
+
 /* 设备状态数据 */
 static tc_iot_shadow_local_data g_device_vars = 
 {
@@ -12,12 +54,6 @@ static tc_iot_shadow_local_data g_device_vars =
     100, /* 亮度 */
 };
 
-/* 设备本地数据类型及地址、回调函数等相关定义 */
-tc_iot_shadow_property_def g_device_property_defs[] = {
-    DECLARE_PROPERTY_DEF(device_switch, TC_IOT_SHADOW_TYPE_BOOL, _tc_iot_shadow_property_control_callback),
-    DECLARE_PROPERTY_DEF(color, TC_IOT_SHADOW_TYPE_ENUM, _tc_iot_shadow_property_control_callback),
-    DECLARE_PROPERTY_DEF(brightness, TC_IOT_SHADOW_TYPE_NUMBER, _tc_iot_shadow_property_control_callback),
-};
 
 int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context) {
     tc_iot_shadow_property_def * p_property = NULL;

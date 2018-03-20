@@ -384,7 +384,7 @@ int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len, const char * rep
     return buffer_used;
 }
 
-int tc_iot_shadow_add_properties(char * buffer, int buffer_len, tc_iot_shadow_property_def * properties, int property_count, va_list p_args)  {
+int tc_iot_shadow_add_properties(char * buffer, int buffer_len, int property_total, tc_iot_shadow_property_def * properties, int property_count, va_list p_args)  {
     int ret = 0;
     int i = 0;
     int pos = 0;
@@ -463,7 +463,7 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, tc_iot_shadow_pr
 
 int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
         message_ack_handler callback, int timeout_ms, void * session_context, 
-        tc_iot_shadow_property_def * properties, const char * state_name, int property_count,va_list p_args) {
+         const char * state_name, int property_count,va_list p_args) {
     char *pub_topic ;
     int rc ;
     tc_iot_shadow_session * p_session;
@@ -497,7 +497,9 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
     }
     pos += ret;
 
-    ret = tc_iot_shadow_add_properties(buffer + pos, buffer_len - pos, properties, property_count, p_args);
+    ret = tc_iot_shadow_add_properties(buffer + pos, buffer_len - pos, 
+            c->p_shadow_config->property_total, 
+            c->p_shadow_config->properties, property_count, p_args);
     if (ret <= 0) {
         return TC_IOT_BUFFER_OVERFLOW;
     }

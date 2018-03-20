@@ -22,10 +22,7 @@ typedef struct _tc_iot_shadow_local_data {
 #define TC_IOT_PROP_color_green 1
 #define TC_IOT_PROP_color_blue 2
 
-
-
 int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context);
-void _tc_iot_device_on_message_received(tc_iot_message_data* md);
 
 extern tc_iot_shadow_client g_tc_iot_shadow_client;
 extern tc_iot_shadow_property_def g_device_property_defs[];
