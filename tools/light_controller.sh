@@ -12,7 +12,7 @@ device_name=light001
 
 
 # light shadow 影子属性格式：
-# {"name":"colorful light","color":16777215,"brightness":100,"device_switch":false}
+# {"name":"colorful light","color":16777215,"brightness":100,"light_switch":false}
 
 cmd_cfg="--product_id=$prodcut_id --device_name=$device_name -u ${SECRET_ID} -p ${SECRET_KEY}"
 
@@ -22,28 +22,21 @@ cmd_cfg="--product_id=$prodcut_id --device_name=$device_name -u ${SECRET_ID} -p 
 
 # 通过控制台接口更新设备影子属性数据
 # 开灯
-# echo control command '{"desired":{"device_switch":true}}'
-# ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"device_switch":true}}'  > /dev/null
-
-# exit 0
+echo control command '{"desired":{"light_switch":true}}'
+./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"light_switch":true}}'  > /dev/null
 
 while [ 1 ]; 
-do
-# 随机变化亮度
-brightness=`expr $RANDOM % 100`
-echo control command "{\"desired\":{\"brightness\":$brightness}}"
-./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow="{\"desired\":{\"brightness\":$brightness}}" > /dev/null;
-sleep 5
-
 # 随机变化颜色
+brightness=`expr $RANDOM % 100`
 color=`expr $RANDOM % 256`
-echo control command "{\"desired\":{\"color\":$color}}"
-./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow="{\"desired\":{\"color\":$color}}" > /dev/null;
+echo control command "{\"desired\":{\"color\":$color,\"brightness\":$brightness}}"
+do  ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow="{\"desired\":{\"color\":$color,\"brightness\":$brightness}}" > /dev/null;
+test $? -gt 128 && break;
 sleep 5
 done
 
 # 关灯
-# ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"device_switch":false}}' 
+# ./bin/tc_iot_shadow_cli.py UpdateIotShadow $cmd_cfg --shadow='{"desired":{"light_switch":false}}' 
 
 # 获取最新设备影子数据
 # ./bin/tc_iot_shadow_cli.py GetIotShadow $cmd_cfg 
