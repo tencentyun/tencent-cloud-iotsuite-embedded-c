@@ -2,9 +2,6 @@
 #include "tc_iot_device_logic.h"
 #include "tc_iot_export.h"
 
-void _device_on_message_received(tc_iot_message_data* md);
-bool tc_iot_device_sync_reported(tc_iot_shadow_property_def properties[]);
-
 void operate_device(tc_iot_shadow_local_data * device);
 
 /* 设备状态数据 */

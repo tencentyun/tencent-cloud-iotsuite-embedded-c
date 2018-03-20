@@ -8,39 +8,6 @@
   * 3) method 字段数据: get, update, update_firm_info, report_firm_info, reply */
 #define TC_IOT_MAX_FIELD_LEN  22
 
-volatile int stop;
-
-/* 设备初始配置 */
-tc_iot_shadow_config g_client_config = {
-    {
-        {
-            /* device info*/
-            TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
-            TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
-            TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
-        },
-        TC_IOT_CONFIG_SERVER_HOST,
-        TC_IOT_CONFIG_SERVER_PORT,
-        TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
-        TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
-        TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
-        TC_IOT_CONFIG_CLEAN_SESSION,
-        TC_IOT_CONFIG_USE_TLS,
-        TC_IOT_CONFIG_AUTO_RECONNECT,
-        TC_IOT_CONFIG_ROOT_CA,
-        TC_IOT_CONFIG_CLIENT_CRT,
-        TC_IOT_CONFIG_CLIENT_KEY,
-        NULL,
-        NULL,
-        0,  /* send will */
-        { 
-            {'M', 'Q', 'T', 'W'}, 0, {NULL, {0, NULL}}, {NULL, {0, NULL}}, 0, 0, 
-        }
-    },
-    TC_IOT_SUB_TOPIC_DEF,
-    TC_IOT_PUB_TOPIC_DEF,
-    _device_on_message_received,
-};
 
 /* 影子数据 Client  */
 tc_iot_shadow_client g_tc_iot_shadow_client;
@@ -304,23 +271,6 @@ void _device_on_message_received(tc_iot_message_data* md) {
         LOG_TRACE("payload.state.desired found:%.*s", desired_len, desired_start);
     }
 
-    /* 如果设备无本地存储，则设备重启后可先同步之前上
-     * 报的状态。
-     *
-     * 如果设备有本地存储，一般情况下，重启后本地状态还会
-     * 和服务端一致。不一致时，以本地设备状态优先，还是
-     * 以服务端优先，可根据实际业务情况进行区别处理。
-     * */
-    /* if (reported_start) { */
-        /* ret = tc_iot_json_parse(reported_start,reported_len, json_token, TC_IOT_ARRAY_LENGTH(json_token)); */
-        /* if (ret <= 0) { */
-            /* return ; */
-        /* } */
-        /* LOG_TRACE("---synchronizing reported status---"); */
-        /* _tc_iot_sync_shadow_property(g_device_property_defs, reported_start, json_token, ret); */
-        /* LOG_TRACE("---synchronizing reported status success---"); */
-    /* } */
-
     /* 根据控制台或者 APP 端的指令，设定设备状态 */
     if (desired_start) {
         ret = tc_iot_json_parse(desired_start,desired_len, json_token, TC_IOT_ARRAY_LENGTH(json_token));
@@ -330,22 +280,6 @@ void _device_on_message_received(tc_iot_message_data* md) {
         LOG_TRACE("---synchronizing desired status---");
         _tc_iot_sync_shadow_property(g_device_property_defs, desired_start, json_token, ret);
         LOG_TRACE("---synchronizing desired status success---");
-    }
-
-    /* 如果状态发生变化，则更新设备状态 */
-    if (reported_start || desired_start) {
-        /* 上报最新的设备状态，并通知服务端去掉 
-         * desired 数据，避免指令重复下发。 
-         * */
-        /* if (desired_start) { */
-            /* tc_iot_shadow_sync_to_server(&g_tc_iot_shadow_client, g_device_property_defs, TC_IOT_JSON_NULL); */
-        /* } else { */
-            /* tc_iot_shadow_sync_to_server(&g_tc_iot_shadow_client, g_device_property_defs, NULL); */
-        /* } */
-    } else {
-        /* 服务端无 reported 和 desired 状态，
-         * 说明设备首次启动或数据被重置，重新上报初始状态 */
-        /* tc_iot_shadow_sync_to_server(&g_tc_iot_shadow_client, g_device_property_defs, NULL); */
     }
 }
 
@@ -378,3 +312,45 @@ int tc_iot_shadow_update_desired_propeties(int property_count, ...) {
     va_end( p_args);
     return ret;
 }
+int tc_iot_server_init(tc_iot_shadow_config * p_client_config) {
+    int ret = 0;
+    char buffer[128];
+    int buffer_len = sizeof(buffer);
+    tc_iot_shadow_client* p_shadow_client = &g_tc_iot_shadow_client;
+
+    /* 初始化 shadow client */
+    LOG_INFO("constructing mqtt shadow client.");
+    ret = tc_iot_shadow_construct(p_shadow_client, p_client_config);
+    if (ret != TC_IOT_SUCCESS) {
+        LOG_ERROR("construct shadow client failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
+        return ret;
+    }
+
+    LOG_INFO("construct mqtt shadow client success.");
+    LOG_INFO("yield waiting for server push.");
+    /* 执行 yield 收取影子服务端前序指令消息，清理历史状态。 */
+    tc_iot_shadow_yield(p_shadow_client, 200);
+    LOG_INFO("yield waiting for server finished.");
+
+    /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
+    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 
+            TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, p_shadow_client);
+    LOG_TRACE("[c->s] shadow_get%s", buffer);
+
+    return ret;
+}
+
+int tc_iot_server_loop(int yield_timeout) {
+    tc_iot_shadow_client* p_shadow_client = &g_tc_iot_shadow_client;
+    return tc_iot_shadow_yield(p_shadow_client, yield_timeout);
+}
+
+int tc_iot_server_destroy(void) {
+    tc_iot_shadow_client* p_shadow_client = &g_tc_iot_shadow_client;
+
+    LOG_TRACE("Stopping");
+    tc_iot_shadow_destroy(p_shadow_client);
+    LOG_TRACE("Exit success.");
+    return 0;
+}
+

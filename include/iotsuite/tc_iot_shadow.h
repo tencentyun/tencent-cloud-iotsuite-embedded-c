@@ -140,5 +140,13 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
         message_ack_handler callback, int timeout_ms, void * session_context, 
         tc_iot_shadow_property_def * properties, const char * state_name, int count, va_list p_args);
 
+void _device_on_message_received(tc_iot_message_data* md);
+int _tc_iot_sync_shadow_property(tc_iot_shadow_property_def * properties, const char * doc_start, jsmntok_t * json_token, int tok_count);
+int tc_iot_shadow_update_reported_propeties(int property_count, ...);
+int tc_iot_shadow_update_desired_propeties(int property_count, ...); 
+
+int tc_iot_server_init(tc_iot_shadow_config * p_client_config);
+int tc_iot_server_loop(int yield_timeout);
+int tc_iot_server_destroy(void);
 #endif /* end of include guard */
 

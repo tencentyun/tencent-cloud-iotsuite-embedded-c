@@ -16,7 +16,37 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) ;
 void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * session_context);
 extern tc_iot_shadow_config g_client_config;
 
-#define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
+/* 设备初始配置 */
+tc_iot_shadow_config g_client_config = {
+    {
+        {
+            /* device info*/
+            TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
+            TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
+            TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
+        },
+        TC_IOT_CONFIG_SERVER_HOST,
+        TC_IOT_CONFIG_SERVER_PORT,
+        TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
+        TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
+        TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
+        TC_IOT_CONFIG_CLEAN_SESSION,
+        TC_IOT_CONFIG_USE_TLS,
+        TC_IOT_CONFIG_AUTO_RECONNECT,
+        TC_IOT_CONFIG_ROOT_CA,
+        TC_IOT_CONFIG_CLIENT_CRT,
+        TC_IOT_CONFIG_CLIENT_KEY,
+        NULL,
+        NULL,
+        0,  /* send will */
+        { 
+            {'M', 'Q', 'T', 'W'}, 0, {NULL, {0, NULL}}, {NULL, {0, NULL}}, 0, 0, 
+        }
+    },
+    TC_IOT_SUB_TOPIC_DEF,
+    TC_IOT_PUB_TOPIC_DEF,
+    _device_on_message_received,
+};
 
 /* 循环退出标识 */
 volatile int stop = 0;
@@ -143,47 +173,16 @@ int main(int argc, char** argv) {
         tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
     }
 
-    run_shadow(&g_client_config);
-
-    return 0;
-}
-
-/* 影子数据 Client  */
-extern tc_iot_shadow_client g_tc_iot_shadow_client;
-
-int run_shadow(tc_iot_shadow_config * p_client_config) {
-    int timeout = 500;
-    int ret = 0;
-    char buffer[512];
-    int buffer_len = sizeof(buffer);
-    tc_iot_shadow_client* p_shadow_client = &g_tc_iot_shadow_client;
-
-    /* 初始化 shadow client */
-    tc_iot_hal_printf("constructing mqtt shadow client.\n");
-    ret = tc_iot_shadow_construct(p_shadow_client, p_client_config);
+    ret = tc_iot_server_init(&g_client_config);
     if (ret != TC_IOT_SUCCESS) {
-        tc_iot_hal_printf("construct shadow client failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
         return 0;
     }
 
-    tc_iot_hal_printf("construct mqtt shadow client success.\n");
-    tc_iot_hal_printf("yield waiting for server push.\n");
-    /* 执行 yield 收取影子服务端前序指令消息，清理历史状态。 */
-    tc_iot_shadow_yield(p_shadow_client, timeout);
-    tc_iot_hal_printf("yield waiting for server finished.\n");
-
-    /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
-    ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, get_message_ack_callback, 
-            TC_IOT_CONFIG_COMMAND_TIMEOUT_MS, p_shadow_client);
-    LOG_TRACE("[c->s] shadow_get\n%s", buffer);
-
-    /* 循环等待控制指令 */
     while (!stop) {
-        tc_iot_shadow_yield(p_shadow_client, timeout);
+        tc_iot_server_loop(200);
     }
 
-    tc_iot_hal_printf("Stopping\n");
-    tc_iot_shadow_destroy(p_shadow_client);
-    tc_iot_hal_printf("Exit success.\n");
+    tc_iot_server_destroy();
     return 0;
 }
+
