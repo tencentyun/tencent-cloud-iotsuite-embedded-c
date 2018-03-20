@@ -78,9 +78,9 @@ typedef struct {
 typedef struct tc_iot_network_t {
     int (*do_read)(struct tc_iot_network_t* network, unsigned char* read_buf,
                    int read_buf_len, int timeout_ms); /**< 接收对端网络发送数据*/
-    int (*do_write)(struct tc_iot_network_t* network, unsigned char* write_buf,
+    int (*do_write)(struct tc_iot_network_t* network, const unsigned char* write_buf,
                     int write_buf_len, int timeout_ms); /**< 发送指定数据到对端网络*/
-    int (*do_connect)(tc_iot_network_t* network, char* host, uint16_t port); /**< 连接远程服务器*/
+    int (*do_connect)(tc_iot_network_t* network, const char* host, uint16_t port); /**< 连接远程服务器*/
     int (*do_disconnect)(tc_iot_network_t* network); /**< 断开网络连接*/
     int (*is_connected)(tc_iot_network_t* network); /**< 判断网络是否已连接*/
     int (*do_destroy)(tc_iot_network_t* network);/**< 销毁网络连接对象*/
@@ -110,9 +110,11 @@ int tc_iot_hal_net_init(tc_iot_network_t* network,
  * @param port 服务器端口
  *
  * @return 结果返回码 
+ *	成功返回 TC_IOT_SUCCESS (0)
+ *	失败返回 TC_IOT_FAILURE(-90) 或者其他具体原因(负数)
  * @see tc_iot_sys_code_e
  */
-int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
+int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
                              uint16_t port);
 
 /**
@@ -123,7 +125,10 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
  * @param len 接收缓存区大小
  * @param timeout_ms 最大等待时延，单位ms
  *
- * @return 结果返回码或成功读取字节数
+ * @return 结果返回码或成功读取字节数, 
+ *	假如timeout_ms超时读取了0字节, 返回 TC_IOT_NET_NOTHING_READ
+ *  假如timeout_ms超时读取字节数没有达到 len , 返回TC_IOT_NET_READ_TIMEOUT
+ *  假如timeout_ms超时对端关闭连接, 返回 实际读取字节数
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
@@ -140,7 +145,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
  * @return 结果返回码或成功发送字节数
  * @see tc_iot_sys_code_e
  */
-int tc_iot_hal_net_write(tc_iot_network_t* network, unsigned char* buffer,
+int tc_iot_hal_net_write(tc_iot_network_t* network, const unsigned char* buffer,
                            int len, int timeout_ms);
 
 
@@ -199,7 +204,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
  * @return 结果返回码 
  * @see tc_iot_sys_code_e
  */
-int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
+int tc_iot_hal_tls_connect(tc_iot_network_t* network, const char* host,
                                uint16_t port);
 
 /**
@@ -227,7 +232,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
  * @return 结果返回码或成功发送字节数
  * @see tc_iot_sys_code_e
  */
-int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
+int tc_iot_hal_tls_write(tc_iot_network_t* network, const unsigned char* buffer,
         int len, int timeout_ms);
 
 /**
