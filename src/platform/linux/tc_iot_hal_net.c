@@ -48,7 +48,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
     return bytes;
 }
 
-int tc_iot_hal_net_write(tc_iot_network_t* network, const unsigned char* buffer,
+int tc_iot_hal_net_write(tc_iot_network_t* network, unsigned char* buffer,
                          int len, int timeout_ms) {
     int rc;
     struct timeval tv;
@@ -84,7 +84,7 @@ static int net_prepare(void) {
     return (0);
 }
 
-int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
+int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
                            uint16_t port) {
     int type = SOCK_STREAM;
     struct sockaddr_in address;
@@ -99,7 +99,7 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
     }
 
     if (host) {
-        network->net_context.host = (char*)host;
+        network->net_context.host = host;
     }
 
     if (port) {
