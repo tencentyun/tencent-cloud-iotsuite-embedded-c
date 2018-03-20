@@ -67,7 +67,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     return read_len;
 }
 
-int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
+int tc_iot_hal_tls_write(tc_iot_network_t* network, const unsigned char* buffer,
                          int len, int timeout_ms) {
     int written_len = 0;
     bool is_write_failed = false;
@@ -121,7 +121,7 @@ static int net_prepare(void) {
     return (0);
 }
 
-int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
+int tc_iot_hal_tls_connect(tc_iot_network_t* network, const char* host,
                            uint16_t port) {
     char port_str[6];
     int ret = 0;
@@ -129,7 +129,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
     char info_buf[512];
 
     if (host) {
-        network->net_context.host = host;
+        network->net_context.host = (char*)host;
     }
 
     if (port) {
