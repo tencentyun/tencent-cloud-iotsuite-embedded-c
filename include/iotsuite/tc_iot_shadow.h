@@ -14,9 +14,8 @@ typedef enum _tc_iot_shadow_data_type_e {
 
 typedef struct _tc_iot_shadow_property_def {
     const char * name;
-    int id; // tc_iot_shadow_property_index_e
+    int id;
     tc_iot_shadow_data_type_e  type;
-    tc_iot_event_handler fn_change_notify;
 } tc_iot_shadow_property_def;
 
 
@@ -30,6 +29,7 @@ typedef struct _tc_iot_shadow_config {
     message_handler on_receive_msg; /**< 影子设备消息回调*/
     int property_total;
     tc_iot_shadow_property_def * properties;
+    tc_iot_event_handler event_notify;
 } tc_iot_shadow_config;
 
 typedef enum _tc_iot_command_ack_status_e {
@@ -102,18 +102,34 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
 
 /*--- begin 影子设备请求响应包 method 字段取值----*/
 /* 请求类 */
-/**< 读取服务端影子设备数据*/
+/**< 读取服务端影子设备数据
+ * {"method":"get"}
+ * */
 #define TC_IOT_MQTT_METHOD_GET       "get"
-/**< 更新服务端影子设备数据*/
+/**< 更新服务端影子设备数据
+ * {"method":"update","state"{"reported":{"a":1}, "desired":{"a":2}}}
+ *
+ * */
 #define TC_IOT_MQTT_METHOD_UPDATE    "update"
-/**< 删除服务端影子设备数据*/
-#define TC_IOT_MQTT_METHOD_DELETE    "delete"
 
+/**< 更新设备状态控制指令
+ * {"method":"control","state"{"reported":{"a":1}, "desired":{"a":2}}}
+ * */
+#define TC_IOT_MQTT_METHOD_CONTROL   "control"
+
+/**< 上报固件信息（设备主动上报）
+ * {"method":"update_firm_info","state":{"mac":"xxxxx", "uuid": 123455}}
+ * */
+#define TC_IOT_MQTT_METHOD_UPDATE_FIRM    "update_firm_info"
+/**< 上报固件信息控制指令（服务端下发指令，要求客户端上报）
+ * {"method":"report_firm_info"}
+ * */
+#define TC_IOT_MQTT_METHOD_REPORT_FIRM   "report_firm_info"
 /* 响应类 */
 /**< 读取请求响应*/
 #define TC_IOT_MQTT_METHOD_REPLY     "reply"
-/**< 更新请求响应*/
-#define TC_IOT_MQTT_METHOD_CONTROL   "control"
+
+
 /*--- end 影子设备请求响应包 method 字段取值----*/
 
 int tc_iot_shadow_doc_pack_for_get_with_sid(char *buffer, int buffer_len,
@@ -142,8 +158,14 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
         message_ack_handler callback, int timeout_ms, void * session_context, 
          const char * state_name, int count, va_list p_args);
 
+int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+        message_ack_handler callback, int timeout_ms, void * session_context, 
+         int info_count,va_list p_args);
+int tc_iot_report_firm(int info_count, ...);
+
 void _device_on_message_received(tc_iot_message_data* md);
-int _tc_iot_sync_shadow_property(int property_total, tc_iot_shadow_property_def * properties, 
+int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client, 
+        int property_total, tc_iot_shadow_property_def * properties, 
         const char * doc_start, jsmntok_t * json_token, int tok_count);
 int tc_iot_shadow_update_reported_propeties(int property_count, ...);
 int tc_iot_shadow_update_desired_propeties(int property_count, ...); 

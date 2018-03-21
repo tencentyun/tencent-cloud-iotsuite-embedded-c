@@ -75,7 +75,9 @@ void _tc_iot_report_message_ack_callback(tc_iot_command_ack_status_e ack_status,
  *
  * @return 
  */
-int _tc_iot_sync_shadow_property(int property_total, tc_iot_shadow_property_def * properties, const char * doc_start, jsmntok_t * json_token, int tok_count) {
+int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client, 
+        int property_total, tc_iot_shadow_property_def * properties, 
+        const char * doc_start, jsmntok_t * json_token, int tok_count) {
     int i,j;
     jsmntok_t  * key_tok = NULL;
     jsmntok_t  * val_tok = NULL;
@@ -148,10 +150,11 @@ int _tc_iot_sync_shadow_property(int property_total, tc_iot_shadow_property_def 
                     LOG_ERROR("%s type=%d invalid.", p_prop->name, p_prop->type);
                     continue;
                 }
-                if (p_prop->fn_change_notify) {
+                
+                if (p_shadow_client->p_shadow_config->event_notify) {
                     event_msg.event = TC_IOT_SHADOW_EVENT_SERVER_CONTROL;
                     event_msg.data = ptr;
-                    p_prop->fn_change_notify(&event_msg, "tc_iot_sync_shadow_property", p_prop);
+                    p_shadow_client->p_shadow_config->event_notify(&event_msg, p_shadow_client, p_prop);
                 }
             }
         }
@@ -176,6 +179,7 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
     const char * desired_start = NULL;
     int desired_len = 0;
     int ret = 0;
+    tc_iot_event_message event_msg;
     tc_iot_shadow_client * p_shadow_client = tc_iot_get_shadow_client();
 
     memset(field_buf, 0, sizeof(field_buf));
@@ -195,10 +199,20 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
         return ;
     }
 
-    if (strncmp("control", field_buf, strlen(field_buf)) == 0) {
+    if (strncmp(TC_IOT_MQTT_METHOD_CONTROL, field_buf, strlen(field_buf)) == 0) {
         LOG_TRACE("Control data receved.");
-    } else if (strncmp("reply", field_buf, strlen(field_buf)) == 0) {
+    } else if (strncmp(TC_IOT_MQTT_METHOD_REPLY, field_buf, strlen(field_buf)) == 0) {
         LOG_TRACE("Reply pack recevied.");
+    } else if (strncmp(TC_IOT_MQTT_METHOD_REPORT_FIRM, field_buf, strlen(field_buf)) == 0) {
+        LOG_TRACE("request report firm info.");
+        if (p_shadow_client->p_shadow_config->event_notify) {
+            event_msg.event = TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM;
+            event_msg.data = NULL;
+            p_shadow_client->p_shadow_config->event_notify(&event_msg, p_shadow_client, NULL);
+        } else {
+            LOG_TRACE("no event_notify callback, skip report firm.");
+        }
+        return;
     }
 
     /* 检查 reported 字段是否存在 */
@@ -231,6 +245,7 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
         }
         LOG_TRACE("---synchronizing desired status---");
         _tc_iot_sync_shadow_property(
+                p_shadow_client,
                 p_shadow_client->p_shadow_config->property_total,
                 p_shadow_client->p_shadow_config->properties, 
                 desired_start, json_token, ret);
@@ -266,6 +281,23 @@ int tc_iot_shadow_update_desired_propeties(int property_count, ...) {
     ret = tc_iot_shadow_update_state(p_shadow_client, buffer, buffer_len,  
             _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL,
             "desired", property_count, p_args);
+    va_end( p_args);
+    return ret;
+}
+
+int tc_iot_report_firm(int info_count, ...) {
+    char buffer[512];
+    int buffer_len = sizeof(buffer);
+
+    int ret = 0;
+    va_list p_args;
+    tc_iot_shadow_client* p_shadow_client = tc_iot_get_shadow_client();
+
+    va_start(p_args, info_count);
+    ret = tc_iot_shadow_update_firm_info(p_shadow_client, buffer, buffer_len,  
+            _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL,
+            info_count, p_args);
+    LOG_TRACE("[c-s]update_firm_info: %s", buffer);
     va_end( p_args);
     return ret;
 }

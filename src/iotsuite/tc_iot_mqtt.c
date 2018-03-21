@@ -303,7 +303,7 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     /* 3. read the rest of the buffer using a callback to supply the rest of the
      * data */
     if (rem_len > 0) {
-	
+
         timer_left_ms = tc_iot_hal_timer_left_ms(timer);
         if (timer_left_ms <= 0) {
             timer_left_ms = 1;
@@ -313,8 +313,11 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         if (rc != rem_len) {
             rc = 0;
             goto exit;
-		}
-	}
+        }
+        if (c->readbuf_size > (len + rc)) {
+            c->readbuf[len + rc] = '\0';
+        }
+    }
     header.byte = c->readbuf[0];
     rc = header.bits.type;
     if (c->keep_alive_interval > 0) {

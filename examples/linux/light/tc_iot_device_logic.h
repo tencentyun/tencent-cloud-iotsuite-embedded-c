@@ -26,7 +26,7 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
 
 extern tc_iot_shadow_client g_tc_iot_shadow_client;
 extern tc_iot_shadow_property_def g_device_property_defs[];
-#define DECLARE_PROPERTY_DEF(name, type, callback) {#name, TC_IOT_PROP_ ## name, type, callback}
+#define DECLARE_PROPERTY_DEF(name, type) {#name, TC_IOT_PROP_ ## name, type}
 
 
 #endif /* end of include guard */

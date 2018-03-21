@@ -6,9 +6,9 @@ void operate_device(tc_iot_shadow_local_data * device);
 
 /* 设备本地数据类型及地址、回调函数等相关定义 */
 tc_iot_shadow_property_def g_device_property_defs[] = {
-    DECLARE_PROPERTY_DEF(device_switch, TC_IOT_SHADOW_TYPE_BOOL, _tc_iot_shadow_property_control_callback),
-    DECLARE_PROPERTY_DEF(color, TC_IOT_SHADOW_TYPE_ENUM, _tc_iot_shadow_property_control_callback),
-    DECLARE_PROPERTY_DEF(brightness, TC_IOT_SHADOW_TYPE_NUMBER, _tc_iot_shadow_property_control_callback),
+    DECLARE_PROPERTY_DEF(device_switch, TC_IOT_SHADOW_TYPE_BOOL),
+    DECLARE_PROPERTY_DEF(color, TC_IOT_SHADOW_TYPE_ENUM),
+    DECLARE_PROPERTY_DEF(brightness, TC_IOT_SHADOW_TYPE_NUMBER),
 };
 
 /* 设备初始配置 */
@@ -43,6 +43,7 @@ tc_iot_shadow_config g_client_config = {
     tc_iot_device_on_message_received,
     TC_IOT_PROP_TOTAL,
     &g_device_property_defs[0],
+    _tc_iot_shadow_property_control_callback,
 };
 
 
@@ -122,6 +123,8 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
         tc_iot_shadow_update_reported_propeties( 1, p_property->id, msg->data);
         LOG_TRACE("operating device");
         operate_device(&g_device_vars);
+    } else if (msg->event == TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM) {
+        /* tc_iot_report_firm(3, "mac","00-00-00-00-00", "sdk-ver", "1.0", "firm-ver","2.0.20180123.pre"); */
     } else {
         LOG_TRACE("unkown event received, event=%ds", msg->event);
     }

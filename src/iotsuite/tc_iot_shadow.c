@@ -548,6 +548,125 @@ int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_clien
     return buffer_used;
 }
 
+int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+        message_ack_handler callback, int timeout_ms, void * session_context, 
+         int info_count,va_list p_args) {
+    char *pub_topic ;
+    int rc ;
+    tc_iot_shadow_session * p_session;
+    tc_iot_mqtt_message pubmsg;
+
+    int ret = 0;
+    int i = 0;
+    int pos = 0;
+    const char * info_name = NULL;
+    const char * info_value = NULL;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+
+    p_session = tc_iot_find_empty_session(c);
+    if (!p_session) {
+        LOG_ERROR("no more empty session.");
+        return TC_IOT_SHADOW_SESSION_NOT_ENOUGH;
+    }
+
+    ret = tc_iot_shadow_doc_pack_start(buffer+pos, buffer_len-pos, &(p_session->sid[0]), TC_IOT_SESSION_ID_LEN+1, TC_IOT_MQTT_METHOD_UPDATE_FIRM, c);
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"state\":{");
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    for(i = 0; i < info_count; i++) {
+        info_name = va_arg (p_args, const char *);
+        info_value = va_arg (p_args, const char *);
+        if (info_name == NULL) {
+            LOG_ERROR("No.%d info name is null", i);
+            return TC_IOT_NULL_POINTER;
+        }
+
+        if (info_value == NULL) {
+            LOG_ERROR("No.%d info value is null", i);
+            return TC_IOT_NULL_POINTER;
+        }
+
+        if (i == 0) {
+            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\"");
+            if (ret <= 0) {
+                return TC_IOT_BUFFER_OVERFLOW;
+            }
+            pos += ret;
+        } else {
+            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"");
+            if (ret <= 0) {
+                return TC_IOT_BUFFER_OVERFLOW;
+            }
+            pos += ret;
+        }
+
+        ret = tc_iot_json_escape(buffer + pos, buffer_len-pos, info_name, strlen(info_name));
+        if (ret <= 0) {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+        pos += ret;
+
+
+        ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\":\"");
+        if (ret <= 0) {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+        pos += ret;
+
+        ret = tc_iot_json_escape(buffer + pos, buffer_len-pos, info_value, strlen(info_value));
+        if (ret <= 0) {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+        pos += ret;
+
+        ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\"");
+        if (ret <= 0) {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+        pos += ret;
+    }
+
+    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "}");
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    ret = tc_iot_shadow_doc_pack_end(buffer+pos, buffer_len-pos, c);
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    tc_iot_hal_timer_init(&(p_session->timer));
+    tc_iot_hal_timer_countdown_ms(&(p_session->timer), timeout_ms);
+    p_session->handler = callback;
+    p_session->session_context = session_context;
+
+    memset(&pubmsg, 0, sizeof(pubmsg));
+    pubmsg.payload = buffer;
+    pubmsg.payloadlen = strlen(pubmsg.payload);
+    pubmsg.qos = TC_IOT_QOS1;
+    pubmsg.retained = 0;
+    pubmsg.dup = 0;
+    LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);
+    pub_topic = c->p_shadow_config->pub_topic;
+    rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
+    if (TC_IOT_SUCCESS != rc) {
+        LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
+    }
+    return rc;
+}
+
 #ifdef __cplusplus
 }
 #endif
