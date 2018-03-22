@@ -1,0 +1,5 @@
+{
+    "device_switch":{"type":"bool","default":true},
+    "color":{"type":"enum", "range":"red,green,blue","default":"green"},
+    "brightness":{"type":"number","min":0,"max":100, "default":1}
+}

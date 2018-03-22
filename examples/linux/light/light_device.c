@@ -14,7 +14,7 @@
 int run_shadow(tc_iot_shadow_config * p_client_config);
 void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) ;
 void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * session_context);
-extern tc_iot_shadow_config g_client_config;
+extern tc_iot_shadow_config g_tc_iot_shadow_config;
 
 /* 循环退出标识 */
 volatile int stop = 0;
@@ -111,15 +111,15 @@ int main(int argc, char** argv) {
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
 
-    p_client_config = &(g_client_config.mqtt_client_config);
+    p_client_config = &(g_tc_iot_shadow_config.mqtt_client_config);
 
     /* 解析命令行参数 */
     parse_command(p_client_config, argc, argv);
 
     /* 根据 product id 和device name 定义，生成发布和订阅的 Topic 名称。 */
-    snprintf(g_client_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT, 
+    snprintf(g_tc_iot_shadow_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-    snprintf(g_client_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT, 
+    snprintf(g_tc_iot_shadow_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
     /* 判断是否需要获取动态 token */
@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
         tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
     }
 
-    ret = tc_iot_server_init(&g_client_config);
+    ret = tc_iot_server_init(&g_tc_iot_shadow_config);
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("tc_iot_server_init failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
         return 0;
