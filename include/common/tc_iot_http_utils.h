@@ -194,6 +194,27 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
                                     long nonce, const char* product_id,
                                     int product_id_len, long timestamp);
 
+/**
+ * @brief tc_iot_create_active_device_form 构造 get device 设备激活 HTTP 签名请求 form
+ *
+ * @param form 结果缓存区
+ * @param max_form_len 结果缓存区最大大小
+ * @param secret 签名密钥, 请使用控制台的 product password
+ * @param secret_len 签名密钥长度
+ * @param device_name Device Name
+ * @param device_name_len Device Name 长度
+ * @param product_id Product Id , 例子 : "iot-dalqbv1g"	
+ * @param product_id_len Product Id 长度
+ * @param nonce 随机数
+ * @param timestamp 时间戳 *
+ * @return >=0 签名结果实际长度，<0 错误码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_create_active_device_form(char* form, int max_form_len,
+									const char* product_secret, int secret_len,
+                                    const char* device_name, int device_name_len, 
+									const char* product_id,int product_id_len,
+                                    long nonce, long timestamp);
 
 /**
  * @brief tc_iot_parse_http_response_code 解析 HTTP 响应数据返回码

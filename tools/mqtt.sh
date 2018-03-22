@@ -1,17 +1,12 @@
 #!/bin/bash
 
+PRODUCT_ID=${TENCENT_CLOUD_DEMO_PRODUCT_ID}
+DEVICE_NAME=${TENCENT_CLOUD_DEMO_DEVICE_NAME}
 DEVICE_SECRET=${TENCENT_CLOUD_DEMO_DEVICE_SECRET}
-#./bin/demo_mqtt -s ${DEVICE_SECRET} --verbose
+MQTT_PASSWORD=${TENCENT_CLOUD_DEMO_PASSWORD}
+MQTT_HOST=${TENCENT_CLOUD_DEMO_MQTT_HOST}
+MQTT_CMD="../build/bin/demo_mqtt -t ${PRODUCT_ID} -d ${DEVICE_NAME} -P ${MQTT_PASSWORD} -s ${DEVICE_SECRET} -h ${MQTT_HOST}  --verbose"
 
-# test invalid host
-#./bin/demo_mqtt -u test -P test -p 1883 --verbose -h invalid
-
-# test invalid port
-#./bin/demo_mqtt -u test -P test -p 1883 --verbose -h 127.0.0.1
-
-# test invali username and password
-#./bin/demo_mqtt -u test -P test
-
-
-./bin/demo_mqtt -s ${DEVICE_SECRET} --verbose -p 1883
-
+echo ${MQTT_CMD}
+${MQTT_CMD}
+#./demo_mqtt -t ${PRODUCT_ID} -d ${DEVICE_NAME} -P ${MQTT_PASSWORD} -s ${DEVICE_SECRET} -h ${MQTT_HOST}  --verbose

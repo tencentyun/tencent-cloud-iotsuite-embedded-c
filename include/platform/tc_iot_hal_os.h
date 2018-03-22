@@ -82,4 +82,37 @@ long tc_iot_hal_random(void);
  */
 void tc_iot_hal_srandom(unsigned int seed);
 
+
+/**
+ * @brief tc_iot_get_device_name 获取设备的名称, 该名称具有唯一性,建议使用唯一性的硬件ID比如IMEI / MAC 等
+ *
+ * @param device_name 输出参数, 用于存储 device_name, 可以为NULL, 这时候函数使用静态或者全局空间分配字符串返回
+ * @param  len        输出device_name缓存区大小
+ *
+ * @return  NULL 表示失败,  成功返回指向 device_name 的指针
+ */
+const char* tc_iot_hal_get_device_name(char *device_name, size_t len);
+
+/**
+ * @brief tc_iot_hal_set_value 持久化保存一个 key - value 值, 比如保存在文件系统或者 flash 里面
+ *
+ * @param  key		输入参数, 保存的key
+ * @param  value    输入参数, 保存的value
+ *
+ * @return  <0  表示失败,  成功返回 0
+ */
+int   tc_iot_hal_set_value(const char* key ,  const char* value );
+
+/**
+ * @brief tc_iot_hal_get_value 读取保存的 key - value 值
+ *
+ * @param  key		输入参数, 保存的key
+ * @param  value    输出参数, value
+ * @param  len      value缓存区大小
+ *
+ *
+ * @return  <0  表示失败,  成功返回 0
+ */
+int   tc_iot_hal_get_value(const char* key , char* value , size_t len );
+
 #endif /* end of include guard */

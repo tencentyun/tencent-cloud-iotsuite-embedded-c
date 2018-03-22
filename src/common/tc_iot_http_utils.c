@@ -180,7 +180,10 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
     
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
+
+	LOG_TRACE("tc_iot_calc_auth_sign source %s sec %s sig %s\n", buf, secret, b64_buf);
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
+	
     /* LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret, sign_out, url_ret);  */
     if (url_ret < max_sign_len) {
         sign_out[url_ret] = '\0';
@@ -265,6 +268,87 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
         tc_iot_yabuffer_current(&form_buf), tc_iot_yabuffer_left(&form_buf),
         secret, secret_len, client_id, client_id_len, device_name,
         device_name_len, expire, nonce, product_id, product_id_len, timestamp);
+    return total;
+}
+
+static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len, 
+							const char* product_secret, int secret_len,
+							const char* device_name, int device_name_len, 
+							const char* product_id,int product_id_len,
+							long nonce, 
+							long timestamp	) {
+    char buf[512];
+    int buf_len = sizeof(buf);
+    char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
+    int ret;
+    char b64_buf[128];
+    int data_len;
+    int url_ret;
+
+    IF_NULL_RETURN(sign_out, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(product_secret, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(device_name, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
+    IF_EQUAL_RETURN(max_sign_len, 0, TC_IOT_INVALID_PARAMETER);
+
+    data_len = tc_iot_hal_snprintf(
+        buf, buf_len,
+        "deviceName=%.*s&nonce=%ld&productId=%.*s&timestamp=%ld",
+        device_name_len, device_name, nonce,
+        product_id_len, product_id, timestamp);
+	
+	
+    if (data_len >= buf_len) {
+        LOG_ERROR("generate_active_device_sign buffer overflow.");
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)product_secret, secret_len, (unsigned char *)sha256_digest);
+	
+    
+    ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
+                               sizeof(b64_buf));
+    url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
+	
+    /* LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret, sign_out, url_ret);  */
+    if (url_ret < max_sign_len) {
+        sign_out[url_ret] = '\0';
+    }
+	LOG_DEBUG(" tc_iot_calc_active_device_sign  source:%s sign:%s", buf , sign_out);
+    return url_ret;
+}
+
+int tc_iot_create_active_device_form(char* form, int max_form_len,
+									const char* product_secret, int secret_len,
+                                    const char* device_name, int device_name_len, 
+									const char* product_id,int product_id_len,
+                                    long nonce, long timestamp) {
+    tc_iot_yabuffer_t form_buf;
+    int total = 0;
+	
+    IF_NULL_RETURN(form, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(product_secret, TC_IOT_NULL_POINTER);
+    
+    IF_NULL_RETURN(device_name, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
+
+    tc_iot_yabuffer_init(&form_buf, form, max_form_len);
+    
+	total += add_tc_iot_url_encoded_field(&form_buf, "productId=", product_id,
+									  product_id_len);
+    total += add_tc_iot_url_encoded_field(&form_buf, "&deviceName=",
+                                          device_name, device_name_len);
+    
+    total += add_url_long_field(&form_buf, "&nonce=", nonce);
+
+    total += add_url_long_field(&form_buf, "&timestamp=", timestamp);
+    total += add_tc_iot_url_encoded_field(&form_buf, "&signature=", "", 0);
+
+    total += tc_iot_calc_active_device_sign(
+        tc_iot_yabuffer_current(&form_buf), tc_iot_yabuffer_left(&form_buf),
+        product_secret, secret_len, 
+		device_name, device_name_len, product_id, product_id_len,
+        nonce, timestamp);
     return total;
 }
 
