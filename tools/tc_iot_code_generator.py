@@ -3,6 +3,7 @@
 
 import json
 import sys
+import os
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -39,18 +40,29 @@ class iot_field:
     def __init__(self, name, index, field_obj):
         self.index = index
         self.name = name
+        if "type" not  in field_obj:
+            raise ValueError("错误：{} 字段定义中未找到 type 字段".format(name))
+        if "default" not in field_obj:
+            raise ValueError("错误：{} 字段定义中未找到默认值 default 字段".format(name))
+
         self.type_name = field_obj["type"]
 
         if self.type_name == "bool":
             self.type_id = "TC_IOT_SHADOW_TYPE_BOOL"
             self.type_define = "tc_iot_shadow_bool"
+            if not isinstance(field_obj["default"], bool):
+                raise ValueError("错误：{} 字段类型是 bool，default 字段取值类型不匹配".format(name))
+
             if field_obj["default"]:
-                self.default_value = "true" 
+                self.default_value = "true"
             else:
                 self.default_value = "false"
         elif self.type_name == "enum":
             self.type_id = "TC_IOT_SHADOW_TYPE_ENUM"
             self.type_define = "tc_iot_shadow_enum"
+            if "range" not in field_obj:
+                raise ValueError("错误：{} 字段定义中未找到枚举定义 range 字段".format(name))
+
             enum_defs = field_obj['range'].split(',')
             enum_id = 0
             for enum_name in enum_defs:
@@ -59,14 +71,26 @@ class iot_field:
                 if (enum_name == field_obj["default"]):
                     self.default_value = current_enum.get_c_macro_name()
                 enum_id += 1
+            if self.default_value == "":
+                raise ValueError("错误：{} 字段默认值 {} 非法".format(name, field_obj["default"]))
+
         elif self.type_name == "number":
             self.type_id = "TC_IOT_SHADOW_TYPE_NUMBER"
             self.type_define = "tc_iot_shadow_number"
+            if not isinstance(field_obj["default"], int):
+                raise ValueError("错误：{} 字段类型是 int，default 字段取值类型不匹配".format(name))
+            if "min" not in field_obj:
+                raise ValueError("错误：{} 字段定义中未找到最小值定义 min 字段".format(name))
+            if "max" not in field_obj:
+                raise ValueError("错误：{} 字段定义中未找到最小值定义 max 字段".format(name))
+
             self.min_value = field_obj['min']
             self.max_value = field_obj['max']
             self.default_value = field_obj["default"]
+            if self.default_value < self.min_value or self.default_value > self.max_value:
+                raise ValueError("错误：{} 字段 default 指定的默认值超出 min~max 取值范围".format(name))
         else:
-            raise Exception(k, '"{}" 字段 数据类型 type={} 取值非法'.format(k, v["type"]))
+            raise ValueError('{} 字段 数据类型 type={} 取值非法，有效值应为：bool,enum,number'.format(name, field_obj["type"]))
 
     def get_id_c_macro_name(self):
         return "TC_IOT_PROP_{}".format(self.name)
@@ -162,14 +186,6 @@ class iot_struct:
 #include "tc_iot_inc.h"
 
 /*<header_str>*/
-
-int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context);
-
-extern tc_iot_shadow_client g_tc_iot_shadow_client;
-extern tc_iot_shadow_property_def g_device_property_defs[];
-#define DECLARE_PROPERTY_DEF(name, type) {#name, TC_IOT_PROP_ ## name, type}
-
-
 #endif /* end of include guard */
 """
         header_str = ""
@@ -177,7 +193,7 @@ extern tc_iot_shadow_property_def g_device_property_defs[];
         header_str += "typedef struct _tc_iot_shadow_local_data {\n"
         for field in self.fields:
             header_str += "    {}\n".format(field.get_struct_define_str())
-        header_str += "};\n"
+        header_str += "}tc_iot_shadow_local_data;\n"
 
 	header_str += "/* 数据点字段 ID 宏定义*/\n"
         for field in self.fields:
@@ -236,7 +252,7 @@ tc_iot_shadow_config g_tc_iot_shadow_config = {
     TC_IOT_SUB_TOPIC_DEF,
     TC_IOT_PUB_TOPIC_DEF,
     tc_iot_device_on_message_received,
-    TC_IOT_PROP_TOTAL,
+    TC_IOT_PROPTOTAL,
     &g_tc_iot_shadow_property_defs[0],
     _tc_iot_shadow_property_control_callback,
 };
@@ -299,40 +315,65 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
 def main():
     if len(sys.argv) <= 1:
         print "ERROR: 处理失败，请指定文件路径，说明："
-        print sys.argv[0] + " template.json"
-        print ''' template.json 格式大致如下：
+        print sys.argv[0] + " device_config.json"
+        print ''' device_config.json 格式大致如下：
 {
-    "数据点1":{"type":"bool","default":false}, // 布尔类型，false 和 true 两个取值，用来定义开关状态。
-    "数据点2":{"type":"enum", "range":"enum1,enum2,enumN","default":"enum1"}, // 枚举类型，range 定义枚举，多个枚举之间用","分隔。
-    "数据点3":{"type":"number","min":0,"max":4096,"default":0} // 数值类型，min、max 用来定义数值取值范围。
+    "properties": {
+        "数据点1":{"type":"bool","default":false}, // 布尔类型，false 和 true 两个取值，用来定义开关状态。
+        "数据点2":{"type":"enum", "range":"enum1,enum2,enumN","default":"enum1"}, // 枚举类型，range 定义枚举，多个枚举之间用","分隔。
+        "数据点3":{"type":"number","min":0,"max":4096,"default":0} // 数值类型，min、max 用来定义数值取值范围。
+    }
 }
 例如：
 {
-    "device_switch":{"type":"bool","default":true},
-    "color":{"type":"enum", "range":"red,green,blue","default":"green"},
-    "brightness":{"type":"number","min":0,"max":100, "default":1}
+    "properties": {
+        "device_switch":{"type":"bool","default":false},
+        "color":{"type":"enum", "range":"red,green,blue","default":"red"},
+        "brightness":{"type":"number","min":0,"max":100, "default":0}
+    }
 }
 '''
         return 0
     else:
         # try:
-            f = open(sys.argv[1], "r")
-            defs = json.load(f)
+            template_path = sys.argv[1]
+            if not os.path.exists(template_path):
+                print("错误：{} 文件不存在，请重新指定 device_config.json 文件路径".format(template_path))
+                return 1
 
-            st = iot_struct(defs)
-            # print st.generate_header()
-            # print logic_header
-            header_file_name = "tc_iot_device_logic.h"
-            header_file = open(header_file_name, "w")
-            header_file.write(st.generate_header())
-            print "generate {} success.".format(header_file_name)
+            template_dir = os.path.dirname(template_path)
+            if template_dir:
+                template_dir += "/"
 
-            source_file_name = "tc_iot_device_logic.c"
-            source_file = open(source_file_name, "w")
-            source_file.write(st.generate_source())
-            print "generate {} success.".format(source_file_name)
+            f = open(template_path, "r")
+            try:
+                defs = json.load(f)
+                print("加载 {} 文件成功".format(template_path))
+            except ValueError as e:
+                print("错误：文件格式非法，请检查 {} 文件是否是 JSON 格式。".format(template_path))
+                return 1
 
-            return 0
+            if "properties" not in defs:
+                print("错误：{} 文件中未发现 properties 属性字段，请检查文件格式是否合法。".format(template_path))
+                return 1
+
+            try:
+                st = iot_struct(defs["properties"])
+                header_file_name = template_dir + "tc_iot_device_logic.h"
+                header_file = open(header_file_name, "w")
+                header_file.write(st.generate_header())
+                print "头文件 {} 生成成功".format(header_file_name)
+
+                source_file_name = template_dir + "tc_iot_device_logic.c"
+                source_file = open(source_file_name, "w")
+                source_file.write(st.generate_source())
+                print "源文件 {} 生成成功".format(source_file_name)
+
+                return 0
+            except ValueError as e:
+                print(e)
+                return 1
+
         # except Exception as e:
             # print e
             # return 1

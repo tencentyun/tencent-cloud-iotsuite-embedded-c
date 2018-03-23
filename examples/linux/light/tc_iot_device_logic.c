@@ -12,6 +12,7 @@ tc_iot_shadow_property_def g_tc_iot_shadow_property_defs[] = {
     DECLARE_PROPERTY_DEF(device_switch, TC_IOT_SHADOW_TYPE_BOOL),
     DECLARE_PROPERTY_DEF(color, TC_IOT_SHADOW_TYPE_ENUM),
     DECLARE_PROPERTY_DEF(brightness, TC_IOT_SHADOW_TYPE_NUMBER),
+
 };
 
 /* 设备初始配置 */
@@ -52,70 +53,65 @@ tc_iot_shadow_config g_tc_iot_shadow_config = {
 
 /* 设备状态数据 */
 static tc_iot_shadow_local_data g_tc_iot_device_local_data = {
-    false,  /* 开关状态 */
-    2, /* 设备光颜色控制 */
-    100, /* 亮度 */
+    false,
+    TC_IOT_PROP_color_red,
+    0,
 };
 
-static int _tc_iot_property_change( int property_id, void * data) {
-    tc_iot_shadow_bool device_switch = false;
-    tc_iot_shadow_enum color  = TC_IOT_PROP_color_red;
-    tc_iot_shadow_number brightness  = 0;
 
+static int _tc_iot_property_change( int property_id, void * data) {
+    tc_iot_shadow_bool device_switch;
+    tc_iot_shadow_enum color;
+    tc_iot_shadow_number brightness;
     switch (property_id) {
         case TC_IOT_PROP_device_switch:
             device_switch = *(tc_iot_shadow_bool *)data;
+            g_tc_iot_device_local_data.device_switch = device_switch;
             if (device_switch) {
                 LOG_TRACE("do something for device_switch on");
             } else {
                 LOG_TRACE("do something for device_switch off");
             }
-            g_tc_iot_device_local_data.device_switch = device_switch;
             break;
         case TC_IOT_PROP_color:
             color = *(tc_iot_shadow_enum *)data;
-            switch (color)
-            {
+            g_tc_iot_device_local_data.color = color;
+            switch(color){
                 case TC_IOT_PROP_color_red:
-                    LOG_TRACE("do something for color red");
+                    LOG_TRACE("do something for color = red");
                     break;
                 case TC_IOT_PROP_color_green:
-                    LOG_TRACE("do something for color green");
+                    LOG_TRACE("do something for color = green");
                     break;
                 case TC_IOT_PROP_color_blue:
-                    LOG_TRACE("do something for color blue");
+                    LOG_TRACE("do something for color = blue");
                     break;
                 default:
-                    LOG_WARN("do something for color unkown.");
                     break;
             }
-            g_tc_iot_device_local_data.color = color;
             break;
         case TC_IOT_PROP_brightness:
             brightness = *(tc_iot_shadow_number *)data;
-            LOG_TRACE("do something for brightness=%d", brightness);
             g_tc_iot_device_local_data.brightness = brightness;
+            LOG_TRACE("do something for brightness=%d", brightness);
             break;
         default:
             LOG_WARN("unkown property id = %d", property_id);
-            return TC_IOT_SUCCESS;
+            return TC_IOT_FAILURE;
     }
-
-    /* 上报所有状态 */
-    /* tc_iot_shadow_update_reported_propeties(  */
-    /* 3 */
-    /* ,TC_IOT_PROP_device_switch , &g_tc_iot_device_local_data.device_switch */
-    /* ,TC_IOT_PROP_color , &g_tc_iot_device_local_data.color */
-    /* ,TC_IOT_PROP_brightness , &g_tc_iot_device_local_data.brightness */
-    /* ); */
 
     tc_iot_shadow_update_reported_propeties( 1, property_id, data);
     LOG_TRACE("operating device");
     operate_device(&g_tc_iot_device_local_data);
+    return TC_IOT_SUCCESS;
+
 }
 
 int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context) {
     tc_iot_shadow_property_def * p_property = NULL;
+    tc_iot_shadow_bool device_switch = false;
+    tc_iot_shadow_enum color  = TC_IOT_PROP_color_red;
+    tc_iot_shadow_number brightness  = 0;
 
     if (!msg) {
         LOG_ERROR("msg is null.");
@@ -128,6 +124,7 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
             LOG_ERROR("p_property is null.");
             return TC_IOT_FAILURE;
         }
+
         return _tc_iot_property_change(p_property->id, msg->data);
     } else if (msg->event == TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM) {
         /* tc_iot_report_firm(3, "mac","00-00-00-00-00", "sdk-ver", "1.0", "firm-ver","2.0.20180123.pre"); */
