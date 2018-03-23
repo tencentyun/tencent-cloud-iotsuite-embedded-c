@@ -314,25 +314,45 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
 
 def main():
     if len(sys.argv) <= 1:
-        print "ERROR: 处理失败，请指定文件路径，说明："
-        print sys.argv[0] + " device_config.json"
-        print ''' device_config.json 格式大致如下：
+        print sys.argv[0] + ''' 是数据点定义及代码框架生成脚本，基于 Python 开发，需要在 Python 环境下运行。
+本工具以数据点定义文件 device_config.json 为输入，根据该文件的定义，自动生成相关 c 代码。
+工具命令行格式：'''
+        print '''device_config.json 格式如下：
+_____________________________________________
 {
     "properties": {
-        "数据点1":{"type":"bool","default":false}, // 布尔类型，false 和 true 两个取值，用来定义开关状态。
-        "数据点2":{"type":"enum", "range":"enum1,enum2,enumN","default":"enum1"}, // 枚举类型，range 定义枚举，多个枚举之间用","分隔。
-        "数据点3":{"type":"number","min":0,"max":4096,"default":0} // 数值类型，min、max 用来定义数值取值范围。
+        // 布尔类型，false 和 true 两个取值，用来定义开关状态。
+        "数据点1":{"type":"bool","default":false},
+
+        // 枚举类型，range 定义枚举，多个枚举之间用","分隔。
+        "数据点2":{"type":"enum", "range":"enum1,enum2,enumN","default":"enum1"},
+
+        // 数值类型，min、max 用来定义数值取值范围。
+        "数据点3":{"type":"number","min":0,"max":4096,"default":0},
+
+        // 更多 ...
+        "数据点N":{"type":"number","min":0,"max":256,"default":0}
     }
 }
-例如：
+_____________________________________________
+
+以灯为例，可以用如下参数来控制：
+1. device_switch：开关，布尔类型，true 表示开，false 表示关，默认状态为 关闭；
+2. color：颜色，枚举类型，可以定义红、绿、蓝等，三种颜色模式，默认颜色为 红色；
+3. brightness：亮度，数值类型，取值范围为 0~100，取值越大亮度越高，默认亮度为 80；
+
+device_config.json 定义写法如下：
+_____________________________________________
 {
     "properties": {
         "device_switch":{"type":"bool","default":false},
         "color":{"type":"enum", "range":"red,green,blue","default":"red"},
-        "brightness":{"type":"number","min":0,"max":100, "default":0}
+        "brightness":{"type":"number","min":0,"max":100, "default":80}
     }
 }
+_____________________________________________
 '''
+        print "执行命令：\n" + sys.argv[0] + " device_config.json"
         return 0
     else:
         # try:
