@@ -63,7 +63,7 @@ class iot_field:
             if "range" not in field_obj:
                 raise ValueError("错误：{} 字段定义中未找到枚举定义 range 字段".format(name))
 
-            enum_defs = field_obj['range'].split(',')
+            enum_defs = field_obj['range']
             enum_id = 0
             for enum_name in enum_defs:
                 current_enum = iot_enum(self.name, enum_name, enum_id)
@@ -79,13 +79,13 @@ class iot_field:
             self.type_define = "tc_iot_shadow_number"
             if not isinstance(field_obj["default"], int):
                 raise ValueError("错误：{} 字段类型是 int，default 字段取值类型不匹配".format(name))
-            if "min" not in field_obj:
-                raise ValueError("错误：{} 字段定义中未找到最小值定义 min 字段".format(name))
-            if "max" not in field_obj:
-                raise ValueError("错误：{} 字段定义中未找到最小值定义 max 字段".format(name))
+            if "range" not in field_obj:
+                raise ValueError("错误：{} 字段定义中未找到取值范围定义 range 字段".format(name))
+            if len(field_obj["range"]) != 2:
+                raise ValueError("错误：{} 字段 range 取值非法".format(name))
 
-            self.min_value = field_obj['min']
-            self.max_value = field_obj['max']
+            self.min_value = field_obj['range'][0]
+            self.max_value = field_obj['range'][1]
             self.default_value = field_obj["default"]
             if self.default_value < self.min_value or self.default_value > self.max_value:
                 raise ValueError("错误：{} 字段 default 指定的默认值超出 min~max 取值范围".format(name))
@@ -102,7 +102,7 @@ class iot_field:
         return "{} {};".format(self.type_define, self.name)
 
     def get_meta_define_str(self):
-        return 'DECLARE_PROPERTY_DEF({}, {}),'.format(self.name, self.type_id)
+        return '{{ "{}", {}, {}}},'.format(self.name, self.get_id_c_macro_name(), self.type_id)
     def get_sample_code_snippet(self, indent, data_pointer):
         sample_code = ""
         if self.type_name == "bool":
@@ -147,8 +147,10 @@ class iot_struct:
     fields = []
     field_id = 0
     def __init__(self, obj):
-        for field_name,field_define in obj.items():
-            self.fields.append(iot_field(field_name, self.field_id, field_define))
+        for field_define in obj:
+            if "name" not in field_define:
+                raise ValueError("错误：字段定义中未找到 name 字段")
+            self.fields.append(iot_field(field_define['name'], self.field_id, field_define))
             self.field_id += 1
 
     def generate_sample_code(self):
@@ -219,8 +221,7 @@ void operate_device(tc_iot_shadow_local_data * device);
 
 /* 设备本地数据类型及地址、回调函数等相关定义 */
 tc_iot_shadow_property_def g_tc_iot_shadow_property_defs[] = {
-/*<meta_define_str>*/
-};
+/*<meta_define_str>*/};
 
 /* 设备初始配置 */
 tc_iot_shadow_config g_tc_iot_shadow_config = {
@@ -322,13 +323,13 @@ _____________________________________________
 {
     "properties": {
         // 布尔类型，false 和 true 两个取值，用来定义开关状态。
-        "数据点1":{"type":"bool","default":false},
+        {"name":"bool_var","type":"bool","range":[false,true],"default":false},
 
-        // 枚举类型，range 定义枚举，多个枚举之间用","分隔。
-        "数据点2":{"type":"enum", "range":"enum1,enum2,enumN","default":"enum1"},
+        // 枚举类型，range 定义枚举，枚举在内部实现时，依次被映射成 0~N 的数字。
+        {"name":"enum_var","type":"enum", "range":["enum0","enum1","enum2"],"default":"enum0"},
 
-        // 数值类型，min、max 用来定义数值取值范围。
-        "数据点3":{"type":"number","min":0,"max":4096,"default":0},
+        // 数值类型，range 数组包含2个值，分别用来定义数值取值范围。
+        {"name":"number_var","type":"number","range":[0,1024], "default":0}
 
         // 更多 ...
         "数据点N":{"type":"number","min":0,"max":256,"default":0}
@@ -344,11 +345,11 @@ _____________________________________________
 device_config.json 定义写法如下：
 _____________________________________________
 {
-    "properties": {
-        "device_switch":{"type":"bool","default":false},
-        "color":{"type":"enum", "range":"red,green,blue","default":"red"},
-        "brightness":{"type":"number","min":0,"max":100, "default":80}
-    }
+    "properties": [
+        {"name":"device_switch","type":"bool","range":[false,true],"default":false},
+        {"name":"color","type":"enum", "range":["red","green","blue"],"default":"red"},
+        {"name":"brightness","type":"number","range":[0,100], "default":0}
+    ]
 }
 _____________________________________________
 '''

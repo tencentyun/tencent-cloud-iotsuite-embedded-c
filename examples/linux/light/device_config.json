@@ -1,7 +1,7 @@
 {
-    "properties": {
-        "device_switch":{"type":"bool","default":false},
-        "color":{"type":"enum", "range":"red,green,blue","default":"red"},
-        "brightness":{"type":"number","min":0,"max":100, "default":0}
-    }
+    "properties": [
+        {"name":"device_switch","type":"bool","range":[false,true],"default":false},
+        {"name":"color","type":"enum", "range":["red","green","blue"],"default":"red"},
+        {"name":"brightness","type":"number","range":[0,100], "default":0}
+    ]
 }
