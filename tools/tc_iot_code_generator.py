@@ -168,14 +168,14 @@ class iot_struct:
         sample_code += (indent * 1) + '}\n\n'
 
         # /* 上报所有状态 */
-        # /* tc_iot_shadow_update_reported_propeties(  */
+        # /* tc_iot_report_propeties(  */
         # /* 3 */
         # /* ,TC_IOT_PROP_device_switch , &g_tc_iot_device_local_data.device_switch */
         # /* ,TC_IOT_PROP_color , &g_tc_iot_device_local_data.color */
         # /* ,TC_IOT_PROP_brightness , &g_tc_iot_device_local_data.brightness */
         # /* ); */
 
-        sample_code += (indent * 1) + 'tc_iot_shadow_update_reported_propeties( 1, property_id, data);\n'
+        sample_code += (indent * 1) + 'tc_iot_report_propeties( 1, property_id, data);\n'
         sample_code += (indent * 1) + 'LOG_TRACE("operating device");\n'
         sample_code += (indent * 1) + 'operate_device(&g_tc_iot_device_local_data);\n'
         sample_code += (indent * 1) + 'return TC_IOT_SUCCESS;\n'
@@ -356,7 +356,7 @@ _____________________________________________
         print "执行命令：\n" + sys.argv[0] + " device_config.json"
         return 0
     else:
-        # try:
+        try:
             template_path = sys.argv[1]
             if not os.path.exists(template_path):
                 print("错误：{} 文件不存在，请重新指定 device_config.json 文件路径".format(template_path))
@@ -395,12 +395,11 @@ _____________________________________________
                 print(e)
                 return 1
 
-        # except Exception as e:
-            # print e
-            # return 1
+        except Exception as e:
+            print e
+            return 1
 
 
 if __name__ == '__main__':
     sys.exit(main())
-
 

@@ -99,7 +99,7 @@ static int _tc_iot_property_change( int property_id, void * data) {
             return TC_IOT_FAILURE;
     }
 
-    tc_iot_shadow_update_reported_propeties( 1, property_id, data);
+    tc_iot_report_propeties( 1, property_id, data);
     LOG_TRACE("operating device");
     operate_device(&g_tc_iot_device_local_data);
     return TC_IOT_SUCCESS;

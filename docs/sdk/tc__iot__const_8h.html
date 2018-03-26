@@ -87,6 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">结构体</a> &#124;
 <a href="#define-members">宏定义</a> &#124;
 <a href="#typedef-members">类型定义</a> &#124;
 <a href="#enum-members">枚举</a>  </div>
@@ -114,6 +115,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div>
 <p><a href="tc__iot__const_8h_source.html">浏览源代码.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+结构体</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__event__message.html">_tc_iot_event_message</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 宏定义</h2></td></tr>
 <tr class="memitem:aa5e1d04aaa4a59ee810d3cadbcb29a01"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#aa5e1d04aaa4a59ee810d3cadbcb29a01">TC_IOT_ARRAY_LENGTH</a>(a)&#160;&#160;&#160;(sizeof(a)/sizeof(a[0]))</td></tr>
@@ -124,6 +130,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="memitem:a22976d49fd798dc8f3625734a8b6f6f6"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecc">_tc_iot_sys_code_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6">tc_iot_sys_code_e</a></td></tr>
 <tr class="memdesc:a22976d49fd798dc8f3625734a8b6f6f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统常见错误码定义，基本定义原则：  <a href="#a22976d49fd798dc8f3625734a8b6f6f6">更多...</a><br /></td></tr>
 <tr class="separator:a22976d49fd798dc8f3625734a8b6f6f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a426550fc531ec432bd56c48370e0282b"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138">_tc_iot_event_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#a426550fc531ec432bd56c48370e0282b">tc_iot_event_e</a></td></tr>
+<tr class="separator:a426550fc531ec432bd56c48370e0282b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59231aed9451c90cfa1f0cd3ce0545d3"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct__tc__iot__event__message.html">_tc_iot_event_message</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#a59231aed9451c90cfa1f0cd3ce0545d3">tc_iot_event_message</a></td></tr>
+<tr class="separator:a59231aed9451c90cfa1f0cd3ce0545d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a547039c0f365d991e39fc16d143b2cbd"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#a547039c0f365d991e39fc16d143b2cbd">tc_iot_event_handler</a>) (<a class="el" href="tc__iot__const_8h.html#a59231aed9451c90cfa1f0cd3ce0545d3">tc_iot_event_message</a> *msg, void *client, void *context)</td></tr>
+<tr class="memdesc:a547039c0f365d991e39fc16d143b2cbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_event_handler 通用事件回调原型  <a href="#a547039c0f365d991e39fc16d143b2cbd">更多...</a><br /></td></tr>
+<tr class="separator:a547039c0f365d991e39fc16d143b2cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 枚举</h2></td></tr>
@@ -191,11 +204,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 &#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca565814d95f4064c7d88afc7d5c7ec45f">TC_IOT_ERROR_HTTP_REQUEST_FAILED</a> = -1005, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaf7ffd96aaca8701a224dce66603585ea">TC_IOT_REFRESH_TOKEN_FAILED</a> = -1006, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0db7b477f0ea341d328b0fc44beddf31">TC_IOT_HTTP_RESPONSE_INVALID</a> = -1007, 
-<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca25564bec5ebbab108fbb1b16579b2152">TC_IOT_SHADOW_SESSION_NOT_ENOUGH</a> = -1008
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca25564bec5ebbab108fbb1b16579b2152">TC_IOT_SHADOW_SESSION_NOT_ENOUGH</a> = -1008, 
+<br />
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4c68890ff9ae4331f603ce91c782a791">TC_IOT_HTTP_REDIRECT_TOO_MANY</a> = -1009
 <br />
  }<tr class="memdesc:a1bf17f05159227e33f5eef1f0e067ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统常见错误码定义，基本定义原则：  <a href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecc">更多...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a1bf17f05159227e33f5eef1f0e067ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5533ece34072260a264c7269aab4138"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138">_tc_iot_event_e</a> { <br />
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138a1e43bbe1ceaee32568d6e72ffd71a722">TC_IOT_EVENT_UNKNOWN</a> = 0, 
+<a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138a5bcf55c5802863453337d5a618e8d2f7">TC_IOT_SYS_EVENT_BASE</a> = 1, 
+<a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138a2679a51b99851e78f326a6c5747f4a8a">TC_IOT_MQTT_EVENT_BASE</a> = 50, 
+<a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138aa91dc413efc1e19779436989946ba0b5">TC_IOT_SHADOW_EVENT_BASE</a> = 100, 
+<br />
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138acaad3d447029bd43ab9818e4b807ee0e">TC_IOT_SHADOW_EVENT_SERVER_CONTROL</a>, 
+<a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138ac0983f8dc98c6bba7a2f2b1570e9aba6">TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM</a>, 
+<a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138a6d103884c9b2cdfdc67c302fe77b69cb">TC_IOT_USER_EVENT_BASE</a> = 200
+<br />
+ }</td></tr>
+<tr class="separator:ad5533ece34072260a264c7269aab4138"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
 <a class="anchor" id="aa5e1d04aaa4a59ee810d3cadbcb29a01"></a>
@@ -215,6 +242,54 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div>
 </div>
 <h2 class="groupheader">类型定义说明</h2>
+<a class="anchor" id="a426550fc531ec432bd56c48370e0282b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef enum <a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138">_tc_iot_event_e</a>  <a class="el" href="tc__iot__const_8h.html#a426550fc531ec432bd56c48370e0282b">tc_iot_event_e</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a547039c0f365d991e39fc16d143b2cbd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int(* tc_iot_event_handler) (<a class="el" href="tc__iot__const_8h.html#a59231aed9451c90cfa1f0cd3ce0545d3">tc_iot_event_message</a> *msg, void *client, void *context)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tc_iot_event_handler 通用事件回调原型 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>消息内容 </td></tr>
+    <tr><td class="paramname">src</td><td>触发事件的来源 </td></tr>
+    <tr><td class="paramname">context</td><td>附加 context 信息。</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd></dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a59231aed9451c90cfa1f0cd3ce0545d3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="struct__tc__iot__event__message.html">_tc_iot_event_message</a>  <a class="el" href="tc__iot__const_8h.html#a59231aed9451c90cfa1f0cd3ce0545d3">tc_iot_event_message</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a22976d49fd798dc8f3625734a8b6f6f6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -235,6 +310,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div>
 </div>
 <h2 class="groupheader">枚举类型说明</h2>
+<a class="anchor" id="ad5533ece34072260a264c7269aab4138"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138">_tc_iot_event_e</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a class="anchor" id="ad5533ece34072260a264c7269aab4138a1e43bbe1ceaee32568d6e72ffd71a722"></a>TC_IOT_EVENT_UNKNOWN&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad5533ece34072260a264c7269aab4138a5bcf55c5802863453337d5a618e8d2f7"></a>TC_IOT_SYS_EVENT_BASE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad5533ece34072260a264c7269aab4138a2679a51b99851e78f326a6c5747f4a8a"></a>TC_IOT_MQTT_EVENT_BASE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad5533ece34072260a264c7269aab4138aa91dc413efc1e19779436989946ba0b5"></a>TC_IOT_SHADOW_EVENT_BASE&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad5533ece34072260a264c7269aab4138acaad3d447029bd43ab9818e4b807ee0e"></a>TC_IOT_SHADOW_EVENT_SERVER_CONTROL&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad5533ece34072260a264c7269aab4138ac0983f8dc98c6bba7a2f2b1570e9aba6"></a>TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad5533ece34072260a264c7269aab4138a6d103884c9b2cdfdc67c302fe77b69cb"></a>TC_IOT_USER_EVENT_BASE&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
 <a class="anchor" id="a1bf17f05159227e33f5eef1f0e067ecc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -407,6 +510,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a1bf17f05159227e33f5eef1f0e067ecca25564bec5ebbab108fbb1b16579b2152"></a>TC_IOT_SHADOW_SESSION_NOT_ENOUGH&#160;</td><td class="fielddoc">
 <p>影子回调会话空间不够，请检查是否发送过多并发请求， 合理设置 TC_IOT_MAX_SESSION_COUNT 的值 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a1bf17f05159227e33f5eef1f0e067ecca4c68890ff9ae4331f603ce91c782a791"></a>TC_IOT_HTTP_REDIRECT_TOO_MANY&#160;</td><td class="fielddoc">
+<p>HTTP 跳转次数过多，有可能是跳转循环 </p>
 </td></tr>
 </table>
 

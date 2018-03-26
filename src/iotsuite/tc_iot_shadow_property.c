@@ -253,7 +253,7 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
     }
 }
 
-int tc_iot_shadow_update_reported_propeties(int property_count, ...) {
+int tc_iot_report_propeties(int property_count, ...) {
     char buffer[512];
     int buffer_len = sizeof(buffer);
 
@@ -269,7 +269,7 @@ int tc_iot_shadow_update_reported_propeties(int property_count, ...) {
     return ret;
 }
 
-int tc_iot_shadow_update_desired_propeties(int property_count, ...) {
+int tc_iot_set_control_propeties(int property_count, ...) {
     char buffer[512];
     int buffer_len = sizeof(buffer);
     tc_iot_shadow_client* p_shadow_client = tc_iot_get_shadow_client();
@@ -301,6 +301,7 @@ int tc_iot_report_firm(int info_count, ...) {
     va_end( p_args);
     return ret;
 }
+
 
 int tc_iot_server_init(tc_iot_shadow_config * p_client_config) {
     int ret = 0;
