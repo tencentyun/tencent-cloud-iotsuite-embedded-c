@@ -76,8 +76,6 @@ SET(CMAKE_SYSTEM_NAME Linux)
 include_directories(include)
 include_directories(include/platform/${TC_IOT_PLATFORM_NAME})
 
-add_definitions(-DJSMN_PARENT_LINKS)
-
 # enable_testing()
 ADD_SUBDIRECTORY(external)
 ADD_SUBDIRECTORY(examples)
