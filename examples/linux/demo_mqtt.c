@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
 
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
-    tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
+    tc_iot_hal_printf("[s->c] %s\n", (char*)message->payload);
 }
 
 static volatile int stop = 0;

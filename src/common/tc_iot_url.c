@@ -123,14 +123,14 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
 
     /* at least should be http://x */
     if (input_url_len <= URL_LEAST_LEN) {
-        LOG_ERROR("url invalid: %.*s", input_url_len, input_url);
+        LOG_ERROR("url invalid: %s", tc_iot_log_summary_string(input_url, input_url_len));
         return -1;
     }
 
     /* check if prefix with 'http' */
     prefix_len = sizeof(HTTP_SCHEME_PREFIX) - 1;
     if (strncmp(HTTP_SCHEME_PREFIX, &input_url[pos], prefix_len) != 0) {
-        LOG_ERROR("url invalid: %.*s", input_url_len, input_url);
+        LOG_ERROR("url invalid: %s", tc_iot_log_summary_string(input_url, input_url_len));
         return -1;
     }
     pos += prefix_len;
@@ -150,7 +150,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
     /* check '://' */
     split_len = sizeof(SCHEME_SPLIT_STR) - 1;
     if (strncmp(SCHEME_SPLIT_STR, &input_url[pos], split_len) != 0) {
-        LOG_ERROR("url invalid: %.*s", input_url_len, input_url);
+        LOG_ERROR("url invalid: %s", input_url);
         return -1;
     }
     pos += split_len;
@@ -185,7 +185,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
                 return 0;
             } else if ('/' != input_url[pos]) {
                 /* port should follow with '/', thing goes wrong if not. */
-                LOG_ERROR("url invalid: %.*s", input_url_len, input_url);
+                LOG_ERROR("url invalid: %s", input_url);
                 return -1;
             }
         }

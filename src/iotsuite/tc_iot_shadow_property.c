@@ -223,7 +223,7 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
     } else {
         reported_start = (const char *)message->payload + json_token[field_index].start;
         reported_len = json_token[field_index].end - json_token[field_index].start;
-        LOG_TRACE("payload.state.reported found:%.*s", reported_len, reported_start);
+        LOG_TRACE("payload.state.reported found:%s", tc_iot_log_summary_string(reported_start, reported_len));
     }
 
     /* 检查 desired 字段是否存在 */
@@ -234,7 +234,7 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
     } else {
         desired_start = (const char *)message->payload + json_token[field_index].start;
         desired_len = json_token[field_index].end - json_token[field_index].start;
-        LOG_TRACE("payload.state.desired found:%.*s", desired_len, desired_start);
+        LOG_TRACE("payload.state.desired found:%s", tc_iot_log_summary_string(desired_start, desired_len));
     }
 
     /* 根据控制台或者 APP 端的指令，设定设备状态 */

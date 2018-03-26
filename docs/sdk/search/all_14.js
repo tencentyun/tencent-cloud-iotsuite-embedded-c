@@ -107,6 +107,7 @@ var searchData=
   ['tc_5fiot_5flog_5flevel_5fe',['tc_iot_log_level_e',['../tc__iot__log_8h.html#a30b9363d110f0613cca8e8b4241b737b',1,'tc_iot_log.h']]],
   ['tc_5fiot_5flog_5flevel_5fenabled',['tc_iot_log_level_enabled',['../tc__iot__log_8h.html#a942f2cbf099b30ee0af067b365b87013',1,'tc_iot_log_level_enabled(tc_iot_log_level_e log_level):&#160;tc_iot_log.h'],['../tc__iot__export_8h.html#a942f2cbf099b30ee0af067b365b87013',1,'tc_iot_log_level_enabled(tc_iot_log_level_e log_level):&#160;tc_iot_export.h']]],
   ['tc_5fiot_5flog_5foff',['TC_IOT_LOG_OFF',['../tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97a567a33ec06ea4eb631782ba5216721b3',1,'tc_iot_log.h']]],
+  ['tc_5fiot_5flog_5fsummary_5fstring',['tc_iot_log_summary_string',['../tc__iot__log_8h.html#ae27da72de788dab35dfed1ddf2f3091d',1,'tc_iot_log.h']]],
   ['tc_5fiot_5flog_5ftrace',['TC_IOT_LOG_TRACE',['../tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97aa2e02e3849ae5491e6114bf368345c21',1,'tc_iot_log.h']]],
   ['tc_5fiot_5flog_5fwarn',['TC_IOT_LOG_WARN',['../tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97ad0521eabd72cba4c43ab63239b6d0b3f',1,'tc_iot_log.h']]],
   ['tc_5fiot_5flogic_5ferror_5fbase',['TC_IOT_LOGIC_ERROR_BASE',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccaa74db8b33bb21c36b0bf0048486a1999',1,'tc_iot_const.h']]],
