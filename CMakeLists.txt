@@ -8,6 +8,8 @@ else()
     set(TC_IOT_PLATFORM_NAME "linux")
 endif()
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS, 1)
+
 add_definitions(-DENABLE_LOG_TRACE)
 add_definitions(-DENABLE_LOG_DEBUG)
 add_definitions(-DENABLE_LOG_INFO)
@@ -36,6 +38,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 file(COPY tools/tc_iot_shadow_cli.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file(COPY tools/tc_iot_code_generator.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
@@ -72,8 +75,6 @@ SET(CMAKE_SYSTEM_NAME Linux)
 
 include_directories(include)
 include_directories(include/platform/${TC_IOT_PLATFORM_NAME})
-
-add_definitions(-DJSMN_PARENT_LINKS)
 
 # enable_testing()
 ADD_SUBDIRECTORY(external)

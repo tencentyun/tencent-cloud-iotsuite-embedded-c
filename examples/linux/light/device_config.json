@@ -1,0 +1,7 @@
+{
+    "properties": [
+        {"name":"device_switch","type":"bool","range":[false,true],"default":false},
+        {"name":"color","type":"enum", "range":["red","green","blue"],"default":"red"},
+        {"name":"brightness","type":"number","range":[0,100], "default":0}
+    ]
+}

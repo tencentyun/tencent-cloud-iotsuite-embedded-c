@@ -221,6 +221,9 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
 <tr class="memitem:a5642aae30e497076894847b5be57077f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a5642aae30e497076894847b5be57077f">tc_iot_create_auth_request_form</a> (char *form, int max_form_len, const char *secret, int secret_len, const char *client_id, int client_id_len, const char *device_name, int device_name_len, long expire, long nonce, const char *product_id, int product_id_len, long timestamp)</td></tr>
 <tr class="memdesc:a5642aae30e497076894847b5be57077f"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_create_auth_request_form 构造 Token HTTP 签名请求 form  <a href="#a5642aae30e497076894847b5be57077f">更多...</a><br /></td></tr>
 <tr class="separator:a5642aae30e497076894847b5be57077f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84ecdf58a1bba7264b42b309b26cb790"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#a84ecdf58a1bba7264b42b309b26cb790">tc_iot_create_active_device_form</a> (char *form, int max_form_len, const char *product_secret, int secret_len, const char *device_name, int device_name_len, const char *product_id, int product_id_len, long nonce, long timestamp)</td></tr>
+<tr class="memdesc:a84ecdf58a1bba7264b42b309b26cb790"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_create_active_device_form 构造 get device 设备激活 HTTP 签名请求 form  <a href="#a84ecdf58a1bba7264b42b309b26cb790">更多...</a><br /></td></tr>
+<tr class="separator:a84ecdf58a1bba7264b42b309b26cb790"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba8a80606b36c51db6525aaba12b8b6c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__http__utils_8h.html#aba8a80606b36c51db6525aaba12b8b6c">tc_iot_parse_http_response_code</a> (const char *http_resp)</td></tr>
 <tr class="memdesc:aba8a80606b36c51db6525aaba12b8b6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_parse_http_response_code 解析 HTTP 响应数据返回码  <a href="#aba8a80606b36c51db6525aaba12b8b6c">更多...</a><br /></td></tr>
 <tr class="separator:aba8a80606b36c51db6525aaba12b8b6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -586,6 +589,99 @@ tc_iot_http_utils.h 的引用(Include)关系图:</div>
     <tr><td class="paramname">product_id</td><td>Product Id </td></tr>
     <tr><td class="paramname">product_id_len</td><td>Product Id 长度 </td></tr>
     <tr><td class="paramname">timestamp</td><td>时间戳</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 签名结果实际长度，&lt;0 错误码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a84ecdf58a1bba7264b42b309b26cb790"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_create_active_device_form </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>form</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>max_form_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>product_secret</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>secret_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>device_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>device_name_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>product_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>product_id_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>nonce</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>timestamp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tc_iot_create_active_device_form 构造 get device 设备激活 HTTP 签名请求 form </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">form</td><td>结果缓存区 </td></tr>
+    <tr><td class="paramname">max_form_len</td><td>结果缓存区最大大小 </td></tr>
+    <tr><td class="paramname">secret</td><td>签名密钥, 请使用控制台的 product password </td></tr>
+    <tr><td class="paramname">secret_len</td><td>签名密钥长度 </td></tr>
+    <tr><td class="paramname">device_name</td><td>Device Name </td></tr>
+    <tr><td class="paramname">device_name_len</td><td>Device Name 长度 </td></tr>
+    <tr><td class="paramname">product_id</td><td>Product Id , 例子 : "iot-dalqbv1g" </td></tr>
+    <tr><td class="paramname">product_id_len</td><td>Product Id 长度 </td></tr>
+    <tr><td class="paramname">nonce</td><td>随机数 </td></tr>
+    <tr><td class="paramname">timestamp</td><td>时间戳 * </td></tr>
   </table>
   </dd>
 </dl>

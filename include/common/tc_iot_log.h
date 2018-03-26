@@ -114,4 +114,6 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 #define LOG_FATAL(...)
 #endif
 
+const char * tc_iot_log_summary_string(const char * src, int src_len);
+
 #endif /* end of include guard */

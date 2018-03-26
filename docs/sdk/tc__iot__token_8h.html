@@ -126,6 +126,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="memitem:a51e8ecbd22768be5f906f575c5b9d6d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__token_8h.html#a51e8ecbd22768be5f906f575c5b9d6d7">http_refresh_auth_token_with_expire</a> (const char *api_url, char *root_ca_path, long timestamp, long nonce, <a class="el" href="tc__iot__mqtt_8h.html#a5b9f545868639f4d9b5529ebb5a491cc">tc_iot_device_info</a> *p_device_info, long expire)</td></tr>
 <tr class="memdesc:a51e8ecbd22768be5f906f575c5b9d6d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">http_refresh_auth_token 请求 MQTT 访问服务端动态用户名和密码  <a href="#a51e8ecbd22768be5f906f575c5b9d6d7">更多...</a><br /></td></tr>
 <tr class="separator:a51e8ecbd22768be5f906f575c5b9d6d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10a20075109ad51b6c2dd91f4efa7bb6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__token_8h.html#a10a20075109ad51b6c2dd91f4efa7bb6">http_get_device_secret</a> (const char *api_url, char *root_ca_path, long timestamp, long nonce, <a class="el" href="tc__iot__mqtt_8h.html#a5b9f545868639f4d9b5529ebb5a491cc">tc_iot_device_info</a> *p_device_info)</td></tr>
+<tr class="memdesc:a10a20075109ad51b6c2dd91f4efa7bb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">http_get_device_secret 请求 MQTT 访问服务端的 device secrect  <a href="#a10a20075109ad51b6c2dd91f4efa7bb6">更多...</a><br /></td></tr>
+<tr class="separator:a10a20075109ad51b6c2dd91f4efa7bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
 <a class="anchor" id="ab637b50d744aa929c9a86fdbb3a3ae83"></a>
@@ -141,6 +144,65 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </div>
 </div>
 <h2 class="groupheader">函数说明</h2>
+<a class="anchor" id="a10a20075109ad51b6c2dd91f4efa7bb6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int http_get_device_secret </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>api_url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>root_ca_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>timestamp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>nonce</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="tc__iot__mqtt_8h.html#a5b9f545868639f4d9b5529ebb5a491cc">tc_iot_device_info</a> *&#160;</td>
+          <td class="paramname"><em>p_device_info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>http_get_device_secret 请求 MQTT 访问服务端的 device secrect </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">api_url</td><td>请求接口的地址 </td></tr>
+    <tr><td class="paramname">root_ca_path</td><td>额外加载证书地址，一般填 NULL 即可 </td></tr>
+    <tr><td class="paramname">timestamp</td><td>时间戳 </td></tr>
+    <tr><td class="paramname">nonce</td><td>随机值 </td></tr>
+    <tr><td class="paramname">p_device_info</td><td>设备信息，请求成功后，会自动更新该对象的 device_secret 成员数据 </td></tr>
+    <tr><td class="paramname">expire</td><td>token 有效期单位为s，最大有效时间为2个月 = 60*86400 s。</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>结果返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ae33c7cd10bfb63fb1bbacd91bcf6e221"></a>
 <div class="memitem">
 <div class="memproto">

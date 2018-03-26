@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['net_5fcontext',['net_context',['../structtc__iot__network__t.html#a378f0fd6e492c9b4c7f48add638ba120',1,'tc_iot_network_t']]],
-  ['next_5fpacketid',['next_packetid',['../struct__tc__iot__mqtt__client.html#a2d0846473b91e25e68ab336da1ce75e3',1,'_tc_iot_mqtt_client']]]
+  ['on_5freceive_5fmsg',['on_receive_msg',['../struct__tc__iot__shadow__config.html#ae03933c4ff91ba0141da18e4bb07c209',1,'_tc_iot_shadow_config']]],
+  ['over_5ftls',['over_tls',['../struct__tc__iot__url__parse__result__t.html#a017f4cf3d7161f301ced31e76940a346',1,'_tc_iot_url_parse_result_t']]]
 ];
