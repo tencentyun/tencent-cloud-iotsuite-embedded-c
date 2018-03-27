@@ -17,7 +17,7 @@ int tc_iot_jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 }
 
 static void _trace_node(const char *prefix, const char *str, const jsmntok_t *node) {
-    /* LOG_TRACE("---%s type=%d,start=%d,end=%d,size=%d,parent=%d\t %s", */
+    /* TC_IOT_LOG_TRACE("---%s type=%d,start=%d,end=%d,size=%d,parent=%d\t %s", */
     /* prefix,  */
     /* node->type, node->start, node->end, node->size, node->parent, */
     /* tc_iot_log_summary_string( str + node->start, node->end - node->start)); */
@@ -44,7 +44,7 @@ void tc_iot_json_print_node(const char *prefix, const char *json, const jsmntok_
     const jsmntok_t * node;
 
 	node = root_node + node_index;
-    LOG_TRACE("%s id=%d,type=%s,start=%d,end=%d,size(child_count)=%d,parent=%d\t %s",
+    TC_IOT_LOG_TRACE("%s id=%d,type=%s,start=%d,end=%d,size(child_count)=%d,parent=%d\t %s",
     prefix, node_index,
     tc_iot_json_token_type_str(node->type), 
     node->start, node->end, node->size, node->parent,
@@ -203,7 +203,7 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
                                                         &temp_unicode);
                             if (ret != TC_IOT_SUCCESS) {
                                 valid_escaped = false;
-                                LOG_WARN("unicode data invalid %s",
+                                TC_IOT_LOG_WARN("unicode data invalid %s",
                                          tc_iot_log_summary_string( &src[index], src_len - index));
                                 break;
                             }
@@ -212,7 +212,7 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
                                                          temp_unicode);
                             if (ret <= 0) {
                                 valid_escaped = false;
-                                LOG_WARN(
+                                TC_IOT_LOG_WARN(
                                     "unicode %ld transform to utf8 failed: "
                                     "ret=%d",
                                     temp_unicode, ret);
@@ -221,12 +221,12 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
                             dest_index += ret;
                             index += 5;
                         } else {
-                                LOG_WARN("unicode data invalid %s",
+                                TC_IOT_LOG_WARN("unicode data invalid %s",
                                          tc_iot_log_summary_string( &src[index], src_len - index));
                         }
                         break;
                     default:
-                        LOG_WARN("invalid json escape:%s",
+                        TC_IOT_LOG_WARN("invalid json escape:%s",
                                          tc_iot_log_summary_string( &src[index], src_len - index));
                         valid_escaped = false;
                         break;
@@ -322,7 +322,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
 
         _trace_node("check node:", json, &root_token[tok_index]);
         if (root_token[tok_index].type != JSMN_OBJECT) {
-            LOG_ERROR("token %d not object", tok_index);
+            TC_IOT_LOG_ERROR("token %d not object", tok_index);
             return -1;
         }
 
@@ -356,7 +356,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                                 result[val_len] = 0;
                             }
                         }
-                        /* LOG_TRACE("result=%s", tc_iot_log_summary_string(result,val_len)); */
+                        /* TC_IOT_LOG_TRACE("result=%s", tc_iot_log_summary_string(result,val_len)); */
                         return tok_index;
                     }
                     break;
@@ -365,19 +365,19 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                 }
                 visited_child++;
             } else {
-                /* LOG_TRACE("target parent=%d/current parent=%d", parent_index, root_token[tok_index].parent); */
+                /* TC_IOT_LOG_TRACE("target parent=%d/current parent=%d", parent_index, root_token[tok_index].parent); */
                 _trace_node("node parent not match:", json, &root_token[tok_index]); 
             }
         }
 
         if (visited_child >= child_count) {
-            LOG_TRACE("%s no match in json.", path);
+            TC_IOT_LOG_TRACE("%s no match in json.", path);
             return TC_IOT_JSON_PATH_NO_MATCH;
         }
 
         /* continue search */
         name_start = pos + 1;
-        /* LOG_TRACE("searching sub path: %s", name_start); */
+        /* TC_IOT_LOG_TRACE("searching sub path: %s", name_start); */
     }
 
     return TC_IOT_JSON_PATH_NO_MATCH;
@@ -391,12 +391,12 @@ int tc_iot_json_parse(const char * json, int json_len, jsmntok_t * tokens, int t
     ret = jsmn_parse(&p, json, json_len, tokens, token_count);
 
     if (ret < 0) {
-        LOG_ERROR("Failed to parse JSON: %s", tc_iot_log_summary_string(json, json_len));
+        TC_IOT_LOG_ERROR("Failed to parse JSON: %s", tc_iot_log_summary_string(json, json_len));
         return TC_IOT_JSON_PARSE_FAILED;
     }
 
     if (ret < 1 || tokens[0].type != JSMN_OBJECT) {
-        LOG_ERROR("Failed to JSON format: %s", tc_iot_log_summary_string(json, json_len));
+        TC_IOT_LOG_ERROR("Failed to JSON format: %s", tc_iot_log_summary_string(json, json_len));
         return TC_IOT_JSON_PARSE_FAILED;
     }
 

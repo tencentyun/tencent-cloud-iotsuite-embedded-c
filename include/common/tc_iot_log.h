@@ -10,7 +10,7 @@
 typedef enum _tc_iot_log_level_e{
     TC_IOT_LOG_LEVEL_TRACE = 0, /**< 输出各类详细过程及输入输出信息 */
     TC_IOT_LOG_LEVEL_DEBUG = 1, /**< 输出应用调试信息 */
-    TC_IOT_LOG_LEVEL_TINFO = 2,  /**< 输出从粗粒度上，描述了应用运行过程 */
+    TC_IOT_LOG_LEVEL_INFO = 2,  /**< 输出从粗粒度上，描述了应用运行过程 */
     TC_IOT_LOG_LEVEL_WARN = 3,  /**< 输出潜在的有害状况，需要及时关注 */
     TC_IOT_LOG_LEVEL_ERROR = 4, /**< 输出错误事件，但应用可能还能继续运行 */
     TC_IOT_LOG_LEVEL_FATAL = 5, /**< 输出非常严重的错误事件，可能会导致应用终止执行 */
@@ -21,8 +21,8 @@ void tc_iot_set_log_level(tc_iot_log_level_e log_level);
 tc_iot_log_level_e tc_iot_get_log_level(void);
 char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 
-#ifdef ENABLE_LOG_TRACE
-#define LOG_TRACE(...)                                             \
+#ifdef ENABLE_TC_IOT_LOG_TRACE
+#define TC_IOT_LOG_TRACE(...)                                             \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_TRACE)){               \
         tc_iot_hal_printf("TRACE %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                            \
@@ -47,15 +47,15 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     return x;                                                             \
 
 #else
-#define LOG_TRACE(...)
+#define TC_IOT_LOG_TRACE(...)
 #define IOT_FUNC_ENTRY
 #define IOT_FUNC_EXIT
 #define IOT_FUNC_EXIT_RC(x) \
     { return x; }
 #endif
 
-#ifdef ENABLE_LOG_DEBUG
-#define LOG_DEBUG(...)                                             \
+#ifdef ENABLE_TC_IOT_LOG_DEBUG
+#define TC_IOT_LOG_DEBUG(...)                                             \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_DEBUG)){               \
         tc_iot_hal_printf("DEBUG %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                            \
@@ -63,23 +63,23 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     }
 
 #else
-#define LOG_DEBUG(...)
+#define TC_IOT_LOG_DEBUG(...)
 #endif
 
-#ifdef ENABLE_LOG_INFO
-#define LOG_INFO(...)                   \
-    if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_TINFO)){   \
+#ifdef ENABLE_TC_IOT_LOG_INFO
+#define TC_IOT_LOG_INFO(...)                   \
+    if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_INFO)){   \
         tc_iot_hal_printf("INFO %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__); \
         tc_iot_hal_printf("\n");        \
     }
 
 #else
-#define LOG_INFO(...)
+#define TC_IOT_LOG_INFO(...)
 #endif
 
-#ifdef ENABLE_LOG_WARN
-#define LOG_WARN(...)                                             \
+#ifdef ENABLE_TC_IOT_LOG_WARN
+#define TC_IOT_LOG_WARN(...)                                             \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_WARN)){               \
         tc_iot_hal_printf("WARN  %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                           \
@@ -87,11 +87,11 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     }
 
 #else
-#define LOG_WARN(...)
+#define TC_IOT_LOG_WARN(...)
 #endif
 
-#ifdef ENABLE_LOG_ERROR
-#define LOG_ERROR(...)                                             \
+#ifdef ENABLE_TC_IOT_LOG_ERROR
+#define TC_IOT_LOG_ERROR(...)                                             \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_ERROR)){               \
         tc_iot_hal_printf("ERROR %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                            \
@@ -99,11 +99,11 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     }
 
 #else
-#define LOG_ERROR(...)
+#define TC_IOT_LOG_ERROR(...)
 #endif
 
-#ifdef ENABLE_LOG_FATAL
-#define LOG_FATAL(...)                                             \
+#ifdef ENABLE_TC_IOT_LOG_FATAL
+#define TC_IOT_LOG_FATAL(...)                                             \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_FATAL)){               \
         tc_iot_hal_printf("FATAL %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                           \
@@ -111,7 +111,7 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     }
 
 #else
-#define LOG_FATAL(...)
+#define TC_IOT_LOG_FATAL(...)
 #endif
 
 const char * tc_iot_log_summary_string(const char * src, int src_len);

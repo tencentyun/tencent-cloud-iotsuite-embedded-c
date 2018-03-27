@@ -32,12 +32,12 @@ int http_post_urlencoded(tc_iot_network_t* network,
     }
 
     if (result.host_len >= sizeof(temp_host)) {
-        LOG_ERROR("host address too long.");
+        TC_IOT_LOG_ERROR("host address too long.");
         return -1;
     }
 
     if (result.over_tls != network->net_context.use_tls) {
-        LOG_WARN("network type not match: url tls=%d, context tls=%d",
+        TC_IOT_LOG_WARN("network type not match: url tls=%d, context tls=%d",
                  (int)result.over_tls, (int)network->net_context.use_tls);
         return -1;
     }
@@ -45,14 +45,14 @@ int http_post_urlencoded(tc_iot_network_t* network,
     strncpy(temp_host, url + result.host_start, result.host_len);
     temp_host[result.host_len] = '\0';
 
-    LOG_TRACE("remote=%s:%d", temp_host, result.port);
+    TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
 
     network->do_connect(network, temp_host, result.port);
     written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
-    LOG_TRACE("request with:\n%s", request->buf.data);
+    TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
     read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
-    LOG_TRACE("response with:\n%s", resp);
+    TC_IOT_LOG_TRACE("response with:\n%s", resp);
 
     network->do_disconnect(network);
 
@@ -97,7 +97,7 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 
 
     if (expire > TC_IOT_TOKEN_MAX_EXPIRE_SECOND) {
-        LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
+        TC_IOT_LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
         expire = TC_IOT_TOKEN_MAX_EXPIRE_SECOND;
     }
 
@@ -114,13 +114,13 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
         p_device_info->product_id, strlen(p_device_info->product_id),
         timestamp);
 
-    LOG_TRACE("signed request form:\n%s", sign_out);
+    TC_IOT_LOG_TRACE("signed request form:\n%s", sign_out);
 
     memset(&network, 0, sizeof(network));
 
 parse_url:
 
-    LOG_TRACE("request url=%s", api_url);
+    TC_IOT_LOG_TRACE("request url=%s", api_url);
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
 #ifdef ENABLE_TLS
         netcontext.fd = -1;
@@ -138,15 +138,15 @@ parse_url:
 
         tc_iot_hal_tls_init(&network, &netcontext);
         /* init network end*/
-        LOG_TRACE("tls network intialized.");
+        TC_IOT_LOG_TRACE("tls network intialized.");
 #else
-        LOG_FATAL("tls network not supported.");
+        TC_IOT_LOG_FATAL("tls network not supported.");
         return TC_IOT_TLS_NOT_SUPPORTED;
 #endif
     } else {
         memset(&netcontext, 0, sizeof(netcontext));
         tc_iot_hal_net_init(&network, &netcontext);
-        LOG_TRACE("dirtect tcp network intialized.");
+        TC_IOT_LOG_TRACE("dirtect tcp network intialized.");
     }
 
     /* request init begin */
@@ -156,7 +156,7 @@ parse_url:
     /* request init end */
 
     memset(http_resp, 0, sizeof(http_resp));
-    LOG_TRACE("request url=%s", api_url);
+    TC_IOT_LOG_TRACE("request url=%s", api_url);
     ret = http_post_urlencoded(&network, &request, api_url, sign_out, http_resp,
                                sizeof(http_resp), 2000);
 
@@ -167,7 +167,7 @@ parse_url:
             if (redirect_count < 5) {
                 redirect_count++;
             } else {
-                LOG_ERROR("http code %d, redirect exceed maxcount=%d.", ret, redirect_count);
+                TC_IOT_LOG_ERROR("http code %d, redirect exceed maxcount=%d.", ret, redirect_count);
                 return TC_IOT_HTTP_REDIRECT_TOO_MANY;
             }
 
@@ -179,7 +179,7 @@ parse_url:
                 for (i = 0; i < temp_len; i++) {
                     temp_buf[i] = rsp_body[i];
                     if (temp_buf[i] == '\r') {
-                        LOG_TRACE("truncate api url");
+                        TC_IOT_LOG_TRACE("truncate api url");
                         temp_buf[i] = '\0';
                     }
                     if (temp_buf[i] == '\0') {
@@ -188,14 +188,14 @@ parse_url:
                 }
                 api_url = temp_buf;
                 memset(&netcontext, 0, sizeof(netcontext));
-                LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", ret, redirect_count, api_url);
+                TC_IOT_LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", ret, redirect_count, api_url);
             } else {
-                LOG_ERROR("http code %d, Location header not found.", ret);
+                TC_IOT_LOG_ERROR("http code %d, Location header not found.", ret);
             }
 
             goto parse_url;
         } else {
-            LOG_WARN("http response status code=%d", ret);
+            TC_IOT_LOG_WARN("http response status code=%d", ret);
         }
         return TC_IOT_REFRESH_TOKEN_FAILED;
     }
@@ -206,17 +206,17 @@ parse_url:
         jsmn_init(&p);
 
         rsp_body += 4;
-        LOG_TRACE("\nbody:\n%s\n", rsp_body);
+        TC_IOT_LOG_TRACE("\nbody:\n%s\n", rsp_body);
 
         r = jsmn_parse(&p, rsp_body, strlen(rsp_body), t,
                        sizeof(t) / sizeof(t[0]));
         if (r < 0) {
-            LOG_ERROR("Failed to parse JSON: %s", rsp_body);
+            TC_IOT_LOG_ERROR("Failed to parse JSON: %s", rsp_body);
             return TC_IOT_JSON_PARSE_FAILED;
         }
 
         if (r < 1 || t[0].type != JSMN_OBJECT) {
-            LOG_ERROR("Invalid JSON: %s", rsp_body);
+            TC_IOT_LOG_ERROR("Invalid JSON: %s", rsp_body);
             return TC_IOT_JSON_PARSE_FAILED;
         }
 
@@ -224,7 +224,7 @@ parse_url:
                                                  temp_buf, sizeof(temp_buf));
         if (returnCodeIndex <= 0 || strlen(temp_buf) != 1 ||
             temp_buf[0] != '0') {
-            LOG_ERROR("failed to fetch token %d/%s: %s", returnCodeIndex,
+            TC_IOT_LOG_ERROR("failed to fetch token %d/%s: %s", returnCodeIndex,
                       temp_buf, rsp_body);
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
@@ -233,7 +233,7 @@ parse_url:
                                                 p_device_info->username,
                                                 TC_IOT_MAX_USER_NAME_LEN);
         if (username_index <= 0) {
-            LOG_TRACE("data.id not found in response.");
+            TC_IOT_LOG_TRACE("data.id not found in response.");
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
@@ -241,14 +241,14 @@ parse_url:
                                                 p_device_info->password,
                                                 TC_IOT_MAX_PASSWORD_LEN);
         if (password_index <= 0) {
-            LOG_TRACE("data.secret not found in response.");
+            TC_IOT_LOG_TRACE("data.secret not found in response.");
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
         expire_index = tc_iot_json_find_token(rsp_body, t, r, "data.expire",
                                               num_buf, sizeof(num_buf));
         if (expire_index <= 0) {
-            LOG_TRACE("data.expire not found in response.");
+            TC_IOT_LOG_TRACE("data.expire not found in response.");
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 
@@ -295,7 +295,7 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
 
 	/*
     if (expire > TC_IOT_TOKEN_MAX_EXPIRE_SECOND) {
-        LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
+        TC_IOT_LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
         expire = TC_IOT_TOKEN_MAX_EXPIRE_SECOND;
     }*/
 
@@ -310,13 +310,13 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
 		p_device_info->product_id, strlen(p_device_info->product_id),
 		nonce, timestamp);
 
-    LOG_TRACE("signed request form:\n%.*s", sign_len, sign_out);
+    TC_IOT_LOG_TRACE("signed request form:\n%.*s", sign_len, sign_out);
 
     memset(&network, 0, sizeof(network));
 
 parse_url:
 
-    LOG_TRACE("request url=%s", api_url);
+    TC_IOT_LOG_TRACE("request url=%s", api_url);
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
 #ifdef ENABLE_TLS
         netcontext.fd = -1;
@@ -334,15 +334,15 @@ parse_url:
 
         tc_iot_hal_tls_init(&network, &netcontext);
         /* init network end*/
-        LOG_TRACE("tls network intialized.");
+        TC_IOT_LOG_TRACE("tls network intialized.");
 #else
-        LOG_FATAL("tls network not supported.");
+        TC_IOT_LOG_FATAL("tls network not supported.");
         return TC_IOT_TLS_NOT_SUPPORTED;
 #endif
     } else {
         memset(&netcontext, 0, sizeof(netcontext));
         tc_iot_hal_net_init(&network, &netcontext);
-        LOG_TRACE("dirtect tcp network intialized.");
+        TC_IOT_LOG_TRACE("dirtect tcp network intialized.");
     }
 
     /* request init begin */
@@ -352,7 +352,7 @@ parse_url:
     /* request init end */
 
     memset(http_resp, 0, sizeof(http_resp));
-    LOG_TRACE("request url=%s", api_url);
+    TC_IOT_LOG_TRACE("request url=%s", api_url);
     ret = http_post_urlencoded(&network, &request, api_url, sign_out, http_resp,
                                sizeof(http_resp), 2000);
 
@@ -363,7 +363,7 @@ parse_url:
             if (redirect_count < 5) {
                 redirect_count++;
             } else {
-                LOG_ERROR("http code %d, redirect exceed maxcount=%d.", ret, redirect_count);
+                TC_IOT_LOG_ERROR("http code %d, redirect exceed maxcount=%d.", ret, redirect_count);
                 return TC_IOT_HTTP_REDIRECT_TOO_MANY;
             }
 
@@ -375,7 +375,7 @@ parse_url:
                 for (i = 0; i < temp_len; i++) {
                     temp_buf[i] = rsp_body[i];
                     if (temp_buf[i] == '\r') {
-                        LOG_TRACE("truncate api url");
+                        TC_IOT_LOG_TRACE("truncate api url");
                         temp_buf[i] = '\0';
                     }
                     if (temp_buf[i] == '\0') {
@@ -384,14 +384,14 @@ parse_url:
                 }
                 api_url = temp_buf;
                 memset(&netcontext, 0, sizeof(netcontext));
-                LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", ret, redirect_count, api_url);
+                TC_IOT_LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", ret, redirect_count, api_url);
             } else {
-                LOG_ERROR("http code %d, Location header not found.", ret);
+                TC_IOT_LOG_ERROR("http code %d, Location header not found.", ret);
             }
 
             goto parse_url;
         } else {
-            LOG_WARN("http response status code=%d", ret);
+            TC_IOT_LOG_WARN("http response status code=%d", ret);
         }
         return TC_IOT_REFRESH_TOKEN_FAILED;
     }
@@ -402,17 +402,17 @@ parse_url:
         jsmn_init(&p);
 
         rsp_body += 4;
-        LOG_TRACE("\nbody:\n%s\n", rsp_body);
+        TC_IOT_LOG_TRACE("\nbody:\n%s\n", rsp_body);
 
         r = jsmn_parse(&p, rsp_body, strlen(rsp_body), t,
                        sizeof(t) / sizeof(t[0]));
         if (r < 0) {
-            LOG_ERROR("Failed to parse JSON: %s", rsp_body);
+            TC_IOT_LOG_ERROR("Failed to parse JSON: %s", rsp_body);
             return TC_IOT_JSON_PARSE_FAILED;
         }
 
         if (r < 1 || t[0].type != JSMN_OBJECT) {
-            LOG_ERROR("Invalid JSON: %s", rsp_body);
+            TC_IOT_LOG_ERROR("Invalid JSON: %s", rsp_body);
             return TC_IOT_JSON_PARSE_FAILED;
         }
 
@@ -420,7 +420,7 @@ parse_url:
                                                  temp_buf, sizeof(temp_buf));
         if (returnCodeIndex <= 0 || strlen(temp_buf) != 1 ||
             temp_buf[0] != '0') {
-            LOG_ERROR("failed to fetch secrect %d/%s: %s", returnCodeIndex,
+            TC_IOT_LOG_ERROR("failed to fetch secrect %d/%s: %s", returnCodeIndex,
                       temp_buf, rsp_body);
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
@@ -429,7 +429,7 @@ parse_url:
                                                 p_device_info->username,
                                                 TC_IOT_MAX_USER_NAME_LEN);
         if (username_index <= 0) {
-            LOG_TRACE("data.id not found in response.");
+            TC_IOT_LOG_TRACE("data.id not found in response.");
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 		*/
@@ -437,7 +437,7 @@ parse_url:
                                                 p_device_info->secret,
                                                 TC_IOT_MAX_SECRET_LEN);
         if (password_index <= 0) {
-            LOG_TRACE("data.device_secret not found in response.");
+            TC_IOT_LOG_TRACE("data.device_secret not found in response.");
             return TC_IOT_REFRESH_TOKEN_FAILED;
         }
 

@@ -110,9 +110,9 @@ class iot_field:
 <indent>field_name = *(field_define *)data;
 <indent>g_tc_iot_device_local_data.field_name = field_name;
 <indent>if (field_name) {
-<indent>    LOG_TRACE("do something for field_name on");
+<indent>    TC_IOT_LOG_TRACE("do something for field_name on");
 <indent>} else {
-<indent>    LOG_TRACE("do something for field_name off");
+<indent>    TC_IOT_LOG_TRACE("do something for field_name off");
 <indent>}
 """.replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
 
@@ -124,7 +124,7 @@ class iot_field:
             sample_code += indent + "switch({})".format(self.name) + "{\n"
             for enum in self.enums:
                 sample_code += indent + "    case {}:\n".format(enum.get_c_macro_name())
-                sample_code += indent + '        LOG_TRACE("do something for {} = {}");\n'.format(self.name, enum.name)
+                sample_code += indent + '        TC_IOT_LOG_TRACE("do something for {} = {}");\n'.format(self.name, enum.name)
                 sample_code += indent + "        break;\n"
 
             sample_code += indent + "    default:\n"
@@ -135,7 +135,7 @@ class iot_field:
             sample_code = """
 <indent>field_name = *(field_define *)data;
 <indent>g_tc_iot_device_local_data.field_name = field_name;
-<indent>LOG_TRACE("do something for field_name=%d", field_name);
+<indent>TC_IOT_LOG_TRACE("do something for field_name=%d", field_name);
 """.replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
         else:
             raise Exception("invalid data type")
@@ -163,7 +163,7 @@ class iot_struct:
             sample_code += field.get_sample_code_snippet(indent*3, "data")
             sample_code +=  (indent * 3) + "break;\n"
         sample_code += (indent * 2) + "default:\n"
-        sample_code += (indent * 3) + 'LOG_WARN("unkown property id = %d", property_id);\n'
+        sample_code += (indent * 3) + 'TC_IOT_LOG_WARN("unkown property id = %d", property_id);\n'
         sample_code += (indent * 3) + 'return TC_IOT_FAILURE;\n'
         sample_code += (indent * 1) + '}\n\n'
 
@@ -176,7 +176,7 @@ class iot_struct:
         # /* ); */
 
         sample_code += (indent * 1) + 'tc_iot_report_device_data( 1, property_id, data);\n'
-        sample_code += (indent * 1) + 'LOG_TRACE("operating device");\n'
+        sample_code += (indent * 1) + 'TC_IOT_LOG_TRACE("operating device");\n'
         sample_code += (indent * 1) + 'operate_device(&g_tc_iot_device_local_data);\n'
         sample_code += (indent * 1) + 'return TC_IOT_SUCCESS;\n'
         return declare_code + sample_code;
@@ -275,14 +275,14 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
     tc_iot_shadow_number brightness  = 0;
 
     if (!msg) {
-        LOG_ERROR("msg is null.");
+        TC_IOT_LOG_ERROR("msg is null.");
         return TC_IOT_FAILURE;
     }
 
     if (msg->event == TC_IOT_SHADOW_EVENT_SERVER_CONTROL) {
         p_property = (tc_iot_shadow_property_def *)context;
         if (!p_property) {
-            LOG_ERROR("p_property is null.");
+            TC_IOT_LOG_ERROR("p_property is null.");
             return TC_IOT_FAILURE;
         }
 
@@ -290,7 +290,7 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
     } else if (msg->event == TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM) {
         /* tc_iot_report_firm(3, "mac","00-00-00-00-00", "sdk-ver", "1.0", "firm-ver","2.0.20180123.pre"); */
     } else {
-        LOG_TRACE("unkown event received, event=%ds", msg->event);
+        TC_IOT_LOG_TRACE("unkown event received, event=%ds", msg->event);
     }
     return TC_IOT_SUCCESS;
 }

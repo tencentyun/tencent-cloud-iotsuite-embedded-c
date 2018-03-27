@@ -74,9 +74,9 @@ static int _tc_iot_property_change( int property_id, void * data) {
             device_switch = *(tc_iot_shadow_bool *)data;
             g_tc_iot_device_local_data.device_switch = device_switch;
             if (device_switch) {
-                LOG_TRACE("do something for device_switch on");
+                TC_IOT_LOG_TRACE("do something for device_switch on");
             } else {
-                LOG_TRACE("do something for device_switch off");
+                TC_IOT_LOG_TRACE("do something for device_switch off");
             }
             break;
         case TC_IOT_PROP_color:
@@ -84,13 +84,13 @@ static int _tc_iot_property_change( int property_id, void * data) {
             g_tc_iot_device_local_data.color = color;
             switch(color){
                 case TC_IOT_PROP_color_red:
-                    LOG_TRACE("do something for color = red");
+                    TC_IOT_LOG_TRACE("do something for color = red");
                     break;
                 case TC_IOT_PROP_color_green:
-                    LOG_TRACE("do something for color = green");
+                    TC_IOT_LOG_TRACE("do something for color = green");
                     break;
                 case TC_IOT_PROP_color_blue:
-                    LOG_TRACE("do something for color = blue");
+                    TC_IOT_LOG_TRACE("do something for color = blue");
                     break;
                 default:
                     break;
@@ -99,15 +99,15 @@ static int _tc_iot_property_change( int property_id, void * data) {
         case TC_IOT_PROP_brightness:
             brightness = *(tc_iot_shadow_number *)data;
             g_tc_iot_device_local_data.brightness = brightness;
-            LOG_TRACE("do something for brightness=%d", brightness);
+            TC_IOT_LOG_TRACE("do something for brightness=%d", brightness);
             break;
         default:
-            LOG_WARN("unkown property id = %d", property_id);
+            TC_IOT_LOG_WARN("unkown property id = %d", property_id);
             return TC_IOT_FAILURE;
     }
 
     tc_iot_report_device_data( 1, property_id, data);
-    LOG_TRACE("operating device");
+    TC_IOT_LOG_TRACE("operating device");
     operate_device(&g_tc_iot_device_local_data);
     return TC_IOT_SUCCESS;
 }
@@ -119,14 +119,14 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
     tc_iot_shadow_number brightness  = 0;
 
     if (!msg) {
-        LOG_ERROR("msg is null.");
+        TC_IOT_LOG_ERROR("msg is null.");
         return TC_IOT_FAILURE;
     }
 
     if (msg->event == TC_IOT_SHADOW_EVENT_SERVER_CONTROL) {
         p_property = (tc_iot_shadow_property_def *)context;
         if (!p_property) {
-            LOG_ERROR("p_property is null.");
+            TC_IOT_LOG_ERROR("p_property is null.");
             return TC_IOT_FAILURE;
         }
 
@@ -134,7 +134,7 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
     } else if (msg->event == TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM) {
         /* tc_iot_report_firm(3, "mac","00-00-00-00-00", "sdk-ver", "1.0", "firm-ver","2.0.20180123.pre"); */
     } else {
-        LOG_TRACE("unkown event received, event=%ds", msg->event);
+        TC_IOT_LOG_TRACE("unkown event received, event=%ds", msg->event);
     }
     return TC_IOT_SUCCESS;
 }

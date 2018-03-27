@@ -123,14 +123,14 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
 
     /* at least should be http://x */
     if (input_url_len <= URL_LEAST_LEN) {
-        LOG_ERROR("url invalid: %s", tc_iot_log_summary_string(input_url, input_url_len));
+        TC_IOT_LOG_ERROR("url invalid: %s", tc_iot_log_summary_string(input_url, input_url_len));
         return -1;
     }
 
     /* check if prefix with 'http' */
     prefix_len = sizeof(HTTP_SCHEME_PREFIX) - 1;
     if (strncmp(HTTP_SCHEME_PREFIX, &input_url[pos], prefix_len) != 0) {
-        LOG_ERROR("url invalid: %s", tc_iot_log_summary_string(input_url, input_url_len));
+        TC_IOT_LOG_ERROR("url invalid: %s", tc_iot_log_summary_string(input_url, input_url_len));
         return -1;
     }
     pos += prefix_len;
@@ -150,7 +150,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
     /* check '://' */
     split_len = sizeof(SCHEME_SPLIT_STR) - 1;
     if (strncmp(SCHEME_SPLIT_STR, &input_url[pos], split_len) != 0) {
-        LOG_ERROR("url invalid: %s", input_url);
+        TC_IOT_LOG_ERROR("url invalid: %s", input_url);
         return -1;
     }
     pos += split_len;
@@ -177,7 +177,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
             if (pos >= input_url_len) {
                 result->path_start = input_url[pos - 1];
                 result->path_len = 0;
-                LOG_TRACE(
+                TC_IOT_LOG_TRACE(
                     "host_start=%d,host_len=%d,path_start=%d,path_len=%d,port=%"
                     "d",
                     result->host_start, result->host_len, result->path_start,
@@ -185,7 +185,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
                 return 0;
             } else if ('/' != input_url[pos]) {
                 /* port should follow with '/', thing goes wrong if not. */
-                LOG_ERROR("url invalid: %s", input_url);
+                TC_IOT_LOG_ERROR("url invalid: %s", input_url);
                 return -1;
             }
         }
@@ -199,7 +199,7 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
         }
     }
 
-    LOG_TRACE("host_start=%d,host_len=%d,path_start=%d,path_len=%d,port=%d",
+    TC_IOT_LOG_TRACE("host_start=%d,host_len=%d,path_start=%d,path_len=%d,port=%d",
               result->host_start, result->host_len, result->path_start,
               result->path_len, result->port);
 
