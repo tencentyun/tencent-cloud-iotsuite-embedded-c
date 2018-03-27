@@ -29,28 +29,28 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
         tc_iot_hal_printf("\n");                                   \
     }
 
-#define IOT_FUNC_ENTRY \
+#define TC_IOT_FUNC_ENTRY \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_TRACE)){               \
-     tc_iot_hal_printf("IOT_FUNC_ENTRY %s:%d \n", __FUNCTION__, __LINE__); \
+     tc_iot_hal_printf("TC_IOT_FUNC_ENTRY %s:%d \n", __FUNCTION__, __LINE__); \
     }
 
-#define IOT_FUNC_EXIT \
+#define TC_IOT_FUNC_EXIT \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_TRACE)){               \
-     tc_iot_hal_printf("IOT_FUNC_EXIT %s:%d \n", __FUNCTION__, __LINE__); \
+     tc_iot_hal_printf("TC_IOT_FUNC_EXIT %s:%d \n", __FUNCTION__, __LINE__); \
     }
 
-#define IOT_FUNC_EXIT_RC(x)                                                   \
+#define TC_IOT_FUNC_EXIT_RC(x)                                                   \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_TRACE)){               \
-        tc_iot_hal_printf("IOT_FUNC_EXIT %s:%d Return : %d \n", __FUNCTION__, \
+        tc_iot_hal_printf("TC_IOT_FUNC_EXIT %s:%d Return : %d \n", __FUNCTION__, \
                           __LINE__, x);                                       \
     }                                                                     \
     return x;                                                             \
 
 #else
 #define TC_IOT_LOG_TRACE(...)
-#define IOT_FUNC_ENTRY
-#define IOT_FUNC_EXIT
-#define IOT_FUNC_EXIT_RC(x) \
+#define TC_IOT_FUNC_ENTRY
+#define TC_IOT_FUNC_EXIT
+#define TC_IOT_FUNC_EXIT_RC(x) \
     { return x; }
 #endif
 

@@ -12,7 +12,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     char err_str[100];
     tc_iot_timer timer;
 
-    IOT_FUNC_ENTRY;
+    TC_IOT_FUNC_ENTRY;
 
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
@@ -32,9 +32,9 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
         } else if (ret == 0) {
             TC_IOT_LOG_TRACE("server closed connection, read_len = %d", read_len);
             if (read_len > 0) {
-                IOT_FUNC_EXIT_RC(read_len);
+                TC_IOT_FUNC_EXIT_RC(read_len);
             } else {
-                IOT_FUNC_EXIT_RC(TC_IOT_NET_READ_ERROR);
+                TC_IOT_FUNC_EXIT_RC(TC_IOT_NET_READ_ERROR);
             }
         } else if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
                    ret != MBEDTLS_ERR_SSL_WANT_WRITE &&
@@ -44,9 +44,9 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             mbedtls_strerror(ret, err_str, sizeof(err_str));
             TC_IOT_LOG_TRACE("mbedtls_ssl_read returned %d/%s", ret, err_str);
             if (read_len > 0) {
-                IOT_FUNC_EXIT_RC(read_len);
+                TC_IOT_FUNC_EXIT_RC(read_len);
             } else {
-                IOT_FUNC_EXIT_RC(TC_IOT_NET_READ_ERROR);
+                TC_IOT_FUNC_EXIT_RC(TC_IOT_NET_READ_ERROR);
             }
         } else {
             if (tc_iot_hal_timer_is_expired(&timer)) {
@@ -75,7 +75,7 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, const unsigned char* buffer,
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
     tc_iot_timer timer;
 
-    IOT_FUNC_ENTRY;
+    TC_IOT_FUNC_ENTRY;
 
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
@@ -89,17 +89,17 @@ int tc_iot_hal_tls_write(tc_iot_network_t* network, const unsigned char* buffer,
         } else if (ret != MBEDTLS_ERR_SSL_WANT_READ &&
                    ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
             TC_IOT_LOG_ERROR("mbedtls_ssl_write returned %d", ret);
-            IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_FAILED);
+            TC_IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_FAILED);
         } else {
             if (tc_iot_hal_timer_is_expired(&timer)) {
                 TC_IOT_LOG_ERROR("mbedtls_ssl_write timeout");
-                IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_TIMEOUT);
+                TC_IOT_FUNC_EXIT_RC(TC_IOT_TLS_SSL_WRITE_TIMEOUT);
             } else {
             }
         }
     }
 
-    IOT_FUNC_EXIT_RC(written_len);
+    TC_IOT_FUNC_EXIT_RC(written_len);
 }
 
 static int net_prepare(void) {
