@@ -110,6 +110,8 @@ int tc_iot_hal_net_init(tc_iot_network_t* network,
  * @param port 服务器端口
  *
  * @return 结果返回码 
+ *	成功返回 TC_IOT_SUCCESS (0)
+ *	失败返回 TC_IOT_FAILURE(-90) 或者其他具体原因(负数)
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
@@ -124,6 +126,9 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
  * @param timeout_ms 最大等待时延，单位ms
  *
  * @return 结果返回码或成功读取字节数
+ *	假如timeout_ms超时读取了0字节, 返回 TC_IOT_NET_NOTHING_READ
+ *  假如timeout_ms超时读取字节数没有达到 len , 返回TC_IOT_NET_READ_TIMEOUT
+ *  假如timeout_ms超时对端关闭连接, 返回 实际读取字节数
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
