@@ -30,7 +30,7 @@ void tc_iot_hal_free(void *ptr);
  *
  * @return 输出字节数
  */
-//int tc_iot_hal_printf(const char *format, ...);
+/*int tc_iot_hal_printf(const char *format, ...);*/
 
 /**
  * @brief tc_iot_hal_snprintf 发送格式化输出到字符串
@@ -43,7 +43,7 @@ void tc_iot_hal_free(void *ptr);
  * @return 输出字节数，需要注意的是：当返回值与入参size大小一致时，有可能缓存区
  * 大小不够，内容并未完全输出
  */
-// int tc_iot_hal_snprintf(char *str, size_t size, const char *format, ...);
+/* int tc_iot_hal_snprintf(char *str, size_t size, const char *format, ...); */
 
 
 /**

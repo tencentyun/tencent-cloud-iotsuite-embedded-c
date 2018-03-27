@@ -43,7 +43,7 @@ file(COPY tools/tc_iot_code_generator.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRE
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     option(ENABLE_TLS "use mqtt/http over tls" OFF) 
-    add_definitions(-std=c89)
+    #add_definitions(-std=c89)
 else()
     option(ENABLE_TLS "use mqtt/http over tls" ON) 
 endif()

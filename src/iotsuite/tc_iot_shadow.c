@@ -437,7 +437,7 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, int property_tot
                 return TC_IOT_BUFFER_OVERFLOW;
             }
             pos += ret;
-            //LOG_TRACE("buffer=%s", buffer);
+            /* LOG_TRACE("buffer=%s", buffer); */
         } else if (current->type == TC_IOT_SHADOW_TYPE_BOOL) {
             ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%s",
                     current->name, *(tc_iot_shadow_bool *)p_prop ? TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
