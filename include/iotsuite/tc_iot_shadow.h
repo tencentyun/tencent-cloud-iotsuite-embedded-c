@@ -288,6 +288,8 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
         int property_total, tc_iot_shadow_property_def * properties, 
         const char * doc_start, jsmntok_t * json_token, int tok_count);
 
+int tc_iot_shadow_event_notify(tc_iot_event_e event, void * data, void * context);
+
 int tc_iot_report_firm(int info_count, ...);
 int tc_iot_report_device_data(int property_count, ...);
 int tc_iot_control_propeties(int property_count, ...); 

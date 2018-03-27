@@ -176,7 +176,7 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
     pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
-    TC_IOT_LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);
+    /*TC_IOT_LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);*/
     pub_topic = c->p_shadow_config->pub_topic;
     rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {
@@ -658,7 +658,7 @@ int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int b
     pubmsg.qos = TC_IOT_QOS1;
     pubmsg.retained = 0;
     pubmsg.dup = 0;
-    TC_IOT_LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);
+    /*TC_IOT_LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);*/
     pub_topic = c->p_shadow_config->pub_topic;
     rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != rc) {

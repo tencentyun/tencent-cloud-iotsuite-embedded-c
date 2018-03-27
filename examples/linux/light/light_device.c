@@ -144,8 +144,6 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    /* tc_iot_report_firm(3, "mac","00-00-00-00-00", "sdk-ver", "1.0", "firm-ver","2.0.2018012.pre"); */
-
     while (!stop) {
         tc_iot_server_loop(200);
     }
