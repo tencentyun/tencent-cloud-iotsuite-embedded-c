@@ -160,7 +160,7 @@ int tc_iot_server_destroy(void);
 
 
 /**
- *  @brief tc_iot_report_propeties
+ *  @brief tc_iot_report_device_data
 
     @par
     上报设备数据点参数最新数据状态，更新到服务端。
@@ -168,19 +168,19 @@ int tc_iot_server_destroy(void);
     @par
     例如，设备定义了 switch、color、brightness，三个参数，上报调用如下：
     @code{.c}
-    tc_iot_report_propeties(3, TC_IOT_PROP_switch, &switch, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
+    tc_iot_report_device_data(3, TC_IOT_PROP_switch, &switch, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
     @endcode
 
     @par
     只上报 switch 状态：
     @code{.c}
-    tc_iot_report_propeties(1, TC_IOT_PROP_switch, &switch);
+    tc_iot_report_device_data(1, TC_IOT_PROP_switch, &switch);
     @endcode
 
     @par
     上报 color 和 brightnes 状态：
     @code{.c}
-    tc_iot_report_propeties(2, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
+    tc_iot_report_device_data(2, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
     @endcode
 
  *  @param property_count 上报数据点数
@@ -189,10 +189,10 @@ int tc_iot_server_destroy(void);
  *  @return 结果返回码 
  *  @see tc_iot_sys_code_e
  */
-int tc_iot_report_propeties(int property_count, ...);
+int tc_iot_report_device_data(int property_count, ...);
 
 /**
- *  @brief tc_iot_set_control_propeties
+ *  @brief tc_iot_confirm_devcie_data
 
     @par
     根据设备控制端要求，发送设备数据点参数控制指令，更新到服务端，推送给设备。
@@ -200,19 +200,19 @@ int tc_iot_report_propeties(int property_count, ...);
     @par
     例如，设备定义了 switch、color、brightness，三个参数，控制指令调用如下：
     @code{.c}
-    tc_iot_set_control_propeties(3, TC_IOT_PROP_switch, &switch, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
+    tc_iot_confirm_devcie_data(3, TC_IOT_PROP_switch, &switch, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
     @endcode
 
     @par
     只上报 switch 状态：
     @code{.c}
-    tc_iot_set_control_propeties(1, TC_IOT_PROP_switch, &switch);
+    tc_iot_confirm_devcie_data(1, TC_IOT_PROP_switch, &switch);
     @endcode
 
     @par
     上报 color 和 brightnes 状态：
     @code{.c}
-    tc_iot_set_control_propeties(2, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
+    tc_iot_confirm_devcie_data(2, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
     @endcode
  *
  *  @param property_count 控制指令包含的数据点数
@@ -221,7 +221,7 @@ int tc_iot_report_propeties(int property_count, ...);
  *  @return 结果返回码 
  *  @see tc_iot_sys_code_e
  */
-int tc_iot_set_control_propeties(int property_count, ...); 
+int tc_iot_confirm_devcie_data(int property_count, ...); 
 
 /**
  *  @brief tc_iot_report_firm

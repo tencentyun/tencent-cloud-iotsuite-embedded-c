@@ -57,6 +57,13 @@ static tc_iot_shadow_local_data g_tc_iot_device_local_data = {
     0,
 };
 
+/* 设备状态数据 */
+static tc_iot_shadow_local_data g_tc_iot_device_reported_data = {
+    false,
+    TC_IOT_PROP_color_red,
+    0,
+};
+
 
 static int _tc_iot_property_change( int property_id, void * data) {
     tc_iot_shadow_bool device_switch;
@@ -99,11 +106,10 @@ static int _tc_iot_property_change( int property_id, void * data) {
             return TC_IOT_FAILURE;
     }
 
-    tc_iot_report_propeties( 1, property_id, data);
+    tc_iot_report_device_data( 1, property_id, data);
     LOG_TRACE("operating device");
     operate_device(&g_tc_iot_device_local_data);
     return TC_IOT_SUCCESS;
-
 }
 
 int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context) {

@@ -167,17 +167,58 @@ tc_iot_export.h 的引用(Include)关系图:</div>
 <tr class="memitem:adbe7a4f1f525f2e09751c15155f95fd9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#adbe7a4f1f525f2e09751c15155f95fd9">tc_iot_server_destroy</a> (void)</td></tr>
 <tr class="memdesc:adbe7a4f1f525f2e09751c15155f95fd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_server_destroy 数据点服务析构处理，释放资源。  <a href="#adbe7a4f1f525f2e09751c15155f95fd9">更多...</a><br /></td></tr>
 <tr class="separator:adbe7a4f1f525f2e09751c15155f95fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c66ab2edd1de456b20039cd6ceb7a84"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#a5c66ab2edd1de456b20039cd6ceb7a84">tc_iot_report_propeties</a> (int property_count,...)</td></tr>
-<tr class="memdesc:a5c66ab2edd1de456b20039cd6ceb7a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_report_propeties  <a href="#a5c66ab2edd1de456b20039cd6ceb7a84">更多...</a><br /></td></tr>
-<tr class="separator:a5c66ab2edd1de456b20039cd6ceb7a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21168a328723813b198dbd0be8e0ac89"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#a21168a328723813b198dbd0be8e0ac89">tc_iot_set_control_propeties</a> (int property_count,...)</td></tr>
-<tr class="memdesc:a21168a328723813b198dbd0be8e0ac89"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_set_control_propeties  <a href="#a21168a328723813b198dbd0be8e0ac89">更多...</a><br /></td></tr>
-<tr class="separator:a21168a328723813b198dbd0be8e0ac89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7462d679d5073c681d720ab3b6437447"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#a7462d679d5073c681d720ab3b6437447">tc_iot_report_device_data</a> (int property_count,...)</td></tr>
+<tr class="memdesc:a7462d679d5073c681d720ab3b6437447"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_report_device_data  <a href="#a7462d679d5073c681d720ab3b6437447">更多...</a><br /></td></tr>
+<tr class="separator:a7462d679d5073c681d720ab3b6437447"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4117f7a7e67e9a11a74f0e83faad35be"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#a4117f7a7e67e9a11a74f0e83faad35be">tc_iot_confirm_devcie_data</a> (int property_count,...)</td></tr>
+<tr class="memdesc:a4117f7a7e67e9a11a74f0e83faad35be"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_confirm_devcie_data  <a href="#a4117f7a7e67e9a11a74f0e83faad35be">更多...</a><br /></td></tr>
+<tr class="separator:a4117f7a7e67e9a11a74f0e83faad35be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a726861d7906f5be4da9dd88d72d87f32"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#a726861d7906f5be4da9dd88d72d87f32">tc_iot_report_firm</a> (int info_count,...)</td></tr>
 <tr class="memdesc:a726861d7906f5be4da9dd88d72d87f32"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_report_firm 上报设备系统信息  <a href="#a726861d7906f5be4da9dd88d72d87f32">更多...</a><br /></td></tr>
 <tr class="separator:a726861d7906f5be4da9dd88d72d87f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">函数说明</h2>
+<a class="anchor" id="a4117f7a7e67e9a11a74f0e83faad35be"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_confirm_devcie_data </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tc_iot_confirm_devcie_data </p>
+<dl class="section user"><dt></dt><dd>根据设备控制端要求，发送设备数据点参数控制指令，更新到服务端，推送给设备。</dd></dl>
+<dl class="section user"><dt></dt><dd>例如，设备定义了 switch、color、brightness，三个参数，控制指令调用如下： <div class="fragment"><div class="line"><a class="code" href="tc__iot__export_8h.html#a4117f7a7e67e9a11a74f0e83faad35be">tc_iot_confirm_devcie_data</a>(3, TC_IOT_PROP_switch, &amp;<span class="keywordflow">switch</span>, TC_IOT_PROP_color, &amp;color, TC_IOT_PROP_brightness, &amp;brightness);</div></div><!-- fragment --></dd></dl>
+<dl class="section user"><dt></dt><dd>只上报 switch 状态： <div class="fragment"><div class="line"><a class="code" href="tc__iot__export_8h.html#a4117f7a7e67e9a11a74f0e83faad35be">tc_iot_confirm_devcie_data</a>(1, TC_IOT_PROP_switch, &amp;<span class="keywordflow">switch</span>);</div></div><!-- fragment --></dd></dl>
+<dl class="section user"><dt></dt><dd>上报 color 和 brightnes 状态： <div class="fragment"><div class="line"><a class="code" href="tc__iot__export_8h.html#a4117f7a7e67e9a11a74f0e83faad35be">tc_iot_confirm_devcie_data</a>(2, TC_IOT_PROP_color, &amp;color, TC_IOT_PROP_brightness, &amp;brightness);</div></div><!-- fragment --></dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">property_count</td><td>控制指令包含的数据点数 </td></tr>
+    <tr><td class="paramname">va_list</td><td>可变参数列表，根据实际上报情况指定，格式为 proprty_id1,value1_address, proprty_id2,value2_address, ... 按照 参数编号&amp;参数地址 成对方式，依次指定，property_count 的值为 property_id1 ~ property_idN 的总key数。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>结果返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aa2cfdf057df51104756e79f75beee5f8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -509,6 +550,47 @@ tc_iot_export.h 的引用(Include)关系图:</div>
 
 </div>
 </div>
+<a class="anchor" id="a7462d679d5073c681d720ab3b6437447"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_report_device_data </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tc_iot_report_device_data </p>
+<dl class="section user"><dt></dt><dd>上报设备数据点参数最新数据状态，更新到服务端。</dd></dl>
+<dl class="section user"><dt></dt><dd>例如，设备定义了 switch、color、brightness，三个参数，上报调用如下： <div class="fragment"><div class="line"><a class="code" href="tc__iot__shadow_8h.html#a7462d679d5073c681d720ab3b6437447">tc_iot_report_device_data</a>(3, TC_IOT_PROP_switch, &amp;<span class="keywordflow">switch</span>, TC_IOT_PROP_color, &amp;color, TC_IOT_PROP_brightness, &amp;brightness);</div></div><!-- fragment --></dd></dl>
+<dl class="section user"><dt></dt><dd>只上报 switch 状态： <div class="fragment"><div class="line"><a class="code" href="tc__iot__shadow_8h.html#a7462d679d5073c681d720ab3b6437447">tc_iot_report_device_data</a>(1, TC_IOT_PROP_switch, &amp;<span class="keywordflow">switch</span>);</div></div><!-- fragment --></dd></dl>
+<dl class="section user"><dt></dt><dd>上报 color 和 brightnes 状态： <div class="fragment"><div class="line"><a class="code" href="tc__iot__shadow_8h.html#a7462d679d5073c681d720ab3b6437447">tc_iot_report_device_data</a>(2, TC_IOT_PROP_color, &amp;color, TC_IOT_PROP_brightness, &amp;brightness);</div></div><!-- fragment --></dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">property_count</td><td>上报数据点数 </td></tr>
+    <tr><td class="paramname">va_list</td><td>可变参数列表，根据实际上报情况指定，格式为 proprty_id1,value1_address, proprty_id2,value2_address, ... 按照 参数编号&amp;参数地址 成对方式，依次指定，property_count 的值为 property_id1 ~ property_idN 的总key数。 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>结果返回码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a726861d7906f5be4da9dd88d72d87f32"></a>
 <div class="memitem">
 <div class="memproto">
@@ -539,47 +621,6 @@ tc_iot_export.h 的引用(Include)关系图:</div>
   <table class="params">
     <tr><td class="paramname">info_count</td><td>固件信息数 </td></tr>
     <tr><td class="paramname">va_list</td><td>可变参数列表，根据实际上报情况指定，格式为 key1,value1,key2,value2, ... 按照 key value 对方式，依次指定，info_count 的值为 key1 ~ keyN 的总key数。 </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>返回</dt><dd>结果返回码 </dd></dl>
-<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a5c66ab2edd1de456b20039cd6ceb7a84"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int tc_iot_report_propeties </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>property_count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>tc_iot_report_propeties </p>
-<dl class="section user"><dt></dt><dd>上报设备数据点参数最新数据状态，更新到服务端。</dd></dl>
-<dl class="section user"><dt></dt><dd>例如，设备定义了 switch、color、brightness，三个参数，上报调用如下： <div class="fragment"><div class="line"><a class="code" href="tc__iot__shadow_8h.html#a5c66ab2edd1de456b20039cd6ceb7a84">tc_iot_report_propeties</a>(3, TC_IOT_PROP_switch, &amp;<span class="keywordflow">switch</span>, TC_IOT_PROP_color, &amp;color, TC_IOT_PROP_brightness, &amp;brightness);</div></div><!-- fragment --></dd></dl>
-<dl class="section user"><dt></dt><dd>只上报 switch 状态： <div class="fragment"><div class="line"><a class="code" href="tc__iot__shadow_8h.html#a5c66ab2edd1de456b20039cd6ceb7a84">tc_iot_report_propeties</a>(1, TC_IOT_PROP_switch, &amp;<span class="keywordflow">switch</span>);</div></div><!-- fragment --></dd></dl>
-<dl class="section user"><dt></dt><dd>上报 color 和 brightnes 状态： <div class="fragment"><div class="line"><a class="code" href="tc__iot__shadow_8h.html#a5c66ab2edd1de456b20039cd6ceb7a84">tc_iot_report_propeties</a>(2, TC_IOT_PROP_color, &amp;color, TC_IOT_PROP_brightness, &amp;brightness);</div></div><!-- fragment --></dd></dl>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">property_count</td><td>上报数据点数 </td></tr>
-    <tr><td class="paramname">va_list</td><td>可变参数列表，根据实际上报情况指定，格式为 proprty_id1,value1_address, proprty_id2,value2_address, ... 按照 参数编号&amp;参数地址 成对方式，依次指定，property_count 的值为 property_id1 ~ property_idN 的总key数。 </td></tr>
   </table>
   </dd>
 </dl>
@@ -652,47 +693,6 @@ tc_iot_export.h 的引用(Include)关系图:</div>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">yield_timeout</td><td>循环等待时间，单位毫秒 </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>返回</dt><dd>结果返回码 </dd></dl>
-<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a21168a328723813b198dbd0be8e0ac89"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int tc_iot_set_control_propeties </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>property_count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>tc_iot_set_control_propeties </p>
-<dl class="section user"><dt></dt><dd>根据设备控制端要求，发送设备数据点参数控制指令，更新到服务端，推送给设备。</dd></dl>
-<dl class="section user"><dt></dt><dd>例如，设备定义了 switch、color、brightness，三个参数，控制指令调用如下： <div class="fragment"><div class="line"><a class="code" href="tc__iot__export_8h.html#a21168a328723813b198dbd0be8e0ac89">tc_iot_set_control_propeties</a>(3, TC_IOT_PROP_switch, &amp;<span class="keywordflow">switch</span>, TC_IOT_PROP_color, &amp;color, TC_IOT_PROP_brightness, &amp;brightness);</div></div><!-- fragment --></dd></dl>
-<dl class="section user"><dt></dt><dd>只上报 switch 状态： <div class="fragment"><div class="line"><a class="code" href="tc__iot__export_8h.html#a21168a328723813b198dbd0be8e0ac89">tc_iot_set_control_propeties</a>(1, TC_IOT_PROP_switch, &amp;<span class="keywordflow">switch</span>);</div></div><!-- fragment --></dd></dl>
-<dl class="section user"><dt></dt><dd>上报 color 和 brightnes 状态： <div class="fragment"><div class="line"><a class="code" href="tc__iot__export_8h.html#a21168a328723813b198dbd0be8e0ac89">tc_iot_set_control_propeties</a>(2, TC_IOT_PROP_color, &amp;color, TC_IOT_PROP_brightness, &amp;brightness);</div></div><!-- fragment --></dd></dl>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">property_count</td><td>控制指令包含的数据点数 </td></tr>
-    <tr><td class="paramname">va_list</td><td>可变参数列表，根据实际上报情况指定，格式为 proprty_id1,value1_address, proprty_id2,value2_address, ... 按照 参数编号&amp;参数地址 成对方式，依次指定，property_count 的值为 property_id1 ~ property_idN 的总key数。 </td></tr>
   </table>
   </dd>
 </dl>

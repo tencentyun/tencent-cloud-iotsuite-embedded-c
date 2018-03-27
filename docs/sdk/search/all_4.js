@@ -9,10 +9,10 @@ var searchData=
   ['digest',['digest',['../struct__tc__iot__hmac__sha256__t.html#af6eca1caac5caf2a3c776f8bc8a5fd5d',1,'_tc_iot_hmac_sha256_t']]],
   ['disconnect_5fhandler',['disconnect_handler',['../struct__tc__iot__mqtt__client.html#aae4efdf66c603fc24df38f64b534d841',1,'_tc_iot_mqtt_client::disconnect_handler()'],['../struct__tc__iot__mqtt__client__config.html#a52a6e022dc8a92a87d63c0d32c652d2a',1,'_tc_iot_mqtt_client_config::disconnect_handler()']]],
   ['disconnecthandler',['disconnectHandler',['../tc__iot__mqtt_8h.html#a8d1ce635834f8d467d387786090d1652',1,'tc_iot_mqtt.h']]],
-  ['do_5fconnect',['do_connect',['../structtc__iot__network__t.html#ae19275d928e0eb4eaa6e7ed7c53885d9',1,'tc_iot_network_t']]],
+  ['do_5fconnect',['do_connect',['../structtc__iot__network__t.html#a4edff339432dee740717008ff292d026',1,'tc_iot_network_t']]],
   ['do_5fdestroy',['do_destroy',['../structtc__iot__network__t.html#a92566f7597d7aac4675a7e90b3d6452a',1,'tc_iot_network_t']]],
   ['do_5fdisconnect',['do_disconnect',['../structtc__iot__network__t.html#a89d531326d6a2e907db6c9772d03ae52',1,'tc_iot_network_t']]],
   ['do_5fread',['do_read',['../structtc__iot__network__t.html#a99c83df0b60d332056ee726d62cb7412',1,'tc_iot_network_t']]],
-  ['do_5fwrite',['do_write',['../structtc__iot__network__t.html#a92438dc10b29b666e0dd85235359150c',1,'tc_iot_network_t']]],
+  ['do_5fwrite',['do_write',['../structtc__iot__network__t.html#ab692fb304b9de25ea72407d6fc30dddf',1,'tc_iot_network_t']]],
   ['dup',['dup',['../struct__tc__iot__mqtt__message.html#a93c3719e8048eadf6747bd070b6e5ef0',1,'_tc_iot_mqtt_message']]]
 ];
