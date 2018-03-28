@@ -199,34 +199,13 @@ int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client, int propert
  *  @brief tc_iot_confirm_devcie_data
 
     @par
-    根据设备控制端要求，发送设备数据点参数控制指令，更新到服务端，推送给设备。
-
-    @par
-    例如，设备定义了 switch、color、brightness，三个参数，控制指令调用如下：
-    @code{.c}
-    tc_iot_confirm_devcie_data(3, TC_IOT_PROP_switch, &switch, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
-    @endcode
-
-    @par
-    只上报 switch 状态：
-    @code{.c}
-    tc_iot_confirm_devcie_data(1, TC_IOT_PROP_switch, &switch);
-    @endcode
-
-    @par
-    上报 color 和 brightnes 状态：
-    @code{.c}
-    tc_iot_confirm_devcie_data(2, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
-    @endcode
- *
+    确认服务端控制指令执行结果，如果服务端下发的 desired 指令执行成功，
+    则上报最新状态，并自动清空指令。
  *  @param  p_shadow_client 设备影子对象
- *  @param property_count 控制指令包含的数据点数
- *  @param va_list 可变参数列表，根据实际上报情况指定，格式为 proprty_id1,value1_address, proprty_id2,value2_address,  ...
- * 按照 参数编号&参数地址 成对方式，依次指定，property_count 的值为 property_id1 ~ property_idN 的总key数。
  *  @return 结果返回码
  *  @see tc_iot_sys_code_e
  */
-int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client, int property_count, ...);
+int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client);
 
 /**
  *  @brief tc_iot_report_firm

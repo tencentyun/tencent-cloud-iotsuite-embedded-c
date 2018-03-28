@@ -93,7 +93,7 @@ void _tc_iot_update_firm_message_ack_callback(tc_iot_command_ack_status_e ack_st
  * @return
  */
 int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
-        int property_total, tc_iot_shadow_property_def * properties,
+        int property_total, tc_iot_shadow_property_def * properties, bool reported,
         const char * doc_start, jsmntok_t * json_token, int tok_count) {
     int i,j;
     jsmntok_t  * key_tok = NULL;
@@ -144,21 +144,23 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
         for(j = 0; j < property_total; j++) {
             p_prop = &properties[j];
             if (strncmp(p_prop->name, key_start, key_len) == 0)  {
+                strncpy(field_buf, val_start, val_len);
+                field_buf[val_len] = '\0';
+
+                if (strncmp(TC_IOT_JSON_NULL, field_buf, val_len) == 0) {
+                    TC_IOT_LOG_WARN("%s recevied null value.", p_prop->name);
+                    continue;
+                }
+
                 if (p_prop->type == TC_IOT_SHADOW_TYPE_BOOL) {
-                    strncpy(field_buf, val_start, val_len);
-                    field_buf[val_len] = '\0';
                     new_bool = (strncmp(TC_IOT_JSON_TRUE, field_buf, val_len) == 0);
                     ptr = &new_bool;
                     TC_IOT_LOG_TRACE("state change:[%s=%s]", p_prop->name, (*(tc_iot_shadow_bool *) ptr)?"true":"false");
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_NUMBER) {
-                    strncpy(field_buf, val_start, val_len);
-                    field_buf[val_len] = '\0';
                     new_number = atoi(field_buf);
                     ptr = &new_number;
                     TC_IOT_LOG_TRACE("state change:[%s=%d]", p_prop->name, (*(tc_iot_shadow_number *) ptr));
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_ENUM) {
-                    strncpy(field_buf, val_start, val_len);
-                    field_buf[val_len] = '\0';
                     new_enum = atoi(field_buf);
                     ptr = &new_enum;
                     TC_IOT_LOG_TRACE("state change:[%s|%d]", p_prop->name, (*(tc_iot_shadow_enum *) ptr));
@@ -167,7 +169,11 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                     continue;
                 }
 
+                tc_iot_shadow_save_to_cached(p_shadow_client, p_prop->id, ptr, p_shadow_client->p_shadow_config->p_current_device_data);
+                tc_iot_shadow_save_to_cached(p_shadow_client, p_prop->id, ptr, p_shadow_client->p_shadow_config->p_desired_device_data);
+                TC_IOT_BIT_SET(p_shadow_client->desired_bits, p_prop->id);
                 tc_iot_shadow_event_notify(p_shadow_client, TC_IOT_SHADOW_EVENT_SERVER_CONTROL, ptr, p_prop);
+                tc_iot_confirm_devcie_data(p_shadow_client);
             }
         }
     }
@@ -260,7 +266,7 @@ int tc_iot_shadow_doc_parse(tc_iot_shadow_client * p_shadow_client,
         _tc_iot_sync_shadow_property(
                 p_shadow_client,
                 p_shadow_client->p_shadow_config->property_total,
-                p_shadow_client->p_shadow_config->properties,
+                p_shadow_client->p_shadow_config->properties, false,
                 desired_start, json_token, ret);
         TC_IOT_LOG_TRACE("---synchronizing desired status success---");
     }
@@ -283,18 +289,13 @@ int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client, int propert
     return ret;
 }
 
-int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client, int property_count, ...) {
+int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client) {
     char buffer[512];
     int buffer_len = sizeof(buffer);
-
     int ret = 0;
-    va_list p_args;
 
-    va_start(p_args, property_count);
-    ret = tc_iot_shadow_update_state(p_shadow_client, buffer, buffer_len,
-            _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL,
-            "desired", property_count, p_args);
-    va_end( p_args);
+    ret = tc_iot_shadow_check_and_report(p_shadow_client, buffer, buffer_len,
+            _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL);
     return ret;
 }
 

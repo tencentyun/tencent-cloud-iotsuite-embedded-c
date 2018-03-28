@@ -21,7 +21,7 @@ static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
         return ;
     }
 
-    field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, 
+    field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret,
             "passthrough.sid", session_id, sizeof(session_id));
     if (field_index > 0 ) {
         for (i = 0; i < TC_IOT_MAX_SESSION_COUNT; i++) {
@@ -94,7 +94,7 @@ char tc_iot_shadow_isconnected(tc_iot_shadow_client *c) {
 static int _tc_iot_check_expired_session(tc_iot_shadow_client *c) {
     int i;
     tc_iot_shadow_session * session;
-    
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
     for (i = 0; i < TC_IOT_MAX_SESSION_COUNT; i++) {
@@ -119,17 +119,17 @@ static int _tc_iot_check_expired_session(tc_iot_shadow_client *c) {
 
 int tc_iot_shadow_yield(tc_iot_shadow_client *c, int timeout_ms) {
 	int ret;
-	
+
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     ret = tc_iot_mqtt_client_yield(&(c->mqtt_client), timeout_ms);
     _tc_iot_check_expired_session(c);
-	
+
 	return ret;
 }
 
 tc_iot_shadow_session * tc_iot_find_empty_session(tc_iot_shadow_client *c) {
     int i;
-    
+
     if (!c) {
         return NULL;
     }
@@ -142,7 +142,7 @@ tc_iot_shadow_session * tc_iot_find_empty_session(tc_iot_shadow_client *c) {
     return NULL;
 }
 
-int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,  
+int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
          message_ack_handler callback, int timeout_ms, void * session_context) {
     char *pub_topic ;
     int rc ;
@@ -160,7 +160,7 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
             TC_IOT_LOG_ERROR("no more empty session.");
             return TC_IOT_SHADOW_SESSION_NOT_ENOUGH;
         }
-        rc = tc_iot_shadow_doc_pack_for_get_with_sid(buffer, buffer_len, &(p_session->sid[0]), 
+        rc = tc_iot_shadow_doc_pack_for_get_with_sid(buffer, buffer_len, &(p_session->sid[0]),
                 TC_IOT_SESSION_ID_LEN+1, c);
         tc_iot_hal_timer_init(&(p_session->timer));
         tc_iot_hal_timer_countdown_ms(&(p_session->timer), timeout_ms);
@@ -185,7 +185,7 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
     return rc;
 }
 
-int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         const char * reported, const char * desired,
         message_ack_handler callback, int timeout_ms, void * session_context) {
     char *pub_topic ;
@@ -204,7 +204,7 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
             TC_IOT_LOG_ERROR("no more empty session.");
             return TC_IOT_SHADOW_SESSION_NOT_ENOUGH;
         }
-        rc = tc_iot_shadow_doc_pack_for_update_with_sid(buffer, buffer_len, &(p_session->sid[0]), 
+        rc = tc_iot_shadow_doc_pack_for_update_with_sid(buffer, buffer_len, &(p_session->sid[0]),
                 TC_IOT_SESSION_ID_LEN+1, reported, desired,
                 c);
         tc_iot_hal_timer_init(&(p_session->timer));
@@ -256,7 +256,7 @@ int tc_iot_shadow_doc_pack_for_update(char *buffer, int buffer_len,
     int buffer_used = 0;
 
     ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len,
-                              "{\"method\":\"%s\",\"passthrough\":{\"m\":\"u\",\"sid\":\"%x\"}", 
+                              "{\"method\":\"%s\",\"passthrough\":{\"m\":\"u\",\"sid\":\"%x\"}",
                               TC_IOT_MQTT_METHOD_UPDATE,
                               _get_unique_session_id(&(c->mqtt_client))
                               );
@@ -340,7 +340,7 @@ int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
         }
 
         ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len,
-                "{\"method\":\"%s\",\"passthrough\":{\"sid\":\"%s\"}", 
+                "{\"method\":\"%s\",\"passthrough\":{\"sid\":\"%s\"}",
                 method,
                 session_id
                 );
@@ -462,8 +462,8 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, int property_tot
     return pos;
 }
 
-int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
-        message_ack_handler callback, int timeout_ms, void * session_context, 
+int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len,
+        message_ack_handler callback, int timeout_ms, void * session_context,
          const char * state_name, int property_count,va_list p_args) {
     char *pub_topic ;
     int rc ;
@@ -473,7 +473,7 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
     int ret = 0;
     int i = 0;
     int pos = 0;
-    
+
     tc_iot_shadow_property_def * current = NULL;
     int prop_index = 0;
     void * p_prop;
@@ -498,8 +498,8 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
     }
     pos += ret;
 
-    ret = tc_iot_shadow_add_properties(buffer + pos, buffer_len - pos, 
-            c->p_shadow_config->property_total, 
+    ret = tc_iot_shadow_add_properties(buffer + pos, buffer_len - pos,
+            c->p_shadow_config->property_total,
             c->p_shadow_config->properties, property_count, p_args);
     if (ret <= 0) {
         return TC_IOT_BUFFER_OVERFLOW;
@@ -538,6 +538,327 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
     return rc;
 }
 
+int tc_iot_shadow_cmp_local(tc_iot_shadow_client * c, int property_id, void * src, void * dest) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+    void * p_dest_offset = NULL;
+    void * p_src_offset = NULL;
+    int ret = 0;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config->properties, TC_IOT_NULL_POINTER);
+
+    p_prop = &c->p_shadow_config->properties[property_id];
+    p_dest_offset = dest + p_prop->offset;
+    p_src_offset = src + p_prop->offset;
+    switch (p_prop->type) {
+        case TC_IOT_SHADOW_TYPE_BOOL:
+            ret = memcmp( p_dest_offset, p_src_offset, sizeof(tc_iot_shadow_bool));
+            if (0 != ret) {
+                TC_IOT_LOG_TRACE("%s differ %s -> %s", p_prop->name,
+                        *(tc_iot_shadow_bool*)p_src_offset ? "true":"false",
+                        *(tc_iot_shadow_bool*)p_dest_offset ? "true":"false"
+                        );
+            }
+            break;
+        case TC_IOT_SHADOW_TYPE_NUMBER:
+            ret = memcmp( p_dest_offset, p_src_offset, sizeof(tc_iot_shadow_number));
+            if (0 != ret) {
+                TC_IOT_LOG_TRACE("%s differ %d -> %d", p_prop->name,
+                        *(tc_iot_shadow_number*)p_src_offset,
+                        *(tc_iot_shadow_number*)p_dest_offset
+                        );
+            }
+            break;
+        case TC_IOT_SHADOW_TYPE_ENUM:
+            ret = memcmp( p_dest_offset, p_src_offset, sizeof(tc_iot_shadow_enum));
+            if (0 != ret) {
+                TC_IOT_LOG_TRACE("%s differ %d -> %d", p_prop->name,
+                        *(tc_iot_shadow_number*)p_src_offset,
+                        *(tc_iot_shadow_number*)p_dest_offset
+                        );
+            }
+            break;
+        default:
+            TC_IOT_LOG_ERROR("invalid data type=%d found", p_prop->type);
+            return -1;
+    }
+    return ret;
+}
+
+int tc_iot_shadow_cmp_reported_with_local(tc_iot_shadow_client * c, int property_id) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+    void * p_current = NULL;
+    void * p_reported = NULL;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config->properties, TC_IOT_NULL_POINTER);
+
+    return tc_iot_shadow_cmp_local(c, property_id,
+            c->p_shadow_config->p_reported_device_data,
+            c->p_shadow_config->p_current_device_data
+            );
+}
+
+
+int tc_iot_shadow_cmp_desired_with_local(tc_iot_shadow_client * c, int property_id) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+    void * p_current = NULL;
+    void * p_reported = NULL;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config->properties, TC_IOT_NULL_POINTER);
+
+    return tc_iot_shadow_cmp_local(c, property_id,
+            c->p_shadow_config->p_desired_device_data,
+            c->p_shadow_config->p_current_device_data
+            );
+}
+
+void * tc_iot_shadow_copy_local_to_reported(tc_iot_shadow_client * c, int property_id) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+    void * p_current = NULL;
+    void * p_reported = NULL;
+
+    IF_NULL_RETURN_DATA(c, p_reported);
+    IF_NULL_RETURN_DATA(c->p_shadow_config, p_reported);
+    IF_NULL_RETURN_DATA(c->p_shadow_config->properties, p_reported);
+
+    p_prop = &c->p_shadow_config->properties[property_id];
+    p_current = c->p_shadow_config->p_current_device_data + p_prop->offset;
+    p_reported = c->p_shadow_config->p_reported_device_data + p_prop->offset;
+
+    switch (p_prop->type) {
+        case TC_IOT_SHADOW_TYPE_BOOL:
+            return memcpy( p_reported, p_current, sizeof(tc_iot_shadow_bool));
+        case TC_IOT_SHADOW_TYPE_NUMBER:
+            return memcpy( p_reported, p_current, sizeof(tc_iot_shadow_number));
+        case TC_IOT_SHADOW_TYPE_ENUM:
+            return memcpy( p_reported, p_current, sizeof(tc_iot_shadow_enum));
+        default:
+            TC_IOT_LOG_ERROR("invalid data type=%d found", p_prop->type);
+            return p_reported;
+    }
+}
+
+void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, void * p_cache) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+    void * p_current = NULL;
+    void * p_dest = NULL;
+
+    IF_NULL_RETURN_DATA(c, p_dest);
+    IF_NULL_RETURN_DATA(c->p_shadow_config, p_dest);
+    IF_NULL_RETURN_DATA(c->p_shadow_config->properties, p_dest);
+    IF_NULL_RETURN_DATA(p_cache, p_dest);
+
+    p_prop = &c->p_shadow_config->properties[property_id];
+    p_dest = p_cache + p_prop->offset;
+
+    switch (p_prop->type) {
+        case TC_IOT_SHADOW_TYPE_BOOL:
+            return memcpy( p_dest, p_data, sizeof(tc_iot_shadow_bool));
+        case TC_IOT_SHADOW_TYPE_NUMBER:
+            return memcpy( p_dest, p_data, sizeof(tc_iot_shadow_number));
+        case TC_IOT_SHADOW_TYPE_ENUM:
+            return memcpy( p_dest, p_data, sizeof(tc_iot_shadow_enum));
+        default:
+            TC_IOT_LOG_ERROR("invalid data type=%d found", p_prop->type);
+            return p_dest;
+    }
+}
+
+int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, char * buffer, int buffer_len) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+    void * p_current = NULL;
+    void * p_reported = NULL;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config->properties, TC_IOT_NULL_POINTER);
+
+    p_prop = &c->p_shadow_config->properties[property_id];
+    p_current = c->p_shadow_config->p_current_device_data + p_prop->offset;
+    p_reported = c->p_shadow_config->p_reported_device_data + p_prop->offset;
+
+    switch (p_prop->type) {
+        case TC_IOT_SHADOW_TYPE_BOOL:
+            tc_iot_shadow_copy_local_to_reported(c, property_id);
+            if (*(tc_iot_shadow_bool *)p_current) {
+                return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":true", p_prop->name);
+            } else {
+                return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":false", p_prop->name);
+            }
+        case TC_IOT_SHADOW_TYPE_NUMBER:
+            tc_iot_shadow_copy_local_to_reported(c, property_id);
+            return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":%d", p_prop->name, *(tc_iot_shadow_number *)p_current);
+        case TC_IOT_SHADOW_TYPE_ENUM:
+            tc_iot_shadow_copy_local_to_reported(c, property_id);
+            return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":%d", p_prop->name, *(tc_iot_shadow_enum *)p_current);
+        default:
+            TC_IOT_LOG_ERROR("invalid data name=%s,type=%d found", p_prop->name, p_prop->type);
+            return 0;
+    }
+}
+
+int tc_iot_shadow_confirm_change(tc_iot_shadow_client * c, int property_id, char * buffer, int buffer_len) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+    void * p_current = NULL;
+    void * p_desired = NULL;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(c->p_shadow_config->properties, TC_IOT_NULL_POINTER);
+
+    p_prop = &c->p_shadow_config->properties[property_id];
+
+    return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":null", p_prop->name);
+}
+
+
+int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int buffer_len,
+        message_ack_handler callback, int timeout_ms, void * session_context) {
+    char *pub_topic ;
+    int rc ;
+    tc_iot_shadow_session * p_session;
+    tc_iot_mqtt_message pubmsg;
+
+    int ret = 0;
+    int i = 0;
+    int pos = 0;
+
+    tc_iot_shadow_property_def * current = NULL;
+    int prop_index = 0;
+    void * p_prop;
+    int desired_count = 0;
+    int reported_count = 0;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+
+    p_session = tc_iot_find_empty_session(c);
+    if (!p_session) {
+        TC_IOT_LOG_ERROR("no more empty session.");
+        return TC_IOT_SHADOW_SESSION_NOT_ENOUGH;
+    }
+
+    ret = tc_iot_shadow_doc_pack_start(buffer+pos, buffer_len-pos, &(p_session->sid[0]), TC_IOT_SESSION_ID_LEN+1, TC_IOT_MQTT_METHOD_UPDATE, c);
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"state\":{\"desired\":{");
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    for (i = 0; i < c->p_shadow_config->property_total; ++i) {
+        /* 清空 desired 数据 */
+        /* TODO check if desired succes */
+        if (TC_IOT_BIT_GET(c->desired_bits,i)) {
+            /* 仅当本地状态和服务端在控制指令状态一致时，发送确认指令，清空 desired 数据。 */
+            if (0 != tc_iot_shadow_cmp_desired_with_local(c, i)) {
+                TC_IOT_LOG_ERROR("property_id=%d control failed", i);
+                continue;
+            }
+            if (desired_count > 0) {
+                ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",");
+                if (ret <= 0) {
+                    return TC_IOT_BUFFER_OVERFLOW;
+                }
+                pos += ret;
+                desired_count++;
+            }
+            ret = tc_iot_shadow_confirm_change(c, i, buffer+pos, buffer_len-pos);
+            if (ret <= 0) {
+                return TC_IOT_BUFFER_OVERFLOW;
+            }
+            pos += ret;
+            TC_IOT_BIT_CLEAR(c->desired_bits, i);
+        }
+    }
+
+    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "},\"reported\":{");
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    for (i = 0; i < c->p_shadow_config->property_total; ++i) {
+        /* 未上报过的数据，无条件做上报 */
+        if (!TC_IOT_BIT_GET(c->reported_bits,i)) {
+            if (reported_count > 0) {
+                ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",");
+                if (ret <= 0) {
+                    return TC_IOT_BUFFER_OVERFLOW;
+                }
+                pos += ret;
+            }
+            reported_count++;
+            ret = tc_iot_shadow_report_property(c, i, buffer+pos, buffer_len-pos);
+            if (ret <= 0) {
+                return TC_IOT_BUFFER_OVERFLOW;
+            }
+            TC_IOT_LOG_TRACE("report(first time): %s", buffer+pos);
+            pos += ret;
+            TC_IOT_BIT_SET(c->reported_bits,i);
+        } else {
+            /* 上报过的数据，则对于本地数据和已上报数据不一致的，才做上报 */
+            if (tc_iot_shadow_cmp_reported_with_local(c, i) != 0) {
+                if (reported_count > 0) {
+                    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",");
+                    if (ret <= 0) {
+                        return TC_IOT_BUFFER_OVERFLOW;
+                    }
+                    pos += ret;
+                }
+                reported_count++;
+                ret = tc_iot_shadow_report_property(c, i, buffer+pos, buffer_len-pos);
+                if (ret <= 0) {
+                    return TC_IOT_BUFFER_OVERFLOW;
+                }
+                TC_IOT_LOG_TRACE("report(changed): %s", buffer+pos);
+                pos += ret;
+                TC_IOT_BIT_SET(c->reported_bits,i);
+            }
+        }
+    }
+
+    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "}}");
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    ret = tc_iot_shadow_doc_pack_end(buffer+pos, buffer_len-pos, c);
+    if (ret <= 0) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    pos += ret;
+
+    tc_iot_hal_timer_init(&(p_session->timer));
+    tc_iot_hal_timer_countdown_ms(&(p_session->timer), timeout_ms);
+    p_session->handler = callback;
+    p_session->session_context = session_context;
+
+    memset(&pubmsg, 0, sizeof(pubmsg));
+    pubmsg.payload = buffer;
+    pubmsg.payloadlen = strlen(pubmsg.payload);
+    pubmsg.qos = TC_IOT_QOS1;
+    pubmsg.retained = 0;
+    pubmsg.dup = 0;
+    TC_IOT_LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);
+    pub_topic = c->p_shadow_config->pub_topic;
+    rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
+    if (TC_IOT_SUCCESS != rc) {
+        TC_IOT_LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
+    }
+    return rc;
+}
+
+
 
 int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_client *c) {
     int ret;
@@ -553,8 +874,8 @@ int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_clien
     return buffer_used;
 }
 
-int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
-        message_ack_handler callback, int timeout_ms, void * session_context, 
+int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len,
+        message_ack_handler callback, int timeout_ms, void * session_context,
          int info_count,va_list p_args) {
     char *pub_topic ;
     int rc ;

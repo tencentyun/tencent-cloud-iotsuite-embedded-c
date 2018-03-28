@@ -35,6 +35,7 @@ typedef struct _tc_iot_shadow_config {
     tc_iot_event_handler event_notify;
     void * p_current_device_data;
     void * p_reported_device_data;
+    void * p_desired_device_data;
 } tc_iot_shadow_config;
 
 typedef enum _tc_iot_command_ack_status_e {
@@ -292,13 +293,22 @@ int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int b
 void tc_iot_device_on_message_received(tc_iot_message_data* md);
 void _device_on_message_received(tc_iot_message_data* md);
 int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
-        int property_total, tc_iot_shadow_property_def * properties,
+        int property_total, tc_iot_shadow_property_def * properties, bool reported,
         const char * doc_start, jsmntok_t * json_token, int tok_count);
 
 int tc_iot_shadow_doc_parse(tc_iot_shadow_client * p_shadow_client,
         const char * payload, jsmntok_t * json_token, int token_count, char * field_buf, int field_buf_len);
 
 int tc_iot_shadow_event_notify(tc_iot_shadow_client * p_shadow_client, tc_iot_event_e event, void * data, void * context);
+
+int tc_iot_shadow_cmp_local(tc_iot_shadow_client * c, int property_id, void * src, void * dest);
+int tc_iot_shadow_cmp_local_with_reported(tc_iot_shadow_client * c, int property_id);
+int tc_iot_shadow_cmp_local_with_desired(tc_iot_shadow_client * c, int property_id);
+void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, void * p_cache);
+
+int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, char * buffer, int buffer_len);
+int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int buffer_len,
+        message_ack_handler callback, int timeout_ms, void * session_context);
 
 int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, int info_count, ...);
 int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client, int property_count, ...);

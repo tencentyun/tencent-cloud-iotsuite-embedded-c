@@ -227,6 +227,10 @@ tc_iot_shadow_property_def g_tc_iot_shadow_property_defs[] = {
 tc_iot_shadow_local_data g_tc_iot_device_local_data = {
 /*<default_init_str>*/};
 
+/* 设备状态控制数据 */
+static tc_iot_shadow_local_data g_tc_iot_device_desired_data = {
+/*<default_init_str>*/};
+
 /* 设备已上报状态数据 */
 tc_iot_shadow_local_data g_tc_iot_device_reported_data = {
 /*<default_init_str>*/};
@@ -266,6 +270,7 @@ tc_iot_shadow_config g_tc_iot_shadow_config = {
     _tc_iot_shadow_property_control_callback,
     &g_tc_iot_device_local_data,
     &g_tc_iot_device_reported_data,
+    &g_tc_iot_device_desired_data,
 };
 
 
