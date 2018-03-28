@@ -128,7 +128,7 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
  * @return 结果返回码或成功读取字节数
  *  假如timeout_ms超时读取了0字节, 返回 TC_IOT_NET_NOTHING_READ
  *  假如timeout_ms超时读取字节数没有达到 len , 返回实际读取字节
- *  假如对端关闭连接导致取字节数没有达到 len, 返回 实际读取字节数, 没有读取数据到返回0
+ *  假如对端关闭连接导致取字节数没有达到 len, 返回 实际读取字节数, 没有读取到数据返回0
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
