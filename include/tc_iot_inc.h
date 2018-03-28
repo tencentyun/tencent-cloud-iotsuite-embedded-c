@@ -7,6 +7,7 @@
 
 #include "common/tc_iot_log.h"
 #include "common/tc_iot_const.h"
+#include "common/tc_iot_bit.h"
 #include "common/tc_iot_safety_check.h"
 #include "common/tc_iot_hmac.h"
 #include "platform/tc_iot_hal_os.h"
@@ -14,7 +15,7 @@
 #include "platform/tc_iot_hal_network.h"
 
 #include "common/tc_iot_ya_buffer.h"
-#include "common/tc_iot_http_utils.h" 
+#include "common/tc_iot_http_utils.h"
 #include "common/tc_iot_base64.h"
 #include "common/tc_iot_json.h"
 #include "common/tc_iot_url.h"

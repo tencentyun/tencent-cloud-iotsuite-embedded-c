@@ -138,17 +138,17 @@ int main(int argc, char** argv) {
         tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
     }
 
-    ret = tc_iot_server_init(&g_tc_iot_shadow_config);
+    ret = tc_iot_server_init(tc_iot_get_shadow_client(), &g_tc_iot_shadow_config);
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("tc_iot_server_init failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
         return 0;
     }
 
     while (!stop) {
-        tc_iot_server_loop(200);
+        tc_iot_server_loop(tc_iot_get_shadow_client(), 200);
     }
 
-    tc_iot_server_destroy();
+    tc_iot_server_destroy(tc_iot_get_shadow_client());
     return 0;
 }
 

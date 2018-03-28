@@ -1,6 +1,8 @@
 #ifndef TC_IOT_SHADOW_H
 #define TC_IOT_SHADOW_H
 
+#define TC_IOT_MAX_PROPERTY_COUNT   128
+
 typedef int tc_iot_shadow_number;
 typedef int tc_iot_shadow_enum;
 typedef bool tc_iot_shadow_bool;
@@ -16,6 +18,7 @@ typedef struct _tc_iot_shadow_property_def {
     const char * name;
     int id;
     tc_iot_shadow_data_type_e  type;
+    int offset;
 } tc_iot_shadow_property_def;
 
 
@@ -30,6 +33,8 @@ typedef struct _tc_iot_shadow_config {
     int property_total;
     tc_iot_shadow_property_def * properties;
     tc_iot_event_handler event_notify;
+    void * p_current_device_data;
+    void * p_reported_device_data;
 } tc_iot_shadow_config;
 
 typedef enum _tc_iot_command_ack_status_e {
@@ -46,7 +51,7 @@ typedef void (*message_ack_handler)(tc_iot_command_ack_status_e ack_status, tc_i
 typedef struct _tc_iot_shadow_session{
     char sid[TC_IOT_SESSION_ID_LEN+1];
     tc_iot_timer        timer;
-    message_ack_handler handler;    
+    message_ack_handler handler;
     void * session_context;
 }tc_iot_shadow_session;
 
@@ -58,13 +63,15 @@ typedef struct _tc_iot_shadow_client {
     tc_iot_shadow_config* p_shadow_config; /**< 影子设备配置*/
     tc_iot_mqtt_client mqtt_client; /**< MQTT 客户端*/
     tc_iot_shadow_session sessions[TC_IOT_MAX_SESSION_COUNT];
+    char desired_bits[(TC_IOT_MAX_PROPERTY_COUNT/8)+1];
+    char reported_bits[(TC_IOT_MAX_PROPERTY_COUNT/8)+1];
 } tc_iot_shadow_client;
 
 
 /**
  * @brief tc_iot_shadow_doc_pack_for_get 构造 get 请求包，用于读取影子设备服务端数据。
  *
- * @param buffer 输出结果缓存区 
+ * @param buffer 输出结果缓存区
  * @param buffer_len 输出结果缓存区大小
  * @param c 影子设备客户端
  *
@@ -76,7 +83,7 @@ int tc_iot_shadow_doc_pack_for_get(char * buffer, int buffer_len, tc_iot_shadow_
 /**
  * @brief tc_iot_shadow_doc_pack_for_update 生成影子设备文档或属性上报请求包
  *
- * @param buffer 输出结果缓存区 
+ * @param buffer 输出结果缓存区
  * @param buffer_len 输出结果缓存区大小
  * @param c 影子设备客户端
  * @param reported Reported 文档上报数据
@@ -89,7 +96,7 @@ int tc_iot_shadow_doc_pack_for_update(char * buffer, int buffer_len, tc_iot_shad
 /**
  * @brief tc_iot_shadow_doc_pack_for_delete 生成影子设备删除文档或属性请求包
  *
- * @param buffer 输出结果缓存区 
+ * @param buffer 输出结果缓存区
  * @param buffer_len 输出结果缓存区大小
  * @param c 影子设备客户端
  * @param reported Reported 属性数据删除指令
@@ -138,7 +145,7 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
  * @param p_shadow_client 设备影子对象
  * @param p_config 初始化设备影子对象所需参数配置
  *
- * @return 结果返回码 
+ * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
 int tc_iot_shadow_construct(tc_iot_shadow_client * p_shadow_client,
@@ -169,7 +176,7 @@ char tc_iot_shadow_isconnected(tc_iot_shadow_client *p_shadow_client);
  * @param  p_shadow_client 设备影子对象
  * @param timeout_ms 等待时延，单位毫秒
  *
- * @return 结果返回码 
+ * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
 int tc_iot_shadow_yield(tc_iot_shadow_client *p_shadow_client, int timeout_ms);
@@ -187,10 +194,10 @@ int tc_iot_shadow_yield(tc_iot_shadow_client *p_shadow_client, int timeout_ms);
  * 等待时间。
  * @param session_context 请求相关 context，可选，无需透传时，可传默认的 NULL 。
  *
- * @return 结果返回码 
+ * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
-int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,  
+int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
          message_ack_handler callback, int timeout_ms, void * context);
 
 /**
@@ -201,12 +208,12 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
  * @param buffer_len 设备影子文档缓存最大长度
  * @param reported reported 字段上报数据，可传递三类数据：
  * 1. NULL : 当不需要上报 reported 字段时，传 NULL 。
- * 2. TC_IOT_JSON_NULL : 当需要清空 reported 字段数据时，传 TC_IOT_JSON_NULL 。 
+ * 2. TC_IOT_JSON_NULL : 当需要清空 reported 字段数据时，传 TC_IOT_JSON_NULL 。
  * 3. {"a":1,"b":"some string"} : 当需要正常上报 reported 数据时，传有效的 json 字符串。
  *
  * @param desired desired 字段上报数据，可传递三类数据：
  * 1. NULL : 当不需要上报 desired 字段时，传 NULL 。
- * 2. TC_IOT_JSON_NULL : 当需要清空 desired 字段数据时，传 TC_IOT_JSON_NULL 。 
+ * 2. TC_IOT_JSON_NULL : 当需要清空 desired 字段数据时，传 TC_IOT_JSON_NULL 。
  * 3. {"a":1,"b":"some string"} : 当需要正常上报 desired 数据时，传有效的 json 字符串。
  *
  * @param callback 请求响应数据回调，可选，传 NULL 则表示不指定响应回调，未指定
@@ -215,10 +222,10 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
  * 等待时间。
  * @param session_context 请求相关 context，可选，无需透传时，可传默认的 NULL 。
  *
- * @return 结果返回码 
+ * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
-int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         const char * reported, const char * desired,
         message_ack_handler callback, int timeout_ms, void * session_context);
 
@@ -231,12 +238,12 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
  * @param buffer_len 设备影子文档缓存最大长度
  * @param reported reported 字段上报数据，可传递三类数据：
  * 1. NULL : 当不需要上报 reported 字段时，传 NULL 。
- * 2. TC_IOT_JSON_NULL : 当需要清空 reported 字段数据时，传 TC_IOT_JSON_NULL 。 
+ * 2. TC_IOT_JSON_NULL : 当需要清空 reported 字段数据时，传 TC_IOT_JSON_NULL 。
  * 3. {"a":1,"b":"some string"} : 当需要正常上报 reported 数据时，传有效的 json 字符串。
  *
  * @param desired desired 字段上报数据，可传递三类数据：
  * 1. NULL : 当不需要上报 desired 字段时，传 NULL 。
- * 2. TC_IOT_JSON_NULL : 当需要清空 desired 字段数据时，传 TC_IOT_JSON_NULL 。 
+ * 2. TC_IOT_JSON_NULL : 当需要清空 desired 字段数据时，传 TC_IOT_JSON_NULL 。
  * 3. {"a":1,"b":"some string"} : 当需要正常上报 desired 数据时，传有效的 json 字符串。
  *
  * @param callback 请求响应数据回调，可选，传 NULL 则表示不指定响应回调，未指定
@@ -246,10 +253,10 @@ int tc_iot_shadow_update(tc_iot_shadow_client *c, char * buffer, int buffer_len,
  * @param session_context 请求相关 context，可选，无需透传时，可传默认的 NULL 。
  *
  *
- * @return 结果返回码 
+ * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
-int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
+int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         const char * reported, const char * desired,
         message_ack_handler callback, int timeout_ms, void * session_context);
 int tc_iot_shadow_doc_pack_for_get_with_sid(char *buffer, int buffer_len,
@@ -269,34 +276,37 @@ int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
                                  const char * method,
                                  tc_iot_shadow_client *c);
 
-int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len, 
-        const char * reported, 
+int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len,
+        const char * reported,
         const char * desired);
 int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_client *c);
 
-int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
-        message_ack_handler callback, int timeout_ms, void * session_context, 
+int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len,
+        message_ack_handler callback, int timeout_ms, void * session_context,
          const char * state_name, int count, va_list p_args);
 
-int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len, 
-        message_ack_handler callback, int timeout_ms, void * session_context, 
+int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len,
+        message_ack_handler callback, int timeout_ms, void * session_context,
          int info_count,va_list p_args);
 
 void tc_iot_device_on_message_received(tc_iot_message_data* md);
 void _device_on_message_received(tc_iot_message_data* md);
-int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client, 
-        int property_total, tc_iot_shadow_property_def * properties, 
+int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
+        int property_total, tc_iot_shadow_property_def * properties,
         const char * doc_start, jsmntok_t * json_token, int tok_count);
 
-int tc_iot_shadow_event_notify(tc_iot_event_e event, void * data, void * context);
+int tc_iot_shadow_doc_parse(tc_iot_shadow_client * p_shadow_client,
+        const char * payload, jsmntok_t * json_token, int token_count, char * field_buf, int field_buf_len);
 
-int tc_iot_report_firm(int info_count, ...);
-int tc_iot_report_device_data(int property_count, ...);
-int tc_iot_control_propeties(int property_count, ...); 
+int tc_iot_shadow_event_notify(tc_iot_shadow_client * p_shadow_client, tc_iot_event_e event, void * data, void * context);
 
-int tc_iot_server_init(tc_iot_shadow_config * p_client_config);
-int tc_iot_server_loop(int yield_timeout);
-int tc_iot_server_destroy(void);
+int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, int info_count, ...);
+int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client, int property_count, ...);
+int tc_iot_control_propeties(tc_iot_shadow_client* p_shadow_client, int property_count, ...);
+
+int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_config * p_client_config);
+int tc_iot_server_loop(tc_iot_shadow_client* p_shadow_client, int yield_timeout);
+int tc_iot_server_destroy(tc_iot_shadow_client* p_shadow_client);
 
 #endif /* end of include guard */
 

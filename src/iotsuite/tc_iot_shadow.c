@@ -400,7 +400,12 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, int property_tot
 
     for(i = 0; i < property_count; i++) {
         prop_index = va_arg (p_args, int);
-        TC_IOT_LOG_TRACE("No.%d param as prop index=%d", i, prop_index);
+        if (prop_index < 0 || prop_index >= property_count) {
+            TC_IOT_LOG_ERROR("No.%d param as prop index=%d", i, prop_index);
+            continue;
+        } else {
+            TC_IOT_LOG_TRACE("No.%d param as prop index=%d", i, prop_index);
+        }
         current = &properties[prop_index];
         p_prop = va_arg (p_args, void *);
         if (i > 0) {

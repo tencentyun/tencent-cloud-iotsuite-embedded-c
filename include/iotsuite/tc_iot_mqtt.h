@@ -65,6 +65,7 @@ typedef struct _tc_iot_mqtt_message {
 typedef struct _tc_iot_message_data {
     tc_iot_mqtt_message* message; /**< 消息内容*/
     MQTTString* topicName; /**< 所属 Topic*/
+    void * mqtt_client;
     void * context;
 } tc_iot_message_data;
 

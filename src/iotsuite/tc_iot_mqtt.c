@@ -25,7 +25,7 @@ void tc_iot_init_mqtt_conn_data(MQTTPacket_connectData * conn_data)
 }
 
 static void _on_new_message_data(tc_iot_message_data* md, MQTTString* topic,
-                                 tc_iot_mqtt_message* message, void * context) {
+                                 tc_iot_mqtt_message* message, void * context, void * mqtt_client) {
     if (!md) {
         TC_IOT_LOG_ERROR("md is null");
         return;
@@ -44,6 +44,7 @@ static void _on_new_message_data(tc_iot_message_data* md, MQTTString* topic,
     md->topicName = topic;
     md->message = message;
     md->context = context;
+    md->mqtt_client = mqtt_client;
 }
 
 static int _handle_reconnect(tc_iot_mqtt_client* c) {
@@ -380,7 +381,7 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
                             topicName))) {
             if (c->message_handlers[i].fp != NULL) {
                 tc_iot_message_data md;
-                _on_new_message_data(&md, topicName, message, c->message_handlers[i].context);
+                _on_new_message_data(&md, topicName, message, c->message_handlers[i].context, c);
                 c->message_handlers[i].fp(&md);
                 rc = TC_IOT_SUCCESS;
             }
@@ -388,7 +389,7 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
     }
 
     if (rc == TC_IOT_FAILURE && c->default_msg_handler != NULL) {
-        _on_new_message_data(&md, topicName, message, c->message_handlers[i].context);
+        _on_new_message_data(&md, topicName, message, c->message_handlers[i].context,c);
         c->default_msg_handler(&md);
         rc = TC_IOT_SUCCESS;
     }
