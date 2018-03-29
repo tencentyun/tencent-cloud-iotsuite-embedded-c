@@ -549,8 +549,8 @@ int tc_iot_shadow_cmp_local(tc_iot_shadow_client * c, int property_id, void * sr
     IF_NULL_RETURN(c->p_shadow_config->properties, TC_IOT_NULL_POINTER);
 
     p_prop = &c->p_shadow_config->properties[property_id];
-    p_dest_offset = dest + p_prop->offset;
-    p_src_offset = src + p_prop->offset;
+    p_dest_offset = (char *)dest + p_prop->offset;
+    p_src_offset = (char *)src + p_prop->offset;
     switch (p_prop->type) {
         case TC_IOT_SHADOW_TYPE_BOOL:
             ret = memcmp( p_dest_offset, p_src_offset, sizeof(tc_iot_shadow_bool));
@@ -627,8 +627,8 @@ void * tc_iot_shadow_copy_local_to_reported(tc_iot_shadow_client * c, int proper
     IF_NULL_RETURN_DATA(c->p_shadow_config->properties, p_reported);
 
     p_prop = &c->p_shadow_config->properties[property_id];
-    p_current = c->p_shadow_config->p_current_device_data + p_prop->offset;
-    p_reported = c->p_shadow_config->p_reported_device_data + p_prop->offset;
+    p_current = (char *)c->p_shadow_config->p_current_device_data + p_prop->offset;
+    p_reported = (char *)c->p_shadow_config->p_reported_device_data + p_prop->offset;
 
     switch (p_prop->type) {
         case TC_IOT_SHADOW_TYPE_BOOL:
@@ -654,7 +654,7 @@ void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, c
     IF_NULL_RETURN_DATA(p_cache, p_dest);
 
     p_prop = &c->p_shadow_config->properties[property_id];
-    p_dest = p_cache + p_prop->offset;
+    p_dest = (char *)p_cache + p_prop->offset;
 
     switch (p_prop->type) {
         case TC_IOT_SHADOW_TYPE_BOOL:
@@ -679,8 +679,8 @@ int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, cha
     IF_NULL_RETURN(c->p_shadow_config->properties, TC_IOT_NULL_POINTER);
 
     p_prop = &c->p_shadow_config->properties[property_id];
-    p_current = c->p_shadow_config->p_current_device_data + p_prop->offset;
-    p_reported = c->p_shadow_config->p_reported_device_data + p_prop->offset;
+    p_current = (char *)c->p_shadow_config->p_current_device_data + p_prop->offset;
+    p_reported = (char *)c->p_shadow_config->p_reported_device_data + p_prop->offset;
 
     switch (p_prop->type) {
         case TC_IOT_SHADOW_TYPE_BOOL:

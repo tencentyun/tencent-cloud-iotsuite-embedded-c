@@ -16,6 +16,7 @@ add_definitions(-DENABLE_TC_IOT_LOG_INFO)
 add_definitions(-DENABLE_TC_IOT_LOG_WARN)
 add_definitions(-DENABLE_TC_IOT_LOG_ERROR)
 add_definitions(-DENABLE_TC_IOT_LOG_FATAL)
+add_definitions(-Werror=pointer-arith)
 
 message(STATUS "CMake version: " ${CMAKE_VERSION})
 message(STATUS "CMake system name: " ${CMAKE_SYSTEM_NAME})
@@ -42,10 +43,10 @@ file(COPY tools/tc_iot_code_generator.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRE
 
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
-    option(ENABLE_TLS "use mqtt/http over tls" OFF) 
+    option(ENABLE_TLS "use mqtt/http over tls" OFF)
     #add_definitions(-std=c89)
 else()
-    option(ENABLE_TLS "use mqtt/http over tls" ON) 
+    option(ENABLE_TLS "use mqtt/http over tls" ON)
 endif()
 
 option(ENABLE_TESTING "enable testting" ON)
