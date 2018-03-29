@@ -21,6 +21,6 @@ typedef struct _tc_iot_shadow_local_data {
 #define TC_IOT_PROP_color_green 1
 #define TC_IOT_PROP_color_blue 2
 
-tc_iot_shadow_client * tc_iot_get_shadow_client(void);
 
+tc_iot_shadow_client * tc_iot_get_shadow_client(void);
 #endif /* end of include guard */
