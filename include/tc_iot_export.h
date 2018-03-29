@@ -166,41 +166,20 @@ int tc_iot_server_destroy(tc_iot_shadow_client* p_shadow_client);
  *  @brief tc_iot_report_device_data
 
     @par
-    上报设备数据点参数最新数据状态，更新到服务端。
-
-    @par
-    例如，设备定义了 switch、color、brightness，三个参数，上报调用如下：
-    @code{.c}
-    tc_iot_report_device_data(3, TC_IOT_PROP_switch, &switch, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
-    @endcode
-
-    @par
-    只上报 switch 状态：
-    @code{.c}
-    tc_iot_report_device_data(1, TC_IOT_PROP_switch, &switch);
-    @endcode
-
-    @par
-    上报 color 和 brightnes 状态：
-    @code{.c}
-    tc_iot_report_device_data(2, TC_IOT_PROP_color, &color, TC_IOT_PROP_brightness, &brightness);
-    @endcode
+    检查本地变量数据和服务端差异，上报设备数据点参数最新数据状态，更新到服务端。
 
  *  @param  p_shadow_client 设备影子对象
- *  @param property_count 上报数据点数
- *  @param va_list 可变参数列表，根据实际上报情况指定，格式为 proprty_id1,value1_address, proprty_id2,value2_address,  ...
- * 按照 参数编号&参数地址 成对方式，依次指定，property_count 的值为 property_id1 ~ property_idN 的总key数。
  *  @return 结果返回码
  *  @see tc_iot_sys_code_e
  */
-int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client, int property_count, ...);
+int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client);
 
 /**
  *  @brief tc_iot_confirm_devcie_data
 
     @par
     确认服务端控制指令执行结果，如果服务端下发的 desired 指令执行成功，
-    则上报最新状态，并自动清空指令。
+    则上报最新状态，并清空对应的 desired 指令。
  *  @param  p_shadow_client 设备影子对象
  *  @return 结果返回码
  *  @see tc_iot_sys_code_e

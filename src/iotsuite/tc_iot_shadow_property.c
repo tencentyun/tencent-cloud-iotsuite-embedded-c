@@ -106,6 +106,7 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
     int  key_len = 0, val_len = 0;
     const char * key_start;
     const char * val_start;
+    int ret = 0;
     tc_iot_shadow_property_def * p_prop = NULL;
     void  * ptr = NULL;
 
@@ -169,10 +170,12 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                     continue;
                 }
 
-                tc_iot_shadow_save_to_cached(p_shadow_client, p_prop->id, ptr, p_shadow_client->p_shadow_config->p_current_device_data);
                 tc_iot_shadow_save_to_cached(p_shadow_client, p_prop->id, ptr, p_shadow_client->p_shadow_config->p_desired_device_data);
                 TC_IOT_BIT_SET(p_shadow_client->desired_bits, p_prop->id);
-                tc_iot_shadow_event_notify(p_shadow_client, TC_IOT_SHADOW_EVENT_SERVER_CONTROL, ptr, p_prop);
+                ret = tc_iot_shadow_event_notify(p_shadow_client, TC_IOT_SHADOW_EVENT_SERVER_CONTROL, ptr, p_prop);
+                if (ret == TC_IOT_SUCCESS) {
+                    tc_iot_shadow_save_to_cached(p_shadow_client, p_prop->id, ptr, p_shadow_client->p_shadow_config->p_current_device_data);
+                }
                 tc_iot_confirm_devcie_data(p_shadow_client);
             }
         }
@@ -273,19 +276,13 @@ int tc_iot_shadow_doc_parse(tc_iot_shadow_client * p_shadow_client,
     return TC_IOT_SUCCESS;
 }
 
-int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client, int property_count, ...) {
+int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client) {
     char buffer[512];
     int buffer_len = sizeof(buffer);
-
     int ret = 0;
-    va_list p_args;
 
-    TC_IOT_LOG_TRACE("property_count=%d", property_count);
-    va_start(p_args, property_count);
-    ret = tc_iot_shadow_update_state(p_shadow_client, buffer, buffer_len,
-            _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL,
-            "reported", property_count, p_args);
-    va_end( p_args);
+    ret = tc_iot_shadow_check_and_report(p_shadow_client, buffer, buffer_len,
+            _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, false);
     return ret;
 }
 
@@ -295,7 +292,7 @@ int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client) {
     int ret = 0;
 
     ret = tc_iot_shadow_check_and_report(p_shadow_client, buffer, buffer_len,
-            _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL);
+            _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, true);
     return ret;
 }
 
@@ -356,8 +353,76 @@ int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_conf
             p_shadow_client->mqtt_client.command_timeout_ms, p_shadow_client);
     TC_IOT_LOG_TRACE("[c->s] shadow_get%s", buffer);
 
+    tc_iot_report_device_data(p_shadow_client);
+
     return ret;
 }
+
+tc_iot_shadow_property_def * tc_iot_shadow_get_property_def(tc_iot_shadow_client * p_shadow_client, int property_id) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+
+    if (NULL == p_shadow_client) {
+        TC_IOT_LOG_ERROR("p_shadow_client = null");
+        return NULL;
+    }
+
+    if (property_id < p_shadow_client->p_shadow_config->property_total) {
+        p_prop = &p_shadow_client->p_shadow_config->properties[property_id];
+        return p_prop;
+    } else {
+        TC_IOT_LOG_ERROR("invalid property_id=%d, property_total=%d", property_id, p_shadow_client->p_shadow_config->property_total);
+        return NULL;
+    }
+}
+
+const char * tc_iot_shadow_get_property_name(tc_iot_shadow_client * p_shadow_client, int property_id) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+
+    if (NULL == p_shadow_client) {
+        TC_IOT_LOG_ERROR("p_shadow_client = null");
+        return NULL;
+    }
+
+    p_prop = tc_iot_shadow_get_property_def(p_shadow_client, property_id);
+    if (p_prop) {
+        return p_prop->name;
+    } else {
+        return "not_found";
+    }
+}
+
+int tc_iot_shadow_get_property_type(tc_iot_shadow_client * p_shadow_client, int property_id) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+
+    if (NULL == p_shadow_client) {
+        TC_IOT_LOG_ERROR("p_shadow_client = null");
+        return TC_IOT_SHADOW_TYPE_INVALID;
+    }
+
+    p_prop = tc_iot_shadow_get_property_def(p_shadow_client, property_id);
+    if (p_prop) {
+        return p_prop->type;
+    } else {
+        return TC_IOT_SHADOW_TYPE_INVALID;
+    }
+}
+
+int tc_iot_shadow_get_property_offset(tc_iot_shadow_client * p_shadow_client, int property_id) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+
+    if (NULL == p_shadow_client) {
+        TC_IOT_LOG_ERROR("p_shadow_client = null");
+        return 0;
+    }
+
+    p_prop = tc_iot_shadow_get_property_def(p_shadow_client, property_id);
+    if (p_prop) {
+        return p_prop->offset;
+    } else {
+        return 0;
+    }
+}
+
 
 int tc_iot_server_loop(tc_iot_shadow_client* p_shadow_client, int yield_timeout) {
     return tc_iot_shadow_yield(p_shadow_client, yield_timeout);

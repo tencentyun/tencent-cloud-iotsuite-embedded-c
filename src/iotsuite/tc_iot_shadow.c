@@ -109,8 +109,8 @@ static int _tc_iot_check_expired_session(tc_iot_shadow_client *c) {
                 }
                 memset(session, 0, sizeof(*session));
             } else {
-                TC_IOT_LOG_TRACE("session:%s not expired, left_ms=%d", session->sid,
-                        tc_iot_hal_timer_left_ms(&(session->timer)));
+                /* TC_IOT_LOG_TRACE("session:%s not expired, left_ms=%d", session->sid, */
+                        /* tc_iot_hal_timer_left_ms(&(session->timer))); */
             }
         }
     }
@@ -718,7 +718,7 @@ int tc_iot_shadow_confirm_change(tc_iot_shadow_client * c, int property_id, char
 
 
 int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int buffer_len,
-        message_ack_handler callback, int timeout_ms, void * session_context) {
+        message_ack_handler callback, int timeout_ms, void * session_context, bool do_confirm) {
     char *pub_topic ;
     int rc ;
     tc_iot_shadow_session * p_session;
@@ -748,43 +748,56 @@ int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int b
     }
     pos += ret;
 
-    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"state\":{\"desired\":{");
+    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"state\":{");
     if (ret <= 0) {
         return TC_IOT_BUFFER_OVERFLOW;
     }
     pos += ret;
 
-    for (i = 0; i < c->p_shadow_config->property_total; ++i) {
-        /* 清空 desired 数据 */
-        /* TODO check if desired succes */
-        if (TC_IOT_BIT_GET(c->desired_bits,i)) {
-            /* 仅当本地状态和服务端在控制指令状态一致时，发送确认指令，清空 desired 数据。 */
-            if (0 != tc_iot_shadow_cmp_desired_with_local(c, i)) {
-                TC_IOT_LOG_ERROR("property_id=%d control failed", i);
-                continue;
-            }
-            if (desired_count > 0) {
-                ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",");
+    if (do_confirm) {
+        ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\"desired\":{");
+        if (ret <= 0) {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+        pos += ret;
+        for (i = 0; i < c->p_shadow_config->property_total; ++i) {
+            /* 清空 desired 数据 */
+            /* TODO check if desired succes */
+            if (TC_IOT_BIT_GET(c->desired_bits,i)) {
+                /* 仅当本地状态和服务端在控制指令状态一致时，发送确认指令，清空 desired 数据。 */
+                if (0 != tc_iot_shadow_cmp_desired_with_local(c, i)) {
+                    TC_IOT_LOG_ERROR("device data %s change failure detected(local != desired)", tc_iot_shadow_get_property_name(c,i));
+                    continue;
+                }
+                if (desired_count > 0) {
+                    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",");
+                    if (ret <= 0) {
+                        return TC_IOT_BUFFER_OVERFLOW;
+                    }
+                    pos += ret;
+                }
+                desired_count++;
+                ret = tc_iot_shadow_confirm_change(c, i, buffer+pos, buffer_len-pos);
                 if (ret <= 0) {
                     return TC_IOT_BUFFER_OVERFLOW;
                 }
                 pos += ret;
-                desired_count++;
+                TC_IOT_BIT_CLEAR(c->desired_bits, i);
             }
-            ret = tc_iot_shadow_confirm_change(c, i, buffer+pos, buffer_len-pos);
-            if (ret <= 0) {
-                return TC_IOT_BUFFER_OVERFLOW;
-            }
-            pos += ret;
-            TC_IOT_BIT_CLEAR(c->desired_bits, i);
         }
+        ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "},\"reported\":{");
+        if (ret <= 0) {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+        pos += ret;
+    } else {
+        ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\"reported\":{");
+        if (ret <= 0) {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+        pos += ret;
     }
 
-    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "},\"reported\":{");
-    if (ret <= 0) {
-        return TC_IOT_BUFFER_OVERFLOW;
-    }
-    pos += ret;
 
     for (i = 0; i < c->p_shadow_config->property_total; ++i) {
         /* 未上报过的数据，无条件做上报 */
@@ -824,6 +837,11 @@ int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int b
                 TC_IOT_BIT_SET(c->reported_bits,i);
             }
         }
+    }
+
+    if (desired_count <= 0 && reported_count <= 0) {
+        TC_IOT_LOG_TRACE("No device data needed be reported.");
+        return TC_IOT_SUCCESS;
     }
 
     ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "}}");
