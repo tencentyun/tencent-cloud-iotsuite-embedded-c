@@ -296,17 +296,16 @@ int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client) {
     return ret;
 }
 
-int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, int info_count, ...) {
+int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, ...) {
     char buffer[512];
     int buffer_len = sizeof(buffer);
 
     int ret = 0;
     va_list p_args;
 
-    va_start(p_args, info_count);
+    va_start(p_args, p_shadow_client);
     ret = tc_iot_shadow_update_firm_info(p_shadow_client, buffer, buffer_len,
-            _tc_iot_update_firm_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL,
-            info_count, p_args);
+            _tc_iot_update_firm_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, p_args);
     TC_IOT_LOG_TRACE("[c-s]update_firm_info: %s", buffer);
     va_end( p_args);
     return ret;

@@ -296,7 +296,11 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
 
         return _tc_iot_property_change(p_property->id, msg->data);
     } else if (msg->event == TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM) {
-        tc_iot_report_firm(tc_iot_get_shadow_client(), 3, "mac","00-00-00-00-00", "sdk-ver", "1.0", "firm-ver","1.0");
+        tc_iot_report_firm(tc_iot_get_shadow_client(),
+                "product", TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
+                "device", TC_IOT_CONFIG_DEVICE_NAME,
+                "sdk-ver", "1.0",
+                "firm-ver","1.0", NULL);
     } else {
         TC_IOT_LOG_TRACE("unkown event received, event=%ds", msg->event);
     }

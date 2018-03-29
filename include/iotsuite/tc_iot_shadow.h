@@ -2,6 +2,7 @@
 #define TC_IOT_SHADOW_H
 
 #define TC_IOT_MAX_PROPERTY_COUNT   128
+#define TC_IOT_MAX_FIRM_INFO_COUNT  5
 
 typedef int tc_iot_shadow_number;
 typedef int tc_iot_shadow_enum;
@@ -288,7 +289,7 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
 
 int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         message_ack_handler callback, int timeout_ms, void * session_context,
-         int info_count,va_list p_args);
+         va_list p_args);
 
 void tc_iot_device_on_message_received(tc_iot_message_data* md);
 void _device_on_message_received(tc_iot_message_data* md);
@@ -315,7 +316,7 @@ const char * tc_iot_shadow_get_property_name(tc_iot_shadow_client * p_shadow_cli
 int tc_iot_shadow_get_property_type(tc_iot_shadow_client * p_shadow_client, int property_id);
 int tc_iot_shadow_get_property_offset(tc_iot_shadow_client * p_shadow_client, int property_id);
 
-int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, int info_count, ...);
+int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, ...);
 int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client);
 
 int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_config * p_client_config);

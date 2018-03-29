@@ -194,16 +194,15 @@ int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client);
  硬件版本，调用方式为：
 
  @code{.c}
- tc_iot_report_firm(3, "firm_version":"1.0.192", "sdk_version":"1.8", "harderwaer_ver":"gprs.v.1.0.2018092")
+ tc_iot_report_firm("firm_version":"1.0.192", "sdk_version":"1.8", "harderwaer_ver":"gprs.v.1.0.2018092", NULL)
  @endcode
 
  *  @param  p_shadow_client 设备影子对象
- *  @param info_count 固件信息数
- *  @param va_list 可变参数列表，根据实际上报情况指定，格式为 key1,value1,key2,value2, ...
- * 按照 key value 对方式，依次指定，info_count 的值为 key1 ~ keyN 的总key数。
+ *  @param va_list 可变参数列表，根据实际上报情况指定，格式为 key1,value1,key2,value2, ..., NULL
+ * 按照 key value 对方式，依次指定，最后一个参数必须为NULL，作为变参终止符。
  *  @return 结果返回码
  * @see tc_iot_sys_code_e
  */
-int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, int info_count, ...);
+int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, ...);
 
 #endif /* end of include guard */

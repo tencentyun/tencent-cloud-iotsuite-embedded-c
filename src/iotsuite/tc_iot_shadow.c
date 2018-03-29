@@ -894,7 +894,7 @@ int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_clien
 
 int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         message_ack_handler callback, int timeout_ms, void * session_context,
-         int info_count,va_list p_args) {
+         va_list p_args) {
     char *pub_topic ;
     int rc ;
     tc_iot_shadow_session * p_session;
@@ -926,17 +926,15 @@ int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int b
     }
     pos += ret;
 
-    for(i = 0; i < info_count; i++) {
+    for(i = 0; i < TC_IOT_MAX_FIRM_INFO_COUNT; i++) {
         info_name = va_arg (p_args, const char *);
-        info_value = va_arg (p_args, const char *);
         if (info_name == NULL) {
-            TC_IOT_LOG_ERROR("No.%d info name is null", i);
-            return TC_IOT_NULL_POINTER;
+            break;
         }
 
+        info_value = va_arg (p_args, const char *);
         if (info_value == NULL) {
-            TC_IOT_LOG_ERROR("No.%d info value is null", i);
-            return TC_IOT_NULL_POINTER;
+            break;
         }
 
         if (i == 0) {
