@@ -21,6 +21,7 @@ tc_iot_shadow_property_def g_tc_iot_shadow_property_defs[] = {
     { "brightness", TC_IOT_PROP_brightness, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, brightness) },
 };
 
+
 /* 设备当前状态数据 */
 tc_iot_shadow_local_data g_tc_iot_device_local_data = {
     false,
@@ -130,9 +131,6 @@ static int _tc_iot_property_change( int property_id, void * data) {
 
 int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context) {
     tc_iot_shadow_property_def * p_property = NULL;
-    tc_iot_shadow_bool device_switch = false;
-    tc_iot_shadow_enum color  = TC_IOT_PROP_color_red;
-    tc_iot_shadow_number brightness  = 0;
 
     if (!msg) {
         TC_IOT_LOG_ERROR("msg is null.");
@@ -154,7 +152,7 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
                 "sdk-ver", "1.0",
                 "firm-ver","1.0", NULL);
     } else {
-        TC_IOT_LOG_TRACE("unkown event received, event=%ds", msg->event);
+        TC_IOT_LOG_TRACE("unkown event received, event=%d", msg->event);
     }
     return TC_IOT_SUCCESS;
 }
