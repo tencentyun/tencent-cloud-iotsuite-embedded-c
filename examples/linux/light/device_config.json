@@ -1,8 +1,51 @@
 {
-    "device_data": [
-        {"name":"device_switch","type":"bool","range":[false,true]},
-        {"name":"color","type":"enum", "range":["red","green","blue"]},
-        {"name":"brightness","type":"number","range":[0,100]}
-    ],
-    "product_id":"test"
+  "ProductId": "iot-fdxt0fie",
+  "ProductKey": "mqtt-xxxxxxxx",
+  "ProductSecret": "",
+  "AppId": 0,
+  "Region": "gz",
+  "Name": "智能灯",
+  "Description": "可远程开关、调节亮度和颜色的智能灯。",
+  "Domain": "mqtt-1e8w58ou4.ap-guangzhou.mqtt.tencentcloudmq.com",
+  "Standard": 3,
+  "AuthType": 1,
+  "DataTemplate": [
+    {
+      "Name": "device_switch",
+      "Mode": "rw",
+      "Type": "bool",
+      "Range": [
+        false,
+        true
+      ],
+      "Desc": "开关"
+    },
+    {
+      "Name": "color",
+      "Mode": "rw",
+      "Type": "enum",
+      "Range": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "Desc": "颜色"
+    },
+    {
+      "Name": "brightness",
+      "Mode": "rw",
+      "Type": "number",
+      "Range": [
+        0,
+        100
+      ],
+      "Desc": "亮度"
+    }
+  ],
+  "Deleted": 0,
+  "Message": "",
+  "CreateTime": "2018-01-12 00:00:00",
+  "UpdateTime": "2018-03-26 00:00:00",
+  "Username": "username",
+  "Password": "password"
 }

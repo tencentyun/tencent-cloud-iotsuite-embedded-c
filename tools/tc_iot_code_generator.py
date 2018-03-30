@@ -40,10 +40,10 @@ class iot_field:
     def __init__(self, name, index, field_obj):
         self.index = index
         self.name = name
-        if "type" not  in field_obj:
-            raise ValueError("错误：{} 字段定义中未找到 type 字段".format(name))
+        if "Type" not  in field_obj:
+            raise ValueError("错误：{} 字段定义中未找到 Type 字段".format(name))
 
-        self.type_name = field_obj["type"]
+        self.type_name = field_obj["Type"]
 
         if self.type_name == "bool":
             self.type_id = "TC_IOT_SHADOW_TYPE_BOOL"
@@ -52,10 +52,10 @@ class iot_field:
         elif self.type_name == "enum":
             self.type_id = "TC_IOT_SHADOW_TYPE_ENUM"
             self.type_define = "tc_iot_shadow_enum"
-            if "range" not in field_obj:
+            if "Range" not in field_obj:
                 raise ValueError("错误：{} 字段定义中未找到枚举定义 range 字段".format(name))
 
-            enum_defs = field_obj['range']
+            enum_defs = field_obj['Range']
             enum_id = 0
             for enum_name in enum_defs:
                 current_enum = iot_enum(self.name, enum_name, enum_id)
@@ -69,13 +69,13 @@ class iot_field:
         elif self.type_name == "number":
             self.type_id = "TC_IOT_SHADOW_TYPE_NUMBER"
             self.type_define = "tc_iot_shadow_number"
-            if "range" not in field_obj:
-                raise ValueError("错误：{} 字段定义中未找到取值范围定义 range 字段".format(name))
-            if len(field_obj["range"]) != 2:
-                raise ValueError("错误：{} 字段 range 取值非法".format(name))
+            if "Range" not in field_obj:
+                raise ValueError("错误：{} 字段定义中未找到取值范围定义 Range 字段".format(name))
+            if len(field_obj["Range"]) != 2:
+                raise ValueError("错误：{} 字段 Range 取值非法".format(name))
 
-            self.min_value = field_obj['range'][0]
-            self.max_value = field_obj['range'][1]
+            self.min_value = field_obj['Range'][0]
+            self.max_value = field_obj['Range'][1]
             self.default_value = self.min_value
             if self.default_value < self.min_value or self.default_value > self.max_value:
                 raise ValueError("错误：{} 字段 default 指定的默认值超出 min~max 取值范围".format(name))
@@ -138,9 +138,9 @@ class iot_struct:
     field_id = 0
     def __init__(self, obj):
         for field_define in obj:
-            if "name" not in field_define:
-                raise ValueError("错误：字段定义中未找到 name 字段")
-            self.fields.append(iot_field(field_define['name'], self.field_id, field_define))
+            if "Name" not in field_define:
+                raise ValueError("错误：字段定义中未找到 Name 字段")
+            self.fields.append(iot_field(field_define['Name'], self.field_id, field_define))
             self.field_id += 1
 
     def generate_sample_code(self):
@@ -333,7 +333,7 @@ def main():
         print '''device_config.json 格式如下：
 _____________________________________________
 {
-    "device_data": {
+    "DataTemplate": {
         // 布尔类型，false 和 true 两个取值，用来定义开关状态。
         {"name":"bool_var","type":"bool","range":[false,true]},
 
@@ -357,7 +357,7 @@ _____________________________________________
 device_config.json 定义写法如下：
 _____________________________________________
 {
-    "device_data": [
+    "DataTemplate": [
         {"name":"device_switch","type":"bool","range":[false,true]},
         {"name":"color","type":"enum", "range":["red","green","blue"]},
         {"name":"brightness","type":"number","range":[0,100]}
@@ -386,12 +386,12 @@ _____________________________________________
                 print("错误：文件格式非法，请检查 {} 文件是否是 JSON 格式。".format(template_path))
                 return 1
 
-            if "device_data" not in defs:
-                print("错误：{} 文件中未发现 device_data 属性字段，请检查文件格式是否合法。".format(template_path))
+            if "DataTemplate" not in defs:
+                print("错误：{} 文件中未发现 DataTemplate 属性字段，请检查文件格式是否合法。".format(template_path))
                 return 1
 
             try:
-                st = iot_struct(defs["device_data"])
+                st = iot_struct(defs["DataTemplate"])
                 header_file_name = template_dir + "tc_iot_device_logic.h"
                 header_file = open(header_file_name, "w")
                 header_file.write(st.generate_header())
