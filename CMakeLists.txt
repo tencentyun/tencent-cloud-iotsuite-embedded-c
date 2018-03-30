@@ -8,14 +8,12 @@ else()
     set(TC_IOT_PLATFORM_NAME "linux")
 endif()
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS, 1)
-
-add_definitions(-DENABLE_TC_IOT_LOG_TRACE)
-add_definitions(-DENABLE_TC_IOT_LOG_DEBUG)
-add_definitions(-DENABLE_TC_IOT_LOG_INFO)
-add_definitions(-DENABLE_TC_IOT_LOG_WARN)
-add_definitions(-DENABLE_TC_IOT_LOG_ERROR)
-add_definitions(-DENABLE_TC_IOT_LOG_FATAL)
+add_definitions(-DENABLE_LOG_TRACE)
+add_definitions(-DENABLE_LOG_DEBUG)
+add_definitions(-DENABLE_LOG_INFO)
+add_definitions(-DENABLE_LOG_WARN)
+add_definitions(-DENABLE_LOG_ERROR)
+add_definitions(-DENABLE_LOG_FATAL)
 
 message(STATUS "CMake version: " ${CMAKE_VERSION})
 message(STATUS "CMake system name: " ${CMAKE_SYSTEM_NAME})
@@ -38,12 +36,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 file(COPY tools/tc_iot_shadow_cli.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-file(COPY tools/tc_iot_code_generator.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     option(ENABLE_TLS "use mqtt/http over tls" OFF) 
-    #add_definitions(-std=c89)
+    add_definitions(-std=c89)
 else()
     option(ENABLE_TLS "use mqtt/http over tls" ON) 
 endif()
@@ -75,6 +72,8 @@ SET(CMAKE_SYSTEM_NAME Linux)
 
 include_directories(include)
 include_directories(include/platform/${TC_IOT_PLATFORM_NAME})
+
+add_definitions(-DJSMN_PARENT_LINKS)
 
 # enable_testing()
 ADD_SUBDIRECTORY(external)

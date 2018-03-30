@@ -26,9 +26,9 @@ void sig_handler(int sig) {
 
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
-    tc_iot_hal_printf("[s->c] %s\n", (char*)message->payload);
+    tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
-void _message_ack_callback(tc_iot_command_ack_status_e ack_status,
+void _message_ack_callback(tc_iot_command_ack_status_e ack_status, 
         tc_iot_message_data * md , void * p_context) {
 
     if (ack_status != TC_IOT_ACK_SUCCESS) {
@@ -40,7 +40,7 @@ void _message_ack_callback(tc_iot_command_ack_status_e ack_status,
 
     tc_iot_mqtt_message* message = md->message;
 
-    tc_iot_hal_printf("[s->c] %s\n", (char*)message->payload);
+    tc_iot_hal_printf("[s->c] %.*s\n", (int)message->payloadlen, (char*)message->payload);
 }
 
 tc_iot_shadow_config g_client_config = {
@@ -83,9 +83,9 @@ int main(int argc, char** argv) {
 
     p_client_config = &(g_client_config.mqtt_client_config);
     parse_command(p_client_config, argc, argv);
-    snprintf(g_client_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT,
+    snprintf(g_client_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-    snprintf(g_client_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT,
+    snprintf(g_client_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
     token_defined = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
 
@@ -138,11 +138,11 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
     tc_iot_hal_printf("[c->s] shadow_get\n%s\n", buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
-    snprintf(reported, sizeof(reported),
+    snprintf(reported, sizeof(reported), 
             "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}",
             tc_iot_json_inline_escape(buffer, buffer_len, "A string \"\r\n"),
             12345,3.14159, TC_IOT_JSON_TRUE, TC_IOT_JSON_NULL);
-    snprintf(desired, sizeof(desired),
+    snprintf(desired, sizeof(desired), 
             "{\"string\":\"%s\",\"number\":%d,\"double\":%f,\"bool\":%s,\"obj\":%s}",
             tc_iot_json_inline_escape(buffer, buffer_len, "Hello, world!"),
             700,10000.1234, TC_IOT_JSON_FALSE, TC_IOT_JSON_NULL);
@@ -157,6 +157,10 @@ int run_shadow(tc_iot_shadow_config * p_client_config) {
 
     tc_iot_shadow_update(p_shadow_client, buffer, buffer_len, NULL, desired, _message_ack_callback, 6000, NULL);
     tc_iot_hal_printf("[c->s] shadow_update_desired\n%s\n", buffer);
+    tc_iot_shadow_yield(p_shadow_client, timeout);
+
+    tc_iot_shadow_delete(p_shadow_client, buffer, buffer_len, TC_IOT_JSON_NULL, TC_IOT_JSON_NULL, NULL, 0, NULL);
+    tc_iot_hal_printf("[c->s] shadow_delete\n%s\n", buffer);
     tc_iot_shadow_yield(p_shadow_client, timeout);
 
     tc_iot_hal_printf("Stopping\n");

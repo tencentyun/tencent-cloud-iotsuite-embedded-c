@@ -163,36 +163,28 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
     IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
     IF_EQUAL_RETURN(max_sign_len, 0, TC_IOT_INVALID_PARAMETER);
 
-    memset(buf, 0, buf_len);
-    if (client_id_len == strlen(client_id)
-            && device_name_len == strlen(device_name)
-            && product_id_len == strlen(product_id)) {
-        data_len = tc_iot_hal_snprintf(
-            buf, buf_len,
-            "clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&"
-            "timestamp=%ld",
-            client_id, device_name, expire, nonce,
-            product_id, timestamp);
-    } else {
-        data_len = tc_iot_hal_snprintf(
-                buf, buf_len,
-                "deviceName=%.*s&nonce=%ld&productId=%.*s&timestamp=%ld",
-                device_name_len, device_name, nonce,
-                product_id_len, product_id, timestamp);
-    }
+    data_len = tc_iot_hal_snprintf(
+        buf, buf_len,
+        "clientId=%.*s&deviceName=%.*s&expire=%ld&nonce=%ld&productId=%.*s&"
+        "timestamp=%ld",
+        client_id_len, client_id, device_name_len, device_name, expire, nonce,
+        product_id_len, product_id, timestamp);
 
     if (data_len >= buf_len) {
-        TC_IOT_LOG_ERROR("generate_auth_sign buffer overflow.");
+        LOG_ERROR("generate_auth_sign buffer overflow.");
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
     tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)secret, secret_len, (unsigned char *)sha256_digest);
 
+    
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
 
-    TC_IOT_LOG_TRACE("tc_iot_calc_auth_sign source %s sec %s sig %s\n", buf, secret, b64_buf);
+    LOG_TRACE("tc_iot_calc_auth_sign source %s sec %s sig %s\n", buf, secret, b64_buf);
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
+    
+    /* LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret, sign_out, url_ret);  */
     if (url_ret < max_sign_len) {
         sign_out[url_ret] = '\0';
     }
@@ -253,7 +245,7 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
                                     int product_id_len, long timestamp) {
     tc_iot_yabuffer_t form_buf;
     int total = 0;
-
+    
     IF_NULL_RETURN(form, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(secret, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(client_id, TC_IOT_NULL_POINTER);
@@ -307,7 +299,7 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
     
     
     if (data_len >= buf_len) {
-        TC_IOT_LOG_ERROR("generate_active_device_sign buffer overflow.");
+        LOG_ERROR("generate_active_device_sign buffer overflow.");
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
@@ -318,11 +310,11 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
                                sizeof(b64_buf));
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
     
-    /* TC_IOT_LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret, sign_out, url_ret);  */
+    /* LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret, sign_out, url_ret);  */
     if (url_ret < max_sign_len) {
         sign_out[url_ret] = '\0';
     }
-    TC_IOT_LOG_DEBUG(" tc_iot_calc_active_device_sign  source:%s sign:%s", buf , sign_out);
+    LOG_DEBUG(" tc_iot_calc_active_device_sign  source:%s sign:%s", buf , sign_out);
     return url_ret;
 }
 
@@ -368,15 +360,15 @@ int tc_iot_parse_http_response_code(const char * resp) {
     if (strncmp(HTTP_RESPONSE_STATE_PREFIX, resp, HTTP_RESPONSE_STATE_PREFIX_LEN) != 0) {
         return TC_IOT_HTTP_RESPONSE_INVALID;
     }
-
+    
     resp+= HTTP_RESPONSE_STATE_PREFIX_LEN;
     if (*resp != '0' && *resp != '1') {
-        TC_IOT_LOG_TRACE("http minor version invalid: %s", tc_iot_log_summary_string(resp, 5));
+        LOG_TRACE("http minor version invalid: %.*s", 5, resp);
         return TC_IOT_HTTP_RESPONSE_INVALID;
     }
     resp++;
     if (*resp != ' ') {
-        TC_IOT_LOG_TRACE("http stat line invalid: %s", tc_iot_log_summary_string(resp, 5));
+        LOG_TRACE("http minor version invalid: %.*s", 5, resp);
         return TC_IOT_HTTP_RESPONSE_INVALID;
     }
     resp++;
@@ -384,10 +376,10 @@ int tc_iot_parse_http_response_code(const char * resp) {
     for ( i = 0; i < 3; i++, resp++) {
         if (*resp < '0') {
             return TC_IOT_HTTP_RESPONSE_INVALID;
-        }
+        } 
         if (*resp > '9') {
             return TC_IOT_HTTP_RESPONSE_INVALID;
-        }
+        } 
         ret = ret*10 +((*resp) - '0');
     }
 

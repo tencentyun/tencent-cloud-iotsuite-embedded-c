@@ -6,34 +6,34 @@ extern "C" {
 
 int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
                         int len, int timeout_ms) {
-    TC_IOT_LOG_ERROR("not implemented");
+    LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
-int tc_iot_hal_tls_write(tc_iot_network_t* network, const unsigned char* buffer,
+int tc_iot_hal_tls_write(tc_iot_network_t* network, unsigned char* buffer,
                          int len, int timeout_ms) {
-    TC_IOT_LOG_ERROR("not implemented");
+    LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
-int tc_iot_hal_tls_connect(tc_iot_network_t* network, const char* host,
+int tc_iot_hal_tls_connect(tc_iot_network_t* network, char* host,
                            uint16_t port) {
-    TC_IOT_LOG_ERROR("not implemented");
+    LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
 int tc_iot_hal_tls_is_connected(tc_iot_network_t* network) {
-    TC_IOT_LOG_ERROR("not implemented");
+    LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
 int tc_iot_hal_tls_disconnect(tc_iot_network_t* network) {
-    TC_IOT_LOG_ERROR("not implemented");
+    LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
 int tc_iot_hal_tls_destroy(tc_iot_network_t* network) {
-    TC_IOT_LOG_ERROR("not implemented");
+    LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
@@ -53,7 +53,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     /*tc_iot_copy_net_context(&(network->net_context), net_context);*/
     network->net_context.is_connected = 0;
 
-    TC_IOT_LOG_ERROR("not implemented");
+    LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 

@@ -28,7 +28,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
             if (errno != EAGAIN && errno != EWOULDBLOCK) {
                 bytes = -1;
             }
-            /* TC_IOT_LOG_TRACE("recv rc=%d, errno=%d,str=%s,timeout=%d,ts=%d",rc, errno, strerror(errno), timeout_ms, time(NULL)); */
+            /* LOG_TRACE("recv rc=%d, errno=%d,str=%s,timeout=%d,ts=%d",rc, errno, strerror(errno), timeout_ms, time(NULL)); */
             break;
         } else if (rc == 0) {
             if (bytes > 0) {
@@ -48,7 +48,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
     return bytes;
 }
 
-int tc_iot_hal_net_write(tc_iot_network_t* network, const unsigned char* buffer,
+int tc_iot_hal_net_write(tc_iot_network_t* network, unsigned char* buffer,
                          int len, int timeout_ms) {
     int rc;
     struct timeval tv;
@@ -84,7 +84,7 @@ static int net_prepare(void) {
     return (0);
 }
 
-int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
+int tc_iot_hal_net_connect(tc_iot_network_t* network, char* host,
                            uint16_t port) {
     int type = SOCK_STREAM;
     struct sockaddr_in address;
@@ -99,7 +99,7 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
     }
 
     if (host) {
-        network->net_context.host = (char *)host;
+        network->net_context.host = host;
     }
 
     if (port) {
@@ -130,7 +130,7 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
 
         freeaddrinfo(result);
     } else {
-        TC_IOT_LOG_ERROR("getaddrinfo failed for host:%s, errno=%d,errstr=%s", 
+        LOG_ERROR("getaddrinfo failed for host:%s, errno=%d,errstr=%s", 
                 network->net_context.host,
                 rc, gai_strerror(rc)
                 );
@@ -145,7 +145,7 @@ int tc_iot_hal_net_connect(tc_iot_network_t* network, const char* host,
             if (rc == 0) {
                 network->net_context.is_connected = 1;
             } else {
-                TC_IOT_LOG_ERROR("tcp connect return error: code=%d, msg=%s", errno,
+                LOG_ERROR("tcp connect return error: code=%d, msg=%s", errno,
                           strerror(errno));
                 rc = TC_IOT_NET_CONNECT_FAILED;
             }
@@ -160,10 +160,10 @@ int tc_iot_hal_net_is_connected(tc_iot_network_t* network) {
 }
 
 int tc_iot_hal_net_disconnect(tc_iot_network_t* network) {
-    TC_IOT_LOG_TRACE("network disconnecting...");
+    LOG_TRACE("network disconnecting...");
     close(network->net_context.fd);
     network->is_connected = 0;
-    TC_IOT_LOG_TRACE("network disconnected");
+    LOG_TRACE("network disconnected");
     return TC_IOT_SUCCESS;
 }
 
@@ -172,8 +172,8 @@ int tc_iot_hal_net_destroy(tc_iot_network_t* network) {
         tc_iot_hal_net_disconnect(network);
     }
 
-    TC_IOT_LOG_TRACE("network destroying...");
-    TC_IOT_LOG_TRACE("network destroied...");
+    LOG_TRACE("network destroying...");
+    LOG_TRACE("network destroied...");
     return TC_IOT_SUCCESS;
 }
 
