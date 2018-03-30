@@ -72,11 +72,15 @@ int main(int argc, char** argv) {
                 timestamp, nonce, //1521444038, 398983339, //
                 &p_client_config->device_info);
             
-            if (ret == TC_IOT_SUCCESS)
+            if (ret != TC_IOT_SUCCESS)
             {
-                tc_iot_hal_set_value("device_secrect", p_client_config->device_info.secret );
-                tc_iot_hal_printf("save device_secrect %s\n", p_client_config->device_info.secret);
+                tc_iot_hal_printf("requesting device_secrect for http token, ret %d\n", ret);
+                return 0;
             }
+       
+            tc_iot_hal_set_value("device_secrect", p_client_config->device_info.secret );
+            tc_iot_hal_printf("save device_secrect %s\n", p_client_config->device_info.secret);
+            
 
             //return 0;
 
