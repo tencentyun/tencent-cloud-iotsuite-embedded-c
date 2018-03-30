@@ -164,15 +164,15 @@ tc_iot_hal_network.h 的引用(Include)关系图:</div>
 <tr class="memitem:a3cfd612bceb35d38c8575a1dcd17d85b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__hal__network_8h.html#a3cfd612bceb35d38c8575a1dcd17d85b">tc_iot_hal_net_init</a> (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, <a class="el" href="structtc__iot__net__context__init__t.html">tc_iot_net_context_init_t</a> *net_context)</td></tr>
 <tr class="memdesc:a3cfd612bceb35d38c8575a1dcd17d85b"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_hal_net_init 初始化 TCP 连接对象，设置相关参数和对应回调等  <a href="#a3cfd612bceb35d38c8575a1dcd17d85b">更多...</a><br /></td></tr>
 <tr class="separator:a3cfd612bceb35d38c8575a1dcd17d85b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e11fa74212755ecf304a41c6775f629"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__hal__network_8h.html#a0e11fa74212755ecf304a41c6775f629">tc_iot_hal_net_connect</a> (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, char *host, uint16_t port)</td></tr>
-<tr class="memdesc:a0e11fa74212755ecf304a41c6775f629"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_hal_net_connect 连接服务端  <a href="#a0e11fa74212755ecf304a41c6775f629">更多...</a><br /></td></tr>
-<tr class="separator:a0e11fa74212755ecf304a41c6775f629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a827d32f4ac25df806fc4c67787346be7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__hal__network_8h.html#a827d32f4ac25df806fc4c67787346be7">tc_iot_hal_net_connect</a> (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, const char *host, uint16_t port)</td></tr>
+<tr class="memdesc:a827d32f4ac25df806fc4c67787346be7"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_hal_net_connect 连接服务端  <a href="#a827d32f4ac25df806fc4c67787346be7">更多...</a><br /></td></tr>
+<tr class="separator:a827d32f4ac25df806fc4c67787346be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad464b9f0ace056e52d54baf414f57919"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__hal__network_8h.html#ad464b9f0ace056e52d54baf414f57919">tc_iot_hal_net_read</a> (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, unsigned char *buffer, int len, int timeout_ms)</td></tr>
 <tr class="memdesc:ad464b9f0ace056e52d54baf414f57919"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_hal_net_read 接收网络对端发送的数据  <a href="#ad464b9f0ace056e52d54baf414f57919">更多...</a><br /></td></tr>
 <tr class="separator:ad464b9f0ace056e52d54baf414f57919"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a382b941ccb637b21ce97955f13feed36"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__hal__network_8h.html#a382b941ccb637b21ce97955f13feed36">tc_iot_hal_net_write</a> (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, unsigned char *buffer, int len, int timeout_ms)</td></tr>
-<tr class="memdesc:a382b941ccb637b21ce97955f13feed36"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_hal_net_write 发送数据到网络对端  <a href="#a382b941ccb637b21ce97955f13feed36">更多...</a><br /></td></tr>
-<tr class="separator:a382b941ccb637b21ce97955f13feed36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f6b150bc421aca260f50c57910f8cc6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__hal__network_8h.html#a8f6b150bc421aca260f50c57910f8cc6">tc_iot_hal_net_write</a> (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, const unsigned char *buffer, int len, int timeout_ms)</td></tr>
+<tr class="memdesc:a8f6b150bc421aca260f50c57910f8cc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_hal_net_write 发送数据到网络对端  <a href="#a8f6b150bc421aca260f50c57910f8cc6">更多...</a><br /></td></tr>
+<tr class="separator:a8f6b150bc421aca260f50c57910f8cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32e078ea249ad04a2f7efb79cbd33a18"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__hal__network_8h.html#a32e078ea249ad04a2f7efb79cbd33a18">tc_iot_hal_net_is_connected</a> (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network)</td></tr>
 <tr class="memdesc:a32e078ea249ad04a2f7efb79cbd33a18"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_hal_net_is_connected 判断当前是否已成功建立网络连接  <a href="#a32e078ea249ad04a2f7efb79cbd33a18">更多...</a><br /></td></tr>
 <tr class="separator:a32e078ea249ad04a2f7efb79cbd33a18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,7 +199,7 @@ tc_iot_hal_network.h 的引用(Include)关系图:</div>
 </div>
 </div>
 <h2 class="groupheader">函数说明</h2>
-<a class="anchor" id="a0e11fa74212755ecf304a41c6775f629"></a>
+<a class="anchor" id="a827d32f4ac25df806fc4c67787346be7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -212,7 +212,7 @@ tc_iot_hal_network.h 的引用(Include)关系图:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">char *&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>host</em>, </td>
         </tr>
         <tr>
@@ -408,7 +408,7 @@ tc_iot_hal_network.h 的引用(Include)关系图:</div>
 
 </div>
 </div>
-<a class="anchor" id="a382b941ccb637b21ce97955f13feed36"></a>
+<a class="anchor" id="a8f6b150bc421aca260f50c57910f8cc6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -421,7 +421,7 @@ tc_iot_hal_network.h 的引用(Include)关系图:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned char *&#160;</td>
+          <td class="paramtype">const unsigned char *&#160;</td>
           <td class="paramname"><em>buffer</em>, </td>
         </tr>
         <tr>

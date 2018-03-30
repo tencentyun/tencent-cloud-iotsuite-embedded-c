@@ -160,6 +160,37 @@ class Iot:
         self.parser.add_option('--device_name', dest='deviceName', default='',help="device name, from <https://console.qcloud.com/iotsuite/product>")
         self.parser.add_option('--shadow', dest='shadow', default='{"reported":{},"desired":{}}',help='Shadow document json format, like this:\n{"reported":{"device":"on"},"desired":{"device":"off"}}')
 
+    def DeleteIotDevice(self):
+        self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
+        self.parser.add_option('--device_name', dest='deviceName', default='',help="device name, from <https://console.qcloud.com/iotsuite/product>")
+
+    def GetIotDeviceList(self):
+        self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
+        self.parser.add_option('--offset', dest='offset', default='0')
+        self.parser.add_option('--length', dest='length', default='10')
+
+    def GetIotDevice(self):
+        self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
+        self.parser.add_option('--device_name', dest='deviceName', default='',help="device name, from <https://console.qcloud.com/iotsuite/product>")
+
+    def CreateIotDevice(self):
+        self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
+        self.parser.add_option('--device_name', dest='deviceName', default='',help="device name, from <https://console.qcloud.com/iotsuite/product>")
+
+    def GetIotProductList(self):
+        self.parser.add_option('--offset', dest='offset', default='0')
+        self.parser.add_option('--length', dest='length', default='10')
+        self.parser.add_option('--include_deleted', dest='includeDeleted', default='0')
+
+    def GetIotProduct(self):
+        self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
+
+    def CreateIotProduct(self):
+        self.parser.add_option('--name', dest='name', default='', help="product name")
+        self.parser.add_option('--description', dest='description', default='', help="product description")
+        self.parser.add_option('--auth_type', dest='authType', default='', help="连接模式（0：直连，1：token）")
+
+
 def main():
     iot = Iot()
     try:

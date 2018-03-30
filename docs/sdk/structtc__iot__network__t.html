@@ -107,10 +107,10 @@ tc_iot_network_t 的协作图:</div>
 成员变量</h2></td></tr>
 <tr class="memitem:a99c83df0b60d332056ee726d62cb7412"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtc__iot__network__t.html#a99c83df0b60d332056ee726d62cb7412">do_read</a> )(struct <a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, unsigned char *read_buf, int read_buf_len, int timeout_ms)</td></tr>
 <tr class="separator:a99c83df0b60d332056ee726d62cb7412"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92438dc10b29b666e0dd85235359150c"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtc__iot__network__t.html#a92438dc10b29b666e0dd85235359150c">do_write</a> )(struct <a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, unsigned char *write_buf, int write_buf_len, int timeout_ms)</td></tr>
-<tr class="separator:a92438dc10b29b666e0dd85235359150c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae19275d928e0eb4eaa6e7ed7c53885d9"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtc__iot__network__t.html#ae19275d928e0eb4eaa6e7ed7c53885d9">do_connect</a> )(<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, char *host, uint16_t port)</td></tr>
-<tr class="separator:ae19275d928e0eb4eaa6e7ed7c53885d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab692fb304b9de25ea72407d6fc30dddf"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtc__iot__network__t.html#ab692fb304b9de25ea72407d6fc30dddf">do_write</a> )(struct <a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, const unsigned char *write_buf, int write_buf_len, int timeout_ms)</td></tr>
+<tr class="separator:ab692fb304b9de25ea72407d6fc30dddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4edff339432dee740717008ff292d026"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtc__iot__network__t.html#a4edff339432dee740717008ff292d026">do_connect</a> )(<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, const char *host, uint16_t port)</td></tr>
+<tr class="separator:a4edff339432dee740717008ff292d026"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89d531326d6a2e907db6c9772d03ae52"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtc__iot__network__t.html#a89d531326d6a2e907db6c9772d03ae52">do_disconnect</a> )(<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network)</td></tr>
 <tr class="separator:a89d531326d6a2e907db6c9772d03ae52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f66a9ee6aeeba4f8b84e715f71f34a2"><td class="memItemLeft" align="right" valign="top">int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtc__iot__network__t.html#a9f66a9ee6aeeba4f8b84e715f71f34a2">is_connected</a> )(<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network)</td></tr>
@@ -123,12 +123,12 @@ tc_iot_network_t 的协作图:</div>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>网络连接对象，包括相关参数及回调函数 </p>
 </div><h2 class="groupheader">结构体成员变量说明</h2>
-<a class="anchor" id="ae19275d928e0eb4eaa6e7ed7c53885d9"></a>
+<a class="anchor" id="a4edff339432dee740717008ff292d026"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int(* tc_iot_network_t::do_connect) (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, char *host, uint16_t port)</td>
+          <td class="memname">int(* tc_iot_network_t::do_connect) (<a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, const char *host, uint16_t port)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -175,12 +175,12 @@ tc_iot_network_t 的协作图:</div>
 
 </div>
 </div>
-<a class="anchor" id="a92438dc10b29b666e0dd85235359150c"></a>
+<a class="anchor" id="ab692fb304b9de25ea72407d6fc30dddf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int(* tc_iot_network_t::do_write) (struct <a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, unsigned char *write_buf, int write_buf_len, int timeout_ms)</td>
+          <td class="memname">int(* tc_iot_network_t::do_write) (struct <a class="el" href="structtc__iot__network__t.html">tc_iot_network_t</a> *network, const unsigned char *write_buf, int write_buf_len, int timeout_ms)</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -14,5 +14,7 @@ var searchData=
   ['port',['port',['../struct__tc__iot__url__parse__result__t.html#a69308d498e91b19af714fe66a0c8dcfb',1,'_tc_iot_url_parse_result_t::port()'],['../struct__tc__iot__mqtt__client__config.html#a9c63ef7769f515471eb976b22ff99b87',1,'_tc_iot_mqtt_client_config::port()'],['../structtc__iot__net__context__init__t.html#a52df7ed648c885cd6400ca1b25348727',1,'tc_iot_net_context_init_t::port()'],['../structtc__iot__net__context__t.html#ab4f93937350406a755ddca9c4b89c528',1,'tc_iot_net_context_t::port()']]],
   ['pos',['pos',['../struct__tc__iot__yabuffer__t.html#a4d052d2186605018b8f53766f8286dd5',1,'_tc_iot_yabuffer_t']]],
   ['product_5fid',['product_id',['../struct__tc__iot__device__info.html#aac8f526e7fff8b1827b22f0c64a5af9a',1,'_tc_iot_device_info']]],
+  ['properties',['properties',['../struct__tc__iot__shadow__config.html#a30513eebf36377884ae51de2e62719c5',1,'_tc_iot_shadow_config']]],
+  ['property_5ftotal',['property_total',['../struct__tc__iot__shadow__config.html#a69d589c7d5bb6f4bb3e0e07ad4adf64a',1,'_tc_iot_shadow_config']]],
   ['pub_5ftopic',['pub_topic',['../struct__tc__iot__shadow__config.html#a1bbecf4d6fad84b400d0446c0b7c93ce',1,'_tc_iot_shadow_config']]]
 ];

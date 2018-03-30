@@ -1,6 +1,6 @@
 @echo off 
 set cc_options=-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I ../include -I ../include/platform/generic
-set cc_options=%cc_options% -DENABLE_LOG_TRACE -DENABLE_LOG_DEBUG -DENABLE_LOG_INFO -DENABLE_LOG_WARN -DENABLE_LOG_ERROR -DENABLE_LOG_FATAL
+set cc_options=%cc_options% -DENABLE_TC_IOT_LOG_TRACE -DENABLE_TC_IOT_LOG_DEBUG -DENABLE_TC_IOT_LOG_INFO -DENABLE_TC_IOT_LOG_WARN -DENABLE_TC_IOT_LOG_ERROR -DENABLE_TC_IOT_LOG_FATAL
 REM set cc_options=%cc_options% -W
 REM set cc_options=%cc_options% --diag_suppress 177
 

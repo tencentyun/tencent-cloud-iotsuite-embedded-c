@@ -1,8 +1,11 @@
 var searchData=
 [
+  ['_5fdevice_5fon_5fmessage_5freceived',['_device_on_message_received',['../tc__iot__shadow_8h.html#abb76b238e7b5e66aeb35852f87ff2b3a',1,'tc_iot_shadow.h']]],
   ['_5ftc_5fiot_5fcommand_5fack_5fstatus_5fe',['_tc_iot_command_ack_status_e',['../tc__iot__shadow_8h.html#acfeee5865fa73359d0bed9fe872bfac9',1,'tc_iot_shadow.h']]],
   ['_5ftc_5fiot_5fdevice_5fauth_5fmode_5fe',['_tc_iot_device_auth_mode_e',['../tc__iot__mqtt_8h.html#a969240708b1ac6dfacf14ab37c163324',1,'tc_iot_mqtt.h']]],
   ['_5ftc_5fiot_5fdevice_5finfo',['_tc_iot_device_info',['../struct__tc__iot__device__info.html',1,'']]],
+  ['_5ftc_5fiot_5fevent_5fe',['_tc_iot_event_e',['../tc__iot__const_8h.html#ad5533ece34072260a264c7269aab4138',1,'tc_iot_const.h']]],
+  ['_5ftc_5fiot_5fevent_5fmessage',['_tc_iot_event_message',['../struct__tc__iot__event__message.html',1,'']]],
   ['_5ftc_5fiot_5fhmac_5fsha256_5ft',['_tc_iot_hmac_sha256_t',['../struct__tc__iot__hmac__sha256__t.html',1,'']]],
   ['_5ftc_5fiot_5fhttp_5frequest',['_tc_iot_http_request',['../struct__tc__iot__http__request.html',1,'']]],
   ['_5ftc_5fiot_5flog_5flevel_5fe',['_tc_iot_log_level_e',['../tc__iot__log_8h.html#aa05f46043c8218c9fa10658610f7be97',1,'tc_iot_log.h']]],
@@ -19,7 +22,10 @@ var searchData=
   ['_5ftc_5fiot_5fsha256_5ft',['_tc_iot_sha256_t',['../struct__tc__iot__sha256__t.html',1,'']]],
   ['_5ftc_5fiot_5fshadow_5fclient',['_tc_iot_shadow_client',['../struct__tc__iot__shadow__client.html',1,'']]],
   ['_5ftc_5fiot_5fshadow_5fconfig',['_tc_iot_shadow_config',['../struct__tc__iot__shadow__config.html',1,'']]],
+  ['_5ftc_5fiot_5fshadow_5fdata_5ftype_5fe',['_tc_iot_shadow_data_type_e',['../tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1df',1,'tc_iot_shadow.h']]],
+  ['_5ftc_5fiot_5fshadow_5fproperty_5fdef',['_tc_iot_shadow_property_def',['../struct__tc__iot__shadow__property__def.html',1,'']]],
   ['_5ftc_5fiot_5fshadow_5fsession',['_tc_iot_shadow_session',['../struct__tc__iot__shadow__session.html',1,'']]],
+  ['_5ftc_5fiot_5fsync_5fshadow_5fproperty',['_tc_iot_sync_shadow_property',['../tc__iot__shadow_8h.html#a9e8cc6c87f3d517b988ae92a4a61fa64',1,'tc_iot_shadow.h']]],
   ['_5ftc_5fiot_5fsys_5fcode_5fe',['_tc_iot_sys_code_e',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecc',1,'tc_iot_const.h']]],
   ['_5ftc_5fiot_5ftype_5fe',['_tc_iot_type_e',['../tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608d',1,'tc_iot_json.h']]],
   ['_5ftc_5fiot_5furl_5fparse_5fresult_5ft',['_tc_iot_url_parse_result_t',['../struct__tc__iot__url__parse__result__t.html',1,'']]],
