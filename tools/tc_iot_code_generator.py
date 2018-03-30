@@ -4,6 +4,7 @@
 import json
 import sys
 import os
+import six
 import argparse
 
 reload(sys)
@@ -11,6 +12,10 @@ sys.setdefaultencoding("utf-8")
 
 try: import simplejson as json
 except: import json
+
+class AttributeDict(dict):
+    __getattr__ = dict.__getitem__
+    __setattr__ = dict.__setitem__
 
 class code_template:
     file_name = ""
@@ -166,14 +171,6 @@ class iot_struct:
         sample_code += (indent * 3) + 'return TC_IOT_FAILURE;\n'
         sample_code += (indent * 1) + '}\n\n'
 
-        # /* 上报所有状态 */
-        # /* tc_iot_report_DataTemplate(  */
-        # /* 3 */
-        # /* ,TC_IOT_PROP_device_switch , &g_tc_iot_device_local_data.device_switch */
-        # /* ,TC_IOT_PROP_color , &g_tc_iot_device_local_data.color */
-        # /* ,TC_IOT_PROP_brightness , &g_tc_iot_device_local_data.brightness */
-        # /* ); */
-
         sample_code += (indent * 1) + 'TC_IOT_LOG_TRACE("operating device");\n'
         sample_code += (indent * 1) + 'operate_device(&g_tc_iot_device_local_data);\n'
         sample_code += (indent * 1) + 'return TC_IOT_SUCCESS;\n'
@@ -255,9 +252,7 @@ tc_iot_shadow_client * tc_iot_get_shadow_client(void);
             .replace("/*<default_init_str>*/", default_init_str) \
             .replace("/*<sample_code>*/", sample_code) \
 
-def smart_parser(source_str, data_template, script_open_mark="/*${", script_close_mark="}*/"):
-    test = "1"
-    str = "hello"
+def smart_parser(source_str, template_config, data_template, script_open_mark="/*${", script_close_mark="}*/"):
     start = 0
     code_start = 0
     code_end = 0
@@ -270,8 +265,15 @@ def smart_parser(source_str, data_template, script_open_mark="/*${", script_clos
             print("ERROR: " + script_open_mark + " has no match " + script_close_mark + "\n")
             break
         result += source_str[start:code_start]
-        temp = eval(source_str[code_start+len(script_open_mark):code_end])
-        result += temp
+        code_snip = source_str[code_start+len(script_open_mark):code_end]
+        temp = eval(code_snip)
+        if (isinstance(temp, int)):
+            result += str(temp)
+        elif (isinstance(temp, six.string_types)):
+            result += temp
+        else:
+            print("ERROR: unkonw data type return by:" + code_snip)
+
         start = code_end + len(script_close_mark)
         code_start = source_str.find(script_open_mark, start)
     result += source_str[start:]
@@ -280,165 +282,44 @@ def smart_parser(source_str, data_template, script_open_mark="/*${", script_clos
 
 def main():
     parser = argparse.ArgumentParser(description='Iotsuite device data code generator.')
-    parser.add_argument('-c','--config', dest='config', required=True,
+    parser.add_argument('files', nargs='*')
+    parser.add_argument('-c','--config', dest='config',metavar='iot-abcxyz.json', required=True,
                         help='配置文件本地路径，该文件可从控制台导出到本地： https://console.qcloud.com/iotsuite/product')
 
     args = parser.parse_args()
 
-    template_path = args.config
-    if not os.path.exists(template_path):
-        print("错误：{} 文件不存在，请重新指定 device_config.json 文件路径".format(template_path))
+    config_path = args.config
+    if not os.path.exists(config_path):
+        print("错误：{} 文件不存在，请重新指定 device_config.json 文件路径".format(config_path))
         return 1
 
-    template_dir = os.path.dirname(template_path)
-    if template_dir:
-        template_dir += "/"
+    config_dir = os.path.dirname(config_path)
+    if config_dir:
+        config_dir += "/"
 
-    f = open(template_path, "r")
+    f = open(config_path, "r")
     try:
         device_config = json.load(f)
-        print("加载 {} 文件成功".format(template_path))
+        device_config = AttributeDict(device_config)
+        print("加载 {} 文件成功".format(config_path))
     except ValueError as e:
-        print("错误：文件格式非法，请检查 {} 文件是否是 JSON 格式。".format(template_path))
+        print("错误：文件格式非法，请检查 {} 文件是否是 JSON 格式。".format(config_path))
         return 1
 
     if "DataTemplate" not in device_config:
-        print("错误：{} 文件中未发现 DataTemplate 属性字段，请检查文件格式是否合法。".format(template_path))
+        print("错误：{} 文件中未发现 DataTemplate 属性字段，请检查文件格式是否合法。".format(config_path))
         return 1
 
     try:
-        data_template = iot_struct(device_config["DataTemplate"])
+        data_template = iot_struct(device_config.DataTemplate)
+        for template_file in args.files:
+            input_file_name = template_file
+            input_file = open(input_file_name, "r")
+            input_str = input_file.read()
 
-        templates = [
-code_template("tc_iot_device_logic.h",
-"""#ifndef TC_IOT_DEVICE_LOGIC_H
-#define TC_IOT_DEVICE_LOGIC_H
-
-#include "tc_iot_inc.h"
-
-/* 数据点本地存储结构定义 local data struct define */
-/*${data_template.declare_local_data_struct()}*/
-
-/* 数据点字段 ID 宏定义*/
-/*${data_template.declare_local_data_field_id()}*/
-
-/* enum macro definitions */
-/*${data_template.declare_local_data_enum()}*/
-
-tc_iot_shadow_client * tc_iot_get_shadow_client(void);
-#endif /* end of include guard */
-"""),
-
-code_template("tc_iot_device_logic.c",
-"""#include "tc_iot_device_config.h"
-#include "tc_iot_device_logic.h"
-#include "tc_iot_export.h"
-
-int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context);
-void operate_device(tc_iot_shadow_local_data * device);
-
-/* 影子数据 Client  */
-tc_iot_shadow_client g_tc_iot_shadow_client;
-
-tc_iot_shadow_client * tc_iot_get_shadow_client(void) {
-    return &g_tc_iot_shadow_client;
-}
-
-
-/* 设备本地数据类型及地址、回调函数等相关定义 */
-tc_iot_shadow_property_def g_tc_iot_shadow_property_defs[] = {
-/*${ data_template.property_def_initializer() }*/};
-
-
-/* 设备当前状态数据 */
-tc_iot_shadow_local_data g_tc_iot_device_local_data = {
-/*${ data_template.local_data_initializer() }*/};
-
-/* 设备状态控制数据 */
-static tc_iot_shadow_local_data g_tc_iot_device_desired_data = {
-/*${ data_template.local_data_initializer() }*/};
-
-/* 设备已上报状态数据 */
-tc_iot_shadow_local_data g_tc_iot_device_reported_data = {
-/*${ data_template.local_data_initializer() }*/};
-
-/* 设备初始配置 */
-tc_iot_shadow_config g_tc_iot_shadow_config = {
-    {
-        {
-            /* device info*/
-            TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
-            TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
-            TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
-        },
-        TC_IOT_CONFIG_SERVER_HOST,
-        TC_IOT_CONFIG_SERVER_PORT,
-        TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
-        TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
-        TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
-        TC_IOT_CONFIG_CLEAN_SESSION,
-        TC_IOT_CONFIG_USE_TLS,
-        TC_IOT_CONFIG_AUTO_RECONNECT,
-        TC_IOT_CONFIG_ROOT_CA,
-        TC_IOT_CONFIG_CLIENT_CRT,
-        TC_IOT_CONFIG_CLIENT_KEY,
-        NULL,
-        NULL,
-        0,  /* send will */
-        {
-            {'M', 'Q', 'T', 'W'}, 0, {NULL, {0, NULL}}, {NULL, {0, NULL}}, 0, 0,
-        }
-    },
-    TC_IOT_SUB_TOPIC_DEF,
-    TC_IOT_PUB_TOPIC_DEF,
-    tc_iot_device_on_message_received,
-    TC_IOT_PROPTOTAL,
-    &g_tc_iot_shadow_property_defs[0],
-    _tc_iot_shadow_property_control_callback,
-    &g_tc_iot_device_local_data,
-    &g_tc_iot_device_reported_data,
-    &g_tc_iot_device_desired_data,
-};
-
-
-static int _tc_iot_property_change( int property_id, void * data) {
-/*${data_template.generate_sample_code()}*/
-}
-
-int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context) {
-    tc_iot_shadow_property_def * p_property = NULL;
-
-    if (!msg) {
-        TC_IOT_LOG_ERROR("msg is null.");
-        return TC_IOT_FAILURE;
-    }
-
-    if (msg->event == TC_IOT_SHADOW_EVENT_SERVER_CONTROL) {
-        p_property = (tc_iot_shadow_property_def *)context;
-        if (!p_property) {
-            TC_IOT_LOG_ERROR("p_property is null.");
-            return TC_IOT_FAILURE;
-        }
-
-        return _tc_iot_property_change(p_property->id, msg->data);
-    } else if (msg->event == TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM) {
-        tc_iot_report_firm(tc_iot_get_shadow_client(),
-                "product", TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
-                "device", TC_IOT_CONFIG_DEVICE_NAME,
-                "sdk-ver", TC_IOT_SDK_VERSION,
-                "firm-ver","1.0", NULL);
-    } else {
-        TC_IOT_LOG_TRACE("unkown event received, event=%d", msg->event);
-    }
-    return TC_IOT_SUCCESS;
-}
-
-""")]
-
-        for template in templates:
-            output_file_name = template_dir + template.file_name
+            output_file_name = config_dir + os.path.basename(template_file)
             output_file = open(output_file_name, "w")
-            output_file.write(smart_parser(template.template, data_template))
+            output_file.write(smart_parser(input_str, device_config, data_template))
             print "文件 {} 生成成功".format(output_file_name)
 
 
