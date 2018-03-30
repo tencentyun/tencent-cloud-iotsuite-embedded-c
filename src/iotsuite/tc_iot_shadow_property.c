@@ -292,6 +292,11 @@ int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client) {
     int ret = 0;
 
     ret = tc_iot_shadow_check_and_report(p_shadow_client, buffer, buffer_len,
+            _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, false);
+    if (ret != TC_IOT_SUCCESS) {
+        return ret;
+    }
+    ret = tc_iot_shadow_check_and_report(p_shadow_client, buffer, buffer_len,
             _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, true);
     return ret;
 }

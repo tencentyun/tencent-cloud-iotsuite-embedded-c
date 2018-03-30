@@ -4,6 +4,7 @@
 import json
 import sys
 import os
+import argparse
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -278,38 +279,37 @@ def smart_parser(source_str, data_template, script_open_mark="/*${", script_clos
 
 
 def main():
-    if len(sys.argv) <= 1:
-        print sys.argv[0] + ''' 是数据点定义及代码框架生成脚本，基于 Python 开发，需要在 Python 环境下运行。
-本工具以数据点定义文件 device_config.json (https://console.qcloud.com/iotsuite/product) 为输入，根据该文件的定义，自动生成相关 c 代码。'''
-        print "执行命令：\n" + sys.argv[0] + " device_config.json"
-        return 0
-    else:
-        #  try:
-            template_path = sys.argv[1]
-            if not os.path.exists(template_path):
-                print("错误：{} 文件不存在，请重新指定 device_config.json 文件路径".format(template_path))
-                return 1
+    parser = argparse.ArgumentParser(description='Iotsuite device data code generator.')
+    parser.add_argument('-c','--config', dest='config', required=True,
+                        help='配置文件本地路径，该文件可从控制台导出到本地： https://console.qcloud.com/iotsuite/product')
 
-            template_dir = os.path.dirname(template_path)
-            if template_dir:
-                template_dir += "/"
+    args = parser.parse_args()
 
-            f = open(template_path, "r")
-            try:
-                device_config = json.load(f)
-                print("加载 {} 文件成功".format(template_path))
-            except ValueError as e:
-                print("错误：文件格式非法，请检查 {} 文件是否是 JSON 格式。".format(template_path))
-                return 1
+    template_path = args.config
+    if not os.path.exists(template_path):
+        print("错误：{} 文件不存在，请重新指定 device_config.json 文件路径".format(template_path))
+        return 1
 
-            if "DataTemplate" not in device_config:
-                print("错误：{} 文件中未发现 DataTemplate 属性字段，请检查文件格式是否合法。".format(template_path))
-                return 1
+    template_dir = os.path.dirname(template_path)
+    if template_dir:
+        template_dir += "/"
 
-            try:
-                data_template = iot_struct(device_config["DataTemplate"])
+    f = open(template_path, "r")
+    try:
+        device_config = json.load(f)
+        print("加载 {} 文件成功".format(template_path))
+    except ValueError as e:
+        print("错误：文件格式非法，请检查 {} 文件是否是 JSON 格式。".format(template_path))
+        return 1
 
-                templates = [
+    if "DataTemplate" not in device_config:
+        print("错误：{} 文件中未发现 DataTemplate 属性字段，请检查文件格式是否合法。".format(template_path))
+        return 1
+
+    try:
+        data_template = iot_struct(device_config["DataTemplate"])
+
+        templates = [
 code_template("tc_iot_device_logic.h",
 """#ifndef TC_IOT_DEVICE_LOGIC_H
 #define TC_IOT_DEVICE_LOGIC_H
@@ -336,7 +336,6 @@ code_template("tc_iot_device_logic.c",
 
 int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context);
 void operate_device(tc_iot_shadow_local_data * device);
-
 
 /* 影子数据 Client  */
 tc_iot_shadow_client g_tc_iot_shadow_client;
@@ -426,7 +425,7 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
         tc_iot_report_firm(tc_iot_get_shadow_client(),
                 "product", TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
                 "device", TC_IOT_CONFIG_DEVICE_NAME,
-                "sdk-ver", "1.0",
+                "sdk-ver", TC_IOT_SDK_VERSION,
                 "firm-ver","1.0", NULL);
     } else {
         TC_IOT_LOG_TRACE("unkown event received, event=%d", msg->event);
@@ -436,22 +435,18 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
 
 """)]
 
-                for template in templates:
-                    output_file_name = template_dir + template.file_name
-                    output_file = open(output_file_name, "w")
-                    output_file.write(smart_parser(template.template, data_template))
-                    print "文件 {} 生成成功".format(output_file_name)
+        for template in templates:
+            output_file_name = template_dir + template.file_name
+            output_file = open(output_file_name, "w")
+            output_file.write(smart_parser(template.template, data_template))
+            print "文件 {} 生成成功".format(output_file_name)
 
 
-                return 0
-            except ValueError as e:
-                print(e)
-                return 1
+        return 0
+    except ValueError as e:
+        print(e)
+        return 1
 
-        #  except Exception as e:
-            #  #  print e
-            #  raise e
-            #  return 1
 
 
 if __name__ == '__main__':

@@ -116,10 +116,16 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
  * */
 #define TC_IOT_MQTT_METHOD_GET       "get"
 /**< 更新服务端影子设备数据
- * {"method":"update","state"{"reported":{"a":1}, "desired":{"a":2}}}
+ * {"method":"update","state"{"reported":{"a":1}}}
  *
  * */
 #define TC_IOT_MQTT_METHOD_UPDATE    "update"
+
+/**< 删除服务端影子设备数据
+ * {"method":"delete","state"{"desired":{"a":null}}}
+ *
+ * */
+#define TC_IOT_MQTT_METHOD_DELETE    "delete"
 
 /**< 更新设备状态控制指令
  * {"method":"control","state"{"reported":{"a":1}, "desired":{"a":2}}}
