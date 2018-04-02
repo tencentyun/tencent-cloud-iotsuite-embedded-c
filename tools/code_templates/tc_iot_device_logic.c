@@ -93,7 +93,7 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
         tc_iot_report_firm(tc_iot_get_shadow_client(),
                 "product", TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
                 "device", TC_IOT_CONFIG_DEVICE_NAME,
-                "sdk-ver", "1.0",
+                "sdk-ver", TC_IOT_SDK_VERSION,
                 "firm-ver","1.0", NULL);
     } else {
         TC_IOT_LOG_TRACE("unkown event received, event=%d", msg->event);

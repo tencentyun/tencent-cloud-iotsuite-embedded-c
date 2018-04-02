@@ -88,6 +88,7 @@ static int _tc_iot_property_change( int property_id, void * data) {
     switch (property_id) {
         case TC_IOT_PROP_device_switch:
             device_switch = *(tc_iot_shadow_bool *)data;
+            g_tc_iot_device_local_data.device_switch = device_switch;
             if (device_switch) {
                 TC_IOT_LOG_TRACE("do something for device_switch on");
             } else {
@@ -96,6 +97,7 @@ static int _tc_iot_property_change( int property_id, void * data) {
             break;
         case TC_IOT_PROP_color:
             color = *(tc_iot_shadow_enum *)data;
+            g_tc_iot_device_local_data.color = color;
             switch(color){
                 case TC_IOT_PROP_color_red:
                     TC_IOT_LOG_TRACE("do something for color = red");
@@ -115,6 +117,7 @@ static int _tc_iot_property_change( int property_id, void * data) {
             break;
         case TC_IOT_PROP_brightness:
             brightness = *(tc_iot_shadow_number *)data;
+            g_tc_iot_device_local_data.brightness = brightness;
             TC_IOT_LOG_TRACE("do something for brightness=%d", brightness);
             break;
         default:

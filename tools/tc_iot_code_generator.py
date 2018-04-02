@@ -112,6 +112,7 @@ class iot_field:
         if self.type_name == "bool":
             sample_code = """
 <indent>field_name = *(field_define *)data;
+<indent>g_tc_iot_device_local_data.field_name = field_name;
 <indent>if (field_name) {
 <indent>    TC_IOT_LOG_TRACE("do something for field_name on");
 <indent>} else {
@@ -122,6 +123,7 @@ class iot_field:
         elif self.type_name == "enum":
             sample_code = """
 <indent>field_name = *(field_define *)data;
+<indent>g_tc_iot_device_local_data.field_name = field_name;
 """.replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
             sample_code += indent + "switch({})".format(self.name) + "{\n"
             for enum in self.enums:
@@ -139,6 +141,7 @@ class iot_field:
         elif self.type_name == "number":
             sample_code = """
 <indent>field_name = *(field_define *)data;
+<indent>g_tc_iot_device_local_data.field_name = field_name;
 <indent>TC_IOT_LOG_TRACE("do something for field_name=%d", field_name);
 """.replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
         else:
