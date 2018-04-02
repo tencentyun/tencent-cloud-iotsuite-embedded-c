@@ -296,6 +296,8 @@ int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffe
 int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         message_ack_handler callback, int timeout_ms, void * session_context,
          va_list p_args);
+tc_iot_shadow_session * tc_iot_find_empty_session(tc_iot_shadow_client *c);
+void tc_iot_release_session(tc_iot_shadow_session * p_session);
 
 void tc_iot_device_on_message_received(tc_iot_message_data* md);
 void _device_on_message_received(tc_iot_message_data* md);
