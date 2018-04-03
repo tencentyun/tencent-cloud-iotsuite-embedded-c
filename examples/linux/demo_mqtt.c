@@ -71,19 +71,23 @@ int main(int argc, char** argv) {
                 TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG, TC_IOT_CONFIG_ROOT_CA,
                 timestamp, nonce, 
                 &p_client_config->device_info);
-
-            if (ret == TC_IOT_SUCCESS)
+            
+            if (ret != TC_IOT_SUCCESS)
             {
-                tc_iot_hal_set_value("device_secrect", p_client_config->device_info.secret );
-                tc_iot_hal_printf("save device_secrect %s\n", p_client_config->device_info.secret);
+                tc_iot_hal_printf("requesting device_secrect for http token, ret %d\n", ret);
+                return 0;
             }
+       
+            tc_iot_hal_set_value("device_secrect", p_client_config->device_info.secret );
+            tc_iot_hal_printf("save device_secrect %s\n", p_client_config->device_info.secret);
+            
 
-            /*return 0;*/
+            //return 0;
 
         }
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
         ret = http_refresh_auth_token(
-                TC_IOT_CONFIG_AUTH_API_URL_DEBUG, //TC_IOT_CONFIG_AUTH_API_URL,
+                TC_IOT_CONFIG_AUTH_API_URL_DEBUG, //TC_IOT_CONFIG_AUTH_API_URL, 
                 TC_IOT_CONFIG_ROOT_CA,
                 timestamp, nonce,
                 &p_client_config->device_info);
