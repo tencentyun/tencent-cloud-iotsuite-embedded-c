@@ -67,9 +67,42 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_SHADOW_SESSION_NOT_ENOUGH = -1008, /**< 影子回调会话空间不够，请检查是否发送过多并发请求，
                                                 合理设置 TC_IOT_MAX_SESSION_COUNT 的值*/
     TC_IOT_HTTP_REDIRECT_TOO_MANY = -1009, /**< HTTP 跳转次数过多，有可能是跳转循环 */
+    TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE = -1010, /**< 数据无变动，无需上报*/
 
 } tc_iot_sys_code_e;
 
 #define TC_IOT_ARRAY_LENGTH(a)  (sizeof(a)/sizeof(a[0]))
+
+
+typedef enum _tc_iot_event_e {
+    TC_IOT_EVENT_UNKNOWN = 0,
+    TC_IOT_SYS_EVENT_BASE = 1,
+    TC_IOT_MQTT_EVENT_BASE = 50,
+    TC_IOT_SHADOW_EVENT_BASE = 100,
+    TC_IOT_SHADOW_EVENT_SERVER_CONTROL,
+    TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM,
+    TC_IOT_USER_EVENT_BASE = 200,
+} tc_iot_event_e;
+
+
+typedef struct _tc_iot_event_message {
+    tc_iot_event_e  event;
+    void * data;
+} tc_iot_event_message;
+
+/**
+* @brief tc_iot_event_handler 通用事件回调原型 
+*
+* @param msg 消息内容
+* @param src 触发事件的来源
+* @param context 附加 context 信息。
+*
+* @return @see tc_iot_sys_code_e
+*/
+typedef int (*tc_iot_event_handler)(tc_iot_event_message *msg, void * client,  void * context);
+
+#define TC_IOT_CONTAINER_OF(ptr, type, member) ({\
+        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+        (type *)( (char *)__mptr - offsetof(type,member) );})
 
 #endif /* end of include guard */

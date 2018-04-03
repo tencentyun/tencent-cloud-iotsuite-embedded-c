@@ -99,15 +99,17 @@ _tc_iot_shadow_config 的协作图:</div>
 <div class="dyncontent">
 <div class="center"><img src="struct__tc__iot__shadow__config__coll__graph.png" border="0" usemap="#__tc__iot__shadow__config_coll__map" alt="Collaboration graph"/></div>
 <map name="__tc__iot__shadow__config_coll__map" id="__tc__iot__shadow__config_coll__map">
-<area shape="rect" id="node2" href="struct__tc__iot__mqtt__client__config.html" title="MQTT client 客户端配置 " alt="" coords="177,317,309,359"/>
-<area shape="rect" id="node3" href="struct__tc__iot__mqtt__client.html" title="MQTT client 对象结构，保存 MQTT 客户端相关配置、连接状态、 回调处理、时延要求、收发缓存区等信息。 ..." alt="" coords="443,228,575,255"/>
-<area shape="rect" id="node4" href="structtc__iot__network__t.html" title="网络连接对象，包括相关参数及回调函数 " alt="" coords="450,102,569,129"/>
-<area shape="rect" id="node5" href="structtc__iot__net__context__t.html" title="网络连接参数及过程会话数据 " alt="" coords="439,5,579,32"/>
-<area shape="rect" id="node6" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html" title="_tc_iot_mqtt_client\l::MessageHandlers" alt="" coords="593,95,727,136"/>
-<area shape="rect" id="node7" href="structtc__iot__timer.html" title="tc_iot_timer" alt="" coords="335,102,425,129"/>
-<area shape="rect" id="node8" href="struct__tc__iot__message__data.html" title="接收到的订阅消息 " alt="" coords="58,102,211,129"/>
-<area shape="rect" id="node9" href="struct__tc__iot__mqtt__message.html" title="MQTT Publis请求消息，头部参数定义(非协议头)，关键参数说明 " alt="" coords="57,5,212,32"/>
-<area shape="rect" id="node10" href="struct__tc__iot__device__info.html" title="设备信息 " alt="" coords="285,228,419,255"/>
+<area shape="rect" id="node2" href="struct__tc__iot__event__message.html" title="_tc_iot_event_message" alt="" coords="1164,156,1324,183"/>
+<area shape="rect" id="node3" href="struct__tc__iot__shadow__property__def.html" title="_tc_iot_shadow_property_def" alt="" coords="1148,207,1340,233"/>
+<area shape="rect" id="node4" href="struct__tc__iot__mqtt__client__config.html" title="MQTT client 客户端配置 " alt="" coords="1178,258,1310,299"/>
+<area shape="rect" id="node5" href="struct__tc__iot__mqtt__client.html" title="MQTT client 对象结构，保存 MQTT 客户端相关配置、连接状态、 回调处理、时延要求、收发缓存区等信息。 ..." alt="" coords="849,119,981,145"/>
+<area shape="rect" id="node6" href="structtc__iot__network__t.html" title="网络连接对象，包括相关参数及回调函数 " alt="" coords="548,7,667,33"/>
+<area shape="rect" id="node7" href="structtc__iot__net__context__t.html" title="网络连接参数及过程会话数据 " alt="" coords="272,7,412,33"/>
+<area shape="rect" id="node8" href="struct__tc__iot__mqtt__client_1_1MessageHandlers.html" title="_tc_iot_mqtt_client\l::MessageHandlers" alt="" coords="540,58,675,99"/>
+<area shape="rect" id="node9" href="struct__tc__iot__message__data.html" title="接收到的订阅消息 " alt="" coords="265,184,419,211"/>
+<area shape="rect" id="node10" href="struct__tc__iot__mqtt__message.html" title="MQTT Publis请求消息，头部参数定义(非协议头)，关键参数说明 " alt="" coords="5,184,160,211"/>
+<area shape="rect" id="node11" href="structtc__iot__timer.html" title="tc_iot_timer" alt="" coords="562,192,653,219"/>
+<area shape="rect" id="node12" href="struct__tc__iot__device__info.html" title="设备信息 " alt="" coords="848,293,983,320"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">图例</a>]</span></center></div>
 <table class="memberdecls">
@@ -121,10 +123,28 @@ _tc_iot_shadow_config 的协作图:</div>
 <tr class="separator:a1bbecf4d6fad84b400d0446c0b7c93ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae03933c4ff91ba0141da18e4bb07c209"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__mqtt_8h.html#adc1265ae64dab46c36579d229d0eb11a">message_handler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__shadow__config.html#ae03933c4ff91ba0141da18e4bb07c209">on_receive_msg</a></td></tr>
 <tr class="separator:ae03933c4ff91ba0141da18e4bb07c209"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69d589c7d5bb6f4bb3e0e07ad4adf64a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__shadow__config.html#a69d589c7d5bb6f4bb3e0e07ad4adf64a">property_total</a></td></tr>
+<tr class="separator:a69d589c7d5bb6f4bb3e0e07ad4adf64a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30513eebf36377884ae51de2e62719c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__shadow_8h.html#ad196579026e904f1554533e10f67e3e6">tc_iot_shadow_property_def</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__shadow__config.html#a30513eebf36377884ae51de2e62719c5">properties</a></td></tr>
+<tr class="separator:a30513eebf36377884ae51de2e62719c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa40b4b1e152f72a3a7a1032532c97d85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__const_8h.html#a547039c0f365d991e39fc16d143b2cbd">tc_iot_event_handler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__shadow__config.html#aa40b4b1e152f72a3a7a1032532c97d85">event_notify</a></td></tr>
+<tr class="separator:aa40b4b1e152f72a3a7a1032532c97d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
 <div class="textblock"><p>影子设备配置 </p>
 </div><h2 class="groupheader">结构体成员变量说明</h2>
+<a class="anchor" id="aa40b4b1e152f72a3a7a1032532c97d85"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tc__iot__const_8h.html#a547039c0f365d991e39fc16d143b2cbd">tc_iot_event_handler</a> _tc_iot_shadow_config::event_notify</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ad6105cbe556d04ce5994f33bba729104"></a>
 <div class="memitem">
 <div class="memproto">
@@ -148,6 +168,30 @@ _tc_iot_shadow_config 的协作图:</div>
       </table>
 </div><div class="memdoc">
 <p>影子设备消息回调 </p>
+
+</div>
+</div>
+<a class="anchor" id="a30513eebf36377884ae51de2e62719c5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tc__iot__shadow_8h.html#ad196579026e904f1554533e10f67e3e6">tc_iot_shadow_property_def</a>* _tc_iot_shadow_config::properties</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a69d589c7d5bb6f4bb3e0e07ad4adf64a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int _tc_iot_shadow_config::property_total</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

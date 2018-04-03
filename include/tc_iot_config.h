@@ -2,6 +2,8 @@
 #define TC_IOT_CONFIG_H
 
 
+#define TC_IOT_SDK_VERSION     "1.0.8"
+
 /* mqtt消息接收缓冲区长度 */
 #define TC_IOT_CLIENT_SEND_BUF_SIZE 1024
 /* mqtt消息发送缓冲区长度 */
