@@ -149,6 +149,7 @@ void tc_iot_release_session(tc_iot_shadow_session * p_session) {
         return ;
     }
 
+    TC_IOT_LOG_TRACE("sid released:%s", p_session->sid)
     memset(p_session, 0, sizeof(tc_iot_shadow_session));
     return ;
 }
@@ -868,7 +869,7 @@ int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int b
 
     if (desired_count <= 0 && reported_count <= 0) {
         TC_IOT_LOG_TRACE("No device data needed be reported.");
-        rc = TC_IOT_SUCCESS;
+        rc = TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE;
         goto exit;
     }
 
@@ -903,6 +904,7 @@ int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int b
     if (TC_IOT_SUCCESS != rc) {
         TC_IOT_LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
     }
+
 exit:
     if (rc != TC_IOT_SUCCESS) {
         tc_iot_release_session(p_session);
