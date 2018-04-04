@@ -38,29 +38,37 @@
 /*#define TC_IOT_CONFIG_SERVER_HOST "localhost"*/
 /* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-fdxt0fie"
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-1e8w58ou4"
 
 /* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
 
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_NAME "light001"
+#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
+
 /* client id，*/
-/* 由两部分组成，组成形式为“Instanceid@DeviceID”，ClientID 的长度不超过 64个字符
+/* 由两部分组成，组成形式为“ProductKey@DeviceID”，ClientID 的长度不超过 64个字符
  * */
 /* ，请不要使用不可见字符。其中*/
-/* Instanceid 为 IoT MQ 的实例 ID。*/
+/* ProductKey 为 IoT MQ 的实例 ID。*/
 /* DeviceID 为每个设备独一无二的标识，由业务方自己指定，需保证全局唯一，例如每个
- * */
-/* 传感器设备的序列号。*/
-#define TC_IOT_CONFIG_DEVICE_CLIENT_ID "mqtt-1e8w58ou4@" TC_IOT_CONFIG_DEVICE_NAME
+ * 传感器设备的序列号。*/
+#define TC_IOT_CONFIG_DEVICE_CLIENT_ID TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "@" TC_IOT_CONFIG_DEVICE_NAME
 
 /************************************************************************/
 /**********************************选填项********************************/
 /* 关于username和password：*/
 /* 1)如果是通过TC_IOT_CONFIG_AUTH_API_URL接口，动态获取的，以下两个参数可不用填写*/
 /* 2)如果有预先申请好的固定username和password，可以把获取到的固定参数填写到如下位置*/
+#if 0==0
+/* Token 模式 */
 #define TC_IOT_CONFIG_DEVICE_USER_NAME ""
 #define TC_IOT_CONFIG_DEVICE_PASSWORD ""
+#else
+/* 直连模式 */
+#define TC_IOT_CONFIG_DEVICE_USER_NAME "username"
+#define TC_IOT_CONFIG_DEVICE_PASSWORD "password"
+#endif
 /************************************************************************/
 
 

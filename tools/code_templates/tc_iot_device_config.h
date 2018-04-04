@@ -44,7 +44,7 @@
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
 
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_NAME "light001"
+#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
 
 /* client id，*/
 /* 由两部分组成，组成形式为“ProductKey@DeviceID”，ClientID 的长度不超过 64个字符

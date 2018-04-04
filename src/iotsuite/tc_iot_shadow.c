@@ -334,6 +334,67 @@ int tc_iot_shadow_doc_pack_for_update_with_sid(char *buffer, int buffer_len,
     return buffer_used;
 }
 
+int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len,
+        const char * reported, const char * desired,
+        message_ack_handler callback, int timeout_ms, void * session_context) {
+    char *pub_topic ;
+    int rc ;
+    tc_iot_shadow_session * p_session;
+    tc_iot_mqtt_message pubmsg;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+
+    if (callback) {
+        if (timeout_ms <= 0) {
+            TC_IOT_LOG_ERROR("callback handler given, but timeout_ms=%d", timeout_ms);
+        }
+        p_session = tc_iot_find_empty_session(c);
+        if (!p_session) {
+            TC_IOT_LOG_ERROR("no more empty session.");
+            return TC_IOT_SHADOW_SESSION_NOT_ENOUGH;
+        }
+        rc = tc_iot_shadow_doc_pack_for_delete_with_sid(buffer, buffer_len, &(p_session->sid[0]),
+                TC_IOT_SESSION_ID_LEN+1, reported, desired,
+                c);
+        tc_iot_hal_timer_init(&(p_session->timer));
+        tc_iot_hal_timer_countdown_ms(&(p_session->timer), timeout_ms);
+        p_session->handler = callback;
+        p_session->session_context = session_context;
+    } else {
+        rc = tc_iot_shadow_doc_pack_for_delete_with_sid(buffer, buffer_len, NULL, 0, reported, desired, c);
+    }
+
+    memset(&pubmsg, 0, sizeof(pubmsg));
+    pubmsg.payload = buffer;
+    pubmsg.payloadlen = strlen(pubmsg.payload);
+    pubmsg.qos = TC_IOT_QOS1;
+    pubmsg.retained = 0;
+    pubmsg.dup = 0;
+    TC_IOT_LOG_TRACE("requesting with: %s", (char *)pubmsg.payload);
+    pub_topic = c->p_shadow_config->pub_topic;
+    rc = tc_iot_mqtt_client_publish(&(c->mqtt_client), pub_topic, &pubmsg);
+    if (TC_IOT_SUCCESS != rc) {
+        TC_IOT_LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
+    }
+    return rc;
+}
+
+int tc_iot_shadow_doc_pack_for_delete_with_sid(char *buffer, int buffer_len,
+                                    char * session_id, int session_id_len,
+                                    const char * reported, const char * desired,
+                                    tc_iot_shadow_client *c) {
+    int ret;
+    int buffer_used = 0;
+    ret = tc_iot_shadow_doc_pack_start(buffer, buffer_len, session_id, session_id_len, TC_IOT_MQTT_METHOD_DELETE, c);
+    buffer_used += ret;
+    ret = tc_iot_shadow_doc_pack_format(buffer+buffer_used, buffer_len-buffer_used, reported, desired);
+    buffer_used += ret;
+    ret = tc_iot_shadow_doc_pack_end(buffer+buffer_used, buffer_len-buffer_used, c);
+    buffer_used += ret;
+    return buffer_used;
+}
+
+
 int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
                                  char * session_id, int session_id_len,
                                  const char * method,
