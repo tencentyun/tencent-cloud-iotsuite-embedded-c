@@ -311,7 +311,11 @@ int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, ...) {
     va_start(p_args, p_shadow_client);
     ret = tc_iot_shadow_update_firm_info(p_shadow_client, buffer, buffer_len,
             _tc_iot_update_firm_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, p_args);
-    TC_IOT_LOG_TRACE("[c-s]update_firm_info: %s", buffer);
+    if (ret == TC_IOT_SUCCESS) {
+        TC_IOT_LOG_TRACE("[c-s]update_firm_info: %s", buffer);
+    } else {
+        TC_IOT_LOG_TRACE("[c-s]update_firm_info failed(%d): %s", ret, buffer);
+    }
     va_end( p_args);
     return ret;
 }

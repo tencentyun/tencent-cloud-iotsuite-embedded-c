@@ -975,6 +975,18 @@ int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int b
             break;
         }
 
+        if (strlen(info_name) > TC_IOT_MAX_FIRM_INFO_NAME_LEN) {
+            TC_IOT_LOG_ERROR("firm name too long:%s", info_name);
+            rc = TC_IOT_FIRM_INFO_NAME_TOO_LONG;
+            goto exit;
+        }
+
+        if (strlen(info_value) > TC_IOT_MAX_FIRM_INFO_VALUE_LEN) {
+            TC_IOT_LOG_ERROR("firm value too long:%s", info_value);
+            rc = TC_IOT_FIRM_INFO_VALUE_TOO_LONG;
+            goto exit;
+        }
+
         if (i == 0) {
             ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\"");
             if (ret <= 0) {

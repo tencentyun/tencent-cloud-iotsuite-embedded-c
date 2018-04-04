@@ -18,6 +18,12 @@
 /* 设备名称长度 */
 #define TC_IOT_MAX_DEVICE_NAME_LEN 20
 
+/* 设备信息名称长度 */
+#define TC_IOT_MAX_FIRM_INFO_NAME_LEN 256
+
+/* 设备信息取值长度 */
+#define TC_IOT_MAX_FIRM_INFO_VALUE_LEN 256
+
 /* clientid和topic的定义与限制： */
 /* https://cloud.tencent.com/document/product/646/12657 */
 /* client id 最大长度 */

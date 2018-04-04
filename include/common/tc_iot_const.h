@@ -68,6 +68,8 @@ typedef enum _tc_iot_sys_code_e {
                                                 合理设置 TC_IOT_MAX_SESSION_COUNT 的值*/
     TC_IOT_HTTP_REDIRECT_TOO_MANY = -1009, /**< HTTP 跳转次数过多，有可能是跳转循环 */
     TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE = -1010, /**< 数据无变动，无需上报*/
+    TC_IOT_FIRM_INFO_NAME_TOO_LONG = -1011, /**< 上报的设备信息字段名称太长*/
+    TC_IOT_FIRM_INFO_VALUE_TOO_LONG = -1012, /**< 上报的设备信息字段取值太长*/
 
 } tc_iot_sys_code_e;
 
