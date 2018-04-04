@@ -60,7 +60,7 @@
 /* 关于username和password：*/
 /* 1)如果是通过TC_IOT_CONFIG_AUTH_API_URL接口，动态获取的，以下两个参数可不用填写*/
 /* 2)如果有预先申请好的固定username和password，可以把获取到的固定参数填写到如下位置*/
-#if 0==/*${template_config.AuthType}*/
+#if 1==/*${template_config.AuthType}*/
 /* Token 模式 */
 #define TC_IOT_CONFIG_DEVICE_USER_NAME ""
 #define TC_IOT_CONFIG_DEVICE_PASSWORD ""

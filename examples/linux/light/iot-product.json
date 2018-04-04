@@ -8,7 +8,7 @@
   "Description": "可远程开关、调节亮度和颜色的智能灯。",
   "Domain": "mqtt-1e8w58ou4.ap-guangzhou.mqtt.tencentcloudmq.com",
   "Standard": 3,
-  "AuthType": 0,
+  "AuthType": 1,
   "DataTemplate": [
     {
       "Name": "device_switch",
