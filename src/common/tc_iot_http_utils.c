@@ -190,6 +190,9 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
 
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
+    if (ret < sizeof(b64_buf) && ret > 0) {
+       b64_buf[ret] = '\0'; 
+    }
 
     TC_IOT_LOG_TRACE("tc_iot_calc_auth_sign source %s sec %s sig %s\n", buf, secret, b64_buf);
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
