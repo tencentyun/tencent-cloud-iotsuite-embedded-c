@@ -176,9 +176,9 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                 if (ret == TC_IOT_SUCCESS) {
                     tc_iot_shadow_save_to_cached(p_shadow_client, p_prop->id, ptr, p_shadow_client->p_shadow_config->p_current_device_data);
                 }
-                tc_iot_confirm_devcie_data(p_shadow_client);
             }
         }
+        tc_iot_confirm_devcie_data(p_shadow_client);
     }
     return 0;
 }
