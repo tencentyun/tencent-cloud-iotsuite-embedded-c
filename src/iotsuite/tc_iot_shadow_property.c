@@ -178,8 +178,8 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                 }
             }
         }
-        tc_iot_confirm_devcie_data(p_shadow_client);
     }
+    tc_iot_confirm_devcie_data(p_shadow_client);
     return 0;
 }
 

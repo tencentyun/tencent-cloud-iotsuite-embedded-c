@@ -18,17 +18,11 @@ class AttributeDict(dict):
     __setattr__ = dict.__setitem__
 
 class code_template:
-    file_name = ""
-    template = ""
     def __init__(self, file_name, template):
         self.file_name = file_name
         self.template = template
 
 class iot_enum:
-    parent = ""
-    name = ""
-    index = 0
-
     def __init__(self, parent, name, index):
         self.parent = parent
         self.name = name
@@ -40,17 +34,9 @@ class iot_enum:
         return "#define {} {}".format(self.get_c_macro_name(), self.index)
 
 class iot_field:
-    name = ""
-    index = 0
-    type_name = ""
-    type_id = ""
-    type_define = ""
-    default_value = ""
-    min_value = ""
-    max_value = ""
-    enums = []
-
     def __init__(self, name, index, field_obj):
+        self.default_value = ""
+        self.enums = []
         self.index = index
         self.name = name
         if "Type" not  in field_obj:
@@ -151,9 +137,9 @@ class iot_field:
 
 
 class iot_struct:
-    fields = []
-    field_id = 0
     def __init__(self, obj):
+        self.fields = []
+        self.field_id = 0
         for field_define in obj:
             if "Name" not in field_define:
                 raise ValueError("错误：字段定义中未找到 Name 字段")
