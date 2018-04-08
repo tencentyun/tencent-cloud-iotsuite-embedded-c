@@ -150,7 +150,7 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
     } else if (msg->event == TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM) {
         tc_iot_report_firm(tc_iot_get_shadow_client(),
                 "product", TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
-                "device", TC_IOT_CONFIG_DEVICE_NAME,
+                "device", g_tc_iot_shadow_config.mqtt_client_config.device_info.device_name,
                 "sdk-ver", TC_IOT_SDK_VERSION,
                 "firm-ver","1.0", NULL);
     } else {
