@@ -5,5 +5,6 @@ var searchData=
   ['readbuf_5fsize',['readbuf_size',['../struct__tc__iot__mqtt__client.html#aa166e5eb3f941e32b09c37497bf0671f',1,'_tc_iot_mqtt_client']]],
   ['reconnect_5ftimeout_5fms',['reconnect_timeout_ms',['../struct__tc__iot__mqtt__client.html#a5d01fa13c802f929fda9e33ce9911a65',1,'_tc_iot_mqtt_client']]],
   ['reconnect_5ftimer',['reconnect_timer',['../struct__tc__iot__mqtt__client.html#ac6a2615c0cd6c3f7d52dfe21319d76a8',1,'_tc_iot_mqtt_client']]],
+  ['reported_5fbits',['reported_bits',['../struct__tc__iot__shadow__client.html#a0dae86cc160836ee4479118a86f549d6',1,'_tc_iot_shadow_client']]],
   ['retained',['retained',['../struct__tc__iot__mqtt__message.html#a4fbdc6cd5215af247699dd7d60e44b3c',1,'_tc_iot_mqtt_message']]]
 ];

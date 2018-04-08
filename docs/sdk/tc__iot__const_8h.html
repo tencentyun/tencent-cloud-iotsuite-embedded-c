@@ -124,6 +124,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 宏定义</h2></td></tr>
 <tr class="memitem:aa5e1d04aaa4a59ee810d3cadbcb29a01"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#aa5e1d04aaa4a59ee810d3cadbcb29a01">TC_IOT_ARRAY_LENGTH</a>(a)&#160;&#160;&#160;(sizeof(a)/sizeof(a[0]))</td></tr>
 <tr class="separator:aa5e1d04aaa4a59ee810d3cadbcb29a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee55fe088ea64952b2d26a7d5c270848"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__const_8h.html#aee55fe088ea64952b2d26a7d5c270848">TC_IOT_CONTAINER_OF</a>(ptr,  type,  member)</td></tr>
+<tr class="separator:aee55fe088ea64952b2d26a7d5c270848"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 类型定义</h2></td></tr>
@@ -206,7 +208,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca0db7b477f0ea341d328b0fc44beddf31">TC_IOT_HTTP_RESPONSE_INVALID</a> = -1007, 
 <a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca25564bec5ebbab108fbb1b16579b2152">TC_IOT_SHADOW_SESSION_NOT_ENOUGH</a> = -1008, 
 <br />
-&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4c68890ff9ae4331f603ce91c782a791">TC_IOT_HTTP_REDIRECT_TOO_MANY</a> = -1009
+&#160;&#160;<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4c68890ff9ae4331f603ce91c782a791">TC_IOT_HTTP_REDIRECT_TOO_MANY</a> = -1009, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca4f793724e3b9aa79232f45e1d989d1cf">TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE</a> = -1010, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067eccad91bad4d0c62fe715aa68cca8232df26">TC_IOT_FIRM_INFO_NAME_TOO_LONG</a> = -1011, 
+<a class="el" href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca8305335d419c5c17ff188863abd7e7a7">TC_IOT_FIRM_INFO_VALUE_TOO_LONG</a> = -1012
 <br />
  }<tr class="memdesc:a1bf17f05159227e33f5eef1f0e067ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统常见错误码定义，基本定义原则：  <a href="tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecc">更多...</a><br /></td></tr>
 </td></tr>
@@ -239,6 +244,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
       </table>
 </div><div class="memdoc">
 
+</div>
+</div>
+<a class="anchor" id="aee55fe088ea64952b2d26a7d5c270848"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TC_IOT_CONTAINER_OF</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">ptr, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">type, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">member&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>值:</b><div class="fragment"><div class="line">({\</div><div class="line">        const typeof( ((type *)0)-&gt;member ) *__mptr = (ptr);    \</div><div class="line">        (type *)( (<span class="keywordtype">char</span> *)__mptr - offsetof(type,member) );})</div></div><!-- fragment -->
 </div>
 </div>
 <h2 class="groupheader">类型定义说明</h2>
@@ -513,6 +550,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a1bf17f05159227e33f5eef1f0e067ecca4c68890ff9ae4331f603ce91c782a791"></a>TC_IOT_HTTP_REDIRECT_TOO_MANY&#160;</td><td class="fielddoc">
 <p>HTTP 跳转次数过多，有可能是跳转循环 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a1bf17f05159227e33f5eef1f0e067ecca4f793724e3b9aa79232f45e1d989d1cf"></a>TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE&#160;</td><td class="fielddoc">
+<p>数据无变动，无需上报 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a1bf17f05159227e33f5eef1f0e067eccad91bad4d0c62fe715aa68cca8232df26"></a>TC_IOT_FIRM_INFO_NAME_TOO_LONG&#160;</td><td class="fielddoc">
+<p>上报的设备信息字段名称太长 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a1bf17f05159227e33f5eef1f0e067ecca8305335d419c5c17ff188863abd7e7a7"></a>TC_IOT_FIRM_INFO_VALUE_TOO_LONG&#160;</td><td class="fielddoc">
+<p>上报的设备信息字段取值太长 </p>
 </td></tr>
 </table>
 

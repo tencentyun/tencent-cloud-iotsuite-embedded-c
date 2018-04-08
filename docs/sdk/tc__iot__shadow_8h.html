@@ -131,6 +131,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 宏定义</h2></td></tr>
+<tr class="memitem:a10038a9134368edf6bb9d34f3777ca5b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a10038a9134368edf6bb9d34f3777ca5b">TC_IOT_MAX_PROPERTY_COUNT</a>&#160;&#160;&#160;128</td></tr>
+<tr class="separator:a10038a9134368edf6bb9d34f3777ca5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaf11240d51703e729479981eb6abc98"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#aeaf11240d51703e729479981eb6abc98">TC_IOT_MAX_FIRM_INFO_COUNT</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:aeaf11240d51703e729479981eb6abc98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11879c96b587d9a33e88eaf4df1e1fcc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a11879c96b587d9a33e88eaf4df1e1fcc">TC_IOT_SESSION_ID_LEN</a>&#160;&#160;&#160;8</td></tr>
 <tr class="separator:a11879c96b587d9a33e88eaf4df1e1fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1946bf5c5aafe5e951d6ba01280f7f14"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a1946bf5c5aafe5e951d6ba01280f7f14">TC_IOT_MAX_SESSION_COUNT</a>&#160;&#160;&#160;3</td></tr>
@@ -139,6 +143,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="separator:a536a09fa1672f35d9522c87adde522e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad090632690b75a4b931a8461618adbff"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ad090632690b75a4b931a8461618adbff">TC_IOT_MQTT_METHOD_UPDATE</a>&#160;&#160;&#160;&quot;update&quot;</td></tr>
 <tr class="separator:ad090632690b75a4b931a8461618adbff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf6de098f02382b07e0236b749ac241b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#abf6de098f02382b07e0236b749ac241b">TC_IOT_MQTT_METHOD_DELETE</a>&#160;&#160;&#160;&quot;delete&quot;</td></tr>
+<tr class="separator:abf6de098f02382b07e0236b749ac241b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5852c9c78990a785d07b92f3f1ba39d9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a5852c9c78990a785d07b92f3f1ba39d9">TC_IOT_MQTT_METHOD_CONTROL</a>&#160;&#160;&#160;&quot;control&quot;</td></tr>
 <tr class="separator:a5852c9c78990a785d07b92f3f1ba39d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9160123bdcc669ddf6d236f854a26ddb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a9160123bdcc669ddf6d236f854a26ddb">TC_IOT_MQTT_METHOD_UPDATE_FIRM</a>&#160;&#160;&#160;&quot;update_firm_info&quot;</td></tr>
@@ -232,28 +238,78 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="separator:ad05d4c5ad02db77ef6a0465c3fc816cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a583b8c99f82d70d98c47198f2880e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a8a583b8c99f82d70d98c47198f2880e9">tc_iot_shadow_update_state</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, char *buffer, int buffer_len, <a class="el" href="tc__iot__shadow_8h.html#a4fb08f88375041799f4b7054baa9f3f0">message_ack_handler</a> callback, int timeout_ms, void *session_context, const char *state_name, int count, va_list p_args)</td></tr>
 <tr class="separator:a8a583b8c99f82d70d98c47198f2880e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf2501e1a8779a29b1fcb7b8dce969f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#acf2501e1a8779a29b1fcb7b8dce969f3">tc_iot_shadow_update_firm_info</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, char *buffer, int buffer_len, <a class="el" href="tc__iot__shadow_8h.html#a4fb08f88375041799f4b7054baa9f3f0">message_ack_handler</a> callback, int timeout_ms, void *session_context, int info_count, va_list p_args)</td></tr>
-<tr class="separator:acf2501e1a8779a29b1fcb7b8dce969f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aae24ec1a32f49d928154e0808c20e4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a4aae24ec1a32f49d928154e0808c20e4">tc_iot_shadow_update_firm_info</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, char *buffer, int buffer_len, <a class="el" href="tc__iot__shadow_8h.html#a4fb08f88375041799f4b7054baa9f3f0">message_ack_handler</a> callback, int timeout_ms, void *session_context, va_list p_args)</td></tr>
+<tr class="separator:a4aae24ec1a32f49d928154e0808c20e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5fe0691acad6169e6145be24a2646be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__shadow_8h.html#a807a86632af0db9d89c1c9d19ed19f98">tc_iot_shadow_session</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ac5fe0691acad6169e6145be24a2646be">tc_iot_find_empty_session</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c)</td></tr>
+<tr class="separator:ac5fe0691acad6169e6145be24a2646be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74b963a646616436a2ce01ad9ffb0054"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a74b963a646616436a2ce01ad9ffb0054">tc_iot_release_session</a> (<a class="el" href="tc__iot__shadow_8h.html#a807a86632af0db9d89c1c9d19ed19f98">tc_iot_shadow_session</a> *p_session)</td></tr>
+<tr class="separator:a74b963a646616436a2ce01ad9ffb0054"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4e99d480baf1dc61c740f8e7c5aa811"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ab4e99d480baf1dc61c740f8e7c5aa811">tc_iot_device_on_message_received</a> (<a class="el" href="tc__iot__mqtt_8h.html#a7f19565ddaff3d8dd01fad90adb28173">tc_iot_message_data</a> *md)</td></tr>
 <tr class="separator:ab4e99d480baf1dc61c740f8e7c5aa811"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb76b238e7b5e66aeb35852f87ff2b3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#abb76b238e7b5e66aeb35852f87ff2b3a">_device_on_message_received</a> (<a class="el" href="tc__iot__mqtt_8h.html#a7f19565ddaff3d8dd01fad90adb28173">tc_iot_message_data</a> *md)</td></tr>
 <tr class="separator:abb76b238e7b5e66aeb35852f87ff2b3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e8cc6c87f3d517b988ae92a4a61fa64"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a9e8cc6c87f3d517b988ae92a4a61fa64">_tc_iot_sync_shadow_property</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, int property_total, <a class="el" href="tc__iot__shadow_8h.html#ad196579026e904f1554533e10f67e3e6">tc_iot_shadow_property_def</a> *properties, const char *doc_start, jsmntok_t *json_token, int tok_count)</td></tr>
-<tr class="separator:a9e8cc6c87f3d517b988ae92a4a61fa64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a726861d7906f5be4da9dd88d72d87f32"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a726861d7906f5be4da9dd88d72d87f32">tc_iot_report_firm</a> (int info_count,...)</td></tr>
-<tr class="separator:a726861d7906f5be4da9dd88d72d87f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7462d679d5073c681d720ab3b6437447"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a7462d679d5073c681d720ab3b6437447">tc_iot_report_device_data</a> (int property_count,...)</td></tr>
-<tr class="separator:a7462d679d5073c681d720ab3b6437447"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab251a2c52e52d2e6300c1749e8830185"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ab251a2c52e52d2e6300c1749e8830185">tc_iot_control_propeties</a> (int property_count,...)</td></tr>
-<tr class="separator:ab251a2c52e52d2e6300c1749e8830185"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d8ff3cc4bddf3a6a107470e6433c444"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a2d8ff3cc4bddf3a6a107470e6433c444">tc_iot_server_init</a> (<a class="el" href="tc__iot__shadow_8h.html#a83a16bc5fc5ae019a28afe92e77a9b43">tc_iot_shadow_config</a> *p_client_config)</td></tr>
-<tr class="separator:a2d8ff3cc4bddf3a6a107470e6433c444"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a872c7737db32bee8741d2eaff063d2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a1a872c7737db32bee8741d2eaff063d2">tc_iot_server_loop</a> (int yield_timeout)</td></tr>
-<tr class="separator:a1a872c7737db32bee8741d2eaff063d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbe7a4f1f525f2e09751c15155f95fd9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#adbe7a4f1f525f2e09751c15155f95fd9">tc_iot_server_destroy</a> (void)</td></tr>
-<tr class="separator:adbe7a4f1f525f2e09751c15155f95fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab51ab1372e05d4c0e21e5cd856fe8cca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ab51ab1372e05d4c0e21e5cd856fe8cca">_tc_iot_sync_shadow_property</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, int property_total, <a class="el" href="tc__iot__shadow_8h.html#ad196579026e904f1554533e10f67e3e6">tc_iot_shadow_property_def</a> *properties, bool reported, const char *doc_start, jsmntok_t *json_token, int tok_count)</td></tr>
+<tr class="separator:ab51ab1372e05d4c0e21e5cd856fe8cca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad051db15ea9334a85bd801862ec363ce"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ad051db15ea9334a85bd801862ec363ce">tc_iot_shadow_doc_parse</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, const char *payload, jsmntok_t *json_token, int token_count, char *field_buf, int field_buf_len)</td></tr>
+<tr class="separator:ad051db15ea9334a85bd801862ec363ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f495dd759209819d136a1fb52841c97"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a4f495dd759209819d136a1fb52841c97">tc_iot_shadow_event_notify</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, <a class="el" href="tc__iot__const_8h.html#a426550fc531ec432bd56c48370e0282b">tc_iot_event_e</a> event, void *data, void *context)</td></tr>
+<tr class="separator:a4f495dd759209819d136a1fb52841c97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1927fb75b956ca4cbba0a5fc33102e33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a1927fb75b956ca4cbba0a5fc33102e33">tc_iot_shadow_cmp_local</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, int property_id, void *src, void *dest)</td></tr>
+<tr class="separator:a1927fb75b956ca4cbba0a5fc33102e33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ddd629f25550bc55d540b3e71cb1f37"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a8ddd629f25550bc55d540b3e71cb1f37">tc_iot_shadow_cmp_local_with_reported</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, int property_id)</td></tr>
+<tr class="separator:a8ddd629f25550bc55d540b3e71cb1f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af13b74cef616b1c468fc7c173f0b6798"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#af13b74cef616b1c468fc7c173f0b6798">tc_iot_shadow_cmp_local_with_desired</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, int property_id)</td></tr>
+<tr class="separator:af13b74cef616b1c468fc7c173f0b6798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd7ecfda73aa5d38d417384ea354c60e"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#afd7ecfda73aa5d38d417384ea354c60e">tc_iot_shadow_save_to_cached</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, int property_id, const void *p_data, void *p_cache)</td></tr>
+<tr class="separator:afd7ecfda73aa5d38d417384ea354c60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb603c7cfe20de12bfbd8c1db93cc548"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#abb603c7cfe20de12bfbd8c1db93cc548">tc_iot_shadow_report_property</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, int property_id, char *buffer, int buffer_len)</td></tr>
+<tr class="separator:abb603c7cfe20de12bfbd8c1db93cc548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a071e14febb2fea4f3e7428ecc175b0bf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a071e14febb2fea4f3e7428ecc175b0bf">tc_iot_shadow_check_and_report</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *c, char *buffer, int buffer_len, <a class="el" href="tc__iot__shadow_8h.html#a4fb08f88375041799f4b7054baa9f3f0">message_ack_handler</a> callback, int timeout_ms, void *session_context, bool do_confirm)</td></tr>
+<tr class="separator:a071e14febb2fea4f3e7428ecc175b0bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a007f9596c82eb93896a838417f3df01d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__shadow_8h.html#ad196579026e904f1554533e10f67e3e6">tc_iot_shadow_property_def</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a007f9596c82eb93896a838417f3df01d">tc_iot_shadow_get_property_def</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, int property_id)</td></tr>
+<tr class="separator:a007f9596c82eb93896a838417f3df01d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74ba38e9ca6d6bcb07e1ef90c3f67a1d"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a74ba38e9ca6d6bcb07e1ef90c3f67a1d">tc_iot_shadow_get_property_name</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, int property_id)</td></tr>
+<tr class="separator:a74ba38e9ca6d6bcb07e1ef90c3f67a1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3af6ac91b682d9e104836a0e0afc1a3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a3af6ac91b682d9e104836a0e0afc1a3d">tc_iot_shadow_get_property_type</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, int property_id)</td></tr>
+<tr class="separator:a3af6ac91b682d9e104836a0e0afc1a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30c593263d6af026fa0639d682963631"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a30c593263d6af026fa0639d682963631">tc_iot_shadow_get_property_offset</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, int property_id)</td></tr>
+<tr class="separator:a30c593263d6af026fa0639d682963631"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cbc74d68b2288180180df1c7c09d76f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a3cbc74d68b2288180180df1c7c09d76f">tc_iot_report_firm</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client,...)</td></tr>
+<tr class="separator:a3cbc74d68b2288180180df1c7c09d76f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f98e70812afbe8f44dadb3201227580"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a9f98e70812afbe8f44dadb3201227580">tc_iot_report_device_data</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client)</td></tr>
+<tr class="separator:a9f98e70812afbe8f44dadb3201227580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac19ed60474eda4cb0aa71f5502702674"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ac19ed60474eda4cb0aa71f5502702674">tc_iot_server_init</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, <a class="el" href="tc__iot__shadow_8h.html#a83a16bc5fc5ae019a28afe92e77a9b43">tc_iot_shadow_config</a> *p_client_config)</td></tr>
+<tr class="separator:ac19ed60474eda4cb0aa71f5502702674"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb1e29725d6bf7b8dd0cce6a13570958"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#acb1e29725d6bf7b8dd0cce6a13570958">tc_iot_server_loop</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client, int yield_timeout)</td></tr>
+<tr class="separator:acb1e29725d6bf7b8dd0cce6a13570958"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9ac071176fa16739d07b3ab20fa3e7b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#aa9ac071176fa16739d07b3ab20fa3e7b">tc_iot_server_destroy</a> (<a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *p_shadow_client)</td></tr>
+<tr class="separator:aa9ac071176fa16739d07b3ab20fa3e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
+<a class="anchor" id="aeaf11240d51703e729479981eb6abc98"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TC_IOT_MAX_FIRM_INFO_COUNT&#160;&#160;&#160;5</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a10038a9134368edf6bb9d34f3777ca5b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TC_IOT_MAX_PROPERTY_COUNT&#160;&#160;&#160;128</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1946bf5c5aafe5e951d6ba01280f7f14"></a>
 <div class="memitem">
 <div class="memproto">
@@ -279,6 +335,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
+<a class="anchor" id="abf6de098f02382b07e0236b749ac241b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TC_IOT_MQTT_METHOD_DELETE&#160;&#160;&#160;&quot;delete&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>更新设备状态控制指令 {"method":"control","state"{"reported":{"a":1}, "desired":{"a":2}}} </p>
+
+</div>
+</div>
 <a class="anchor" id="a536a09fa1672f35d9522c87adde522e9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -288,7 +357,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
         </tr>
       </table>
 </div><div class="memdoc">
-<p>&lt; 读取服务端影子设备数据 {"method":"get"} 更新服务端影子设备数据 {"method":"update","state"{"reported":{"a":1}, "desired":{"a":2}}} </p>
+<p>&lt; 读取服务端影子设备数据 {"method":"get"} 更新服务端影子设备数据 {"method":"update","state"{"reported":{"a":1}}} </p>
 
 </div>
 </div>
@@ -326,7 +395,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
         </tr>
       </table>
 </div><div class="memdoc">
-<p>更新设备状态控制指令 {"method":"control","state"{"reported":{"a":1}, "desired":{"a":2}}} </p>
+<p>删除服务端影子设备数据 {"method":"delete","state"{"desired":{"a":null}}} </p>
 
 </div>
 </div>
@@ -538,7 +607,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="a9e8cc6c87f3d517b988ae92a4a61fa64"></a>
+<a class="anchor" id="ab51ab1372e05d4c0e21e5cd856fe8cca"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -559,6 +628,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
           <td></td>
           <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#ad196579026e904f1554533e10f67e3e6">tc_iot_shadow_property_def</a> *&#160;</td>
           <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>reported</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -588,32 +663,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="ab251a2c52e52d2e6300c1749e8830185"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int tc_iot_control_propeties </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>property_count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="ab4e99d480baf1dc61c740f8e7c5aa811"></a>
 <div class="memitem">
 <div class="memproto">
@@ -630,41 +679,63 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="a7462d679d5073c681d720ab3b6437447"></a>
+<a class="anchor" id="ac5fe0691acad6169e6145be24a2646be"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tc__iot__shadow_8h.html#a807a86632af0db9d89c1c9d19ed19f98">tc_iot_shadow_session</a>* tc_iot_find_empty_session </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a74b963a646616436a2ce01ad9ffb0054"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void tc_iot_release_session </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#a807a86632af0db9d89c1c9d19ed19f98">tc_iot_shadow_session</a> *&#160;</td>
+          <td class="paramname"><em>p_session</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9f98e70812afbe8f44dadb3201227580"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int tc_iot_report_device_data </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>property_count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a726861d7906f5be4da9dd88d72d87f32"></a>
+<a class="anchor" id="a3cbc74d68b2288180180df1c7c09d76f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int tc_iot_report_firm </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>info_count</em>, </td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -682,15 +753,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="adbe7a4f1f525f2e09751c15155f95fd9"></a>
+<a class="anchor" id="aa9ac071176fa16739d07b3ab20fa3e7b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int tc_iot_server_destroy </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -698,32 +769,198 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="a2d8ff3cc4bddf3a6a107470e6433c444"></a>
+<a class="anchor" id="ac19ed60474eda4cb0aa71f5502702674"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int tc_iot_server_init </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#a83a16bc5fc5ae019a28afe92e77a9b43">tc_iot_shadow_config</a> *&#160;</td>
-          <td class="paramname"><em>p_client_config</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#a83a16bc5fc5ae019a28afe92e77a9b43">tc_iot_shadow_config</a> *&#160;</td>
+          <td class="paramname"><em>p_client_config</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a1a872c7737db32bee8741d2eaff063d2"></a>
+<a class="anchor" id="acb1e29725d6bf7b8dd0cce6a13570958"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int tc_iot_server_loop </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>yield_timeout</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>yield_timeout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a071e14febb2fea4f3e7428ecc175b0bf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_check_and_report </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>buffer_len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#a4fb08f88375041799f4b7054baa9f3f0">message_ack_handler</a>&#160;</td>
+          <td class="paramname"><em>callback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>timeout_ms</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>session_context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>do_confirm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1927fb75b956ca4cbba0a5fc33102e33"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_cmp_local </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>dest</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af13b74cef616b1c468fc7c173f0b6798"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_cmp_local_with_desired </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8ddd629f25550bc55d540b3e71cb1f37"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_cmp_local_with_reported </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1313,6 +1550,94 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
+<a class="anchor" id="ad051db15ea9334a85bd801862ec363ce"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_doc_parse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>payload</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">jsmntok_t *&#160;</td>
+          <td class="paramname"><em>json_token</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>token_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>field_buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>field_buf_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4f495dd759209819d136a1fb52841c97"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_event_notify </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="tc__iot__const_8h.html#a426550fc531ec432bd56c48370e0282b">tc_iot_event_e</a>&#160;</td>
+          <td class="paramname"><em>event</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>context</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="af3e8a1e44ca17e06a3138ae47d414cf9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1378,6 +1703,110 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
+<a class="anchor" id="a007f9596c82eb93896a838417f3df01d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tc__iot__shadow_8h.html#ad196579026e904f1554533e10f67e3e6">tc_iot_shadow_property_def</a>* tc_iot_shadow_get_property_def </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a74ba38e9ca6d6bcb07e1ef90c3f67a1d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* tc_iot_shadow_get_property_name </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a30c593263d6af026fa0639d682963631"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_get_property_offset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3af6ac91b682d9e104836a0e0afc1a3d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_get_property_type </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>p_shadow_client</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a7a5c790b1b663fe048019dbb65ed93a2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1400,6 +1829,82 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   </dd>
 </dl>
 <dl class="section return"><dt>返回</dt><dd>1 表示已连接，0 表示未连接。 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abb603c7cfe20de12bfbd8c1db93cc548"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_shadow_report_property </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>buffer_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afd7ecfda73aa5d38d417384ea354c60e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* tc_iot_shadow_save_to_cached </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__shadow_8h.html#acd4137023aa1d1059b75fc2a31bb92c6">tc_iot_shadow_client</a> *&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>property_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>p_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>p_cache</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1492,7 +1997,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="acf2501e1a8779a29b1fcb7b8dce969f3"></a>
+<a class="anchor" id="a4aae24ec1a32f49d928154e0808c20e4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1531,12 +2036,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
           <td></td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>session_context</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>info_count</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

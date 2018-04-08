@@ -1,6 +1,7 @@
 var searchData=
 [
   ['tc_5fiot_5fbase64_2eh',['tc_iot_base64.h',['../tc__iot__base64_8h.html',1,'']]],
+  ['tc_5fiot_5fbit_2eh',['tc_iot_bit.h',['../tc__iot__bit_8h.html',1,'']]],
   ['tc_5fiot_5fcerts_2eh',['tc_iot_certs.h',['../tc__iot__certs_8h.html',1,'']]],
   ['tc_5fiot_5fclient_2eh',['tc_iot_client.h',['../tc__iot__client_8h.html',1,'']]],
   ['tc_5fiot_5fconfig_2eh',['tc_iot_config.h',['../tc__iot__config_8h.html',1,'']]],

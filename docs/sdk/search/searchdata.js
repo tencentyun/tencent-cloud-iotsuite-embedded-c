@@ -8,7 +8,7 @@ var indexSectionsWithContent =
   5: "dmpt",
   6: "_",
   7: "ct",
-  8: "dhilstu"
+  8: "_dhistu"
 };
 
 var indexSectionNames =

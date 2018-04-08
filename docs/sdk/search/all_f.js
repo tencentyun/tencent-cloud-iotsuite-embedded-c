@@ -2,6 +2,9 @@ var searchData=
 [
   ['p_5fclient_5fcrt',['p_client_crt',['../struct__tc__iot__mqtt__client__config.html#a56c235f0260f246c7e6d8a608deddff9',1,'_tc_iot_mqtt_client_config']]],
   ['p_5fclient_5fkey',['p_client_key',['../struct__tc__iot__mqtt__client__config.html#a1e275618e83d89a26e01c9ae550f5f1e',1,'_tc_iot_mqtt_client_config']]],
+  ['p_5fcurrent_5fdevice_5fdata',['p_current_device_data',['../struct__tc__iot__shadow__config.html#a5656b3dcf961f7fd5f4ce3305f9cf960',1,'_tc_iot_shadow_config']]],
+  ['p_5fdesired_5fdevice_5fdata',['p_desired_device_data',['../struct__tc__iot__shadow__config.html#af504e906f279fdffc058d2910cbed50c',1,'_tc_iot_shadow_config']]],
+  ['p_5freported_5fdevice_5fdata',['p_reported_device_data',['../struct__tc__iot__shadow__config.html#aa1ec2ba96a33bf4cbb4670e98e7660c0',1,'_tc_iot_shadow_config']]],
   ['p_5froot_5fca',['p_root_ca',['../struct__tc__iot__mqtt__client__config.html#a6ec8426bdbbaa5969eba721d3b81d2f6',1,'_tc_iot_mqtt_client_config']]],
   ['p_5fshadow_5fconfig',['p_shadow_config',['../struct__tc__iot__shadow__client.html#a0b3c6bdcb058a5980a0445e3d334d5dd',1,'_tc_iot_shadow_client']]],
   ['password',['password',['../struct__tc__iot__device__info.html#a589e26939b97683ca099583940fc80d2',1,'_tc_iot_device_info']]],
