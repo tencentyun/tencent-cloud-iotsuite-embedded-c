@@ -4,7 +4,8 @@
 #define TC_IOT_MAX_PROPERTY_COUNT   128
 #define TC_IOT_MAX_FIRM_INFO_COUNT  5
 
-typedef int tc_iot_shadow_number;
+typedef double tc_iot_shadow_number;
+typedef int tc_iot_shadow_int;
 typedef int tc_iot_shadow_enum;
 typedef bool tc_iot_shadow_bool;
 
@@ -13,6 +14,7 @@ typedef enum _tc_iot_shadow_data_type_e {
     TC_IOT_SHADOW_TYPE_BOOL = 1,
     TC_IOT_SHADOW_TYPE_NUMBER = 2,
     TC_IOT_SHADOW_TYPE_ENUM = 3,
+    TC_IOT_SHADOW_TYPE_INT = 4,
 } tc_iot_shadow_data_type_e;
 
 typedef struct _tc_iot_shadow_property_def {

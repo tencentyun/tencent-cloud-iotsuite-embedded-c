@@ -118,7 +118,7 @@ static int _tc_iot_property_change( int property_id, void * data) {
         case TC_IOT_PROP_brightness:
             brightness = *(tc_iot_shadow_number *)data;
             g_tc_iot_device_local_data.brightness = brightness;
-            TC_IOT_LOG_TRACE("do something for brightness=%d", brightness);
+            TC_IOT_LOG_TRACE("do something for brightness=%f", brightness);
             break;
         default:
             TC_IOT_LOG_WARN("unkown property id = %d", property_id);

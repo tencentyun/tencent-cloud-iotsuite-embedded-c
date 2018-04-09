@@ -128,6 +128,12 @@ class iot_field:
             sample_code = """
 <indent>field_name = *(field_define *)data;
 <indent>g_tc_iot_device_local_data.field_name = field_name;
+<indent>TC_IOT_LOG_TRACE("do something for field_name=%f", field_name);
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        elif self.type_name == "int":
+            sample_code = """
+<indent>field_name = *(field_define *)data;
+<indent>g_tc_iot_device_local_data.field_name = field_name;
 <indent>TC_IOT_LOG_TRACE("do something for field_name=%d", field_name);
 """.replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
         else:

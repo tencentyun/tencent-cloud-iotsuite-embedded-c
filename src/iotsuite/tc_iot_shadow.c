@@ -501,7 +501,7 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, int property_tot
         }
 
         if (current->type == TC_IOT_SHADOW_TYPE_NUMBER) {
-            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%d",
+            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%f",
                     current->name, *(tc_iot_shadow_number *)p_prop);
             if(ret <= 0) {
                 return TC_IOT_BUFFER_OVERFLOW;
@@ -511,6 +511,14 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, int property_tot
         } else if (current->type == TC_IOT_SHADOW_TYPE_ENUM) {
             ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%d",
                     current->name, *(tc_iot_shadow_enum *)p_prop);
+            if(ret <= 0) {
+                return TC_IOT_BUFFER_OVERFLOW;
+            }
+            pos += ret;
+            /* TC_IOT_LOG_TRACE("buffer=%s", buffer); */
+        } else if (current->type == TC_IOT_SHADOW_TYPE_INT) {
+            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%d",
+                    current->name, *(tc_iot_shadow_int *)p_prop);
             if(ret <= 0) {
                 return TC_IOT_BUFFER_OVERFLOW;
             }
@@ -646,7 +654,7 @@ int tc_iot_shadow_cmp_local(tc_iot_shadow_client * c, int property_id, void * sr
         case TC_IOT_SHADOW_TYPE_NUMBER:
             ret = memcmp( p_dest_offset, p_src_offset, sizeof(tc_iot_shadow_number));
             if (0 != ret) {
-                TC_IOT_LOG_TRACE("%s differ %d -> %d", p_prop->name,
+                TC_IOT_LOG_TRACE("%s differ %f -> %f", p_prop->name,
                         *(tc_iot_shadow_number*)p_src_offset,
                         *(tc_iot_shadow_number*)p_dest_offset
                         );
@@ -656,8 +664,17 @@ int tc_iot_shadow_cmp_local(tc_iot_shadow_client * c, int property_id, void * sr
             ret = memcmp( p_dest_offset, p_src_offset, sizeof(tc_iot_shadow_enum));
             if (0 != ret) {
                 TC_IOT_LOG_TRACE("%s differ %d -> %d", p_prop->name,
-                        *(tc_iot_shadow_number*)p_src_offset,
-                        *(tc_iot_shadow_number*)p_dest_offset
+                        *(tc_iot_shadow_enum*)p_src_offset,
+                        *(tc_iot_shadow_enum*)p_dest_offset
+                        );
+            }
+            break;
+        case TC_IOT_SHADOW_TYPE_INT:
+            ret = memcmp( p_dest_offset, p_src_offset, sizeof(tc_iot_shadow_int));
+            if (0 != ret) {
+                TC_IOT_LOG_TRACE("%s differ %d -> %d", p_prop->name,
+                        *(tc_iot_shadow_int*)p_src_offset,
+                        *(tc_iot_shadow_int*)p_dest_offset
                         );
             }
             break;
@@ -774,10 +791,13 @@ int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, cha
             }
         case TC_IOT_SHADOW_TYPE_NUMBER:
             tc_iot_shadow_copy_local_to_reported(c, property_id);
-            return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":%d", p_prop->name, *(tc_iot_shadow_number *)p_current);
+            return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":%f", p_prop->name, *(tc_iot_shadow_number *)p_current);
         case TC_IOT_SHADOW_TYPE_ENUM:
             tc_iot_shadow_copy_local_to_reported(c, property_id);
             return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":%d", p_prop->name, *(tc_iot_shadow_enum *)p_current);
+        case TC_IOT_SHADOW_TYPE_INT:
+            tc_iot_shadow_copy_local_to_reported(c, property_id);
+            return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":%d", p_prop->name, *(tc_iot_shadow_int *)p_current);
         default:
             TC_IOT_LOG_ERROR("invalid data name=%s,type=%d found", p_prop->name, p_prop->type);
             return 0;

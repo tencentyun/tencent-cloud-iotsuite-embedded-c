@@ -103,6 +103,7 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
     tc_iot_shadow_number new_number = 0;
     tc_iot_shadow_bool new_bool = 0;
     tc_iot_shadow_enum new_enum = 0;
+    tc_iot_shadow_int  new_int = 0;
     int  key_len = 0, val_len = 0;
     const char * key_start;
     const char * val_start;
@@ -158,13 +159,17 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                     ptr = &new_bool;
                     TC_IOT_LOG_TRACE("state change:[%s=%s]", p_prop->name, (*(tc_iot_shadow_bool *) ptr)?"true":"false");
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_NUMBER) {
-                    new_number = atoi(field_buf);
+                    new_number = atof(field_buf);
                     ptr = &new_number;
-                    TC_IOT_LOG_TRACE("state change:[%s=%d]", p_prop->name, (*(tc_iot_shadow_number *) ptr));
+                    TC_IOT_LOG_TRACE("state change:[%s=%f]", p_prop->name, (*(tc_iot_shadow_number *) ptr));
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_ENUM) {
                     new_enum = atoi(field_buf);
                     ptr = &new_enum;
                     TC_IOT_LOG_TRACE("state change:[%s|%d]", p_prop->name, (*(tc_iot_shadow_enum *) ptr));
+                } else if (p_prop->type == TC_IOT_SHADOW_TYPE_INT) {
+                    new_int = atoi(field_buf);
+                    ptr = &new_int;
+                    TC_IOT_LOG_TRACE("state change:[%s=%d]", p_prop->name, (*(tc_iot_shadow_int *) ptr));
                 } else {
                     TC_IOT_LOG_ERROR("%s type=%d invalid.", p_prop->name, p_prop->type);
                     continue;
