@@ -22,7 +22,7 @@ typedef struct tc_iot_tls_config_t {
 
 /**< TLS动态运行数据 */
 typedef struct tc_iot_tls_data_t {
-    mbedtls_entropy_context entropy; 
+    mbedtls_entropy_context entropy;
     mbedtls_ctr_drbg_context ctr_drbg;
     mbedtls_ssl_context ssl_context;
     mbedtls_ssl_config conf;
@@ -31,6 +31,8 @@ typedef struct tc_iot_tls_data_t {
     mbedtls_x509_crt clicert;
     mbedtls_pk_context pkey;
     mbedtls_net_context ssl_fd;
+	mbedtls_timing_delay_context delay_timer;
+	mbedtls_ssl_cookie_ctx cookie_ctx;
 } tc_iot_tls_data_t;
 
 #endif
@@ -95,7 +97,7 @@ typedef struct tc_iot_network_t {
  * @param network 网络连接对象
  * @param net_context 连接参数
  *
- * @return 结果返回码 
+ * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_net_init(tc_iot_network_t* network,
@@ -109,7 +111,7 @@ int tc_iot_hal_net_init(tc_iot_network_t* network,
  * @param host 服务器域名或IP地址
  * @param port 服务器端口
  *
- * @return 结果返回码 
+ * @return 结果返回码
  *	成功返回 TC_IOT_SUCCESS (0)
  *	失败返回 TC_IOT_FAILURE(-90) 或者其他具体原因(负数)
  * @see tc_iot_sys_code_e
@@ -188,7 +190,7 @@ int tc_iot_hal_net_destroy(tc_iot_network_t* network);
  * @param network 网络连接对象
  * @param net_context 连接参数
  *
- * @return 结果返回码 
+ * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_tls_init(tc_iot_network_t* network,
@@ -201,7 +203,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
  * @param host 服务器域名或IP地址
  * @param port 服务器端口
  *
- * @return 结果返回码 
+ * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
 int tc_iot_hal_tls_connect(tc_iot_network_t* network, const char* host,
@@ -246,7 +248,7 @@ int tc_iot_hal_tls_is_connected(tc_iot_network_t* network);
 
 
 /**
- * @brief tc_iot_hal_tls_disconnect 断开 TLS 连接   
+ * @brief tc_iot_hal_tls_disconnect 断开 TLS 连接
  *
  * @param network 网络连接对象
  *
@@ -268,6 +270,182 @@ int tc_iot_hal_tls_destroy(tc_iot_network_t* network);
 
 int tc_iot_copy_net_context(tc_iot_net_context_t * dest, tc_iot_net_context_init_t * init);
 
+/**
+ * @brief tc_iot_hal_dtls_init 初始化 TLS 连接数据
+ *
+ * @param network 网络连接对象
+ * @param net_context 连接参数
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_dtls_init(tc_iot_network_t* network,
+        tc_iot_net_context_init_t* net_context);
+
+/**
+ * @brief tc_iot_hal_dtls_connect 连接 TLS 服务端并进行相关握手及认证
+ *
+ * @param network 网络连接对象
+ * @param host 服务器域名或IP地址
+ * @param port 服务器端口
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_dtls_connect(tc_iot_network_t* network, const char* host,
+                               uint16_t port);
+
+/**
+ * @brief tc_iot_hal_dtls_read 接收 TLS 对端发送的数据
+ *
+ * @param network 网络连接对象
+ * @param buffer 接收缓存区
+ * @param len 接收缓存区大小
+ * @param timeout_ms 最大等待时延，单位ms
+ *
+ * @return 结果返回码或成功读取字节数
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_dtls_read(tc_iot_network_t* network, unsigned char* buffer,
+        int len, int timeout_ms) ;
+
+/**
+ * @brief tc_iot_hal_dtls_write 发送数据到 TLS 对端
+ *
+ * @param network 网络连接对象
+ * @param buffer 发送缓存区
+ * @param len 发送缓存区大小
+ * @param timeout_ms 最大发送等待时延，单位ms
+ *
+ * @return 结果返回码或成功发送字节数
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_dtls_write(tc_iot_network_t* network, const unsigned char* buffer,
+        int len, int timeout_ms);
+
+/**
+ * @brief tc_iot_hal_dtls_is_connected 判断当前是否已成功建立 TLS 连接
+ *
+ * @param network 网络连接对象
+ *
+ * @return 1 表示已连接，0 表示未连接
+ */
+int tc_iot_hal_dtls_is_connected(tc_iot_network_t* network);
+
+
+/**
+ * @brief tc_iot_hal_dtls_disconnect 断开 TLS 连接
+ *
+ * @param network 网络连接对象
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_dtls_disconnect(tc_iot_network_t* network);
+
+
+/**
+ * @brief tc_iot_hal_dtls_destroy 释放 TLS 相关资源
+ *
+ * @param network 网络连接对象
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_dtls_destroy(tc_iot_network_t* network);
+
 #endif
+
+/**
+ * @brief tc_iot_hal_udp_init 初始化 TCP 连接对象，设置相关参数和对应回调等
+ *
+ * @param network 网络连接对象
+ * @param net_context 连接参数
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_udp_init(tc_iot_network_t* network,
+        tc_iot_net_context_init_t* net_context);
+
+
+/**
+ * @brief tc_iot_hal_udp_connect 连接服务端
+ *
+ * @param network 网络连接对象
+ * @param host 服务器域名或IP地址
+ * @param port 服务器端口
+ *
+ * @return 结果返回码
+ *	成功返回 TC_IOT_SUCCESS (0)
+ *	失败返回 TC_IOT_FAILURE(-90) 或者其他具体原因(负数)
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_udp_connect(tc_iot_network_t* network, const char* host,
+                             uint16_t port);
+
+/**
+ * @brief tc_iot_hal_udp_read 接收网络对端发送的数据
+ *
+ * @param network 网络连接对象
+ * @param buffer 接收缓存区
+ * @param len 接收缓存区大小
+ * @param timeout_ms 最大等待时延，单位ms
+ *
+ * @return 结果返回码或成功读取字节数
+ *	假如timeout_ms超时读取了0字节, 返回 TC_IOT_NET_NOTHING_READ
+ *  假如timeout_ms超时读取字节数没有达到 len , 返回TC_IOT_NET_READ_TIMEOUT
+ *  假如timeout_ms超时对端关闭连接, 返回 实际读取字节数
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_udp_read(tc_iot_network_t* network, unsigned char* buffer,
+                          int len, int timeout_ms);
+
+/**
+ * @brief tc_iot_hal_udp_write 发送数据到网络对端
+ *
+ * @param network 网络连接对象
+ * @param buffer 发送缓存区
+ * @param len 发送缓存区大小
+ * @param timeout_ms 最大发送等待时延，单位ms
+ *
+ * @return 结果返回码或成功发送字节数
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_udp_write(tc_iot_network_t* network,const  unsigned char* buffer,
+                           int len, int timeout_ms);
+
+
+/**
+ * @brief tc_iot_hal_udp_is_connected 判断当前是否已成功建立网络连接
+ *
+ * @param network 网络连接对象
+ *
+ * @return 1 表示已连接，0 表示未连接
+ */
+int tc_iot_hal_udp_is_connected(tc_iot_network_t* network);
+
+
+/**
+ * @brief tc_iot_hal_udp_disconnect 断开网络连接
+ *
+ * @param network 网络连接对象
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_udp_disconnect(tc_iot_network_t* network);
+
+
+/**
+ * @brief tc_iot_hal_udp_destroy 释放网络相关资源
+ *
+ * @param network 网络连接对象
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_hal_udp_destroy(tc_iot_network_t* network);
+
 
 #endif /* end of include guard */
