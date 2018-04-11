@@ -38,7 +38,7 @@ const char* tc_iot_hal_get_device_name(char *device_name, size_t len)
 
 int main(int argc, char** argv) {
     int ret = 0;
-    bool token_defined;
+    bool use_static_token;
     bool secrect_defined;
 
     tc_iot_mqtt_client_config * p_client_config;
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     p_client_config = &(g_client_config);
     parse_command(p_client_config, argc, argv);
 
-    token_defined = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
+    use_static_token = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
     secrect_defined = (strlen(p_client_config->device_info.secret)>2);
 
     if (!secrect_defined)
@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 
     tc_iot_hal_printf("p_client_config->device_info.secret %s %d\n", p_client_config->device_info.secret, TC_IOT_CONFIG_USE_TLS);
 
-    if (!token_defined) {
+    if (!use_static_token) {
         /*走 http token 方式来连接 mqtt*/
         if (!secrect_defined)
         {

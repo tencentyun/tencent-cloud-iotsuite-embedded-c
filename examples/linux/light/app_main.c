@@ -99,7 +99,7 @@ void operate_device(tc_iot_shadow_local_data * light) {
 
 int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;
-    bool token_defined;
+    bool use_static_token;
     int ret;
     long timestamp = tc_iot_hal_timestamp(NULL);
     tc_iot_hal_srandom(timestamp);
@@ -120,9 +120,9 @@ int main(int argc, char** argv) {
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
     /* 判断是否需要获取动态 token */
-    token_defined = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
+    use_static_token = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
 
-    if (!token_defined) {
+    if (!use_static_token) {
         /* 获取动态 token */
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
         ret = http_refresh_auth_token_with_expire(
