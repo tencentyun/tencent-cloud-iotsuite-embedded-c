@@ -62,10 +62,10 @@ int main(int argc, char** argv) {
     tc_iot_hal_printf("p_client_config->device_info.secret %s %d\n", p_client_config->device_info.secret, TC_IOT_CONFIG_USE_TLS);
 
     if (!use_static_token) {
-        /*×ß http token ·½Ê½À´Á¬½Ó mqtt*/
+        /*èµ° http token æ–¹å¼æ¥è¿æ¥ mqtt*/
         if (!secrect_defined)
         {
-            /*¼ÙÈçÃ»ÓĞ secrect ÄÇÃ´Òª×ß¼¤»îÁ÷³ÌÀ´»ñÈ¡ device_secrect*/
+            /*å‡å¦‚æ²¡æœ‰ secrect é‚£ä¹ˆè¦èµ°æ¿€æ´»æµç¨‹æ¥è·å– device_secrect*/
             tc_iot_hal_printf("requesting device_secrect for http token api\n");
             ret = http_get_device_secret(
                 TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG, TC_IOT_CONFIG_ROOT_CA,
