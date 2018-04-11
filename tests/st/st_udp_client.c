@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "tc_iot_inc.h"
 
 int main(int argc, char const* argv[])

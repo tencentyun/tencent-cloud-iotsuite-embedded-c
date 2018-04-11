@@ -25,5 +25,6 @@
 #include "iotsuite/tc_iot_client.h"
 #include "iotsuite/tc_iot_shadow.h"
 #include "iotsuite/tc_iot_token.h"
+#include "coap/tc_iot_coap.h"
 
 #endif /* end of include guard */
