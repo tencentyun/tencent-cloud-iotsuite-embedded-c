@@ -60,9 +60,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     if (read_len == 0) {
         /* TC_IOT_LOG_TRACE("nothing read."); */
         return TC_IOT_NET_NOTHING_READ;
-    } else if (read_len != len) {
-        return TC_IOT_NET_READ_TIMEOUT;
-    }
+    } 
 
     return read_len;
 }

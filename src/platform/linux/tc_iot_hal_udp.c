@@ -38,12 +38,11 @@ int tc_iot_hal_udp_read(tc_iot_network_t* network, unsigned char* buffer,
             }
         } else {
             bytes += rc;
+            break;
         }
     }
     if (bytes == 0) {
         return TC_IOT_NET_NOTHING_READ;
-    } else if (bytes != len) {
-        return TC_IOT_NET_READ_TIMEOUT;
     }
     return bytes;
 }

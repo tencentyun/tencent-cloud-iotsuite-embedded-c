@@ -42,8 +42,6 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
     }
     if (bytes == 0) {
         return TC_IOT_NET_NOTHING_READ;
-    } else if (bytes != len) {
-        return TC_IOT_NET_READ_TIMEOUT;
     }
     return bytes;
 }

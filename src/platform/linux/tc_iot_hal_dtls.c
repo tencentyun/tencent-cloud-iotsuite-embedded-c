@@ -29,6 +29,7 @@ int tc_iot_hal_dtls_read(tc_iot_network_t* network, unsigned char* buffer,
         if (ret > 0) {
             read_len += ret;
             TC_IOT_LOG_TRACE("ret=%d, read_len=%d", ret, read_len);
+            break;
         } else if (ret == 0) {
             TC_IOT_LOG_TRACE("server closed connection, read_len = %d", read_len);
             if (read_len >= 0) {
