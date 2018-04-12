@@ -13,7 +13,7 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 
 1. 安装cmake工具 [http://www.cmake.org/download/](http://www.cmake.org/download/) 
 2. 从控制台创建产品和设备，获取对应的 MQTT Server Host、Product ID、DeviceName、DeviceSecret，详情请登录[控制台](https://console.qcloud.com/iotsuite/product)。
-3. 打开 examples/linux/tc_iot_device_config.h ，配置文件，配置设备参数：
+3. 打开 examples/linux/tc_iot_device_config.h ，配置文件，配置设备参数, 参考 [C-SDK 使用指南](https://cloud.tencent.com/document/product/568/14957)：
 ```c
 /************************************************************************/
 /**********************************必填项********************************/
