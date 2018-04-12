@@ -56,6 +56,13 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_TLS_SSL_READ_FAILED = -214,/**< TLS 读取失败*/
     TC_IOT_TLS_SSL_READ_TIMEOUT = -215,/**< TLS 读取超时*/
 
+    TC_IOT_COAP_PACK_INVALID = -300, /**< COAP包解析失败*/
+    TC_IOT_COAP_MSG_VER_INVALID = -301, /**< COAP包ver字段取值非法*/
+    TC_IOT_COAP_MSG_TYPE_INVALID = -302, /**< COAP包type字段取值非法*/
+    TC_IOT_COAP_MSG_TOKEN_LEN_INVALID = -303, /**< COAP包TKL取值非法*/
+    TC_IOT_COAP_MSG_OPTION_DELTA_INVALID = -304, /**< COAP包Option Delta取值非法*/
+    TC_IOT_COAP_MSG_OPTION_LENGTH_INVALID = -305, /**< COAP包Option Length取值非法*/
+
     TC_IOT_LOGIC_ERROR_BASE = -1000, /**< 业务逻辑错误 */
     TC_IOT_NETWORK_PTR_NULL = -1001,/**< network 对象指针为空*/
     TC_IOT_NETCONTEXT_PTR_NULL = -1002, /**< netcontext 对象指针为空*/

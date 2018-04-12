@@ -40,7 +40,7 @@ int main(int argc, char const* argv[])
     }
     p_network->do_connect(p_network, NULL, 0);
     const char * str_send = "Hello, some one.";
-    int timeout_ms = 200;
+    int timeout_ms = 2000;
     char buffer[128] = {0};
     int written_len = p_network->do_write(p_network, str_send , strlen(str_send), timeout_ms);
     TC_IOT_LOG_TRACE("request with:\n%s", str_send);

@@ -20,6 +20,9 @@
 */
 
 #define TC_IOT_COAP_VER   (0x1)
+#define TC_IOT_COAP_MAX_TOKEN_LEN       8
+#define TC_IOT_COAP_MAX_OPTION_COUNT    16
+#define TC_IOT_COAP_PAYLOAD_MARKER      (0xFF)
 
 typedef enum _tc_iot_coap_message_type {
     COAP_CON = 0,
@@ -103,6 +106,51 @@ typedef enum _tc_iot_coap_rsp_code {
     COAP_CODE_205_CONTENT = TC_IOT_COAP_DEFINE_CODE(2,0x5),
 }tc_iot_coap_rsp_code;
 
+/*
+     +--------+------------------+-----------+
+     | Number | Name             | Reference |
+     +--------+------------------+-----------+
+     |      0 | (Reserved)       | [RFC7252] |
+     |      1 | If-Match         | [RFC7252] |
+     |      3 | Uri-Host         | [RFC7252] |
+     |      4 | ETag             | [RFC7252] |
+     |      5 | If-None-Match    | [RFC7252] |
+     |      7 | Uri-Port         | [RFC7252] |
+     |      8 | Location-Path    | [RFC7252] |
+     |     11 | Uri-Path         | [RFC7252] |
+     |     12 | Content-Format   | [RFC7252] |
+     |     14 | Max-Age          | [RFC7252] |
+     |     15 | Uri-Query        | [RFC7252] |
+     |     17 | Accept           | [RFC7252] |
+     |     20 | Location-Query   | [RFC7252] |
+     |     35 | Proxy-Uri        | [RFC7252] |
+     |     39 | Proxy-Scheme     | [RFC7252] |
+     |     60 | Size1            | [RFC7252] |
+     |    128 | (Reserved)       | [RFC7252] |
+     |    132 | (Reserved)       | [RFC7252] |
+     |    136 | (Reserved)       | [RFC7252] |
+     |    140 | (Reserved)       | [RFC7252] |
+     +--------+------------------+-----------+
+*/
+
+typedef enum _tc_iot_coap_option_number {
+    COAP_OPTION_IF_MATCH = 1,
+    COAP_OPTION_URI_HOST = 3,
+    COAP_OPTION_ETAG = 4,
+    COAP_OPTION_IF_NONE_MATCH = 5,
+    COAP_OPTION_URI_PORT = 7,
+    COAP_OPTION_LOCATION_PATH = 8,
+    COAP_OPTION_URI_PATH = 11,
+    COAP_OPTION_CONTENT_FORMAT = 12,
+    COAP_OPTION_MAX_AGE = 14,
+    COAP_OPTION_URI_QUERY = 15,
+    COAP_OPTION_ACCEPT = 17,
+    COAP_OPTION_LOCATION_QUERY = 20,
+    COAP_OPTION_PROXY_URI = 35,
+    COAP_OPTION_PROXY_SCHEME = 39,
+    COAP_OPTION_SIZE1 = 60,
+}tc_iot_coap_option_number;
+
 typedef union _tc_iot_coap_header {
 	unsigned char all;	/**< coap header */
 #if defined(REVERSED)
@@ -123,8 +171,8 @@ typedef union _tc_iot_coap_header {
 } tc_iot_coap_header;
 
 typedef struct _tc_iot_coap_option {
-    short delta;
-    int   length;
+    unsigned int number;
+    int length;
     unsigned char * value;
 } tc_iot_coap_option;
 
@@ -132,11 +180,23 @@ typedef struct _tc_iot_coap_message {
     tc_iot_coap_header header;
     unsigned char code;
     unsigned short message_id;
-    char token[4];
-    char * p_options;
-    char * p_payload;
+    unsigned char token[TC_IOT_COAP_MAX_TOKEN_LEN];
+    int payload_len;
+    unsigned char * p_payload;
+    int option_count;
+    tc_iot_coap_option options[TC_IOT_COAP_MAX_OPTION_COUNT];
 }tc_iot_coap_message;
 
-int tc_iot_coap_serialize(char * buffer, int buffer_len, const tc_iot_coap_message * message);
+int tc_iot_coap_write_char(unsigned char * buffer, int buffer_len, unsigned char val);
+int tc_iot_coap_write_short(unsigned char * buffer, int buffer_len, unsigned short val);
+int tc_iot_coap_write_int(unsigned char * buffer, int buffer_len, unsigned int val);
+int tc_iot_coap_write_bytes(unsigned char * buffer, int buffer_len, const unsigned char * bytes, int bytes_len);
+int tc_iot_coap_write_option(unsigned char * buffer, int buffer_len, unsigned int delta, unsigned int length, unsigned char * value);
+unsigned int tc_iot_coap_extendable_number_base(unsigned int number);
+unsigned int tc_iot_coap_extendable_number_extra_len(unsigned int number);
+unsigned int tc_iot_coap_extendable_number_extra_data(unsigned int number);
+
+int tc_iot_coap_serialize(unsigned char * buffer, int buffer_len, const tc_iot_coap_message * message);
+int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffer, int buffer_len);
 
 #endif /* end of include guard */

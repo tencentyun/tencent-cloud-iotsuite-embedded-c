@@ -7,5 +7,5 @@ add_executable(st_udp_client st/st_udp_client.c)
 target_link_libraries(st_udp_client tc_iot_common tc_iot_suite tc_iot_hal mbedtls)
 
 add_executable(st_coap st/st_coap.c)
-target_link_libraries(st_coap tc_iot_common tc_iot_suite tc_iot_hal mbedtls)
+target_link_libraries(st_coap tc_iot_common tc_iot_coap tc_iot_hal mbedtls)
 
