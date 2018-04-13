@@ -67,7 +67,7 @@ int main(int argc, char const* argv[])
     message.header.bits.ver = TC_IOT_COAP_VER;
     message.header.bits.token_len = strlen(token);
     memcpy(message.token, token, message.header.bits.token_len);
-    message.code = COAP_REQ_GET;
+    message.code = COAP_CODE_001_GET;
     message.message_id = 0x1234;
 
     option_index = message.option_count;

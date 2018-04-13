@@ -94,13 +94,18 @@ typedef enum _tc_iot_event_e {
 } tc_iot_event_e;
 
 
+typedef struct _tc_iot_code_map {
+    int code;
+    const char * str;
+} tc_iot_code_map;
+
 typedef struct _tc_iot_event_message {
     tc_iot_event_e  event;
     void * data;
 } tc_iot_event_message;
 
 /**
-* @brief tc_iot_event_handler 通用事件回调原型 
+* @brief tc_iot_event_handler 通用事件回调原型
 *
 * @param msg 消息内容
 * @param src 触发事件的来源

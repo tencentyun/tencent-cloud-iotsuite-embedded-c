@@ -184,7 +184,7 @@ int tc_iot_coap_serialize(unsigned char * buffer, int buffer_len, const tc_iot_c
 
     ret = tc_iot_coap_write_char(buffer+pos, buffer_len+pos, message->code);
     if (ret < 0) {
-        TC_IOT_LOG_ERROR("buffer overflow after write code=%d", message->code);
+        TC_IOT_LOG_ERROR("buffer overflow after write code=%s", tc_iot_coap_get_message_code_str(message->code));
         return ret;
     }
     pos += ret;
@@ -212,7 +212,7 @@ int tc_iot_coap_serialize(unsigned char * buffer, int buffer_len, const tc_iot_c
         }
         ret = tc_iot_coap_write_option(buffer+pos, buffer_len-pos, delta, message->options[i].length, message->options[i].value);
         if (ret < 0) {
-            TC_IOT_LOG_ERROR("buffer overflow after write Option number=%d", message->options[i].number);
+            TC_IOT_LOG_ERROR("buffer overflow after write Option=%s", tc_iot_coap_get_option_number_str(message->options[i].number));
             return ret;
         }
         pos += ret;
@@ -270,9 +270,9 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
     message->message_id = ntohs(*(unsigned short *) (buffer+pos));
     pos += 2;
 
-    TC_IOT_LOG_TRACE("received: ver=%d,type=%d,tkl=%d,code=%d,message_id=%d",
-            message->header.bits.ver, message->header.bits.type,
-            message->header.bits.token_len, message->code, message->message_id);
+    TC_IOT_LOG_TRACE("received: ver=%d,type=%s,tkl=%d,code=%s,message_id=%d",
+            message->header.bits.ver, tc_iot_coap_get_message_type_str(message->header.bits.type),
+            message->header.bits.token_len, tc_iot_coap_get_message_code_str(message->code), message->message_id);
 
     if (message->header.bits.token_len > 0) {
         memcpy(message->token,buffer+pos, message->header.bits.token_len);
@@ -292,7 +292,7 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
         }
         delta = (option_base >> 4) & 0xF;
         length = option_base & 0xF;
-        TC_IOT_LOG_TRACE("delta=%d, length=%d", delta, length);
+        /* TC_IOT_LOG_TRACE("delta=%d, length=%d", delta, length); */
         if (delta == 13) {
             delta += *(unsigned char *)(buffer+pos);
             pos++;
@@ -307,7 +307,7 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
         }
 
         sum_delta += delta;
-        TC_IOT_LOG_TRACE("option number=%d", sum_delta);
+        TC_IOT_LOG_TRACE("Option=%s",tc_iot_coap_get_option_number_str(sum_delta));
 
         if (length == 13) {
             length += *(unsigned char *)(buffer+pos);
@@ -356,3 +356,4 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
 
     return TC_IOT_SUCCESS;
 }
+

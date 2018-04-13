@@ -43,15 +43,21 @@ typedef enum _tc_iot_coap_message_type {
 		 the "CoAP Response Codes" sub-registry (see
 		 Section 12.1.2).<Paste>
 */
-typedef enum _tc_iot_coap_sub_registry_main{
+typedef enum _tc_iot_coap_code_class{
     COAP_CODE_REQ = 0,                                                           // 请求包
 	COAP_CODE_RESERVED = 1,
-    COAP_CODE_RSP_SUCCESS = 2,                                                   // 成功回包
-    COAP_CODE_RSP_BAD_REQ = 4,                                                   // 客户端错误回包
-    COAP_CODE_RSP_SERVER_FAILURE = 5,                                            // 后台错误回包
-} tc_iot_coap_sub_registry_main;
+    COAP_CODE_SUCCESS = 2,                                                   // 成功回包
+    COAP_CODE_CLIENT_ERROR = 4,                                                   // 客户端错误回包
+    COAP_CODE_SERVER_ERROR = 5,                                            // 后台错误回包
+} tc_iot_coap_code_class;
 
 #define TC_IOT_COAP_DEFINE_CODE(m,s) ((m << 5) | s)
+
+#define TC_IOT_COAP_CODE_CLASS(m) ((m >> 5) & 0x7)
+#define TC_IOT_COAP_CODE_DETAIL(m) (m & 0x1F)
+
+#define TC_IOT_COAP_CODE_AS_READABLE(m) (TC_IOT_COAP_CODE_CLASS(m)*100 + TC_IOT_COAP_CODE_DETAIL(m))
+
 /*
    +------+--------+-----------+
    | Code | Name   | Reference |
@@ -61,16 +67,7 @@ typedef enum _tc_iot_coap_sub_registry_main{
    | 0.03 | PUT    | [RFC7252] |
    | 0.04 | DELETE | [RFC7252] |
    +------+--------+-----------+
-*/
-typedef enum _tc_iot_coap_req_code {
-    COAP_REQ_GET = 1,
-    COAP_REQ_POST = 2,
-    COAP_REQ_PUT = 3,
-    COAP_REQ_DELETE = 4,
-}tc_iot_coap_req_code;
 
-/*
- *
     +------+------------------------------+-----------+
     | Code | Description                  | Reference |
     +------+------------------------------+-----------+
@@ -96,14 +93,32 @@ typedef enum _tc_iot_coap_req_code {
     | 5.04 | Gateway Timeout              | [RFC7252] |
     | 5.05 | Proxying Not Supported       | [RFC7252] |
     +------+------------------------------+-----------+
-
  */
 typedef enum _tc_iot_coap_rsp_code {
-    COAP_CODE_201_CREATED = TC_IOT_COAP_DEFINE_CODE(2,0x1),
-    COAP_CODE_202_DELETED = TC_IOT_COAP_DEFINE_CODE(2,0x2),
-    COAP_CODE_203_VALID   = TC_IOT_COAP_DEFINE_CODE(2,0x3),
-    COAP_CODE_204_CHANGED = TC_IOT_COAP_DEFINE_CODE(2,0x4),
-    COAP_CODE_205_CONTENT = TC_IOT_COAP_DEFINE_CODE(2,0x5),
+    COAP_CODE_001_GET = TC_IOT_COAP_DEFINE_CODE(0,1),
+    COAP_CODE_002_POST = TC_IOT_COAP_DEFINE_CODE(0,2),
+    COAP_CODE_003_PUT = TC_IOT_COAP_DEFINE_CODE(0,3),
+    COAP_CODE_004_DELETE = TC_IOT_COAP_DEFINE_CODE(0,4),
+    COAP_CODE_201_CREATED = TC_IOT_COAP_DEFINE_CODE(2,1),
+    COAP_CODE_202_DELETED = TC_IOT_COAP_DEFINE_CODE(2,2),
+    COAP_CODE_203_VALID   = TC_IOT_COAP_DEFINE_CODE(2,3),
+    COAP_CODE_204_CHANGED = TC_IOT_COAP_DEFINE_CODE(2,4),
+    COAP_CODE_205_CONTENT = TC_IOT_COAP_DEFINE_CODE(2,5),
+    COAP_CODE_401_UNAUTHORIZED = TC_IOT_COAP_DEFINE_CODE(4,1),
+    COAP_CODE_402_BAD_OPTION              = TC_IOT_COAP_DEFINE_CODE(4,2),
+    COAP_CODE_403_FORBIDDEN               = TC_IOT_COAP_DEFINE_CODE(4,3),
+    COAP_CODE_404_NOT_FOUND                    = TC_IOT_COAP_DEFINE_CODE(4,4),
+    COAP_CODE_405_METHOD_NOT_ALLOWED           = TC_IOT_COAP_DEFINE_CODE(4,5),
+    COAP_CODE_406_NOT_ACCEPTABLE               = TC_IOT_COAP_DEFINE_CODE(4,5),
+    COAP_CODE_412_PRECONDITION_FAILED          = TC_IOT_COAP_DEFINE_CODE(4,12),
+    COAP_CODE_413_REQUEST_ENTITY_TOO_LARGE     = TC_IOT_COAP_DEFINE_CODE(4,13),
+    COAP_CODE_415_UNSUPPORTED_CONTENT_FORMAT   = TC_IOT_COAP_DEFINE_CODE(4,15),
+    COAP_CODE_500_INTERNAL_SERVER_ERROR        = TC_IOT_COAP_DEFINE_CODE(5,0),
+    COAP_CODE_501_NOT_IMPLEMENTED              = TC_IOT_COAP_DEFINE_CODE(5,1),
+    COAP_CODE_502_BAD_GATEWAY                  = TC_IOT_COAP_DEFINE_CODE(5,2),
+    COAP_CODE_503_SERVICE_UNAVAILABLE          = TC_IOT_COAP_DEFINE_CODE(5,3),
+    COAP_CODE_504_GATEWAY_TIMEOUT              = TC_IOT_COAP_DEFINE_CODE(5,4),
+    COAP_CODE_505_PROXYING_NOT_SUPPORTED       = TC_IOT_COAP_DEFINE_CODE(5,5),
 }tc_iot_coap_rsp_code;
 
 /*
@@ -198,5 +213,9 @@ unsigned int tc_iot_coap_extendable_number_extra_data(unsigned int number);
 
 int tc_iot_coap_serialize(unsigned char * buffer, int buffer_len, const tc_iot_coap_message * message);
 int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffer, int buffer_len);
+
+const char * tc_iot_coap_get_message_type_str(int type);
+const char * tc_iot_coap_get_message_code_str(int code);
+const char * tc_iot_coap_get_option_number_str(int number);
 
 #endif /* end of include guard */
