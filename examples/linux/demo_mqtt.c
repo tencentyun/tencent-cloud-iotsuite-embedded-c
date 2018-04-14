@@ -38,8 +38,8 @@ const char* tc_iot_hal_get_device_name(char *device_name, size_t len)
 
 int main(int argc, char** argv) {
     int ret = 0;
-    bool use_static_token;
-    bool secrect_defined;
+    bool use_static_token; //true: 直连模式 ; false : 临时token模式
+    bool secrect_defined;  //true : 在token模式下本地无token, 需要激活获取
 
     tc_iot_mqtt_client_config * p_client_config;
     long timestamp = tc_iot_hal_timestamp(NULL);
@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     use_static_token = strlen(p_client_config->device_info.username) && strlen(p_client_config->device_info.password);
     secrect_defined = (strlen(p_client_config->device_info.secret)>2);
 
-    if (!secrect_defined)
+    if (!secrect_defined && !use_static_token)
     {
         /* try to load device decrect from local storage */
         tc_iot_hal_get_value("device_secrect", p_client_config->device_info.secret,  sizeof(p_client_config->device_info.secret));
@@ -85,9 +85,9 @@ int main(int argc, char** argv) {
             //return 0;
 
         }
-        tc_iot_hal_printf("requesting username and password for mqtt.\n");
+        tc_iot_hal_printf("requesting username and password for mqtt by token interface.\n");
         ret = http_refresh_auth_token(
-                TC_IOT_CONFIG_AUTH_API_URL_DEBUG, //TC_IOT_CONFIG_AUTH_API_URL, 
+                TC_IOT_CONFIG_AUTH_API_URL, //TC_IOT_CONFIG_AUTH_API_URL_DEBUG
                 TC_IOT_CONFIG_ROOT_CA,
                 timestamp, nonce,
                 &p_client_config->device_info);
