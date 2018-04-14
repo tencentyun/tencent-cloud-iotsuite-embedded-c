@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project (tencent-cloud-iotsuite-embedded-c)
+project (tencent-cloud-iotsuite-embedded-c C)
 
 set(CMAKE_BUILD_TYPE Debug)
 # sdk use c compiler, use this to disable find cxx compiler.
