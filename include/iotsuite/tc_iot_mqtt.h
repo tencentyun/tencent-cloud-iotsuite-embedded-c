@@ -117,7 +117,7 @@ typedef void (*disconnectHandler)(tc_iot_mqtt_client*, void*);
  * @brief MQTT client 对象结构，保存 MQTT 客户端相关配置、连接状态、
  * 回调处理、时延要求、收发缓存区等信息。
  */
-typedef struct _tc_iot_mqtt_client {
+struct _tc_iot_mqtt_client {
     unsigned int command_timeout_ms;  /**< MQTT 指令超时配置，根据客户端设备工作环境，实际网络情况进行合理配置。
                                         1) 对于客户端网络不稳定情况下，适当延长时延，可以避免无效重连、重试；
                                         2) 对于客户端网络较为稳定的情况下，可以设置较短的时延，确保当网络或服务异常时，
@@ -154,7 +154,7 @@ typedef struct _tc_iot_mqtt_client {
     tc_iot_timer reconnect_timer; /**< 重连定时器，用来判断是否需要发起新一轮重连尝试*/
     
     long         client_init_time;
-} tc_iot_mqtt_client;
+} ;
 
 typedef enum _tc_iot_device_auth_mode_e {
     TC_IOT_MQTT_AUTH_NONE,

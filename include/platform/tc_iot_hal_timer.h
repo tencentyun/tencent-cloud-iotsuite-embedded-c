@@ -3,7 +3,7 @@
 
 #include "tc_iot_inc.h"
 
-typedef struct tc_iot_timer tc_iot_timer;
+typedef struct _tc_iot_timer tc_iot_timer;
 
 
 /**
