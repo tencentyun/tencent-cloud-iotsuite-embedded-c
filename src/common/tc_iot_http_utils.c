@@ -103,7 +103,6 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
     IF_NULL_RETURN(abs_path, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(http_version, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(user_agent, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(content_type, TC_IOT_NULL_POINTER);
 
     tc_iot_http_request_init(request, method, abs_path, abs_path_len,
                              http_version);
@@ -140,6 +139,14 @@ int tc_iot_create_post_request(tc_iot_http_request* request,
     return tc_iot_create_http_request(request, host, host_len, HTTP_POST, abs_path,
                                abs_path_len, HTTP_VER_1_0, "tciotclient/1.0",
                                HTTP_CONTENT_FORM_URLENCODED, body);
+}
+
+int tc_iot_create_get_request(tc_iot_http_request* request,
+                               const char* abs_path, int abs_path_len,
+                               const char* host, int host_len) {
+    return tc_iot_create_http_request(request, host, host_len, HTTP_GET, abs_path,
+                               abs_path_len, HTTP_VER_1_0, "tciotclient/1.0",
+                               NULL, NULL);
 }
 
 int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,

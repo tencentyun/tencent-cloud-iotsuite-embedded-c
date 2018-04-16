@@ -9,3 +9,5 @@ target_link_libraries(st_udp_client tc_iot_common tc_iot_suite tc_iot_hal mbedtl
 add_executable(st_coap st/st_coap.c)
 target_link_libraries(st_coap tc_iot_common tc_iot_coap tc_iot_hal mbedtls)
 
+add_executable(st_download st/st_download.c)
+target_link_libraries(st_download tc_iot_common tc_iot_suite tc_iot_hal mbedtls)

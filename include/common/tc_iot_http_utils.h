@@ -137,6 +137,21 @@ int tc_iot_create_post_request(tc_iot_http_request* request,
                                const char* host, int host_len,
                                const char* body);
 
+/**
+ * @brief tc_iot_create_get_request 创建 HTTP GET 请求
+ *
+ * @param request HTTP 请求对象
+ * @param abs_path 请求服务路径
+ * @param abs_path_len 请求服务路径长度
+ * @param host 服务器地址
+ * @param host_len 服务器地址长度
+ *
+ * @return 返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_create_get_request(tc_iot_http_request* request,
+                               const char* abs_path, int abs_path_len,
+                               const char* host, int host_len);
 
 /**
  * @brief tc_iot_calc_auth_sign 计算 Token 请求签名
