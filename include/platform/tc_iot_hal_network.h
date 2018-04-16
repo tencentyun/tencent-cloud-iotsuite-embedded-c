@@ -3,7 +3,7 @@
 
 #include "tc_iot_inc.h"
 
-typedef struct _tc_iot_network_t tc_iot_network_t;
+typedef struct tc_iot_network_t tc_iot_network_t;
 
 #ifdef ENABLE_TLS
 
@@ -75,7 +75,7 @@ typedef struct {
 /**
  * @brief 网络连接对象，包括相关参数及回调函数
  */
-struct _tc_iot_network_t {
+struct tc_iot_network_t {
     int (*do_read)(struct tc_iot_network_t* network, unsigned char* read_buf,
                    int read_buf_len, int timeout_ms); /**< 接收对端网络发送数据*/
     int (*do_write)(struct tc_iot_network_t* network, const unsigned char* write_buf,
