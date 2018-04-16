@@ -77,7 +77,7 @@ typedef struct {
 /**
  * @brief 网络连接对象，包括相关参数及回调函数
  */
-typedef struct tc_iot_network_t {
+struct tc_iot_network_t {
     int (*do_read)(struct tc_iot_network_t* network, unsigned char* read_buf,
                    int read_buf_len, int timeout_ms); /**< 接收对端网络发送数据*/
     int (*do_write)(struct tc_iot_network_t* network, const unsigned char* write_buf,
@@ -88,7 +88,7 @@ typedef struct tc_iot_network_t {
     int (*do_destroy)(tc_iot_network_t* network);/**< 销毁网络连接对象*/
 
     tc_iot_net_context_t net_context; /**< 网络连接参数及过程会话数据*/
-} tc_iot_network_t;
+} ;
 
 
 /**
