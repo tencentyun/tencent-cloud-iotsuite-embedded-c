@@ -18,7 +18,6 @@
 #define tc_iot_hal_printf printf
 #define tc_iot_hal_snprintf snprintf
 
-typedef struct tc_iot_timer { long end_time; } tc_iot_timer;
-
+struct _tc_iot_timer { long end_time; };
 
 #endif /* end of include guard */
