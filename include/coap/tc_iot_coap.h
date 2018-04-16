@@ -166,6 +166,28 @@ typedef enum _tc_iot_coap_option_number {
     COAP_OPTION_SIZE1 = 60,
 }tc_iot_coap_option_number;
 
+/*
+   +--------------------------+----------+----+------------------------+
+   | Media type               | Encoding | ID | Reference              |
+   +--------------------------+----------+----+------------------------+
+   | text/plain;              | -        |  0 | [RFC2046] [RFC3676]    |
+   | charset=utf-8            |          |    | [RFC5147]              |
+   | application/link-format  | -        | 40 | [RFC6690]              |
+   | application/xml          | -        | 41 | [RFC3023]              |
+   | application/octet-stream | -        | 42 | [RFC2045] [RFC2046]    |
+   | application/exi          | -        | 47 | [REC-exi-20140211]     |
+   | application/json         | -        | 50 | [RFC7159]              |
+   +--------------------------+----------+----+------------------------+
+*/
+typedef enum _tc_iot_coap_content_format_ids {
+    COAP_CONTENT_TEXT = 0,
+    COAP_CONTENT_LINK = 40,
+    COAP_CONTENT_XML  = 41,
+    COAP_CONTENT_OCTET_STREAM  = 42,
+    COAP_CONTENT_EXI  = 47,
+    COAP_CONTENT_JSON  = 50,
+}tc_iot_coap_content_format_ids;
+
 typedef union _tc_iot_coap_header {
 	unsigned char all;	/**< coap header */
 #if defined(REVERSED)
