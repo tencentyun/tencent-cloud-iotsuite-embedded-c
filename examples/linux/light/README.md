@@ -1,8 +1,18 @@
 # 操作指南
 ## 准备工作
 1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，
-2. 在产品控制台的【基本信息页】中导出 iot-xxxxx.json 数据点描述文档，将 iot-xxxxx.json 文档放到 examples/linux/light 目录下。
-3. 通过脚本自动生成 light 设备的逻辑框架及业务数据配置代码。
+2. 为产品定义以下3个可写数据点：
+
+| 名称    | 类型     | 读写 | 取值范围   |
+| ---------- | ---------- | ---------- | ---------- |
+| device_switch | 布尔 | 可写 | 无需填写 |
+| color | 枚举 | 可写 | red,green,blue |
+| brightness | 数值 | 可写 | 0,100 |
+
+
+3. 在产品控制台的【基本信息页】中导出 iot-xxxxx.json 数据点描述文档，将 iot-xxxxx.json 文档放到 examples/linux/light 目录下。
+4. 通过脚本自动生成 light 设备的逻辑框架及业务数据配置代码。
+
 ```shell
 # 进入工具脚本目录
 cd tools
@@ -32,9 +42,14 @@ make
 ```shell
 # MQTT 直连并开启详细日志模式，运行 light 设备端应用，
 # 此种方式运行，可以有效查看日志及抓包定位问题
-# 备注：-d device_xxxx 参数是指定当前连接使用的设备名
+# 备注：
+# -d device_xxxx 参数是指定当前连接使用的设备名
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_NAME 指定了
 # 正确的设备名称，则命令行执行时，可以不用指定 -d device_xxx 参数。
+#
+# -s secret_abc  认证模式为Token模式时，-s 指定Device Secret
+# 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
+# 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
 # ./light --trace -p 1883
 
 ./light -d device_xxxx --trace -p 1883
