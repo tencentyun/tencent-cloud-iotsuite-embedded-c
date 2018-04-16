@@ -1,8 +1,18 @@
 # 操作指南
 ## 准备工作
 1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，
-2. 在产品控制台的【基本信息页】中导出 iot-xxxxx.json 数据点描述文档，将 iot-xxxxx.json 文档放到 examples/linux/light 目录下。
-3. 通过脚本自动生成 light 设备的逻辑框架及业务数据配置代码。
+2. 为产品定义以下3个可写数据点：
+
+| 名称    | 类型     | 读写 | 取值范围   |
+| ---------- | ---------- | ---------- | ---------- |
+| device_switch | 布尔 | 可写 | 无需填写 |
+| color | 枚举 | 可写 | red,green,blue |
+| brightness | 数值 | 可写 | 0,100 |
+
+
+3. 在产品控制台的【基本信息页】中导出 iot-xxxxx.json 数据点描述文档，将 iot-xxxxx.json 文档放到 examples/linux/light 目录下。
+4. 通过脚本自动生成 light 设备的逻辑框架及业务数据配置代码。
+
 ```shell
 # 进入工具脚本目录
 cd tools
