@@ -25,7 +25,7 @@ static struct option long_options[] =
     {0, 0, 0, 0}
 };
 
-const char * command_help = 
+const char * command_help =
 "Usage: %s [-h host] [-p port] [-i client_id]\r\n"
 "                     [-d] [--trace]\r\n"
 "                     [-u username [-P password]]\r\n"
@@ -91,6 +91,11 @@ const char * command_help =
 void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
     int c;
     int option_index = 0;
+    bool device_name_changed = false;
+    bool client_id_changed = false;
+    int left = 0;
+    int i = 0;
+
     while (1)
     {
         c = getopt_long (argc, argv, "s:h:p:t:d:i:u:P:c:a:k:", long_options, &option_index);
@@ -182,11 +187,13 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
             case 'd':
                 if (optarg) {
                     strncpy(config->device_info.device_name, optarg, TC_IOT_MAX_DEVICE_NAME_LEN);
+                    device_name_changed = true;
                     tc_iot_hal_printf ("device name=%s\n", config->device_info.device_name);
                 }
                 break;
             case 'i':
                 if (optarg) {
+                    client_id_changed = true;
                     strncpy(config->device_info.client_id, optarg, TC_IOT_MAX_CLIENT_ID_LEN);
                     tc_iot_hal_printf ("client id=%s\n", config->device_info.client_id);
                 }
@@ -199,6 +206,17 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
             default:
                 tc_iot_hal_printf("option: %c\n", (char)c);
                 break;
+        }
+    }
+
+    if (device_name_changed && !client_id_changed) {
+        for (i = 0; i < TC_IOT_MAX_CLIENT_ID_LEN; i++) {
+            if (config->device_info.client_id[i] == '@') {
+                left = TC_IOT_MAX_CLIENT_ID_LEN - i- 2;
+                strncpy(config->device_info.client_id+i+1, config->device_info.device_name, left);
+                config->device_info.client_id[TC_IOT_MAX_CLIENT_ID_LEN-1] = '\0';
+                break;
+            }
         }
     }
 
