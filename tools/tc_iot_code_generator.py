@@ -196,7 +196,7 @@ class iot_struct:
         result = ""
         for field in self.fields:
             result += "{}\n".format(field.get_id_define_str())
-	result += "\n#define TC_IOT_PROPTOTAL {}\n".format(self.field_id)
+        result += "\n#define TC_IOT_PROPTOTAL {}\n".format(self.field_id)
         return result
 
     def declare_local_data_enum(self):
@@ -226,10 +226,10 @@ tc_iot_shadow_client * tc_iot_get_shadow_client(void);
             header_str += "    {}\n".format(field.get_struct_field_declare())
         header_str += "}tc_iot_shadow_local_data;\n"
 
-	header_str += "/* 数据点字段 ID 宏定义*/\n"
+        header_str += "/* 数据点字段 ID 宏定义*/\n"
         for field in self.fields:
             header_str += "{}\n".format(field.get_id_define_str())
-	header_str += "\n#define TC_IOT_PROPTOTAL {}\n".format(self.field_id)
+        header_str += "\n#define TC_IOT_PROPTOTAL {}\n".format(self.field_id)
 
         for field in self.fields:
             if field.type_name == 'enum':
@@ -337,7 +337,7 @@ def main():
             output_file_name = config_dir + os.path.basename(template_file)
             output_file = open(output_file_name, "w")
             output_file.write(smart_parser(input_str, device_config, data_template))
-            print "文件 {} 生成成功".format(output_file_name)
+            print("文件 {} 生成成功".format(output_file_name))
 
 
         return 0
