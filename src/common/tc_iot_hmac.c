@@ -208,6 +208,8 @@ void tc_iot_hmac_sha256(unsigned char *buffer, int buffer_len,
     memcpy(digest, hmac.digest, TC_IOT_SHA256_DIGEST_SIZE);
 }
 
+
+
 #ifdef __cplusplus
 }
 #endif

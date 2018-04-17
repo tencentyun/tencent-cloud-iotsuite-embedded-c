@@ -4,9 +4,6 @@ extern "C" {
 
 #include "tc_iot_inc.h"
 
-#define HTTPS_PREFIX "https"
-#define HTTPS_PREFIX_LEN (sizeof(HTTPS_PREFIX) - 1)
-
 int http_post_urlencoded(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          const char* encoded_body, char* resp, int resp_max_len,

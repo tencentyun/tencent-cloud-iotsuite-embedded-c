@@ -77,6 +77,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE = -1010, /**< 数据无变动，无需上报*/
     TC_IOT_FIRM_INFO_NAME_TOO_LONG = -1011, /**< 上报的设备信息字段名称太长*/
     TC_IOT_FIRM_INFO_VALUE_TOO_LONG = -1012, /**< 上报的设备信息字段取值太长*/
+    TC_IOT_HTTP_RESPONSE_NO_CONTENT_LENGTH = -1013, /**< HTTP 响应中未包含Content-Length字段*/
 
 } tc_iot_sys_code_e;
 
