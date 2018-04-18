@@ -11,3 +11,6 @@ target_link_libraries(st_coap tc_iot_common tc_iot_coap tc_iot_hal mbedtls)
 
 add_executable(st_download st/st_download.c)
 target_link_libraries(st_download tc_iot_common tc_iot_suite tc_iot_hal mbedtls)
+
+add_executable(st_md5 st/st_md5.c)
+target_link_libraries(st_md5 tc_iot_common tc_iot_suite tc_iot_hal mbedtls)
