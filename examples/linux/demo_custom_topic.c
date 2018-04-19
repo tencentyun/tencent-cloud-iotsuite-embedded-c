@@ -50,7 +50,9 @@ int main(int argc, char** argv) {
 
     /* 用户自定义 Topic ，格式一般固定以 prodcut id 和 device name为前缀， */
     /* 格式为：{$product_id}/{$device_name}/xxx/yyy/zzz .... */
-    /* 具体后缀根据实际业务情况来定义，自行创建。 */
+    /* 具体后缀根据实际业务情况来定义，自行创建。 
+     * 本demo运行需要创建的Topic为： {$product_id}/{$device_name}/user/get
+     * */
     const char * custom_topic = "%s/%s/user/get";
     snprintf(sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, custom_topic, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);

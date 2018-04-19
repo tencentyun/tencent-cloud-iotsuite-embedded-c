@@ -2,16 +2,21 @@
 #define TC_IOT_DEVICE_CONFIG_H
 
 /* 服务端获取动态username和password接口*/
-/* 地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/device*/
+/* 地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
 /* 广州=gz*/
 /* 北京=bj*/
 /* ...*/
 /* 以下为广州机房的接口地址：*/
 #ifdef ENABLE_TLS
-#define TC_IOT_CONFIG_AUTH_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/device"
+#define TC_IOT_CONFIG_AUTH_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/token"
+#define TC_IOT_CONFIG_ACTIVE_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/secret"
 #else
-#define TC_IOT_CONFIG_AUTH_API_URL "http://gz.auth-device-iot.tencentcloudapi.com/device"
+#define TC_IOT_CONFIG_AUTH_API_URL "http://gz.auth-device-iot.tencentcloudapi.com/token"
+#define TC_IOT_CONFIG_ACTIVE_API_URL "http://gz.auth-device-iot.tencentcloudapi.com/secret"
 #endif
+
+#define TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG   "http://gz.auth.iot.cloud.tencent.com/secret"
+#define TC_IOT_CONFIG_AUTH_API_URL_DEBUG	 "http://gz.auth.iot.cloud.tencent.com/token"
 
 /************************************************************************/
 /**********************************必填项********************************/
@@ -34,11 +39,11 @@
 
 /* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
 /* MQ服务地址，可以在产品“基本信息页”->“mqtt链接地址”位置找到。*/
-#define TC_IOT_CONFIG_SERVER_HOST "mqtt-1e8w58ou4.ap-guangzhou.mqtt.tencentcloudmq.com"
+#define TC_IOT_CONFIG_SERVER_HOST "mqtt-5ns8xh714.ap-guangzhou.mqtt.tencentcloudmq.com"
 /*#define TC_IOT_CONFIG_SERVER_HOST "localhost"*/
 /* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-fdxt0fie"
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-1e8w58ou4"
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-7hjcfc6k"
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-5ns8xh714"
 
 /* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
@@ -66,8 +71,8 @@
 #define TC_IOT_CONFIG_DEVICE_PASSWORD ""
 #else
 /* 直连模式 */
-#define TC_IOT_CONFIG_DEVICE_USER_NAME "username"
-#define TC_IOT_CONFIG_DEVICE_PASSWORD "password"
+#define TC_IOT_CONFIG_DEVICE_USER_NAME ""
+#define TC_IOT_CONFIG_DEVICE_PASSWORD ""
 #endif
 /************************************************************************/
 

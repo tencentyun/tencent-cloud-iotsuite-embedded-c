@@ -2,16 +2,21 @@
 #define TC_IOT_DEVICE_CONFIG_H
 
 /* 服务端获取动态username和password接口*/
-/* 地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/device*/
+/* 地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
 /* 广州=gz*/
 /* 北京=bj*/
 /* ...*/
 /* 以下为广州机房的接口地址：*/
 #ifdef ENABLE_TLS
-#define TC_IOT_CONFIG_AUTH_API_URL "https:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/device"
+#define TC_IOT_CONFIG_AUTH_API_URL "https:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/token"
+#define TC_IOT_CONFIG_ACTIVE_API_URL "https:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/secret"
 #else
-#define TC_IOT_CONFIG_AUTH_API_URL "http:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/device"
+#define TC_IOT_CONFIG_AUTH_API_URL "http:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/token"
+#define TC_IOT_CONFIG_ACTIVE_API_URL "http:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/secret"
 #endif
+
+#define TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG   "http:///*${template_config.Region}*/.auth.iot.cloud.tencent.com/secret"
+#define TC_IOT_CONFIG_AUTH_API_URL_DEBUG	 "http:///*${template_config.Region}*/.auth.iot.cloud.tencent.com/token"
 
 /************************************************************************/
 /**********************************必填项********************************/
