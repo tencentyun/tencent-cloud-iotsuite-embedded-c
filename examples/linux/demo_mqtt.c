@@ -68,7 +68,8 @@ int main(int argc, char** argv) {
             /*假如没有 secrect 那么要走激活流程来获取 device_secrect*/
             tc_iot_hal_printf("requesting device_secrect for http token api\n");
             ret = http_get_device_secret(
-                TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG, TC_IOT_CONFIG_ROOT_CA,
+                TC_IOT_CONFIG_ACTIVE_API_URL, //TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG
+                TC_IOT_CONFIG_ROOT_CA,
                 timestamp, nonce, 
                 &p_client_config->device_info);
             
