@@ -173,6 +173,16 @@ class Iot:
         self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
         self.parser.add_option('--device_name', dest='deviceName', default='',help="device name, from <https://console.qcloud.com/iotsuite/product>")
 
+    def GetIotDeviceData(self):
+        self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
+        self.parser.add_option('--device_name', dest='deviceName', default='',help="device name, from <https://console.qcloud.com/iotsuite/product>")
+
+    def IssueIotDeviceControl(self):
+        self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
+        self.parser.add_option('--device_name', dest='deviceName', default='',help="device name, from <https://console.qcloud.com/iotsuite/product>")
+        self.parser.add_option('--control_data', dest='controlData', default='{"device_switch":true}', \
+                               help='Shadow document json format, like this:\n{"device_switch":true,"color":"green","brightness":80}')
+
     def CreateIotDevice(self):
         self.parser.add_option('--product_id', dest='productId', default='', help="product id, from <https://console.qcloud.com/iotsuite/product>")
         self.parser.add_option('--device_name', dest='deviceName', default='',help="device name, from <https://console.qcloud.com/iotsuite/product>")
