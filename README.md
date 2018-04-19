@@ -10,36 +10,11 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 
 
 ### 开发环境
-
 1. SDK 在 Linux 环境下的测试和验证，主要基于 Ubuntu 16.04 版本，gcc-5.4 (建议至少 gcc-4.7+)，Python 2.7.12+(代码生成及控制台命令行脚本)。
-2. 安装cmake工具 [http://www.cmake.org/download/](http://www.cmake.org/download/)
-3. 从控制台创建产品和设备，获取对应的 MQTT Server Host、Product ID、DeviceName、DeviceSecret，详情请登录[控制台](https://console.qcloud.com/iotsuite/product)。
-4. 打开 examples/linux/tc_iot_device_config.h ，配置文件，配置设备参数, 参考 [C-SDK 使用指南](https://cloud.tencent.com/document/product/568/14957)：
-```c
-/************************************************************************/
-/**********************************必填项********************************/
-// 以下配置需要先在官网创建产品和设备，然后获取相关信息更新
-// MQ服务地址，可以在产品“基本信息”->“mqtt链接地址”位置找到。
-#define TC_IOT_CONFIG_SERVER_HOST "<mqtt-xxx.ap-guangzhou.mqtt.tencentcloudmq.com>"
-// MQ服务端口，直连一般为1883，无需改动
-#define TC_IOT_CONFIG_SERVER_PORT 1883
-// 产品id，可以在产品“基本信息”->“产品id”位置找到
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "<iot-xxx>"
-
-// 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到
-#define TC_IOT_CONFIG_DEVICE_SECRET "<0000000000000000>"
-// 设备名称，可以在产品“设备管理”->“设备名称”位置找到
-#define TC_IOT_CONFIG_DEVICE_NAME "<device001>"
-// client id，
-// 由两部分组成，组成形式为“Instanceid@DeviceID”，ClientID 的长度不超过 64个字符
-// ，请不要使用不可见字符。其中
-// Instanceid 为 IoT MQ 的实例 ID，可以在“基本信息”->“产品 key”位置找到。
-// DeviceID 为每个设备独一无二的标识，由业务方自己指定，需保证全局唯一，例如，每个
-// 传感器设备的序列号，或者设备名称等。
-#define TC_IOT_CONFIG_DEVICE_CLIENT_ID "mqtt-xxx@" TC_IOT_CONFIG_DEVICE_NAME
-/************************************************************************/
-```
-
+2. 安装cmake工具 [http://www.cmake.org/download/](http://www.cmake.org/download/) 。
+3. 配置并运行示例：
+- [iotsuite_app](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/linux/app)
+- [light](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/linux/light)
 
 ### 编译及运行
 1. 执行下面的命令，编译示例程序：
@@ -58,6 +33,8 @@ make
 bin
 |-- demo_mqtt               # MQTT 连接云服务演示程序
 |-- demo_shadow             # Shadow 影子设备操作演示程序
+|-- iotsuite_app            # 通用数据模板演示程序
+|-- light                   # 基于数据模板的 RGB LED Light 演示程序
 lib
 |-- libtc_iot_suite.a       # SDK 的核心层, libtc_iot_hal、libtc_iot_common 提供连接云服务的能力
 |-- libtc_iot_common.a      # SDK 基础工具库，负责http、json、base64等解析和编解码功能
@@ -70,9 +47,9 @@ lib
 cd bin
 
 # 运行demo程序
-./demo_mqtt
+./iotsuite_app
 # or
-./demo_shadow
+./light
 
 ```
 
