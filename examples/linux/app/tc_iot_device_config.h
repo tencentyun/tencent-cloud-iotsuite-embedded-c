@@ -39,11 +39,11 @@
 
 /* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
 /* MQ服务地址，可以在产品“基本信息页”->“mqtt链接地址”位置找到。*/
-#define TC_IOT_CONFIG_SERVER_HOST "mqtt-5ns8xh714.ap-guangzhou.mqtt.tencentcloudmq.com"
+#define TC_IOT_CONFIG_SERVER_HOST "mqtt-1doou8fjk.ap-guangzhou.mqtt.tencentcloudmq.com"
 /*#define TC_IOT_CONFIG_SERVER_HOST "localhost"*/
 /* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-7hjcfc6k"
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-5ns8xh714"
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-9fi4gnz8"
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-1doou8fjk"
 
 /* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"

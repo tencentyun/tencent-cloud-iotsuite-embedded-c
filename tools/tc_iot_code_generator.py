@@ -154,6 +154,40 @@ class iot_field:
 
         return sample_code
 
+    def get_data_change_sample_code_snippet(self, indent):
+        sample_code = ""
+        if self.type_name == "bool":
+            sample_code = """
+<indent>g_tc_iot_device_local_data.field_name = !g_tc_iot_device_local_data.field_name;
+""".replace("<indent>", indent).replace("field_name", self.name)
+
+        elif self.type_name == "enum":
+            if (len(self.enums) > 1):
+                sample_code += """
+<indent>g_tc_iot_device_local_data.field_name += 1;
+<indent>g_tc_iot_device_local_data.field_name %= <max>;
+""".replace("<indent>", indent).replace("field_name", self.name).replace("<max>", str(len(self.enums)))
+
+        elif self.type_name == "number":
+            sample_code = """
+<indent>g_tc_iot_device_local_data.field_name += 1;
+<indent>g_tc_iot_device_local_data.field_name > <max>?<min>:g_tc_iot_device_local_data.field_name;
+"""
+            sample_code = sample_code.replace("<indent>", indent).replace("field_name", self.name)
+            sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))
+
+        elif self.type_name == "int":
+            sample_code = """
+<indent>g_tc_iot_device_local_data.field_name += 1;
+<indent>g_tc_iot_device_local_data.field_name > <max>?<min>:g_tc_iot_device_local_data.field_name;
+"""
+            sample_code = sample_code.replace("<indent>", indent).replace("field_name", self.name)
+            sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))
+        else:
+            raise Exception("invalid data type")
+
+        return sample_code
+
 
 class iot_struct:
     def __init__(self, obj):
@@ -182,6 +216,14 @@ class iot_struct:
         sample_code += (indent * 1) + 'TC_IOT_LOG_TRACE("operating device");\n'
         sample_code += (indent * 1) + 'operate_device(&g_tc_iot_device_local_data);\n'
         sample_code += (indent * 1) + 'return TC_IOT_SUCCESS;\n'
+        return declare_code + sample_code;
+
+    def generate_sim_data_change(self):
+        declare_code = ""
+        sample_code = ""
+        indent = "    "
+        for field in self.fields:
+            sample_code += field.get_data_change_sample_code_snippet(indent)
         return declare_code + sample_code;
 
     def declare_local_data_struct(self, struct_name="tc_iot_shadow_local_data"):
