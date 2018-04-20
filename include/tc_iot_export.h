@@ -152,7 +152,7 @@ int tc_iot_server_loop(tc_iot_shadow_client* p_shadow_client, int yield_timeout)
 
 /**
  *  @brief tc_iot_server_destroy
- * 数据点服务析构处理，释放资源。
+ * 数据模板服务析构处理，释放资源。
  *  @param  p_shadow_client 设备影子对象
  *  @return 结果返回码
  *  @see tc_iot_sys_code_e
@@ -166,7 +166,7 @@ int tc_iot_server_destroy(tc_iot_shadow_client* p_shadow_client);
  *  @brief tc_iot_report_device_data
 
     @par
-    检查本地变量数据和服务端差异，上报设备数据点参数最新数据状态，更新到服务端。
+    检查本地变量数据和服务端差异，上报设备数据模板参数最新数据状态，更新到服务端。
 
  *  @param  p_shadow_client 设备影子对象
  *  @return 结果返回码
