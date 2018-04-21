@@ -57,7 +57,8 @@ make
 
 ```
 
-## 模拟APP控制端发送控制指令
-在控制台的【设备管理】中，点击【下发指令】，即可修改控制参数，下发推送给设备。
+## MQTT 收发消息
+收发 MQTT 消息，参见 demo_mqtt.c 中tc_iot_mqtt_client_publish(发送消息) & tc_iot_mqtt_client_subscribe(订阅 Topic) 。
+
 
 

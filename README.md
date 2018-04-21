@@ -47,9 +47,9 @@ lib
 cd bin
 
 # 运行demo程序
-./iotsuite_app
+./demo_mqtt
 # or
-./light
+./iotsuite_app
 
 ```
 
