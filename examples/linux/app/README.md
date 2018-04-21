@@ -26,7 +26,7 @@ cd tools
 SDK 为设备定义了以下3个本地全局变量：
 - g_tc_iot_device_local_data：本地数据最新状态，以下简称： local
     数据。
-- g_tc_iot_device_desired_data: 服务端最近的控制指令状态，SDK 内部使用，以下简称：desired 数据。
+- g_tc_iot_device_desired_data：服务端最近的控制指令状态，SDK 内部使用，以下简称：desired 数据。
 - g_tc_iot_device_reported_data：本地最近上报的数据最新状态，SDK
     内部使用，以下简称：reported 数据。
 
