@@ -83,3 +83,7 @@ make
 - 下图展示的流程为：设备离线时，控制端下发指令；设备上线后，读取指令数据并上报及清除指令的流程。
 
 ![图例](https://raw.githubusercontent.com/tencentyun/tencent-cloud-iotsuite-embedded-c/master/docs/iot-control-process.svg?sanitize=true)
+
+- 下图展示的流程为：设备在线时，控制端下发指令；服务端直接推送指令。
+
+![图例](https://raw.githubusercontent.com/tencentyun/tencent-cloud-iotsuite-embedded-c/master/docs/iot-control-process-online.svg?sanitize=true)
