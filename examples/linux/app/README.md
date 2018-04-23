@@ -79,7 +79,7 @@ make
 ## 模拟APP控制端发送控制指令
 在控制台的【设备管理】中，点击【下发指令】，即可修改控制参数，下发推送给设备。
 
-## 数据及函数执行流程示意图
+## 数据及函数执行流程
 - **Device**
 
 设备端，通过MQTT协议，接收服务端推送的指令，对数据进行处理，并将处理后的设备状态上报给服务端。
@@ -93,4 +93,3 @@ make
 控制台或App端，通过HTTP接口，查询或展示设备数据，提供操作入口给用户下发指令。
 
 ![图例](https://raw.githubusercontent.com/tencentyun/tencent-cloud-iotsuite-embedded-c/master/docs/iot-control-process.svg?sanitize=true)
-
