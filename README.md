@@ -13,8 +13,8 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 1. SDK 在 Linux 环境下的测试和验证，主要基于 Ubuntu 16.04 版本，gcc-5.4 (建议至少 gcc-4.7+)，Python 2.7.12+(代码生成及控制台命令行脚本)。
 2. 安装cmake工具 [http://www.cmake.org/download/](http://www.cmake.org/download/) 。
 3. 配置并运行示例：
+- [mqtt](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/linux/)
 - [iotsuite_app](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/linux/app)
-- [light](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/linux/light)
 
 ### 编译及运行
 1. 执行下面的命令，编译示例程序：
@@ -47,9 +47,9 @@ lib
 cd bin
 
 # 运行demo程序
-./iotsuite_app
+./demo_mqtt
 # or
-./light
+./iotsuite_app
 
 ```
 

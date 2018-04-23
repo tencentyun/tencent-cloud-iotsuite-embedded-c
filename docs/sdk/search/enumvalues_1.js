@@ -78,6 +78,7 @@ var searchData=
   ['tc_5fiot_5fshadow_5fsession_5fnot_5fenough',['TC_IOT_SHADOW_SESSION_NOT_ENOUGH',['../tc__iot__const_8h.html#a1bf17f05159227e33f5eef1f0e067ecca25564bec5ebbab108fbb1b16579b2152',1,'tc_iot_const.h']]],
   ['tc_5fiot_5fshadow_5ftype_5fbool',['TC_IOT_SHADOW_TYPE_BOOL',['../tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfadced4d8e532ba4e097a983cfbb7652d8',1,'tc_iot_shadow.h']]],
   ['tc_5fiot_5fshadow_5ftype_5fenum',['TC_IOT_SHADOW_TYPE_ENUM',['../tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfa5f0ddbc356d2578286a93e7fde414426',1,'tc_iot_shadow.h']]],
+  ['tc_5fiot_5fshadow_5ftype_5fint',['TC_IOT_SHADOW_TYPE_INT',['../tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfa5686a7eec251b713134e57f9fe9aecb1',1,'tc_iot_shadow.h']]],
   ['tc_5fiot_5fshadow_5ftype_5finvalid',['TC_IOT_SHADOW_TYPE_INVALID',['../tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfa0257cc6936827400b3a35666c15917ca',1,'tc_iot_shadow.h']]],
   ['tc_5fiot_5fshadow_5ftype_5fnumber',['TC_IOT_SHADOW_TYPE_NUMBER',['../tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfab0813d173069c215486cb17bb199fc53',1,'tc_iot_shadow.h']]],
   ['tc_5fiot_5fstring',['TC_IOT_STRING',['../tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dac473f8dd447d37241da62030a117507e',1,'tc_iot_json.h']]],

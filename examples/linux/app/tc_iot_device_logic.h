@@ -3,7 +3,7 @@
 
 #include "tc_iot_inc.h"
 
-/* 数据点本地存储结构定义 local data struct define */
+/* 数据模板本地存储结构定义 local data struct define */
 typedef struct _tc_iot_shadow_local_data {
     tc_iot_shadow_bool param_bool;
     tc_iot_shadow_enum param_enum;
@@ -11,7 +11,7 @@ typedef struct _tc_iot_shadow_local_data {
 }tc_iot_shadow_local_data;
 
 
-/* 数据点字段 ID 宏定义*/
+/* 数据模板字段 ID 宏定义*/
 #define TC_IOT_PROP_param_bool 0
 #define TC_IOT_PROP_param_enum 1
 #define TC_IOT_PROP_param_number 2

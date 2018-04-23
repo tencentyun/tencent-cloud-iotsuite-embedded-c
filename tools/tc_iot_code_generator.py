@@ -262,13 +262,13 @@ tc_iot_shadow_client * tc_iot_get_shadow_client(void);
 #endif /* end of include guard */
 """
         header_str = ""
-        header_str += "/* 数据点本地存储结构定义 local data struct define */\n"
+        header_str += "/* 数据模板本地存储结构定义 local data struct define */\n"
         header_str += "typedef struct _tc_iot_shadow_local_data {\n"
         for field in self.fields:
             header_str += "    {}\n".format(field.get_struct_field_declare())
         header_str += "}tc_iot_shadow_local_data;\n"
 
-        header_str += "/* 数据点字段 ID 宏定义*/\n"
+        header_str += "/* 数据模板字段 ID 宏定义*/\n"
         for field in self.fields:
             header_str += "{}\n".format(field.get_id_define_str())
         header_str += "\n#define TC_IOT_PROPTOTAL {}\n".format(self.field_id)

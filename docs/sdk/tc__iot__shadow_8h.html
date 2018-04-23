@@ -156,8 +156,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 类型定义</h2></td></tr>
-<tr class="memitem:af30863b8a7f2a2737384a199828e1871"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#af30863b8a7f2a2737384a199828e1871">tc_iot_shadow_number</a></td></tr>
-<tr class="separator:af30863b8a7f2a2737384a199828e1871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e9ed647a856e2a5c61a2028474504e7"><td class="memItemLeft" align="right" valign="top">typedef double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a4e9ed647a856e2a5c61a2028474504e7">tc_iot_shadow_number</a></td></tr>
+<tr class="separator:a4e9ed647a856e2a5c61a2028474504e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1311fa6eeb08ea94857f24f70de5840"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ae1311fa6eeb08ea94857f24f70de5840">tc_iot_shadow_int</a></td></tr>
+<tr class="separator:ae1311fa6eeb08ea94857f24f70de5840"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f3cbc1c0153067b82a801e719b76c98"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#a9f3cbc1c0153067b82a801e719b76c98">tc_iot_shadow_enum</a></td></tr>
 <tr class="separator:a9f3cbc1c0153067b82a801e719b76c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8ca40cb14122745d5296803ab439dc2"><td class="memItemLeft" align="right" valign="top">typedef bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#af8ca40cb14122745d5296803ab439dc2">tc_iot_shadow_bool</a></td></tr>
@@ -181,10 +183,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 枚举</h2></td></tr>
-<tr class="memitem:ac83dd9b4441cf0f71794811516d8b1df"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1df">_tc_iot_shadow_data_type_e</a> { <a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfa0257cc6936827400b3a35666c15917ca">TC_IOT_SHADOW_TYPE_INVALID</a> = 0, 
+<tr class="memitem:ac83dd9b4441cf0f71794811516d8b1df"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1df">_tc_iot_shadow_data_type_e</a> { <br />
+&#160;&#160;<a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfa0257cc6936827400b3a35666c15917ca">TC_IOT_SHADOW_TYPE_INVALID</a> = 0, 
 <a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfadced4d8e532ba4e097a983cfbb7652d8">TC_IOT_SHADOW_TYPE_BOOL</a> = 1, 
 <a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfab0813d173069c215486cb17bb199fc53">TC_IOT_SHADOW_TYPE_NUMBER</a> = 2, 
-<a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfa5f0ddbc356d2578286a93e7fde414426">TC_IOT_SHADOW_TYPE_ENUM</a> = 3
+<a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfa5f0ddbc356d2578286a93e7fde414426">TC_IOT_SHADOW_TYPE_ENUM</a> = 3, 
+<br />
+&#160;&#160;<a class="el" href="tc__iot__shadow_8h.html#ac83dd9b4441cf0f71794811516d8b1dfa5686a7eec251b713134e57f9fe9aecb1">TC_IOT_SHADOW_TYPE_INT</a> = 4
+<br />
  }</td></tr>
 <tr class="separator:ac83dd9b4441cf0f71794811516d8b1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfeee5865fa73359d0bed9fe872bfac9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__shadow_8h.html#acfeee5865fa73359d0bed9fe872bfac9">_tc_iot_command_ack_status_e</a> { <a class="el" href="tc__iot__shadow_8h.html#acfeee5865fa73359d0bed9fe872bfac9a8eca140d55528ba9ff4f6948ed8397c8">TC_IOT_ACK_SUCCESS</a>, 
@@ -513,12 +519,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 
 </div>
 </div>
-<a class="anchor" id="af30863b8a7f2a2737384a199828e1871"></a>
+<a class="anchor" id="ae1311fa6eeb08ea94857f24f70de5840"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef int <a class="el" href="tc__iot__shadow_8h.html#af30863b8a7f2a2737384a199828e1871">tc_iot_shadow_number</a></td>
+          <td class="memname">typedef int <a class="el" href="tc__iot__shadow_8h.html#ae1311fa6eeb08ea94857f24f70de5840">tc_iot_shadow_int</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4e9ed647a856e2a5c61a2028474504e7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef double <a class="el" href="tc__iot__shadow_8h.html#a4e9ed647a856e2a5c61a2028474504e7">tc_iot_shadow_number</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -585,6 +603,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr><td class="fieldname"><a class="anchor" id="ac83dd9b4441cf0f71794811516d8b1dfab0813d173069c215486cb17bb199fc53"></a>TC_IOT_SHADOW_TYPE_NUMBER&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="ac83dd9b4441cf0f71794811516d8b1dfa5f0ddbc356d2578286a93e7fde414426"></a>TC_IOT_SHADOW_TYPE_ENUM&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ac83dd9b4441cf0f71794811516d8b1dfa5686a7eec251b713134e57f9fe9aecb1"></a>TC_IOT_SHADOW_TYPE_INT&#160;</td><td class="fielddoc">
 </td></tr>
 </table>
 
