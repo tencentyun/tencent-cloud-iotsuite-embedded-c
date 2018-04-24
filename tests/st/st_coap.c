@@ -70,7 +70,7 @@ int main(int argc, char const* argv[])
 
     tc_iot_coap_init(&coap_client, &coap_config);
 
-    tc_iot_coap_message_init(&coap_client, &message);
+    tc_iot_coap_message_init(&message);
     tc_iot_coap_message_set_message_id(&message, tc_iot_coap_get_next_pack_id(&coap_client));
     tc_iot_coap_message_set_type(&message, COAP_CON);
     tc_iot_coap_message_set_code(&message, COAP_CODE_001_GET);

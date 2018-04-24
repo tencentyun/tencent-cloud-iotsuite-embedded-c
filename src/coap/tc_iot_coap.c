@@ -457,8 +457,7 @@ int tc_iot_coap_message_set_message_id(tc_iot_coap_message* message, unsigned sh
     return message->message_id;
 }
 
-int tc_iot_coap_message_init(tc_iot_coap_client* c, tc_iot_coap_message* message) {
-    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+int tc_iot_coap_message_init(tc_iot_coap_message* message) {
     IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
 
     memset(message, 0, sizeof(*message));
@@ -531,6 +530,7 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
             } else {
                 TC_IOT_LOG_WARN("readbuf fully used(rc=%d), suggest use bigger buffer", rc);
             }
+            tc_iot_coap_message_init(&message);
             rc = tc_iot_coap_deserialize(&message, c->readbuf, rc);
             if (TC_IOT_SUCCESS != rc) {
                 TC_IOT_LOG_ERROR("tc_iot_coap_deserialize rc = %d", rc);

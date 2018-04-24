@@ -282,8 +282,9 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
 int tc_iot_coap_init(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
 unsigned short tc_iot_coap_get_next_pack_id(tc_iot_coap_client* c);
 int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message);
+int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms);
 
-int tc_iot_coap_message_init(tc_iot_coap_client* c, tc_iot_coap_message* message);
+int tc_iot_coap_message_init(tc_iot_coap_message* message);
 int tc_iot_coap_message_set_type(tc_iot_coap_message* message, unsigned char type);
 int tc_iot_coap_message_set_code(tc_iot_coap_message* message, unsigned char code);
 int tc_iot_coap_message_set_message_id(tc_iot_coap_message* message, unsigned short message_id);
