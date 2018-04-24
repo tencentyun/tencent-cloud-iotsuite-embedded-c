@@ -19,10 +19,13 @@
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 */
 
-#define TC_IOT_COAP_VER   (0x1)
+#define TC_IOT_COAP_VER                (0x1)
 #define TC_IOT_COAP_MAX_TOKEN_LEN       8
 #define TC_IOT_COAP_MAX_OPTION_COUNT    16
-#define TC_IOT_COAP_PAYLOAD_MARKER      (0xFF)
+#define TC_IOT_COAP_PAYLOAD_MARKER     (0xFF)
+#define TC_IOT_COAP_SEND_BUF_SIZE      1280
+#define TC_IOT_COAP_RECV_BUF_SIZE      1280
+#define TC_IOT_COAP_MAX_MESSAGE_ID     65535
 
 typedef enum _tc_iot_coap_message_type {
     COAP_CON = 0,
@@ -224,6 +227,46 @@ typedef struct _tc_iot_coap_message {
     tc_iot_coap_option options[TC_IOT_COAP_MAX_OPTION_COUNT];
 }tc_iot_coap_message;
 
+
+typedef struct _tc_iot_coap_client_config {
+    char* host; /**< CoAP 服务地址*/
+    uint16_t port; /**< CoAP 服务端口*/
+    int tls_handshake_timeout_ms; /**< TLS 握手时延，单位毫秒*/
+    char use_tls; /**< 是否通过 TLS 连接服务*/
+    const char* p_root_ca; /**< 根证书*/
+    const char* p_client_crt; /**< 客户端证书*/
+    const char* p_client_key; /**< 客户端私钥*/
+
+} tc_iot_coap_client_config;
+
+typedef struct _tc_iot_coap_client tc_iot_coap_client;
+
+/**
+ * @brief CoAP client 对象结构，保存 CoAP 客户端相关配置、连接状态、
+ * 回调处理、时延要求、收发缓存区等信息。
+ */
+struct _tc_iot_coap_client {
+    size_t buf_size;  /**< 发送缓存区大小，固定为 TC_IOT_CLIENT_SEND_BUF_SIZE*/
+    size_t readbuf_size;  /**< 接收缓存区大小，固定为 TC_IOT_CLIENT_READ_BUF_SIZE*/
+    unsigned char buf[TC_IOT_CLIENT_SEND_BUF_SIZE]; /**< 发送缓存区，根据业务情况，实际发送最大包的大小，
+                                                      合理设定 TC_IOT_CLIENT_READ_BUF_SIZE 的值 */
+    unsigned char readbuf[TC_IOT_CLIENT_READ_BUF_SIZE];  /**< 接收缓存区的大小，根据服务端下发订阅消息最大包大小，
+                                                           合理设定 TC_IOT_CLIENT_READ_BUF_SIZE 的值 */
+    unsigned int next_packetid;  /**< 下一个可用的消息 ID*/
+    MQTTPacket_connectData connect_options; /**< 连接配置 */
+
+    // struct MessageHandlers {
+    //     const char* topicFilter;
+    //     tc_iot_mqtt_qos_e qos;
+    //     message_handler fp;
+    //     void * context;
+    // } message_handlers[TC_IOT_MAX_MESSAGE_HANDLERS]; #<{(|*< 订阅消息回调|)}>#
+
+    tc_iot_network_t ipstack; /**< 网络服务*/
+    tc_iot_timer last_sent; /**< 最近一次发包定时器，用来判断是否需要发起 keep alive 心跳*/
+    tc_iot_timer last_received; /**< 最近一次收包定时器，用来判断是否需要发起 keep alive 心跳*/
+} ;
+
 int tc_iot_coap_write_char(unsigned char * buffer, int buffer_len, unsigned char val);
 int tc_iot_coap_write_short(unsigned char * buffer, int buffer_len, unsigned short val);
 int tc_iot_coap_write_int(unsigned char * buffer, int buffer_len, unsigned int val);
@@ -235,6 +278,18 @@ unsigned int tc_iot_coap_extendable_number_extra_data(unsigned int number);
 
 int tc_iot_coap_serialize(unsigned char * buffer, int buffer_len, const tc_iot_coap_message * message);
 int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffer, int buffer_len);
+
+int tc_iot_coap_init(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
+unsigned short tc_iot_coap_get_next_pack_id(tc_iot_coap_client* c);
+int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message);
+
+int tc_iot_coap_message_init(tc_iot_coap_client* c, tc_iot_coap_message* message);
+int tc_iot_coap_message_set_type(tc_iot_coap_message* message, unsigned char type);
+int tc_iot_coap_message_set_code(tc_iot_coap_message* message, unsigned char code);
+int tc_iot_coap_message_set_message_id(tc_iot_coap_message* message, unsigned short message_id);
+int tc_iot_coap_message_set_token(tc_iot_coap_message* message, int token_len, const unsigned char * token);
+int tc_iot_coap_message_payload(tc_iot_coap_message* message, int payload_len, unsigned char * payload);
+int tc_iot_coap_message_add_option(tc_iot_coap_message * message, int option_number, int option_length, void * option_value);
 
 const char * tc_iot_coap_get_message_type_str(int type);
 const char * tc_iot_coap_get_message_code_str(int code);

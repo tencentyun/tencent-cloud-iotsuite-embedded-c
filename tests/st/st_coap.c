@@ -53,53 +53,33 @@ int main(int argc, char const* argv[])
 {
     /* printf("COAP_CODE_205_CONTENT %d,0x%x\n", (int)COAP_CODE_205_CONTENT,(int)COAP_CODE_205_CONTENT); */
     tc_iot_coap_message message;
+    tc_iot_coap_client coap_client;
+    tc_iot_coap_client_config coap_config = {
+        "localhost",
+        5683,
+        10000,
+        0,
+        NULL,
+        NULL,
+        NULL,
+    };
+
+    int ret = 0;
     const char * token = "cafe";
     const char * uri_path = "time";
-    int option_index = 0;
-    int ret = 0;
-    char buffer[256];
-    int buffer_len = sizeof(buffer);
 
-    char resp[256];
-    int resp_len = sizeof(resp);
+    tc_iot_coap_init(&coap_client, &coap_config);
 
-    memset(&message, 0, sizeof(message));
-    message.header.bits.ver = TC_IOT_COAP_VER;
-    message.header.bits.token_len = strlen(token);
-    memcpy(message.token, token, message.header.bits.token_len);
-    message.code = COAP_CODE_001_GET;
-    message.message_id = 0x1234;
+    tc_iot_coap_message_init(&coap_client, &message);
+    tc_iot_coap_message_set_message_id(&message, tc_iot_coap_get_next_pack_id(&coap_client));
+    tc_iot_coap_message_set_type(&message, COAP_CON);
+    tc_iot_coap_message_set_code(&message, COAP_CODE_001_GET);
+    tc_iot_coap_message_set_token(&message, strlen(token), token);
+    tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_PATH, strlen(uri_path), (unsigned char *)uri_path);
+    tc_iot_coap_send_message(&coap_client, &message);
 
-    option_index = message.option_count;
-    message.options[option_index].number = COAP_OPTION_URI_PATH;
-    message.options[option_index].length = strlen(uri_path);
-    message.options[option_index].value = (char *)uri_path;
-    message.option_count++;
-
-    ret = tc_iot_coap_serialize(buffer, buffer_len, &message);
-    if (ret <= 0) {
-        TC_IOT_LOG_ERROR("tc_iot_coap_serialize ret = %d", ret);
-        return 0;
-    }
-
-    ret = net_request("localhost",5683, buffer, ret, resp, resp_len);
-    if (ret <= 0) {
-        TC_IOT_LOG_ERROR("net_request ret = %d", ret);
-        return 0;
-    }
-
-    memset(&message, 0, sizeof(message));
-    ret = tc_iot_coap_deserialize(&message, resp, ret);
-    resp[ret] = '\0';
-    if (TC_IOT_SUCCESS != ret) {
-        TC_IOT_LOG_ERROR("tc_iot_coap_deserialize ret = %d", ret);
-    } else {
-        if (message.payload_len && message.p_payload) {
-            TC_IOT_LOG_INFO("message paylod(%d):%s", message.payload_len, message.p_payload);
-        } else {
-            TC_IOT_LOG_INFO("message no paylod");
-        }
-    }
+    tc_iot_coap_yield(&coap_client, 2000);
     return 0;
 }
+
 

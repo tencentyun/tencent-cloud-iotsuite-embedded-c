@@ -62,6 +62,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_COAP_MSG_TOKEN_LEN_INVALID = -303, /**< COAP包TKL取值非法*/
     TC_IOT_COAP_MSG_OPTION_DELTA_INVALID = -304, /**< COAP包Option Delta取值非法*/
     TC_IOT_COAP_MSG_OPTION_LENGTH_INVALID = -305, /**< COAP包Option Length取值非法*/
+    TC_IOT_COAP_MSG_OPTION_COUNT_TOO_MUCH = -306, /**< COAP包Option 数量超大*/
 
     TC_IOT_LOGIC_ERROR_BASE = -1000, /**< 业务逻辑错误 */
     TC_IOT_NETWORK_PTR_NULL = -1001,/**< network 对象指针为空*/
