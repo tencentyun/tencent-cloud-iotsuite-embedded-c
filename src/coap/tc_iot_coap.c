@@ -486,9 +486,28 @@ int tc_iot_coap_init(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_
 }
 
 
+static char * _tc_iot_coap_message_id_to_token( unsigned short message_id, char token[TC_IOT_COAP_MAX_TOKEN_LEN])
+{
+    int i = 0;
+    unsigned char temp;
+    unsigned char high;
+    unsigned char low;
+    static const char map_byte_to_hex[16] = {
+        '0', '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+    };
+    token[0] = map_byte_to_hex[((message_id>>12)&0xF)];
+    token[1] = map_byte_to_hex[((message_id>>8)&0xF)];
+    token[2] = map_byte_to_hex[((message_id>>4)&0xF)];
+    token[3] = map_byte_to_hex[((message_id)&0xF)];
+    return token;
+}
+
 int tc_iot_coap_message_set_message_id(tc_iot_coap_message* message, unsigned short message_id) {
     IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
     message->message_id = message_id;
+    message->header.bits.token_len = 2*sizeof(message_id);
+    _tc_iot_coap_message_id_to_token(message_id, message->token);
     return message->message_id;
 }
 

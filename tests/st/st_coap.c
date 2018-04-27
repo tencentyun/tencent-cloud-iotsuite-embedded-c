@@ -37,7 +37,6 @@ void sig_handler(int sig) {
 }
 
 static void _tc_iot_coap_get_time( tc_iot_coap_client * c) {
-    const char * token = "cafe";
     const char * uri_path = "time";
     int ret  = 0;
 
@@ -47,7 +46,6 @@ static void _tc_iot_coap_get_time( tc_iot_coap_client * c) {
     tc_iot_coap_message_set_message_id(&message, tc_iot_coap_get_next_pack_id(c));
     tc_iot_coap_message_set_type(&message, COAP_CON);
     tc_iot_coap_message_set_code(&message, COAP_CODE_001_GET);
-    tc_iot_coap_message_set_token(&message, strlen(token), token);
     tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_PATH, strlen(uri_path), (unsigned char *)uri_path);
     ret = tc_iot_coap_send_message(c, &message, _tc_iot_coap_con_get_time_handler, 500, NULL);
     if (ret <= 0) {
@@ -58,7 +56,6 @@ static void _tc_iot_coap_get_time( tc_iot_coap_client * c) {
 }
 
 static void _tc_iot_coap_get_wellknown( tc_iot_coap_client * c) {
-    const char * token = "hello";
     const char * well_known_path = ".well-known";
     const char * core_path = "core";
     int ret  = 0;
@@ -69,7 +66,6 @@ static void _tc_iot_coap_get_wellknown( tc_iot_coap_client * c) {
     tc_iot_coap_message_set_message_id(&message, tc_iot_coap_get_next_pack_id(c));
     tc_iot_coap_message_set_type(&message, COAP_CON);
     tc_iot_coap_message_set_code(&message, COAP_CODE_001_GET);
-    tc_iot_coap_message_set_token(&message, strlen(token), token);
     tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_PATH, strlen(well_known_path), (unsigned char *)well_known_path);
     tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_PATH, strlen(core_path), (unsigned char *)core_path);
     ret = tc_iot_coap_send_message(c, &message, _tc_iot_coap_con_get_time_handler, 500, NULL);
