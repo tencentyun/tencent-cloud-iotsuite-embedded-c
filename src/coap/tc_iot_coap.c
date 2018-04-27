@@ -241,11 +241,44 @@ int tc_iot_coap_serialize(unsigned char * buffer, int buffer_len, const tc_iot_c
         }
         pos += ret;
     } else {
-        TC_IOT_LOG_TRACE("request with no payload");
+        tc_iot_coap_message_dump(message);
     }
 
     return pos;
 }
+
+
+void tc_iot_coap_message_dump(const tc_iot_coap_message * message) {
+    int i = 0;
+
+    if (NULL == message){
+        TC_IOT_LOG_ERROR("message is null");
+        return ;
+    }
+
+    TC_IOT_LOG_TRACE("ver=%d,type=%s,tkl=%d,code=%s,message_id=%d",
+            message->header.bits.ver, tc_iot_coap_get_message_type_str(message->header.bits.type),
+            message->header.bits.token_len, tc_iot_coap_get_message_code_str(message->code), message->message_id);
+
+    for (i = 0; i < message->option_count; i++) {
+        if (COAP_OPTION_URI_PATH) {
+            TC_IOT_LOG_TRACE("option number=%s,value=%s", tc_iot_coap_get_option_number_str(message->options[i].number), message->options[i].value);
+        } else {
+            TC_IOT_LOG_TRACE("option number=%s,length=%d", tc_iot_coap_get_option_number_str(message->options[i].number), message->options[i].length);
+        }
+    }
+    
+    if (message->payload_len && message->p_payload) {
+        if (strlen(message->p_payload) == message->payload_len) {
+            TC_IOT_LOG_TRACE("payload_len=%d,payload=%s",message->payload_len,message->p_payload);
+        } else {
+            TC_IOT_LOG_TRACE("payload_len=%d,payload=[binary data ...]",message->payload_len);
+        }
+    } else {
+        TC_IOT_LOG_TRACE("payload_len=%d,no payload",message->payload_len);
+    }
+}
+
 
 int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffer, int buffer_len) {
     int i = 0;
@@ -407,6 +440,8 @@ int tc_iot_coap_init(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_client_config, TC_IOT_NULL_POINTER);
 
+    memset(c, 0, sizeof(*c));
+
     p_network = &(c->ipstack);
     memset(p_network, 0, sizeof(tc_iot_network_t));
 
@@ -498,31 +533,68 @@ int tc_iot_coap_message_set_code(tc_iot_coap_message* message, unsigned char cod
     return message->code;
 }
 
-int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message) {
+int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message,
+        tc_iot_coap_con_handler callback, int timeout_ms, void * session_context) {
     int ret = 0;
-    int timeout_ms = 2000;
+    int data_len = 0;
+    int i = 0;
+    tc_iot_coap_session * session;
+
     ret = tc_iot_coap_serialize(c->buf, c->buf_size, message);
     if (ret <= 0) {
         TC_IOT_LOG_ERROR("tc_iot_coap_serialize ret = %d", ret);
         return ret;
     }
+    data_len = ret;
 
-    ret = c->ipstack.do_write(&c->ipstack,  c->buf, c->buf_size, timeout_ms);
+    if (callback) {
+        if (timeout_ms > 0) {
+            session = tc_iot_coap_session_find_empty(c);
+            if (session) {
+                tc_iot_coap_session_init(session, message->message_id, callback, timeout_ms, session_context);
+            } else {
+                TC_IOT_LOG_ERROR("session not enough");
+                for (i = 0; i < TC_IOT_COAP_MAX_SESSION_COUNT; i++) {
+                    TC_IOT_LOG_TRACE("message_id[%d]=%d",i,c->sessions[i].message_id);
+                }
+            }
+        } else {
+            TC_IOT_LOG_ERROR("with callback but timeout_ms invalid=%d", timeout_ms);
+        }
+
+    }
+
+    ret = c->ipstack.do_write(&c->ipstack,  c->buf, data_len, timeout_ms);
     return ret;
 }
 
-tc_iot_coap_session * tc_iot_coap_session_find(tc_iot_coap_client * c, unsigned int message_id) {
-    int i = 0;
+static int _tc_iot_coap_check_expired_session(tc_iot_coap_client *c) {
+    int i;
+    tc_iot_coap_session * session;
+
+    IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
+
     for (i = 0; i < TC_IOT_COAP_MAX_SESSION_COUNT; i++) {
-        if (message_id == c->sessions[i].message_id) {
-            return &c->sessions[i];
+        session = &(c->sessions[i]);
+        if (session->message_id != 0) {
+            if (tc_iot_hal_timer_is_expired(&(session->timer))) {
+                TC_IOT_LOG_WARN("session:%d expired", session->message_id);
+                if (session->handler) {
+                    session->handler(c, TC_IOT_COAP_CON_TIMEOUT, NULL, session->session_context);
+                } else {
+                    TC_IOT_LOG_ERROR("session:%d handler not found", session->message_id);
+                }
+                tc_iot_coap_session_release(session);
+            } else {
+                /* TC_IOT_LOG_TRACE("session:%s not expired, left_ms=%d", session->sid, */
+                        /* tc_iot_hal_timer_left_ms(&(session->timer))); */
+            }
         }
     }
-
-    return NULL;
+    return TC_IOT_SUCCESS;
 }
 
-tc_iot_coap_session * tc_iot_coap_session_check_expire(tc_iot_coap_client * c, unsigned int message_id) {
+tc_iot_coap_session * tc_iot_coap_session_find(tc_iot_coap_client * c, unsigned int message_id) {
     int i = 0;
     for (i = 0; i < TC_IOT_COAP_MAX_SESSION_COUNT; i++) {
         if (message_id == c->sessions[i].message_id) {
@@ -538,7 +610,7 @@ tc_iot_coap_session * tc_iot_coap_session_find_empty(tc_iot_coap_client * c) {
 }
 
 
-void tc_iot_coap_session_create(tc_iot_coap_session * session, unsigned short message_id, 
+void tc_iot_coap_session_init(tc_iot_coap_session * session, unsigned short message_id, 
         tc_iot_coap_con_handler callback, int timeout_ms, void * session_context) {
     if (!session) {
         return;
@@ -569,6 +641,8 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);
 
+    _tc_iot_coap_check_expired_session(c);
+
     do {
         rc = c->ipstack.do_read(&c->ipstack, c->readbuf, c->readbuf_size, timeout_ms);
         if (rc > 0) {
@@ -582,12 +656,6 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
             if (TC_IOT_SUCCESS != rc) {
                 TC_IOT_LOG_ERROR("tc_iot_coap_deserialize rc = %d", rc);
             } else {
-                if (message.payload_len && message.p_payload) {
-                    TC_IOT_LOG_TRACE("message paylod(%d):%s", message.payload_len, message.p_payload);
-                } else {
-                    TC_IOT_LOG_TRACE("message no paylod");
-                }
-
                 session = tc_iot_coap_session_find(c, message.message_id);
                 if (session) {
                     session->handler(c, TC_IOT_COAP_CON_SUCCESS,  &message, session->session_context);

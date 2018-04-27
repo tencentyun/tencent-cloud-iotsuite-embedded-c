@@ -296,7 +296,8 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
 
 int tc_iot_coap_init(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
 unsigned short tc_iot_coap_get_next_pack_id(tc_iot_coap_client* c);
-int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message);
+int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message,
+        tc_iot_coap_con_handler callback, int timeout_ms, void * session_context);
 int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms);
 
 int tc_iot_coap_message_init(tc_iot_coap_message* message);
@@ -306,6 +307,14 @@ int tc_iot_coap_message_set_message_id(tc_iot_coap_message* message, unsigned sh
 int tc_iot_coap_message_set_token(tc_iot_coap_message* message, int token_len, const unsigned char * token);
 int tc_iot_coap_message_payload(tc_iot_coap_message* message, int payload_len, unsigned char * payload);
 int tc_iot_coap_message_add_option(tc_iot_coap_message * message, int option_number, int option_length, void * option_value);
+void tc_iot_coap_message_dump(const tc_iot_coap_message * message);
+
+tc_iot_coap_session * tc_iot_coap_session_find(tc_iot_coap_client * c, unsigned int message_id);
+tc_iot_coap_session * tc_iot_coap_session_find_empty(tc_iot_coap_client * c);
+void tc_iot_coap_session_init(tc_iot_coap_session * session, unsigned short message_id, 
+        tc_iot_coap_con_handler callback, int timeout_ms, void * session_context);
+void tc_iot_coap_session_release(tc_iot_coap_session * session);
+
 
 const char * tc_iot_coap_get_message_type_str(int type);
 const char * tc_iot_coap_get_message_code_str(int code);
