@@ -511,11 +511,58 @@ int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message
     return ret;
 }
 
+tc_iot_coap_session * tc_iot_coap_session_find(tc_iot_coap_client * c, unsigned int message_id) {
+    int i = 0;
+    for (i = 0; i < TC_IOT_COAP_MAX_SESSION_COUNT; i++) {
+        if (message_id == c->sessions[i].message_id) {
+            return &c->sessions[i];
+        }
+    }
+
+    return NULL;
+}
+
+tc_iot_coap_session * tc_iot_coap_session_check_expire(tc_iot_coap_client * c, unsigned int message_id) {
+    int i = 0;
+    for (i = 0; i < TC_IOT_COAP_MAX_SESSION_COUNT; i++) {
+        if (message_id == c->sessions[i].message_id) {
+            return &c->sessions[i];
+        }
+    }
+
+    return NULL;
+}
+
+tc_iot_coap_session * tc_iot_coap_session_find_empty(tc_iot_coap_client * c) {
+    return tc_iot_coap_session_find(c, 0);
+}
+
+
+void tc_iot_coap_session_create(tc_iot_coap_session * session, unsigned short message_id, 
+        tc_iot_coap_con_handler callback, int timeout_ms, void * session_context) {
+    if (!session) {
+        return;
+    }
+    session->session_context = session_context;
+    session->message_id = message_id;
+    tc_iot_hal_timer_init(&session->timer);
+    tc_iot_hal_timer_countdown_ms(&session->timer, timeout_ms);
+    session->handler = callback;
+}
+
+
+void tc_iot_coap_session_release(tc_iot_coap_session * session) {
+    if (session) {
+        memset(session, 0, sizeof(*session));
+    }
+}
+
 int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
     int rc = TC_IOT_SUCCESS;
     int left_ms = 0;
     tc_iot_coap_message message;
     tc_iot_timer timer;
+    tc_iot_coap_session * session = NULL;
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
 
@@ -539,6 +586,16 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
                     TC_IOT_LOG_TRACE("message paylod(%d):%s", message.payload_len, message.p_payload);
                 } else {
                     TC_IOT_LOG_TRACE("message no paylod");
+                }
+
+                session = tc_iot_coap_session_find(c, message.message_id);
+                if (session) {
+                    session->handler(c, TC_IOT_COAP_CON_SUCCESS,  &message, session->session_context);
+                    tc_iot_coap_session_release(session);
+                } else if (c->default_handler) {
+                    c->default_handler(c, &message);
+                } else {
+                    TC_IOT_LOG_ERROR("no handler for message id=%d", message.message_id);
                 }
             }
             break;

@@ -227,10 +227,12 @@ typedef struct _tc_iot_coap_message {
     tc_iot_coap_option options[TC_IOT_COAP_MAX_OPTION_COUNT];
 }tc_iot_coap_message;
 
+typedef void (*tc_iot_coap_default_handler)(void * client, tc_iot_coap_message * message );
 
 typedef struct _tc_iot_coap_client_config {
     char* host; /**< CoAP 服务地址*/
     uint16_t port; /**< CoAP 服务端口*/
+    tc_iot_coap_default_handler default_handler;
     int tls_handshake_timeout_ms; /**< TLS 握手时延，单位毫秒*/
     char use_tls; /**< 是否通过 TLS 连接服务*/
     const char* p_root_ca; /**< 根证书*/
@@ -240,6 +242,23 @@ typedef struct _tc_iot_coap_client_config {
 } tc_iot_coap_client_config;
 
 typedef struct _tc_iot_coap_client tc_iot_coap_client;
+
+#define TC_IOT_COAP_MAX_SESSION_COUNT    5
+
+typedef enum _tc_iot_coap_con_status_e {
+    TC_IOT_COAP_CON_SUCCESS,
+    TC_IOT_COAP_CON_TIMEOUT,
+} tc_iot_coap_con_status_e;
+
+typedef void (*tc_iot_coap_con_handler)(tc_iot_coap_client * client, tc_iot_coap_con_status_e ack_status, 
+        tc_iot_coap_message * message , void * session_context);
+
+typedef struct _tc_iot_coap_session{
+    unsigned int        message_id;
+    tc_iot_timer        timer;
+    tc_iot_coap_con_handler handler;
+    void * session_context;
+}tc_iot_coap_session;
 
 /**
  * @brief CoAP client 对象结构，保存 CoAP 客户端相关配置、连接状态、
@@ -255,16 +274,12 @@ struct _tc_iot_coap_client {
     unsigned int next_packetid;  /**< 下一个可用的消息 ID*/
     MQTTPacket_connectData connect_options; /**< 连接配置 */
 
-    // struct MessageHandlers {
-    //     const char* topicFilter;
-    //     tc_iot_mqtt_qos_e qos;
-    //     message_handler fp;
-    //     void * context;
-    // } message_handlers[TC_IOT_MAX_MESSAGE_HANDLERS]; #<{(|*< 订阅消息回调|)}>#
-
     tc_iot_network_t ipstack; /**< 网络服务*/
     tc_iot_timer last_sent; /**< 最近一次发包定时器，用来判断是否需要发起 keep alive 心跳*/
     tc_iot_timer last_received; /**< 最近一次收包定时器，用来判断是否需要发起 keep alive 心跳*/
+
+    tc_iot_coap_session sessions[TC_IOT_COAP_MAX_SESSION_COUNT];
+    tc_iot_coap_default_handler default_handler;
 } ;
 
 int tc_iot_coap_write_char(unsigned char * buffer, int buffer_len, unsigned char val);
