@@ -13,7 +13,7 @@ int my_http_download_callback(const void * context, const char * data, int data_
     tc_iot_download_helper * helper = (tc_iot_download_helper *)context;
     /* tc_iot_hal_printf("\n[%d/%d]\n->%s", offset+data_len, total, data); */
     tc_iot_hal_printf("%d/%d\n", offset+data_len, total);
-    write(helper->fd,data,data_len);
+    write(helper->fd, data,data_len);
     tc_iot_md5_update(&helper->md5_context, data, data_len);
     /* tc_iot_hal_printf("%s", data); */
 }
@@ -88,6 +88,6 @@ print_help:
         tc_iot_hal_printf("md5=%s\n", tc_iot_util_byte_to_hex(file_md5_digest, sizeof(file_md5_digest), md5str, sizeof(md5str)));
     }
 
-    close(fd);
+    close(helper.fd);
 }
 

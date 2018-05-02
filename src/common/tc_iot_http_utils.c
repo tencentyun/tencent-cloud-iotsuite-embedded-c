@@ -461,8 +461,8 @@ int tc_iot_http_get(tc_iot_network_t* network,
 int tc_iot_do_download(const char* api_url, tc_iot_http_download_callback download_callback, const void * context) {
     tc_iot_network_t network;
     tc_iot_http_request request;
-    unsigned char http_request_buffer[2048];
-    char http_resp[512];
+    unsigned char http_request_buffer[1024];
+    char http_resp[1024];
     int max_http_resp_len = sizeof(http_resp) - 1;
     char temp_buf[128];
     int ret;
@@ -518,7 +518,7 @@ parse_url:
                          sizeof(http_request_buffer));
     /* request init end */
 
-    memset(http_resp, 0, sizeof(http_resp));
+    http_resp[sizeof(http_resp)-1] = 0;
     TC_IOT_LOG_TRACE("request url=%s", api_url);
     ret = tc_iot_http_get(&network, &request, api_url, http_resp, max_http_resp_len, 2000);
     if (ret >= max_http_resp_len) {
@@ -548,13 +548,13 @@ parse_url:
             *(rsp_body+2) = '\0';
             TC_IOT_LOG_TRACE("%s", http_resp);
             rsp_body += 4;
-            received_bytes = strlen(rsp_body);
+            received_bytes = http_resp + ret - rsp_body;
             if (download_callback) {
-                download_callback(context, rsp_body, strlen(rsp_body), received_bytes , content_length);
+                download_callback(context, rsp_body, received_bytes, 0 , content_length);
             }
             while( ret >= 0) {
                 ret = network.do_read(&network,http_resp, max_http_resp_len, 2000);
-                if (ret <= max_http_resp_len && (ret > 0)) {
+                if ((ret <= max_http_resp_len) && (ret > 0)) {
                     http_resp[ret] = '\0';
                     if (download_callback) {
                         download_callback(context, http_resp, ret, received_bytes , content_length);
@@ -609,7 +609,8 @@ parse_url:
                 }
                 api_url = temp_buf;
                 memset(&netcontext, 0, sizeof(netcontext));
-                TC_IOT_LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", ret, redirect_count, api_url);
+                TC_IOT_LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", 
+                        ret, redirect_count, api_url);
             } else {
                 TC_IOT_LOG_ERROR("http code %d, Location header not found.", ret);
             }
