@@ -407,7 +407,7 @@ int tc_iot_parse_http_response_code(const char * resp) {
 int tc_iot_http_get(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          char* resp, int resp_max_len,
-                         int timeout_ms) {
+                         int timeout_ms,int partial_start) {
     tc_iot_url_parse_result_t result;
     char temp_host[512];
     int written_len;
@@ -427,6 +427,16 @@ int tc_iot_http_get(tc_iot_network_t* network,
         ret =
             tc_iot_create_get_request(request, "/", 1, url + result.host_start,
                                        result.host_len);
+    }
+
+    if (partial_start != 0) {
+        tc_iot_yabuffer_forward(&request->buf, -2);
+        /* Range: bytes=%d- */
+        ret = tc_iot_hal_snprintf(tc_iot_yabuffer_current(&request->buf), 
+                tc_iot_yabuffer_left(&request->buf),
+                "Range: bytes=%d-\r\n\r\n", partial_start
+                );
+        tc_iot_yabuffer_forward(&request->buf, ret);
     }
 
     if (result.host_len >= sizeof(temp_host)) {
@@ -458,7 +468,7 @@ int tc_iot_http_get(tc_iot_network_t* network,
     return read_len;
 }
 
-int tc_iot_do_download(const char* api_url, tc_iot_http_download_callback download_callback, const void * context) {
+int tc_iot_do_download(const char* api_url, int partial_start, tc_iot_http_download_callback download_callback, const void * context) {
     tc_iot_network_t network;
     tc_iot_http_request request;
     unsigned char http_request_buffer[1024];
@@ -520,10 +530,10 @@ parse_url:
 
     http_resp[sizeof(http_resp)-1] = 0;
     TC_IOT_LOG_TRACE("request url=%s", api_url);
-    ret = tc_iot_http_get(&network, &request, api_url, http_resp, max_http_resp_len, 2000);
+    ret = tc_iot_http_get(&network, &request, api_url, http_resp, max_http_resp_len, 2000, partial_start);
     if (ret >= max_http_resp_len) {
         http_code = tc_iot_parse_http_response_code(http_resp);
-        if (http_code != 200) {
+        if (http_code != 200 && http_code != 206) {
             TC_IOT_LOG_ERROR("http resoponse http_code = %d", http_code);
             return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
         }

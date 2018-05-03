@@ -248,8 +248,8 @@ int tc_iot_parse_http_response_code(const char * http_resp);
 int tc_iot_http_get(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          char* resp, int resp_max_len,
-                         int timeout_ms);
+                         int timeout_ms, int partial_start);
 typedef int (*tc_iot_http_download_callback)(const void * context, const char * data, int data_len, int offset, int total);
-int tc_iot_do_download(const char* api_url, tc_iot_http_download_callback download_callback, const void * context);
+int tc_iot_do_download(const char* api_url, int partial_start, tc_iot_http_download_callback download_callback, const void * context);
 
 #endif /* end of include guard */
