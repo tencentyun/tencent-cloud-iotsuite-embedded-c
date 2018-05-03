@@ -91,6 +91,17 @@ class iot_field:
             self.default_value = self.min_value
             if self.default_value < self.min_value or self.default_value > self.max_value:
                 raise ValueError("错误：{} 字段 default 指定的默认值超出 min~max 取值范围".format(name))
+        elif self.type_name == "string":
+            self.type_id = "TC_IOT_SHADOW_TYPE_STRING"
+            self.type_define = "tc_iot_shadow_string"
+            if TEMPLATE_CONSTANTS.RANGE not in field_obj:
+                raise ValueError("错误：{} 字段定义中未找到取值范围定义 Range 字段".format(name))
+            if len(field_obj[TEMPLATE_CONSTANTS.RANGE]) != 2:
+                raise ValueError("错误：{} 字段 Range 取值非法".format(name))
+
+            self.min_value = field_obj[TEMPLATE_CONSTANTS.RANGE][0]
+            self.max_value = field_obj[TEMPLATE_CONSTANTS.RANGE][1]
+            self.default_value = "{'\\0'}"
         else:
             raise ValueError('{} 字段 数据类型 type={} 取值非法，有效值应为：bool,enum,number'.format(name, field_obj["type"]))
 
@@ -101,7 +112,10 @@ class iot_field:
         return "#define {} {}".format(self.get_id_c_macro_name(), self.index)
 
     def get_struct_field_declare(self):
-        return "{} {};".format(self.type_define, self.name)
+        if self.type_define == "tc_iot_shadow_string":
+            return "char {}[{}+1];".format(self.name, str(self.max_value))
+        else:
+            return "{} {};".format(self.type_define, self.name)
 
     def get_meta_define_str(self):
         return '{{ "{}", {}, {}, offsetof(tc_iot_shadow_local_data, {}) }},'.format(self.name, self.get_id_c_macro_name(), self.type_id, self.name)
@@ -149,6 +163,12 @@ class iot_field:
 <indent>g_tc_iot_device_local_data.field_name = field_name;
 <indent>TC_IOT_LOG_TRACE("do something for field_name=%d", field_name);
 """.replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        elif self.type_name == "string":
+            sample_code = """
+<indent>field_name = (char *)data;
+<indent>strcpy(g_tc_iot_device_local_data.field_name, field_name);
+<indent>TC_IOT_LOG_TRACE("do something for field_name=%s", field_name);
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
         else:
             raise Exception("invalid data type")
 
@@ -180,6 +200,11 @@ class iot_field:
             sample_code = """
 <indent>g_tc_iot_device_local_data.field_name += 1;
 <indent>g_tc_iot_device_local_data.field_name > <max>?<min>:g_tc_iot_device_local_data.field_name;
+"""
+            sample_code = sample_code.replace("<indent>", indent).replace("field_name", self.name)
+            sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))
+        elif self.type_name == "string":
+            sample_code = """
 """
             sample_code = sample_code.replace("<indent>", indent).replace("field_name", self.name)
             sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))

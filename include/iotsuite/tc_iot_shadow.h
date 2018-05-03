@@ -8,6 +8,7 @@ typedef double tc_iot_shadow_number;
 typedef int tc_iot_shadow_int;
 typedef int tc_iot_shadow_enum;
 typedef bool tc_iot_shadow_bool;
+typedef char * tc_iot_shadow_string;
 
 typedef enum _tc_iot_shadow_data_type_e {
     TC_IOT_SHADOW_TYPE_INVALID = 0,
@@ -15,6 +16,7 @@ typedef enum _tc_iot_shadow_data_type_e {
     TC_IOT_SHADOW_TYPE_NUMBER = 2,
     TC_IOT_SHADOW_TYPE_ENUM = 3,
     TC_IOT_SHADOW_TYPE_INT = 4,
+    TC_IOT_SHADOW_TYPE_STRING = 5,
 } tc_iot_shadow_data_type_e;
 
 typedef struct _tc_iot_shadow_property_def {
@@ -50,7 +52,7 @@ typedef void (*message_ack_handler)(tc_iot_command_ack_status_e ack_status, tc_i
 
 
 #define TC_IOT_SESSION_ID_LEN     8
-#define TC_IOT_MAX_SESSION_COUNT  3
+#define TC_IOT_MAX_SESSION_COUNT  10
 
 typedef struct _tc_iot_shadow_session{
     char sid[TC_IOT_SESSION_ID_LEN+1];

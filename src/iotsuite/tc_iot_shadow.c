@@ -139,6 +139,10 @@ tc_iot_shadow_session * tc_iot_find_empty_session(tc_iot_shadow_client *c) {
             return &(c->sessions[i]);
         }
     }
+
+    for (i = 0; i < TC_IOT_MAX_SESSION_COUNT; i++) {
+        TC_IOT_LOG_TRACE("occupied sid[%d]:%s", i, c->sessions[i].sid);
+    }
     return NULL;
 }
 
@@ -678,6 +682,15 @@ int tc_iot_shadow_cmp_local(tc_iot_shadow_client * c, int property_id, void * sr
                         );
             }
             break;
+        case TC_IOT_SHADOW_TYPE_STRING:
+            ret = strcmp( p_dest_offset, p_src_offset);
+            if (0 != ret) {
+                TC_IOT_LOG_TRACE("%s differ %s -> %s", p_prop->name,
+                        (tc_iot_shadow_string)p_src_offset,
+                        (tc_iot_shadow_string)p_dest_offset
+                        );
+            }
+            break;
         default:
             TC_IOT_LOG_ERROR("invalid data type=%d found", p_prop->type);
             return -1;
@@ -736,6 +749,8 @@ void * tc_iot_shadow_copy_local_to_reported(tc_iot_shadow_client * c, int proper
             return memcpy( p_reported, p_current, sizeof(tc_iot_shadow_number));
         case TC_IOT_SHADOW_TYPE_ENUM:
             return memcpy( p_reported, p_current, sizeof(tc_iot_shadow_enum));
+        case TC_IOT_SHADOW_TYPE_STRING:
+            return strcpy( p_reported, p_current);
         default:
             TC_IOT_LOG_ERROR("invalid data type=%d found", p_prop->type);
             return p_reported;
@@ -762,6 +777,8 @@ void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, c
             return memcpy( p_dest, p_data, sizeof(tc_iot_shadow_number));
         case TC_IOT_SHADOW_TYPE_ENUM:
             return memcpy( p_dest, p_data, sizeof(tc_iot_shadow_enum));
+        case TC_IOT_SHADOW_TYPE_STRING:
+            return strcpy( p_dest, p_data);
         default:
             TC_IOT_LOG_ERROR("invalid data type=%d found", p_prop->type);
             return p_dest;
@@ -769,6 +786,8 @@ void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, c
 }
 
 int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, char * buffer, int buffer_len) {
+    int ret = 0;
+    int pos = 0;
     tc_iot_shadow_property_def * p_prop = NULL;
     void * p_current = NULL;
     void * p_reported = NULL;
@@ -798,6 +817,29 @@ int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, cha
         case TC_IOT_SHADOW_TYPE_INT:
             tc_iot_shadow_copy_local_to_reported(c, property_id);
             return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":%d", p_prop->name, *(tc_iot_shadow_int *)p_current);
+        case TC_IOT_SHADOW_TYPE_STRING:
+            tc_iot_shadow_copy_local_to_reported(c, property_id);
+            ret = tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":\"", 
+                    p_prop->name);
+            if (ret <= 0) {
+                return TC_IOT_BUFFER_OVERFLOW;
+            }
+            pos += ret;
+
+            ret = tc_iot_json_escape(buffer + pos, buffer_len-pos, 
+                    (tc_iot_shadow_string)p_current, strlen((tc_iot_shadow_string)p_current));
+            if (ret < 0) {
+                return TC_IOT_BUFFER_OVERFLOW;
+            }
+            pos += ret;
+
+            ret = tc_iot_hal_snprintf(buffer+pos, buffer_len-pos, "\"");
+            if (ret <= 0) {
+                return TC_IOT_BUFFER_OVERFLOW;
+            }
+            pos += ret;
+            return pos;
+
         default:
             TC_IOT_LOG_ERROR("invalid data name=%s,type=%d found", p_prop->name, p_prop->type);
             return 0;
@@ -871,7 +913,6 @@ int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int b
         pos += ret;
         for (i = 0; i < c->p_shadow_config->property_total; ++i) {
             /* 清空 desired 数据 */
-            /* TODO check if desired succes */
             if (TC_IOT_BIT_GET(c->desired_bits,i)) {
                 /* 仅当本地状态和服务端在控制指令状态一致时，发送确认指令，清空 desired 数据。 */
                 if (0 != tc_iot_shadow_cmp_desired_with_local(c, i)) {

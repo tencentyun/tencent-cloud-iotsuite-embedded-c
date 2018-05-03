@@ -243,7 +243,7 @@ typedef struct _tc_iot_coap_client_config {
 
 typedef struct _tc_iot_coap_client tc_iot_coap_client;
 
-#define TC_IOT_COAP_MAX_SESSION_COUNT    5
+#define TC_IOT_COAP_MAX_SESSION_COUNT    10
 
 typedef enum _tc_iot_coap_con_status_e {
     TC_IOT_COAP_CON_SUCCESS,
