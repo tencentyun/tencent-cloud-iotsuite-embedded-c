@@ -6,9 +6,12 @@
 #define HTTP_VER_1_0 "1.0"
 #define HTTP_VER_1_1 "1.1"
 
-#define HTTP_PUT "GET"
+#define HTTP_PUT "PUT"
+#define HTTP_HEAD "HEAD"
 #define HTTP_POST "POST"
 #define HTTP_GET "GET"
+
+#define TC_IOT_USER_AGENT "tciotclient/1.0"
 
 #define HTTP_SPLIT_STR "\r\n"
 #define HTTP_REQUEST_LINE_FMT ("%s %s HTTP/%s" HTTP_SPLIT_STR)
@@ -249,6 +252,10 @@ int tc_iot_http_get(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          char* resp, int resp_max_len,
                          int timeout_ms, int partial_start);
+int tc_iot_http_head(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         char* resp, int resp_max_len,
+                         int timeout_ms);
 typedef int (*tc_iot_http_download_callback)(const void * context, const char * data, int data_len, int offset, int total);
 int tc_iot_do_download(const char* api_url, int partial_start, tc_iot_http_download_callback download_callback, const void * context);
 

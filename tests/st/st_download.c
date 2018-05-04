@@ -27,7 +27,11 @@ int main(int argc, char** argv) {
     const char * filename = NULL;
     unsigned char file_md5_digest[TC_IOT_MD5_DIGEST_SIZE];
     char md5str[TC_IOT_MD5_DIGEST_SIZE*2 +1];
+    char buffer[64];
+    int byte_read = 0;
+    int partial_start = 0;
     tc_iot_download_helper helper;
+
     memset(file_md5_digest, 0, sizeof(file_md5_digest));
     memset(&helper, 0, sizeof(helper));
 
@@ -83,9 +87,6 @@ print_help:
     tc_iot_md5_init(&helper.md5_context);
 
     fseek(helper.fp, 0, SEEK_SET);
-    char buffer[64];
-    int byte_read = 0;
-    int partial_start = 0;
     while((byte_read = fread( buffer, 1, sizeof(buffer), helper.fp)) > 0) {
         tc_iot_md5_update(&helper.md5_context, buffer, byte_read);
         partial_start += byte_read;

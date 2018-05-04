@@ -137,7 +137,7 @@ int tc_iot_create_post_request(tc_iot_http_request* request,
                                const char* host, int host_len,
                                const char* body) {
     return tc_iot_create_http_request(request, host, host_len, HTTP_POST, abs_path,
-                               abs_path_len, HTTP_VER_1_0, "tciotclient/1.0",
+                               abs_path_len, HTTP_VER_1_0,TC_IOT_USER_AGENT,
                                HTTP_CONTENT_FORM_URLENCODED, body);
 }
 
@@ -145,7 +145,15 @@ int tc_iot_create_get_request(tc_iot_http_request* request,
                                const char* abs_path, int abs_path_len,
                                const char* host, int host_len) {
     return tc_iot_create_http_request(request, host, host_len, HTTP_GET, abs_path,
-                               abs_path_len, HTTP_VER_1_0, "tciotclient/1.0",
+                               abs_path_len, HTTP_VER_1_0,TC_IOT_USER_AGENT,
+                               NULL, NULL);
+}
+
+int tc_iot_create_head_request(tc_iot_http_request* request,
+                               const char* abs_path, int abs_path_len,
+                               const char* host, int host_len) {
+    return tc_iot_create_http_request(request, host, host_len, HTTP_HEAD, abs_path,
+                               abs_path_len, HTTP_VER_1_0,TC_IOT_USER_AGENT,
                                NULL, NULL);
 }
 
@@ -437,6 +445,60 @@ int tc_iot_http_get(tc_iot_network_t* network,
                 "Range: bytes=%d-\r\n\r\n", partial_start
                 );
         tc_iot_yabuffer_forward(&request->buf, ret);
+    }
+
+    if (result.host_len >= sizeof(temp_host)) {
+        TC_IOT_LOG_ERROR("host address too long.");
+        return -1;
+    }
+
+    if (result.over_tls != network->net_context.use_tls) {
+        TC_IOT_LOG_WARN("network type not match: url tls=%d, context tls=%d",
+                 (int)result.over_tls, (int)network->net_context.use_tls);
+        return -1;
+    }
+
+    strncpy(temp_host, url + result.host_start, result.host_len);
+    temp_host[result.host_len] = '\0';
+
+    TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
+
+    network->do_connect(network, temp_host, result.port);
+    written_len = network->do_write(network, (unsigned char *)request->buf.data,
+                                    request->buf.pos, timeout_ms);
+    TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
+
+    read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
+    if (read_len < resp_max_len) {
+        network->do_disconnect(network);
+    }
+
+    return read_len;
+}
+
+int tc_iot_http_head(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         char* resp, int resp_max_len,
+                         int timeout_ms) {
+    tc_iot_url_parse_result_t result;
+    char temp_host[512];
+    int written_len;
+    int read_len;
+    int i = 0;
+    int ret = tc_iot_url_parse(url, strlen(url), &result);
+
+    if (ret < 0) {
+        return ret;
+    }
+
+    if (result.path_len) {
+        ret = tc_iot_create_head_request(
+            request, url + result.path_start, result.path_len,
+            url + result.host_start, result.host_len);
+    } else {
+        ret =
+            tc_iot_create_head_request(request, "/", 1, url + result.host_start,
+                                       result.host_len);
     }
 
     if (result.host_len >= sizeof(temp_host)) {
