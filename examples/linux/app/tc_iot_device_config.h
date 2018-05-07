@@ -1,12 +1,13 @@
 #ifndef TC_IOT_DEVICE_CONFIG_H
 #define TC_IOT_DEVICE_CONFIG_H
 
-/* 服务端获取动态username和password接口*/
-/* 地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
-/* 广州=gz*/
-/* 北京=bj*/
-/* ...*/
-/* 以下为广州机房的接口地址：*/
+/* 设备激活及获取 secret 接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/secret */
+/* Token接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
+/* 机房标识：
+    广州机房=gz
+    北京机房=bj
+    ...
+*/
 #ifdef ENABLE_TLS
 #define TC_IOT_CONFIG_AUTH_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/token"
 #define TC_IOT_CONFIG_ACTIVE_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/secret"
