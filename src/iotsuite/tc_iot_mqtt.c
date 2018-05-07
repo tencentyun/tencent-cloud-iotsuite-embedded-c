@@ -84,6 +84,8 @@ static int _handle_reconnect(tc_iot_mqtt_client* c) {
                 }
             }
         }
+        tc_iot_hal_timer_init(&(c->reconnect_timer));
+        c->reconnect_timeout_ms = 0;
         return TC_IOT_SUCCESS;
     } else {
         TC_IOT_LOG_ERROR("attempt to reconnect failed, errCode: %d", rc);
@@ -96,9 +98,15 @@ static int _handle_reconnect(tc_iot_mqtt_client* c) {
     }
 
     if (TC_IOT_MAX_RECONNECT_WAIT_INTERVAL < c->reconnect_timeout_ms) {
+#ifdef TC_IOT_MQTT_RECONNECT_FOREVER
+        c->reconnect_timeout_ms = TC_IOT_MAX_RECONNECT_WAIT_INTERVAL;
+        TC_IOT_LOG_TRACE("mqtt reconnect timer reset to %dms.", c->reconnect_timeout_ms);
+#else
         TC_IOT_LOG_TRACE("mqtt reconnect timer set to %dms, out of range.",
-                  c->reconnect_timeout_ms);
+        c->reconnect_timeout_ms);
         return TC_IOT_MQTT_RECONNECT_FAILED;
+#endif
+
     }
 
     TC_IOT_LOG_TRACE("mqtt reconnect timer set to %dms.", c->reconnect_timeout_ms);
@@ -579,6 +587,10 @@ int tc_iot_mqtt_yield(tc_iot_mqtt_client* c, int timeout_ms) {
             }
             if (tc_iot_mqtt_get_auto_reconnect(c)) {
                 rc = _handle_reconnect(c);
+                if (TC_IOT_SUCCESS != rc && !tc_iot_hal_timer_is_expired(&timer)) {
+                    left_ms = tc_iot_hal_timer_left_ms(&timer);
+                    tc_iot_hal_sleep_ms(left_ms);
+                }
                 continue;
             }
         }
