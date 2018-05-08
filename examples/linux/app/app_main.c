@@ -49,7 +49,7 @@ void do_sim_data_change(void) {
     g_tc_iot_device_local_data.param_enum %= 3;
 
     g_tc_iot_device_local_data.param_number += 1;
-    g_tc_iot_device_local_data.param_number > 4095?0:g_tc_iot_device_local_data.param_number;
+    g_tc_iot_device_local_data.param_number = g_tc_iot_device_local_data.param_number > 4095?0:g_tc_iot_device_local_data.param_number;
 
 
     /* 上报数据最新状态 */

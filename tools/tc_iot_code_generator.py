@@ -191,7 +191,7 @@ class iot_field:
         elif self.type_name == "number":
             sample_code = """
 <indent>g_tc_iot_device_local_data.field_name += 1;
-<indent>g_tc_iot_device_local_data.field_name > <max>?<min>:g_tc_iot_device_local_data.field_name;
+<indent>g_tc_iot_device_local_data.field_name = g_tc_iot_device_local_data.field_name > <max>?<min>:g_tc_iot_device_local_data.field_name;
 """
             sample_code = sample_code.replace("<indent>", indent).replace("field_name", self.name)
             sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))
