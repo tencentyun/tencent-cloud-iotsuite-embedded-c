@@ -4,8 +4,8 @@
 import json
 import sys
 import os
-import six
 import argparse
+import glob
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -312,17 +312,15 @@ def smart_parser(source_str, template_config, data_template, script_open_mark="/
     while(code_start >= 0):
         code_end = source_str.find(script_close_mark, code_start)
         if (code_end <= code_start):
-            print("ERROR: " + script_open_mark + " has no match " + script_close_mark + "\n")
+            print(u"ERROR: " + script_open_mark + " has no match " + script_close_mark + "\n")
             break
         result += source_str[start:code_start]
         code_snip = source_str[code_start+len(script_open_mark):code_end]
         temp = eval(code_snip)
         if (isinstance(temp, int)):
             result += str(temp)
-        elif (isinstance(temp, six.string_types)):
-            result += temp
         else:
-            print("ERROR: unkonw data type return by:" + code_snip)
+            result += temp
 
         start = code_end + len(script_close_mark)
         code_start = source_str.find(script_open_mark, start)
@@ -340,7 +338,7 @@ def main():
 
     config_path = args.config
     if not os.path.exists(config_path):
-        print("错误：{} 文件不存在，请重新指定 device_config.json 文件路径".format(config_path))
+        print(u"错误：{} 文件不存在，请重新指定 device_config.json 文件路径".format(config_path))
         return 1
 
     config_dir = os.path.dirname(config_path)
@@ -360,26 +358,27 @@ def main():
         device_config.Password = device_config.password
         device_config.DataTemplate = device_config.data_template
 
-        print("加载 {} 文件成功".format(config_path))
+        print(u"加载 {} 文件成功".format(config_path))
     except ValueError as e:
-        print("错误：文件格式非法，请检查 {} 文件是否是 JSON 格式。".format(config_path))
+        print(u"错误：文件格式非法，请检查 {} 文件是否是 JSON 格式。".format(config_path))
         return 1
 
     if TEMPLATE_CONSTANTS.DATA_TEMPLATE not in device_config:
-        print("错误：{} 文件中未发现 DataTemplate 属性字段，请检查文件格式是否合法。".format(config_path))
+        print(u"错误：{} 文件中未发现 DataTemplate 属性字段，请检查文件格式是否合法。".format(config_path))
         return 1
 
     try:
         data_template = iot_struct(device_config.DataTemplate)
-        for template_file in args.files:
-            input_file_name = template_file
-            input_file = open(input_file_name, "r")
-            input_str = input_file.read()
+        for template_files in args.files:
+            for template_file in glob.glob(template_files):
+                input_file_name = template_file
+                input_file = open(input_file_name, "r")
+                input_str = input_file.read()
 
-            output_file_name = config_dir + os.path.basename(template_file)
-            output_file = open(output_file_name, "w")
-            output_file.write(smart_parser(input_str, device_config, data_template))
-            print("文件 {} 生成成功".format(output_file_name))
+                output_file_name = config_dir + os.path.basename(template_file)
+                output_file = open(output_file_name, "w")
+                output_file.write(smart_parser(input_str, device_config, data_template))
+                print(u"文件 {} 生成成功".format(output_file_name))
 
 
         return 0
