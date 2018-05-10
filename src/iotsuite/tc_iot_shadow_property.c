@@ -341,6 +341,14 @@ int tc_iot_shadow_event_notify(tc_iot_shadow_client * p_shadow_client, tc_iot_ev
     }
 }
 
+/*
+根据初始配置，初始化 client：
+1. 连接 MQ 服务器；
+2. 订阅 shadow/get/${product_id}/${device_name} Topic，用来接收下行消息；
+3. 通知设备应用上报设备属性信息；
+4. 发送 {"method":"get"} 请求，获取离线期间累积的，待处理控制指令；
+5. 上报最新设备状态；
+*/
 int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_config * p_client_config) {
     int ret = 0;
     char buffer[128];
@@ -437,10 +445,19 @@ int tc_iot_shadow_get_property_offset(tc_iot_shadow_client * p_shadow_client, in
 }
 
 
+/*
+服务主循环：
+1. 接收服务端响应消息和控制指令等；
+2. 检查 session 队列请求的超时情况，超时则回调通知应用；
+3. 检查keep alive 情况，超时则发送keep alive ping 包；心跳失败，则进入重连；
+ * */
 int tc_iot_server_loop(tc_iot_shadow_client* p_shadow_client, int yield_timeout) {
     return tc_iot_shadow_yield(p_shadow_client, yield_timeout);
 }
 
+/*
+服务退出，释放关闭连接、相关资源等。
+ * */
 int tc_iot_server_destroy(tc_iot_shadow_client* p_shadow_client) {
 
     TC_IOT_LOG_TRACE("Stopping");
