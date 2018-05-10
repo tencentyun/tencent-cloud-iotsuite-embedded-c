@@ -8,7 +8,7 @@
 ```shell
 # 进入工具脚本目录
 cd tools
-./tc_iot_code_generator.py -c ../examples/linux/app/iot-product.json code_templates/*
+python tc_iot_code_generator.py -c ../examples/linux/app/iot-product.json code_templates/*
 ```
 
 执行成功后会看到有如下提示信息：
