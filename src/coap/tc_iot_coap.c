@@ -479,7 +479,7 @@ int tc_iot_coap_init(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_
     c->readbuf_size = TC_IOT_COAP_RECV_BUF_SIZE;
     TC_IOT_LOG_TRACE("mqtt client buf_size=%ld,readbuf_size=%ld,", c->buf_size,
               c->readbuf_size);
-    c->next_packetid = 1;
+    c->next_packetid = 0;
 
     ret = c->ipstack.do_connect(&(c->ipstack), NULL, 0);
     return ret;
