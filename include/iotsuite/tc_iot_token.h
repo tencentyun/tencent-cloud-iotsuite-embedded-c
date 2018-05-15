@@ -20,6 +20,7 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path,
                             tc_iot_device_info* p_device_info);
 
 #define TC_IOT_TOKEN_MAX_EXPIRE_SECOND    (86400*60)
+#define TC_IOT_TOKEN_DEFAULT_EXPIRE_SECOND (86400*7)
 
 /**
  * @brief http_refresh_auth_token 请求 MQTT 访问服务端动态用户名和密码
