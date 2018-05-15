@@ -4,12 +4,19 @@
 
 static void _tc_iot_coap_con_get_time_handler(tc_iot_coap_client * client, tc_iot_coap_con_status_e ack_status, 
         tc_iot_coap_message * message , void * session_context) {
+    unsigned char * payload = NULL;
+    int payload_len;
+
     if (ack_status == TC_IOT_COAP_CON_TIMEOUT) {
         TC_IOT_LOG_ERROR("message timeout");
         return;
     }
-    if (message && message->p_payload) {
-        TC_IOT_LOG_TRACE("len=%d,payload=%s", message->payload_len, message->p_payload);
+
+    tc_iot_coap_get_message_payload(message, &payload_len, &payload);
+    if (message && payload) {
+        TC_IOT_LOG_TRACE("len=%d,payload=%s", payload_len, payload);
+    } else {
+        TC_IOT_LOG_TRACE("[no payload]");
     }
 }
 
@@ -96,7 +103,7 @@ int main(int argc, char const* argv[])
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
 
-    tc_iot_coap_init(&coap_client, &coap_config);
+    tc_iot_coap_construct(&coap_client, &coap_config);
 
     while (!stop) {
         tc_iot_hal_printf("-------------req-------------------\n");

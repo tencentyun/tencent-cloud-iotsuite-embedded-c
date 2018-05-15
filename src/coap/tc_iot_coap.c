@@ -426,7 +426,7 @@ int tc_iot_coap_message_add_option(tc_iot_coap_message * message, int option_num
     return TC_IOT_SUCCESS;
 }
 
-int tc_iot_coap_init(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config) {
+int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config) {
 
     int i;
     int ret;
@@ -529,7 +529,7 @@ int tc_iot_coap_message_set_token(tc_iot_coap_message* message, int token_len, c
     return message->header.bits.token_len;
 }
 
-int tc_iot_coap_message_payload(tc_iot_coap_message* message, int payload_len, unsigned char * payload) {
+int tc_iot_coap_message_set_payload(tc_iot_coap_message* message, int payload_len, unsigned char * payload) {
     IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
 
     message->payload_len = payload_len;
@@ -696,5 +696,23 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
     } while (!tc_iot_hal_timer_is_expired(&timer));
 
     return rc;
+}
+
+int tc_iot_coap_get_message_payload(tc_iot_coap_message* message, int *payload_len, unsigned char **payload) {
+    IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(payload_len, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(payload, TC_IOT_NULL_POINTER);
+
+    *payload_len = message->payload_len;
+    *payload = message->p_payload;
+}
+
+unsigned char tc_iot_coap_get_message_code(tc_iot_coap_message* message) {
+    IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
+    return message->code;
+}
+
+void tc_iot_coap_destroy(tc_iot_coap_client* c) {
+    TC_IOT_LOG_TRACE(" destroy called.");
 }
 
