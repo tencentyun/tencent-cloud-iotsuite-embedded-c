@@ -23,4 +23,5 @@ endif()
 
 ADD_SUBDIRECTORY(app)
 ADD_SUBDIRECTORY(light)
+ADD_SUBDIRECTORY(coap)
 

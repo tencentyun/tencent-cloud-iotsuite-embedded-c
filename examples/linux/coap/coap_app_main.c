@@ -1,6 +1,7 @@
-#include <stdio.h>
+#include "tc_iot_device_config.h"
+#include "tc_iot_export.h"
 
-#include "tc_iot_inc.h"
+void parse_command(tc_iot_coap_client_config * config, int argc, char ** argv) ;
 
 static void _tc_iot_coap_con_get_time_handler(tc_iot_coap_client * client, tc_iot_coap_con_status_e ack_status, 
         tc_iot_coap_message * message , void * session_context) {
@@ -83,17 +84,7 @@ static void _tc_iot_coap_get_wellknown( tc_iot_coap_client * c) {
     }
 }
 
-
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-7hjcfc6k"
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-5ns8xh714"
-#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
-#define TC_IOT_CONFIG_DEVICE_NAME "light001"
-#define TC_IOT_CONFIG_DEVICE_CLIENT_ID TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "@" TC_IOT_CONFIG_DEVICE_NAME
-
-#define TC_IOT_PUB_TOPIC_PREFIX "shadow/update/"
-#define TC_IOT_PUB_TOPIC_DEF TC_IOT_PUB_TOPIC_PREFIX TC_IOT_CONFIG_DEVICE_PRODUCT_ID "/" TC_IOT_CONFIG_DEVICE_NAME
-
-int main(int argc, char const* argv[])
+int main(int argc, char * argv[])
 {
     tc_iot_coap_client coap_client;
     tc_iot_coap_client_config coap_config = {
@@ -116,28 +107,15 @@ int main(int argc, char const* argv[])
     int i = 0;
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
+    /* 解析命令行参数 */
+    parse_command(&coap_config, argc, argv);
 
     tc_iot_coap_construct(&coap_client, &coap_config);
     tc_iot_coap_auth(&coap_client);
-    tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, "tp=" TC_IOT_PUB_TOPIC_DEF, "{\"method\":\"get\"}");
 
-    ret = tc_iot_coap_yield(&coap_client, 2000);
-    return 0;
     while (!stop) {
-        tc_iot_hal_printf("-------------req-------------------\n");
-        _tc_iot_coap_get_time(&coap_client);
-        tc_iot_hal_printf("-------------req-------------------\n");
-
-        tc_iot_hal_printf("-------------rsp-------------------\n");
-        ret = tc_iot_coap_yield(&coap_client, 2000);
-        tc_iot_hal_printf("-------------rsp-------------------\n");
-
-        tc_iot_hal_printf("-------------req-------------------\n");
-        _tc_iot_coap_get_wellknown(&coap_client);
-        tc_iot_hal_printf("-------------req-------------------\n");
-        tc_iot_hal_printf("-------------rsp-------------------\n");
-        ret = tc_iot_coap_yield(&coap_client, 2000);
-        tc_iot_hal_printf("-------------rsp-------------------\n");
+        tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, "tp=" TC_IOT_PUB_TOPIC_DEF, "{\"method\":\"get\"}");
+        tc_iot_coap_yield(&coap_client, 2000);
         for (i = 5; i > 0; i--) {
             tc_iot_hal_printf("%d ...\n", i);
             tc_iot_hal_sleep_ms(1000);
