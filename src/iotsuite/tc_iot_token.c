@@ -308,7 +308,10 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
 		p_device_info->product_id, strlen(p_device_info->product_id),
 		nonce, timestamp);
 
-    TC_IOT_LOG_TRACE("signed request form:\n%.*s", sign_len, sign_out);
+    if (sign_len < sizeof(sign_out)) {
+        sign_out[sign_len] = '\0';
+        TC_IOT_LOG_TRACE("signed request form:\n%s", sign_out);
+    }
 
     memset(&network, 0, sizeof(network));
 

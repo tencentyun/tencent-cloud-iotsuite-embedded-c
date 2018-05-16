@@ -26,6 +26,21 @@
 #define TC_IOT_COAP_SEND_BUF_SIZE      1280
 #define TC_IOT_COAP_RECV_BUF_SIZE      1280
 #define TC_IOT_COAP_MAX_MESSAGE_ID     65535
+#define TC_IOT_COAP_YIELD_TIMEOUT_MS   200
+
+#define TC_IOT_COAP_AUTH_TOKEN_LEN     80
+#define TC_IOT_COAP_AUTH_TIMEOUT_MS    2000
+#define TC_IOT_COAP_AUTH_TOKEN_EXPIRE_TIME 3600
+
+#define TC_IOT_COAP_SERVICE_AUTH_PATH      "auth"
+#define TC_IOT_COAP_SERVICE_PUBLISH_PATH   "mqttpub"
+
+typedef enum _tc_iot_coap_auth_state {
+    COAP_AUTH_INITIAL,
+    COAP_AUTH_SUCCESS,
+    COAP_AUTH_FAILED,
+    COAP_AUTH_TIMEOUT,
+}tc_iot_coap_auth_state;
 
 typedef enum _tc_iot_coap_message_type {
     COAP_CON = 0,
@@ -229,7 +244,19 @@ typedef struct _tc_iot_coap_message {
 
 typedef void (*tc_iot_coap_default_handler)(void * client, tc_iot_coap_message * message );
 
+/**
+ * @brief CoAP设备信息
+ */
+typedef struct _tc_iot_coap_device_info {
+    char secret[TC_IOT_MAX_SECRET_LEN];  /**< 设备签名秘钥*/
+    char product_id[TC_IOT_MAX_PRODUCT_ID_LEN]; /**< 设备 Product Id*/
+    char device_name[TC_IOT_MAX_DEVICE_NAME_LEN];  /**< 设备 Device Name*/
+    char client_id[TC_IOT_MAX_CLIENT_ID_LEN]; /**< 设备 Client Id*/
+} tc_iot_coap_device_info;
+
+
 typedef struct _tc_iot_coap_client_config {
+    tc_iot_coap_device_info device_info;
     char* host; /**< CoAP 服务地址*/
     uint16_t port; /**< CoAP 服务端口*/
     tc_iot_coap_default_handler default_handler;
@@ -265,6 +292,7 @@ typedef struct _tc_iot_coap_session{
  * 回调处理、时延要求、收发缓存区等信息。
  */
 struct _tc_iot_coap_client {
+    tc_iot_coap_device_info device_info;
     size_t buf_size;  /**< 发送缓存区大小，固定为 TC_IOT_CLIENT_SEND_BUF_SIZE*/
     size_t readbuf_size;  /**< 接收缓存区大小，固定为 TC_IOT_CLIENT_READ_BUF_SIZE*/
     unsigned char buf[TC_IOT_CLIENT_SEND_BUF_SIZE]; /**< 发送缓存区，根据业务情况，实际发送最大包的大小，
@@ -280,7 +308,10 @@ struct _tc_iot_coap_client {
 
     tc_iot_coap_session sessions[TC_IOT_COAP_MAX_SESSION_COUNT];
     tc_iot_coap_default_handler default_handler;
-} ;
+    tc_iot_coap_auth_state auth_state;
+    char auth_token[TC_IOT_COAP_AUTH_TOKEN_LEN];
+    long auth_token_expire_time;
+};
 
 int tc_iot_coap_write_char(unsigned char * buffer, int buffer_len, unsigned char val);
 int tc_iot_coap_write_short(unsigned char * buffer, int buffer_len, unsigned short val);
@@ -295,6 +326,9 @@ int tc_iot_coap_serialize(unsigned char * buffer, int buffer_len, const tc_iot_c
 int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffer, int buffer_len);
 
 int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
+int tc_iot_coap_auth(tc_iot_coap_client* c);
+void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, 
+        const char * topic_query_uri, const char * msg);
 unsigned short tc_iot_coap_get_next_pack_id(tc_iot_coap_client* c);
 int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message,
         tc_iot_coap_con_handler callback, int timeout_ms, void * session_context);
