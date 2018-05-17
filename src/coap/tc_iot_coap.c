@@ -729,6 +729,7 @@ static void _tc_iot_coap_con_auth_handler(tc_iot_coap_client * c, tc_iot_coap_co
         tc_iot_coap_message * message , void * session_context) {
     unsigned char * payload = NULL;
     int payload_len;
+    unsigned short message_code = 0;
 
     if (ack_status == TC_IOT_COAP_CON_TIMEOUT) {
         c->auth_state = COAP_AUTH_TIMEOUT;
@@ -736,8 +737,14 @@ static void _tc_iot_coap_con_auth_handler(tc_iot_coap_client * c, tc_iot_coap_co
         return;
     }
 
+    message_code = tc_iot_coap_get_message_code(message);
+    if (message_code != COAP_CODE_201_CREATED) {
+        c->auth_state = COAP_AUTH_FAILED;
+        TC_IOT_LOG_ERROR("auth failed, response coap code = %s", tc_iot_coap_get_message_code_str(message_code));
+        return ;
+    }
+
     tc_iot_coap_get_message_payload(message, &payload_len, &payload);
-    // TODO check return code
     if (message && payload) {
         if (payload_len >= sizeof(c->auth_token)+3) {
             TC_IOT_LOG_TRACE("len=%d,payload=%s, oversize for token", payload_len, payload);
@@ -795,9 +802,9 @@ auth_start:
     c->auth_state = COAP_AUTH_INITIAL;
     ret = tc_iot_coap_send_message(c, &message, _tc_iot_coap_con_auth_handler, TC_IOT_COAP_AUTH_TIMEOUT_MS, NULL);
     if (ret <= 0) {
-        TC_IOT_LOG_ERROR("send message return=%d", ret);
+        TC_IOT_LOG_ERROR("send message failed, ret=%d", ret);
     } else {
-        TC_IOT_LOG_TRACE("send message return=%d", ret);
+        TC_IOT_LOG_TRACE("send message success, sent size=%d", ret);
     }
 
     while (c->auth_state != COAP_AUTH_SUCCESS) {
@@ -822,10 +829,17 @@ static void _tc_iot_coap_con_publish_handler(tc_iot_coap_client * client, tc_iot
         tc_iot_coap_message * message , void * session_context) {
     unsigned char * payload = NULL;
     int payload_len;
+    unsigned short message_code = 0;
 
     if (ack_status == TC_IOT_COAP_CON_TIMEOUT) {
         TC_IOT_LOG_ERROR("message timeout");
         return;
+    }
+    message_code = tc_iot_coap_get_message_code(message);
+
+    if (message_code != COAP_CODE_201_CREATED) {
+        TC_IOT_LOG_ERROR("pulish failed, response coap code = %s", tc_iot_coap_get_message_code_str(message_code));
+        return ;
     }
 
     tc_iot_coap_get_message_payload(message, &payload_len, &payload);
@@ -850,9 +864,9 @@ void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, const c
     tc_iot_coap_message_set_payload(&message, strlen(msg), (unsigned char *)msg);
     ret = tc_iot_coap_send_message(c, &message, _tc_iot_coap_con_publish_handler, 500, NULL);
     if (ret <= 0) {
-        TC_IOT_LOG_ERROR("send message return=%d", ret);
+        TC_IOT_LOG_ERROR("send message failed, ret=%d", ret);
     } else {
-        TC_IOT_LOG_TRACE("send message return=%d", ret);
+        TC_IOT_LOG_TRACE("send message success, sent size=%d", ret);
     }
 }
 

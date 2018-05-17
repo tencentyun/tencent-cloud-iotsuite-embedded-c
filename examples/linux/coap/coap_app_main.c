@@ -111,7 +111,11 @@ int main(int argc, char * argv[])
     parse_command(&coap_config, argc, argv);
 
     tc_iot_coap_construct(&coap_client, &coap_config);
-    tc_iot_coap_auth(&coap_client);
+    ret = tc_iot_coap_auth(&coap_client);
+    if (ret != TC_IOT_SUCCESS) {
+        tc_iot_hal_printf("CoAP auth failed, ret=%d.\n", ret);
+        return 0;
+    }
 
     while (!stop) {
         tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, "tp=" TC_IOT_PUB_TOPIC_DEF, "{\"method\":\"get\"}");
