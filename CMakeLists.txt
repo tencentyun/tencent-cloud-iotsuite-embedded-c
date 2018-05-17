@@ -47,13 +47,12 @@ option(ENABLE_MQTT "use MQTT" ON)
 option(ENABLE_DATA_TEMPLATE "use Data Template" ON)
 option(ENABLE_COAP "use CoAP" ON)
 
+option(ENABLE_TLS "use mqtt/http over tls" OFF)
+option(ENABLE_DTLS "use CoAP over dtls" OFF)
+
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
-    option(ENABLE_TLS "use mqtt/http over tls" OFF)
-    option(ENABLE_DTLS "use CoAP over dtls" OFF)
-    #add_definitions(-std=c89)
-else()
-    option(ENABLE_TLS "use mqtt/http over tls" OFF)
-    option(ENABLE_DTLS "use DTLS for CoAP " OFF)
+    set(ENABLE_TLS  OFF)
+    set(ENABLE_DTLS  OFF)
 endif()
 
 option(ENABLE_TESTING "enable testting" ON)
