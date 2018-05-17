@@ -61,8 +61,8 @@ int tc_iot_hal_dtls_read(tc_iot_network_t* network, unsigned char* buffer,
     if (read_len == 0) {
         /* TC_IOT_LOG_TRACE("nothing read."); */
         return TC_IOT_NET_NOTHING_READ;
-    } else if (read_len != len) {
-        return TC_IOT_NET_READ_TIMEOUT;
+    } else if (read_len > 0) {
+        return read_len;
     }
 
     return read_len;
@@ -153,6 +153,9 @@ int tc_iot_hal_dtls_connect(tc_iot_network_t* network, const char* host,
     mbedtls_ssl_config_init(&(tls_data->conf));
     mbedtls_ctr_drbg_init(&(tls_data->ctr_drbg));
     mbedtls_entropy_init(&(tls_data->entropy));
+
+    mbedtls_ssl_conf_psk( &(tls_data->conf), tls_config->psk, tls_config->psk_len,
+            tls_config->psk_id, tls_config->psk_id_len);
 
     TC_IOT_LOG_TRACE("mbedtls_ctr_drbg_seed running ...");
     if ((ret = mbedtls_ctr_drbg_seed(
@@ -345,6 +348,7 @@ int tc_iot_hal_dtls_destroy(tc_iot_network_t* network) {
 int tc_iot_hal_dtls_init(tc_iot_network_t* network,
                         tc_iot_net_context_init_t* net_context) {
     int ret = 0;
+    const char * psk = "";
 
     if (NULL == network) {
         return TC_IOT_NETWORK_PTR_NULL;
@@ -367,7 +371,6 @@ int tc_iot_hal_dtls_init(tc_iot_network_t* network,
     mbedtls_x509_crt_init(&(tls_data->cacert));
     mbedtls_x509_crt_init(&(tls_data->clicert));
     mbedtls_pk_init(&(tls_data->pkey));
-
 
     if (tls_config->root_ca_in_mem) {
         TC_IOT_LOG_TRACE("Loading preset root CA cert...");

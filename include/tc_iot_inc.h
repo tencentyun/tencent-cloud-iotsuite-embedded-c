@@ -21,7 +21,7 @@
 #include "common/tc_iot_json.h"
 #include "common/tc_iot_url.h"
 #include "tc_iot_config.h"
-#include "iotsuite/tc_iot_certs.h"
+#include "common/tc_iot_certs.h"
 #include "iotsuite/tc_iot_mqtt.h"
 #include "iotsuite/tc_iot_client.h"
 #include "iotsuite/tc_iot_shadow.h"

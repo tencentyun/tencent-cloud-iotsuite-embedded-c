@@ -1,4 +1,4 @@
-#include "tc_iot_device_config.h"
+#include "tc_iot_coap_device_config.h"
 #include "tc_iot_export.h"
 
 void parse_command(tc_iot_coap_client_config * config, int argc, char ** argv) ;
@@ -93,11 +93,15 @@ int main(int argc, char * argv[])
             TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
             TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
         },
-        "localhost",
-        5683,
+        TC_IOT_CONFIG_COAP_SERVER_HOST,
+        TC_IOT_CONFIG_COAP_SERVER_PORT,
         tc_iot_coap_con_default_handler,
-        10000,
-        0,
+        TC_IOT_CONFIG_DTLS_HANDSHAKE_TIMEOUT_MS,
+        TC_IOT_CONFIG_USE_DTLS,
+        TC_IOT_COAP_DTLS_PSK,
+        sizeof(TC_IOT_COAP_DTLS_PSK)-1,
+        TC_IOT_COAP_DTLS_PSK_ID,
+        sizeof(TC_IOT_COAP_DTLS_PSK_ID) -1,
         NULL,
         NULL,
         NULL,
@@ -110,6 +114,7 @@ int main(int argc, char * argv[])
     /* 解析命令行参数 */
     parse_command(&coap_config, argc, argv);
 
+    tc_iot_hal_printf("CoAP Server: %s:%d\n", coap_config.host,coap_config.port);
     tc_iot_coap_construct(&coap_client, &coap_config);
     ret = tc_iot_coap_auth(&coap_client);
     if (ret != TC_IOT_SUCCESS) {

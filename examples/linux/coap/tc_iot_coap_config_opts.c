@@ -1,10 +1,10 @@
 #include "tc_iot_export.h"
-#include "tc_iot_device_config.h"
+#include "tc_iot_coap_device_config.h"
 #include <getopt.h>
 
 static int _log_level = TC_IOT_LOG_LEVEL_TRACE;
 static int request_token = 1;
-static int use_tls = TC_IOT_CONFIG_USE_TLS;
+static int use_tls = TC_IOT_CONFIG_USE_DTLS;
 
 static struct option long_options[] =
 {

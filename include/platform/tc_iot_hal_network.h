@@ -16,6 +16,14 @@ typedef struct tc_iot_tls_config_t {
     const char* device_private_key_location; /**< 设备私钥路径*/
     uint32_t timeout_ms; /**< TLS 超时设置*/
     char verify_server; /**< TLS 连接时，是否验证服务器证书 */
+
+#if defined(ENABLE_DTLS)
+    unsigned char *psk;
+    size_t         psk_len;
+    unsigned char *psk_id;
+    size_t         psk_id_len;
+#endif
+
 } tc_iot_tls_config_t;
 
 /**< TLS动态运行数据 */
@@ -30,7 +38,7 @@ typedef struct tc_iot_tls_data_t {
     mbedtls_pk_context pkey;
     mbedtls_net_context ssl_fd;
 	mbedtls_timing_delay_context delay_timer;
-	mbedtls_ssl_cookie_ctx cookie_ctx;
+	mbedtls_ssl_cookie_ctx cookie_ctx;;
 } tc_iot_tls_data_t;
 
 #endif

@@ -462,7 +462,17 @@ int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_cl
         if (netcontext.use_tls) {
             p_tls_config->verify_server = 0;
             p_tls_config->timeout_ms = p_client_config->tls_handshake_timeout_ms;
-            /* p_tls_config->root_ca_in_mem = g_tc_iot_mqtt_root_ca_certs; */
+
+            p_tls_config->psk = p_client_config->psk;
+            p_tls_config->psk_len = p_client_config->psk_len;
+            p_tls_config->psk_id = p_client_config->psk_id;
+            p_tls_config->psk_id_len = p_client_config->psk_id_len;
+
+            if (g_tc_iot_coap_root_ca_certs && strlen(g_tc_iot_coap_root_ca_certs)) {
+                p_tls_config->root_ca_in_mem = g_tc_iot_coap_root_ca_certs;
+            } else {
+                p_tls_config->root_ca_in_mem = NULL;
+            }
             p_tls_config->root_ca_location = p_client_config->p_root_ca;
             p_tls_config->device_cert_location = p_client_config->p_client_crt;
             p_tls_config->device_private_key_location =

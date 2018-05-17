@@ -265,9 +265,16 @@ typedef struct _tc_iot_coap_client_config {
     tc_iot_coap_default_handler default_handler;
     int tls_handshake_timeout_ms; /**< TLS 握手时延，单位毫秒*/
     char use_tls; /**< 是否通过 TLS 连接服务*/
+
+#if defined(ENABLE_DTLS)
+    unsigned char *psk;
+    size_t         psk_len;
+    unsigned char *psk_id;
+    size_t         psk_id_len;
     const char* p_root_ca; /**< 根证书*/
     const char* p_client_crt; /**< 客户端证书*/
     const char* p_client_key; /**< 客户端私钥*/
+#endif
 
 } tc_iot_coap_client_config;
 

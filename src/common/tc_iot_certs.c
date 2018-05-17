@@ -1,4 +1,5 @@
 
+#if defined(ENABLE_TLS)
 const char* g_tc_iot_https_root_ca_certs =
     "-----BEGIN CERTIFICATE-----\r\n"
     "MIIErjCCA5agAwIBAgIQBYAmfwbylVM0jhwYWl7uLjANBgkqhkiG9w0BAQsFADBh\r\n"
@@ -57,3 +58,7 @@ const char* g_tc_iot_mqtt_root_ca_certs =
     "O9PuiHMKrC6V6mgi0s2sa/gbXlPCD9Z24XUMxJElwIVTDuKB0Q4YMMlnpN/QChJ4\r\n"
     "B0AFsQ+DU0NCO+f78Xf7\r\n"
     "-----END CERTIFICATE-----\r\n";
+#endif
+#if defined(ENABLE_DTLS)
+    const char* g_tc_iot_coap_root_ca_certs = "";
+#endif
