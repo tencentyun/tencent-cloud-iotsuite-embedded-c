@@ -43,12 +43,17 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 file(COPY tools/tc_iot_shadow_cli.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 file(COPY tools/tc_iot_code_generator.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
+option(ENABLE_MQTT "use MQTT" ON)
+option(ENABLE_DATA_TEMPLATE "use Data Template" ON)
+option(ENABLE_COAP "use CoAP" ON)
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     option(ENABLE_TLS "use mqtt/http over tls" OFF)
+    option(ENABLE_DTLS "use CoAP over dtls" OFF)
     #add_definitions(-std=c89)
 else()
-    option(ENABLE_TLS "use mqtt/http over tls" ON)
+    option(ENABLE_TLS "use mqtt/http over tls" OFF)
+    option(ENABLE_DTLS "use DTLS for CoAP " OFF)
 endif()
 
 option(ENABLE_TESTING "enable testting" ON)
@@ -64,11 +69,16 @@ else()
 endif()
 
 
-if(ENABLE_TLS)
-    add_definitions(-DENABLE_TLS)
+if(ENABLE_TLS OR ENABLE_DTLS)
+    if(ENABLE_TLS)
+        add_definitions(-DENABLE_TLS)
+    endif()
+
+    if(ENABLE_DTLS)
+        add_definitions(-DENABLE_DTLS)
+    endif()
     # add mbedtls
     include_directories(external/mbedtls/include)
-
 endif()
 
 # Linux, Windows, and Darwin for Mac OS X are the values found on the big three

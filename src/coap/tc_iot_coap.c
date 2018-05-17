@@ -439,7 +439,7 @@ int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_cl
     tc_iot_network_t* p_network; 
     tc_iot_net_context_init_t netcontext;
 
-#ifdef ENABLE_TLS
+#ifdef ENABLE_DTLS
     tc_iot_tls_config_t* p_tls_config;
 #endif
 
@@ -457,7 +457,7 @@ int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_cl
     netcontext.host = p_client_config->host;
     netcontext.port = p_client_config->port;
     if (netcontext.use_tls) {
-#ifdef ENABLE_TLS
+#ifdef ENABLE_DTLS
         p_tls_config = &(netcontext.tls_config);
         if (netcontext.use_tls) {
             p_tls_config->verify_server = 0;

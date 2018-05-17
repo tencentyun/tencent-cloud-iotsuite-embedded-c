@@ -6,7 +6,7 @@ int main(int argc, char const* argv[])
     tc_iot_network_t* p_network;
     tc_iot_net_context_init_t netcontext;
 
-#ifdef ENABLE_TLS
+#ifdef ENABLE_DTLS
     tc_iot_tls_config_t* p_tls_config;
 #endif
 
@@ -18,7 +18,7 @@ int main(int argc, char const* argv[])
     netcontext.host = "localhost";
     netcontext.port = 4433;
     if (netcontext.use_tls) {
-#ifdef ENABLE_TLS
+#ifdef ENABLE_DTLS
         p_tls_config = &(netcontext.tls_config);
         if (netcontext.use_tls) {
             p_tls_config->verify_server = 0;

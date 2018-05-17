@@ -5,9 +5,7 @@
 
 typedef struct tc_iot_network_t tc_iot_network_t;
 
-#ifdef ENABLE_TLS
-
-
+#if defined(ENABLE_TLS) || defined(ENABLE_DTLS)
 /**
  * @brief TLS 相关配置信息
  */
@@ -48,7 +46,7 @@ typedef struct {
     int is_connected; /**< 是否网络已连接*/
     void * extra_context; /**< 平台相关网络数据*/
 
-#ifdef ENABLE_TLS
+#if defined(ENABLE_TLS) || defined(ENABLE_DTLS)
     tc_iot_tls_config_t tls_config; /**< TLS 配置*/
 #endif
 
@@ -66,7 +64,7 @@ typedef struct {
 
     void * extra_context; /**< 平台相关网络数据*/
 
-#ifdef ENABLE_TLS
+#if defined(ENABLE_TLS) || defined(ENABLE_DTLS)
     tc_iot_tls_config_t tls_config; /**< TLS 配置*/
     tc_iot_tls_data_t tls_data; /**< TLS 运行数据*/
 #endif
@@ -90,6 +88,7 @@ struct tc_iot_network_t {
     tc_iot_net_context_t net_context; /**< 网络连接参数及过程会话数据*/
 } ;
 
+int tc_iot_copy_net_context(tc_iot_net_context_t * dest, tc_iot_net_context_init_t * init);
 
 /**
  * @brief tc_iot_hal_net_init 初始化 TCP 连接对象，设置相关参数和对应回调等
@@ -182,7 +181,7 @@ int tc_iot_hal_net_disconnect(tc_iot_network_t* network);
  */
 int tc_iot_hal_net_destroy(tc_iot_network_t* network);
 
-#ifdef ENABLE_TLS
+#if defined(ENABLE_TLS)
 
 /**
  * @brief tc_iot_hal_tls_init 初始化 TLS 连接数据
@@ -268,7 +267,9 @@ int tc_iot_hal_tls_disconnect(tc_iot_network_t* network);
  */
 int tc_iot_hal_tls_destroy(tc_iot_network_t* network);
 
-int tc_iot_copy_net_context(tc_iot_net_context_t * dest, tc_iot_net_context_init_t * init);
+#endif
+
+#if defined(ENABLE_DTLS)
 
 /**
  * @brief tc_iot_hal_dtls_init 初始化 TLS 连接数据

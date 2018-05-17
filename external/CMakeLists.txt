@@ -7,7 +7,7 @@ add_library(MQTTPacketClient
 target_compile_definitions(MQTTPacketClient PRIVATE MQTT_CLIENT)
 
 
-if(ENABLE_TLS)
+if(ENABLE_TLS OR ENABLE_DTLS)
     add_definitions(-DENABLE_TLS)
 
     option(USE_STATIC_MBEDTLS_LIBRARY "Build mbed TLS static library." ON)

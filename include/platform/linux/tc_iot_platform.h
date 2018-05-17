@@ -29,7 +29,7 @@
 
 struct _tc_iot_timer { struct timeval end_time; } ;
 
-#ifdef ENABLE_TLS
+#if defined(ENABLE_TLS) || defined(ENABLE_DTLS)
 /* mbetls begin */
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
