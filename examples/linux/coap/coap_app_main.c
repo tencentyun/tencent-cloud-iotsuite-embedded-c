@@ -119,7 +119,8 @@ int main(int argc, char * argv[])
 
     while (!stop) {
         tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, "tp=" TC_IOT_PUB_TOPIC_DEF, "{\"method\":\"get\"}");
-        tc_iot_coap_yield(&coap_client, 2000);
+        tc_iot_hal_printf("yielding ...\n");
+        tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
         for (i = 5; i > 0; i--) {
             tc_iot_hal_printf("%d ...\n", i);
             tc_iot_hal_sleep_ms(1000);

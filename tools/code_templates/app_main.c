@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;
     bool use_static_token;
     int ret;
+    int i = 0;
     long timestamp = tc_iot_hal_timestamp(NULL);
     tc_iot_hal_srandom(timestamp);
     long nonce = tc_iot_hal_random();
@@ -97,7 +98,10 @@ int main(int argc, char** argv) {
 
     while (!stop) {
         tc_iot_server_loop(tc_iot_get_shadow_client(), 200);
-        tc_iot_hal_sleep_ms(1000);
+        for (i = 5; i > 0; i--) {
+            tc_iot_hal_printf("%d ...\n", i);
+            tc_iot_hal_sleep_ms(1000);
+        }
         do_sim_data_change();
     }
 

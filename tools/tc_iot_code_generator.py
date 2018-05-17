@@ -199,12 +199,16 @@ class iot_field:
         elif self.type_name == "int":
             sample_code = """
 <indent>g_tc_iot_device_local_data.field_name += 1;
-<indent>g_tc_iot_device_local_data.field_name > <max>?<min>:g_tc_iot_device_local_data.field_name;
+<indent>g_tc_iot_device_local_data.field_name = g_tc_iot_device_local_data.field_name > <max>?<min>:g_tc_iot_device_local_data.field_name;
 """
             sample_code = sample_code.replace("<indent>", indent).replace("field_name", self.name)
             sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))
         elif self.type_name == "string":
             sample_code = """
+<indent>g_tc_iot_device_local_data.field_name[0] += 1;
+<indent>g_tc_iot_device_local_data.field_name[1] = 0;
+<indent>g_tc_iot_device_local_data.field_name[0] = g_tc_iot_device_local_data.field_name[0] > 'Z'?'A':g_tc_iot_device_local_data.field_name[0];
+<indent>g_tc_iot_device_local_data.field_name[0] = g_tc_iot_device_local_data.field_name[0] < 'A'?'A':g_tc_iot_device_local_data.field_name[0];
 """
             sample_code = sample_code.replace("<indent>", indent).replace("field_name", self.name)
             sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))
