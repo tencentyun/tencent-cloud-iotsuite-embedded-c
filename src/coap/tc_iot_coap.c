@@ -310,6 +310,8 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
     pos++;
     message->message_id = ntohs(*(unsigned short *) (buffer+pos));
     pos += 2;
+    message->p_payload = NULL;
+    message->payload_len = 0;
 
     TC_IOT_LOG_TRACE("received: ver=%d,type=%s,tkl=%d,code=%s,message_id=%d",
             message->header.bits.ver, tc_iot_coap_get_message_type_str(message->header.bits.type),
@@ -321,7 +323,7 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
     }
 
     if (pos >= buffer_len) {
-        TC_IOT_LOG_TRACE("no more data after token");
+        TC_IOT_LOG_TRACE("no more data after token:pos=%d,buffer_len=%d", pos, buffer_len);
         return TC_IOT_SUCCESS;
     }
 
@@ -699,7 +701,7 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
                 TC_IOT_LOG_ERROR("tc_iot_coap_deserialize rc = %d", rc);
             } else {
                 session = tc_iot_coap_session_find(c, message.message_id);
-                if (session) {
+                if (session && session->handler) {
                     session->handler(c, TC_IOT_COAP_CON_SUCCESS,  &message, session->session_context);
                     tc_iot_coap_session_release(session);
                 } else if (c->default_handler) {
