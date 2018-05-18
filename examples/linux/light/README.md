@@ -8,6 +8,7 @@
 | device_switch | 布尔 | 可写 | 无需填写 |
 | color | 枚举 | 可写 | red,green,blue |
 | brightness | 数值 | 可写 | 0,100 |
+| power | 数值 | 只读 | 1,100 |
 
 
 3. 点击导出按钮，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/linux/light 目录下覆盖 iot-product.json 文件。

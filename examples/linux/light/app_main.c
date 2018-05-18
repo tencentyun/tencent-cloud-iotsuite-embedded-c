@@ -11,6 +11,7 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 #define ANSI_COLOR_256_FORMAT   "\x1b[38;5;%dm"
 
+extern tc_iot_shadow_local_data g_tc_iot_device_local_data;
 int run_shadow(tc_iot_shadow_config * p_client_config);
 void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) ;
 void get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * session_context);
@@ -97,6 +98,24 @@ void operate_device(tc_iot_shadow_local_data * light) {
     }
 }
 
+int power_usage_inited = false;
+tc_iot_timer power_usage_timer;
+
+void light_power_usage_calc(tc_iot_shadow_client * c) {
+    if (!power_usage_inited) {
+        power_usage_inited = true;
+        tc_iot_hal_timer_init(&power_usage_timer);
+        tc_iot_hal_timer_countdown_second(&power_usage_timer, 3);
+        return;
+    }
+
+    if (tc_iot_hal_timer_is_expired(&power_usage_timer)) {
+        g_tc_iot_device_local_data.power += 0.00001;
+        tc_iot_report_device_data(c);
+        tc_iot_hal_timer_countdown_second(&power_usage_timer, 3);
+    }
+}
+
 int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;
     bool use_static_token;
@@ -146,6 +165,7 @@ int main(int argc, char** argv) {
 
     while (!stop) {
         tc_iot_server_loop(tc_iot_get_shadow_client(), 200);
+        light_power_usage_calc(tc_iot_get_shadow_client());
     }
 
     tc_iot_server_destroy(tc_iot_get_shadow_client());
