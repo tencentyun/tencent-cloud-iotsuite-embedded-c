@@ -53,6 +53,6 @@ make
 ```
 
 ## 模拟APP控制端发送控制指令
-在控制台的【设备管理】中，点击【下发指令】，即可修改控制参数，下发推送给设备。
+调用 [向Topic发布消息](https://cloud.tencent.com/document/product/568/16452) 接口，向 ${product_id}/${device_name}/cmd Topic 发送消息，即可控制。
 
 
