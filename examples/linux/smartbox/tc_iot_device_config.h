@@ -16,9 +16,6 @@
 #define TC_IOT_CONFIG_ACTIVE_API_URL "http://gz.auth-device-iot.tencentcloudapi.com/secret"
 #endif
 
-#define TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG   "http://gz.auth.iot.cloud.tencent.com/secret"
-#define TC_IOT_CONFIG_AUTH_API_URL_DEBUG	 "http://gz.auth.iot.cloud.tencent.com/token"
-
 /************************************************************************/
 /**********************************必填项********************************/
 
@@ -52,13 +49,7 @@
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_NAME "device_name"
 
-/* client id，*/
-/* 由两部分组成，组成形式为“ProductKey@DeviceID”，ClientID 的长度不超过 64个字符
- * */
-/* ，请不要使用不可见字符。其中*/
-/* ProductKey 为 IoT MQ 的实例 ID。*/
-/* DeviceID 为每个设备独一无二的标识，由业务方自己指定，需保证全局唯一，例如每个
- * 传感器设备的序列号。*/
+/* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
 #define TC_IOT_CONFIG_DEVICE_CLIENT_ID TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "@" TC_IOT_CONFIG_DEVICE_NAME
 
 /************************************************************************/

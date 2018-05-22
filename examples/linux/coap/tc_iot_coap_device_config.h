@@ -24,6 +24,7 @@
 #define TC_IOT_CONFIG_COAP_SERVER_HOST "localhost"
 /* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-7hjcfc6k"
+/* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
 #define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-5ns8xh714"
 /* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
