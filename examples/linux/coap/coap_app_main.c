@@ -109,6 +109,7 @@ int main(int argc, char * argv[])
 
     int ret = 0;
     int i = 0;
+    char pub_topic_query_param[128];
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
     /* 解析命令行参数 */
@@ -122,8 +123,11 @@ int main(int argc, char * argv[])
         return 0;
     }
 
+    tc_iot_hal_snprintf(pub_topic_query_param, sizeof(pub_topic_query_param), "tp=%s/%s/cmd",
+            coap_config.device_info.product_id, 
+            coap_config.device_info.device_name);
     while (!stop) {
-        tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, "tp=" TC_IOT_PUB_TOPIC_DEF, "{\"method\":\"get\"}");
+        tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, pub_topic_query_param, "{\"method\":\"get\"}");
         tc_iot_hal_printf("yielding ...\n");
         tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
         for (i = 5; i > 0; i--) {

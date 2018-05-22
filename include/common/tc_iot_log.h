@@ -24,7 +24,7 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 #ifdef ENABLE_TC_IOT_LOG_TRACE
 #define TC_IOT_LOG_TRACE(...)                                             \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_TRACE)){               \
-        tc_iot_hal_printf("TRACE %s:%d ", __FUNCTION__, __LINE__); \
+        tc_iot_hal_printf("TRACE %lu %s:%d ", time(NULL), __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                            \
         tc_iot_hal_printf("\n");                                   \
     }
