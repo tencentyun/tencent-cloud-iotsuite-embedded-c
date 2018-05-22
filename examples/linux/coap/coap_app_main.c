@@ -112,6 +112,8 @@ int main(int argc, char * argv[])
     char pub_topic_query_param[128];
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
+    setbuf(stdout, NULL);
+
     /* 解析命令行参数 */
     parse_command(&coap_config, argc, argv);
 

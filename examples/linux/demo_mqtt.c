@@ -141,6 +141,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
 
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
+    setbuf(stdout, NULL);
 
     tc_iot_mqtt_client client;
     tc_iot_mqtt_client* p_client = &client;

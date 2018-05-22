@@ -80,6 +80,7 @@ int main(int argc, char** argv) {
 
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
+    setbuf(stdout, NULL);
 
     p_client_config = &(g_client_config.mqtt_client_config);
     parse_command(p_client_config, argc, argv);
