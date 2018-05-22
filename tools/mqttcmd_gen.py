@@ -1,6 +1,13 @@
-
 #coding:utf-8
 #import paho.mqtt.client as mqtt
+'''
+使用前先根据控制台产品信息设置环境变量
+export TENCENT_CLOUD_DEMO_PRODUCT_ID="iot-i0ujhadi"
+export TENCENT_CLOUD_DEMO_DEVICE_NAME="device_t1"
+export TENCENT_CLOUD_DEMO_DEVICE_SECRET="xxxxxxxxxxxxxxxxx"
+export TENCENT_CLOUD_DEMO_MQTT_HOST="mqtt-1ipy7vr68.ap-guangzhou.mqtt.tencentcloudmq.com"
+export TENCENT_CLOUD_DEMO_MQTT_CID="mqtt-1ipy7vr68@device_t1"
+'''
 import time
 import urllib
 import urllib2
@@ -12,15 +19,15 @@ import json
 from collections import OrderedDict
 import os
 
-product_id = 'iot-r3cy81wu'
- 
-product_key = 'mqtt-4w1ublzis'
+'''
+#这几行都没有用
+product_id = 'iot-r3cyxxxx' 
+product_key = 'mqtt-xxxxxxxx'
 device_name = 'dev0001'
-device_secret = '617bb4afb286a46ac8a377f4c7663b6d'
+device_secret = 'xxxxxxxxxxxxxxxxxxxxxxx'
 topic = '%s/%s/tp0001' % (product_id, device_name)
-client_id = product_key + '@dev0001_sub'
-
-
+client_id = product_key + '@dev0001'
+'''
 
 product_id = os.getenv("TENCENT_CLOUD_DEMO_PRODUCT_ID")
 mqtt_host =   os.getenv("TENCENT_CLOUD_DEMO_MQTT_HOST")
