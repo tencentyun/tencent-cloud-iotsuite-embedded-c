@@ -205,10 +205,12 @@ class iot_field:
             sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))
         elif self.type_name == "string":
             sample_code = """
-<indent>g_tc_iot_device_local_data.field_name[0] += 1;
-<indent>g_tc_iot_device_local_data.field_name[1] = 0;
-<indent>g_tc_iot_device_local_data.field_name[0] = g_tc_iot_device_local_data.field_name[0] > 'Z'?'A':g_tc_iot_device_local_data.field_name[0];
-<indent>g_tc_iot_device_local_data.field_name[0] = g_tc_iot_device_local_data.field_name[0] < 'A'?'A':g_tc_iot_device_local_data.field_name[0];
+<indent>for (i = 0; i < <min>+1;i++) {
+<indent><indent>g_tc_iot_device_local_data.field_name[i] += 1;
+<indent><indent>g_tc_iot_device_local_data.field_name[i] = g_tc_iot_device_local_data.field_name[0] > 'Z'?'A':g_tc_iot_device_local_data.field_name[0];
+<indent><indent>g_tc_iot_device_local_data.field_name[i] = g_tc_iot_device_local_data.field_name[0] < 'A'?'A':g_tc_iot_device_local_data.field_name[0];
+<indent>}
+<indent>g_tc_iot_device_local_data.field_name[<min>+2] = 0;
 """
             sample_code = sample_code.replace("<indent>", indent).replace("field_name", self.name)
             sample_code = sample_code.replace("field_define", self.type_define).replace("<min>",str(self.min_value)).replace("<max>",str(self.max_value))
@@ -248,7 +250,7 @@ class iot_struct:
         return declare_code + sample_code;
 
     def generate_sim_data_change(self):
-        declare_code = ""
+        declare_code = "    int i = 0;\n"
         sample_code = ""
         indent = "    "
         for field in self.fields:

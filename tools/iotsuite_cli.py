@@ -137,7 +137,7 @@ class Iot:
                 if action == "PublishMsg" and opt == "Message":
                     ms = int(time.time()*1000*1000)
                     # self.params[ Name(opt) ] = '{"msg":"' + getattr(options, opt) + '", "uts":"' + str(ms)+ '"}'
-                    self.params[ Name(opt) ] = getattr(options, opt)[0:-1] + ', "uts":"' + str(ms)+ '"}'
+                    self.params[ Name(opt) ] = getattr(options, opt)[0:-1] + ', "send_ts":' + str(ms)+ '}'
                     if self.debug:
                         print("send msg:" + self.params[ Name(opt) ])
                 else:
