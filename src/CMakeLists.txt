@@ -10,3 +10,7 @@ if (ENABLE_COAP)
     ADD_SUBDIRECTORY(coap)
 endif()
 
+if (ENABLE_OTA)
+    ADD_SUBDIRECTORY(ota)
+endif()
+

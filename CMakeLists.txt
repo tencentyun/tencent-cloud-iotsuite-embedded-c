@@ -46,6 +46,7 @@ file(COPY tools/tc_iot_code_generator.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRE
 option(ENABLE_MQTT "use MQTT" ON)
 option(ENABLE_DATA_TEMPLATE "use Data Template" ON)
 option(ENABLE_COAP "use CoAP" ON)
+option(ENABLE_OTA "use OTA" ON)
 
 option(ENABLE_TLS "use mqtt/http over tls" ON)
 option(ENABLE_DTLS "use CoAP over dtls" ON)
@@ -79,6 +80,23 @@ if(ENABLE_TLS OR ENABLE_DTLS)
     # add mbedtls
     include_directories(external/mbedtls/include)
 endif()
+
+if (ENABLE_COAP)
+    add_definitions(-DENABLE_COAP)
+endif()
+
+if (ENABLE_MQTT)
+    add_definitions(-DENABLE_MQTT)
+endif()
+
+if (ENABLE_DATA_TEMPLATE)
+    add_definitions(-DENABLE_DATA_TEMPLATE)
+endif()
+
+if (ENABLE_OTA)
+    add_definitions(-DENABLE_OTA)
+endif()
+
 
 # Linux, Windows, and Darwin for Mac OS X are the values found on the big three
 # operating systems.

@@ -31,7 +31,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
             /* TC_IOT_LOG_TRACE("recv rc=%d, errno=%d,str=%s,timeout=%d,ts=%d",rc, errno, strerror(errno), timeout_ms, time(NULL)); */
             break;
         } else if (rc == 0) {
-            if (bytes > 0) {
+            if (bytes >= 0) {
                 return bytes;
             } else {
                 return TC_IOT_NET_READ_ERROR;
