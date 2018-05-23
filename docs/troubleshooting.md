@@ -96,6 +96,27 @@ TC_IOT_MQTT_CONNACK_BAD_USER_OR_PASSWORD = -164
 ```
 
 SDK 在网络连接建立成功后，发起 MQTT CONN 请求，收到了 CONNACK 返回的错误码，指
+示用户名密码数据格式无效。
+
+- 诊断建议
+
+1. 如果当前是通过固定用户名&密码方式访问MQ，请检查 username 和 password 配置，
+看是否在拷贝过程中，丢失或多拷贝了非法字符。
+
+```c
+#define TC_IOT_CONFIG_DEVICE_USER_NAME ""
+#define TC_IOT_CONFIG_DEVICE_PASSWORD ""
+```
+
+## -165
+
+- 说明
+
+```c
+    TC_IOT_MQTT_CONNACK_NOT_AUTHORIZED = -165
+```
+
+SDK 在网络连接建立成功后，发起 MQTT CONN 请求，收到了 CONNACK 返回的错误码，指
 示用户名密码校验不通过。
 
 - 诊断建议
@@ -106,14 +127,6 @@ SDK 在网络连接建立成功后，发起 MQTT CONN 请求，收到了 CONNACK
 ```c
 #define TC_IOT_CONFIG_DEVICE_USER_NAME ""
 #define TC_IOT_CONFIG_DEVICE_PASSWORD ""
-```
-
-2. 如果当前用户名密码是通过token服务动态获取的，请检查 MQ 实例的对应关系、机房等，
-是否一致。
-
-```c
-#define TC_IOT_CONFIG_AUTH_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/device"
-#define TC_IOT_CONFIG_SERVER_HOST "mqtt-1e8w58ou4.ap-guangzhou.mqtt.tencentcloudmq.com"
 ```
 
 ## -170
