@@ -12,8 +12,8 @@ python tc_iot_code_generator.py -c ../examples/linux/iot-product.json code_templ
 
 执行成功后会看到有如下提示信息：
 ```shell
-加载 ../examples/linux/app/iot-product.json 文件成功
-文件 ../examples/linux/app/tc_iot_device_config.h 生成成功
+加载 ../examples/linux/iot-product.json 文件成功
+文件 ../examples/linux/tc_iot_device_config.h 生成成功
 ```
 
 打开 tc_iot_device_config.h ，可以看到生成的如下产品相关信息：
