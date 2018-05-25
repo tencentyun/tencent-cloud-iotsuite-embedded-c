@@ -15,8 +15,7 @@ int my_http_download_callback(const void * context, const char * data, int data_
     tc_iot_hal_printf("%d/%d\n", offset+data_len, total);
     fwrite(data,1,data_len,helper->fp);
     tc_iot_md5_update(&helper->md5_context, data, data_len);
-//    sleep(1);
-    /* tc_iot_hal_printf("%s", data); */
+    return TC_IOT_SUCCESS;
 }
 
 int main(int argc, char** argv) {

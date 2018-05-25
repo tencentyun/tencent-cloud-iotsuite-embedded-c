@@ -30,6 +30,12 @@ int tc_iot_yabuffer_left(tc_iot_yabuffer_t *yabuffer) {
     return space_left;
 }
 
+int tc_iot_yabuffer_len(tc_iot_yabuffer_t *yabuffer) {
+    int space_left;
+    IF_NULL_RETURN(yabuffer, TC_IOT_NULL_POINTER);
+    return yabuffer->len;
+}
+
 char *tc_iot_yabuffer_current(tc_iot_yabuffer_t *yabuffer) {
     IF_NULL_RETURN_DATA(yabuffer, NULL);
     return yabuffer->data + yabuffer->pos;

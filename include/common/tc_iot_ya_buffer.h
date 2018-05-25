@@ -45,6 +45,16 @@ int tc_iot_yabuffer_reset(tc_iot_yabuffer_t* yabuffer);
 int tc_iot_yabuffer_left(tc_iot_yabuffer_t* buffer);
 
 /**
+ * @brief tc_iot_yabuffer_len 获得缓存总大小
+ *
+ * @param yabuffer 缓存对象
+ *
+ * @return >=0 空间大小，<0 失败错误码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_yabuffer_len(tc_iot_yabuffer_t *yabuffer);
+
+/**
  * @brief tc_iot_yabuffer_n_append 追加数据到缓存中
  *
  * @param yabuffer 缓存对象

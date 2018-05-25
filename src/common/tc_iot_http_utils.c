@@ -413,11 +413,11 @@ int tc_iot_parse_http_response_code(const char * resp) {
 }
 
 int tc_iot_http_get(tc_iot_network_t* network,
-                         tc_iot_http_request* request, const char* url,
-                         char* resp, int resp_max_len,
-                         int timeout_ms,int partial_start) {
+                         tc_iot_http_request* request,
+                         const char* url, 
+                         int timeout_ms, const char * extra_header) {
     tc_iot_url_parse_result_t result;
-    char temp_host[512];
+    char temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH];
     int written_len;
     int read_len;
     int i = 0;
@@ -425,26 +425,6 @@ int tc_iot_http_get(tc_iot_network_t* network,
 
     if (ret < 0) {
         return ret;
-    }
-
-    if (result.path_len) {
-        ret = tc_iot_create_get_request(
-            request, url + result.path_start, result.path_len,
-            url + result.host_start, result.host_len);
-    } else {
-        ret =
-            tc_iot_create_get_request(request, "/", 1, url + result.host_start,
-                                       result.host_len);
-    }
-
-    if (partial_start != 0) {
-        tc_iot_yabuffer_forward(&request->buf, -2);
-        /* Range: bytes=%d- */
-        ret = tc_iot_hal_snprintf(tc_iot_yabuffer_current(&request->buf), 
-                tc_iot_yabuffer_left(&request->buf),
-                "Range: bytes=%d-\r\n\r\n", partial_start
-                );
-        tc_iot_yabuffer_forward(&request->buf, ret);
     }
 
     if (result.host_len >= sizeof(temp_host)) {
@@ -464,16 +444,38 @@ int tc_iot_http_get(tc_iot_network_t* network,
     TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
 
     network->do_connect(network, temp_host, result.port);
+
+    if (result.path_len) {
+        ret = tc_iot_create_get_request(
+            request, url + result.path_start, result.path_len,
+            url + result.host_start, result.host_len);
+    } else {
+        ret = tc_iot_create_get_request(request, "/", 1, url + result.host_start,
+                                       result.host_len);
+    }
+
+    if (extra_header != NULL) {
+        tc_iot_yabuffer_forward(&request->buf, -2);
+        /* Range: bytes=%d- */
+        ret = tc_iot_hal_snprintf(tc_iot_yabuffer_current(&request->buf), 
+                tc_iot_yabuffer_left(&request->buf),
+                "%s\r\n\r\n", extra_header
+                );
+        tc_iot_yabuffer_forward(&request->buf, ret);
+        if (tc_iot_yabuffer_left(&request->buf) <= 0) {
+            TC_IOT_LOG_ERROR("request buffer size=%d not enough", 
+                    tc_iot_yabuffer_len(&request->buf));
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+    }
     written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
     TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
-
-    read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
-    if (read_len < resp_max_len) {
-        network->do_disconnect(network);
+    if (written_len == request->buf.pos) {
+        return TC_IOT_SUCCESS;
+    } else {
+        return TC_IOT_FAILURE;
     }
-
-    return read_len;
 }
 
 int tc_iot_http_head(tc_iot_network_t* network,

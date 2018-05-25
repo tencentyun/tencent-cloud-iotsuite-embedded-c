@@ -21,13 +21,18 @@
 #define HTTP_HEADER_ACCEPT_ENCODING "Accept-Encoding"
 #define HTTP_HEADER_USER_AGENT "User-Agent"
 #define HTTP_HEADER_CONTENT_LENGTH "Content-Length"
+#define HTTP_HEADER_LOCATION "Location"
 #define HTTP_HEADER_CONTENT_TYPE "Content-Type"
 #define HTTP_CONTENT_FORM_URLENCODED "application/x-www-form-urlencoded"
+#define HTTP_CONTENT_OCTET_STREAM "application/octet-stream"
 #define HTTP_CONTENT_FORM_DATA "multipart/form-data"
 #define HTTP_CONTENT_JSON "application/json"
 
 #define HTTPS_PREFIX "https"
 #define HTTPS_PREFIX_LEN (sizeof(HTTPS_PREFIX) - 1)
+
+#define TC_IOT_HTTP_MAX_URL_LENGTH     128
+#define TC_IOT_HTTP_MAX_HOST_LENGTH    128
 
 
 /* examples: */
@@ -250,8 +255,8 @@ int tc_iot_parse_http_response_code(const char * http_resp);
 
 int tc_iot_http_get(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
-                         char* resp, int resp_max_len,
-                         int timeout_ms, int partial_start);
+                         int timeout_ms, const char * extra_header);
+
 int tc_iot_http_head(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          char* resp, int resp_max_len,
