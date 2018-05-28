@@ -118,7 +118,8 @@ class iot_field:
             return "{} {};".format(self.type_define, self.name)
 
     def get_meta_define_str(self):
-        return '{{ "{}", {}, {}, offsetof(tc_iot_shadow_local_data, {}) }},'.format(self.name, self.get_id_c_macro_name(), self.type_id, self.name)
+        return '{{ "{}", {}, {}, offsetof(tc_iot_shadow_local_data, {}),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,{}) }},' \
+                    .format(self.name, self.get_id_c_macro_name(), self.type_id, self.name, self.name)
 
     def get_sample_code_snippet(self, indent, data_pointer):
         sample_code = ""

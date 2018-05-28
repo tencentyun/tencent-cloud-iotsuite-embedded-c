@@ -121,4 +121,6 @@ typedef int (*tc_iot_event_handler)(tc_iot_event_message *msg, void * client,  v
         const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
         (type *)( (char *)__mptr - offsetof(type,member) );})
 
+#define TC_IOT_MEMBER_SIZE(type, member) sizeof(((type *)0)->member)
+
 #endif /* end of include guard */

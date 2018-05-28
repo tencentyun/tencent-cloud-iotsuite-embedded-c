@@ -146,8 +146,10 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
         for(j = 0; j < property_total; j++) {
             p_prop = &properties[j];
             if (strncmp(p_prop->name, key_start, key_len) == 0)  {
-                strncpy(field_buf, val_start, val_len);
-                field_buf[val_len] = '\0';
+                if (val_len < sizeof(field_buf)) {
+                    strncpy(field_buf, val_start, val_len);
+                    field_buf[val_len] = '\0';
+                }
 
                 if (strncmp(TC_IOT_JSON_NULL, field_buf, val_len) == 0) {
                     TC_IOT_LOG_WARN("%s recevied null value.", p_prop->name);
@@ -170,12 +172,20 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                     new_int = atoi(field_buf);
                     ptr = &new_int;
                     TC_IOT_LOG_TRACE("state change:[%s=%d]", p_prop->name, (*(tc_iot_shadow_int *) ptr));
+                } else if (p_prop->type == TC_IOT_SHADOW_TYPE_STRING) {
+                    ptr = tc_iot_shadow_save_string_to_cached(p_shadow_client, p_prop->id, val_start, val_len, 
+                            p_shadow_client->p_shadow_config->p_desired_device_data);
+                    if (ptr) {
+                        TC_IOT_LOG_TRACE("state change:[%s=%s]", p_prop->name, (const char *)ptr);
+                    }
                 } else {
                     TC_IOT_LOG_ERROR("%s type=%d invalid.", p_prop->name, p_prop->type);
                     continue;
                 }
 
-                tc_iot_shadow_save_to_cached(p_shadow_client, p_prop->id, ptr, p_shadow_client->p_shadow_config->p_desired_device_data);
+                if (p_prop->type != TC_IOT_SHADOW_TYPE_STRING) {
+                    tc_iot_shadow_save_to_cached(p_shadow_client, p_prop->id, ptr, p_shadow_client->p_shadow_config->p_desired_device_data);
+                }
                 TC_IOT_BIT_SET(p_shadow_client->desired_bits, p_prop->id);
                 ret = tc_iot_shadow_event_notify(p_shadow_client, TC_IOT_SHADOW_EVENT_SERVER_CONTROL, ptr, p_prop);
                 if (ret == TC_IOT_SUCCESS) {

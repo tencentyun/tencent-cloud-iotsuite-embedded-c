@@ -15,9 +15,10 @@ tc_iot_shadow_client * tc_iot_get_shadow_client(void) {
 
 /* 设备本地数据类型及地址、回调函数等相关定义 */
 tc_iot_shadow_property_def g_tc_iot_shadow_property_defs[] = {
-    { "param_bool", TC_IOT_PROP_param_bool, TC_IOT_SHADOW_TYPE_BOOL, offsetof(tc_iot_shadow_local_data, param_bool) },
-    { "param_enum", TC_IOT_PROP_param_enum, TC_IOT_SHADOW_TYPE_ENUM, offsetof(tc_iot_shadow_local_data, param_enum) },
-    { "param_number", TC_IOT_PROP_param_number, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, param_number) },
+    { "param_bool", TC_IOT_PROP_param_bool, TC_IOT_SHADOW_TYPE_BOOL, offsetof(tc_iot_shadow_local_data, param_bool),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,param_bool) },
+    { "param_enum", TC_IOT_PROP_param_enum, TC_IOT_SHADOW_TYPE_ENUM, offsetof(tc_iot_shadow_local_data, param_enum),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,param_enum) },
+    { "param_number", TC_IOT_PROP_param_number, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, param_number),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,param_number) },
+    { "param_string", TC_IOT_PROP_param_string, TC_IOT_SHADOW_TYPE_STRING, offsetof(tc_iot_shadow_local_data, param_string),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,param_string) },
 };
 
 
@@ -26,6 +27,7 @@ tc_iot_shadow_local_data g_tc_iot_device_local_data = {
     false,
     TC_IOT_PROP_param_enum_enum_a,
     0,
+    {'\0'},
 };
 
 /* 设备状态控制数据 */
@@ -33,6 +35,7 @@ static tc_iot_shadow_local_data g_tc_iot_device_desired_data = {
     false,
     TC_IOT_PROP_param_enum_enum_a,
     0,
+    {'\0'},
 };
 
 /* 设备已上报状态数据 */
@@ -40,6 +43,7 @@ tc_iot_shadow_local_data g_tc_iot_device_reported_data = {
     false,
     TC_IOT_PROP_param_enum_enum_a,
     0,
+    {'\0'},
 };
 
 /* 设备初始配置 */
@@ -85,6 +89,7 @@ static int _tc_iot_property_change( int property_id, void * data) {
     tc_iot_shadow_bool param_bool;
     tc_iot_shadow_enum param_enum;
     tc_iot_shadow_number param_number;
+    tc_iot_shadow_string param_string;
     switch (property_id) {
         case TC_IOT_PROP_param_bool:
             param_bool = *(tc_iot_shadow_bool *)data;
@@ -119,6 +124,11 @@ static int _tc_iot_property_change( int property_id, void * data) {
             param_number = *(tc_iot_shadow_number *)data;
             g_tc_iot_device_local_data.param_number = param_number;
             TC_IOT_LOG_TRACE("do something for param_number=%f", param_number);
+            break;
+        case TC_IOT_PROP_param_string:
+            param_string = (char *)data;
+            strcpy(g_tc_iot_device_local_data.param_string, param_string);
+            TC_IOT_LOG_TRACE("do something for param_string=%s", param_string);
             break;
         default:
             TC_IOT_LOG_WARN("unkown property id = %d", property_id);

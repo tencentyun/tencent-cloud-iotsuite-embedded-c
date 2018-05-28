@@ -15,10 +15,10 @@ tc_iot_shadow_client * tc_iot_get_shadow_client(void) {
 
 /* 设备本地数据类型及地址、回调函数等相关定义 */
 tc_iot_shadow_property_def g_tc_iot_shadow_property_defs[] = {
-    { "device_switch", TC_IOT_PROP_device_switch, TC_IOT_SHADOW_TYPE_BOOL, offsetof(tc_iot_shadow_local_data, device_switch) },
-    { "color", TC_IOT_PROP_color, TC_IOT_SHADOW_TYPE_ENUM, offsetof(tc_iot_shadow_local_data, color) },
-    { "brightness", TC_IOT_PROP_brightness, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, brightness) },
-    { "power", TC_IOT_PROP_power, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, power) },
+    { "device_switch", TC_IOT_PROP_device_switch, TC_IOT_SHADOW_TYPE_BOOL, offsetof(tc_iot_shadow_local_data, device_switch),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,device_switch) },
+    { "color", TC_IOT_PROP_color, TC_IOT_SHADOW_TYPE_ENUM, offsetof(tc_iot_shadow_local_data, color),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,color) },
+    { "brightness", TC_IOT_PROP_brightness, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, brightness),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,brightness) },
+    { "power", TC_IOT_PROP_power, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, power),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,power) },
 };
 
 
