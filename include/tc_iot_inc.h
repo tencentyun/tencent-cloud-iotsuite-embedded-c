@@ -36,6 +36,7 @@
 #endif
 
 #if defined(ENABLE_OTA)
+#include "ota/tc_iot_ota_mqtt.h"
 #include "ota/tc_iot_ota_download.h"
 #endif
 
