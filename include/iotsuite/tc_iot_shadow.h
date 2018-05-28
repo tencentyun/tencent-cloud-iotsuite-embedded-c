@@ -24,6 +24,7 @@ typedef struct _tc_iot_shadow_property_def {
     int id;
     tc_iot_shadow_data_type_e  type;
     int offset;
+    int len;
 } tc_iot_shadow_property_def;
 
 
@@ -318,6 +319,7 @@ int tc_iot_shadow_cmp_local(tc_iot_shadow_client * c, int property_id, void * sr
 int tc_iot_shadow_cmp_local_with_reported(tc_iot_shadow_client * c, int property_id);
 int tc_iot_shadow_cmp_local_with_desired(tc_iot_shadow_client * c, int property_id);
 void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, void * p_cache);
+void * tc_iot_shadow_save_string_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, int len, void * p_cache);
 
 int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, char * buffer, int buffer_len);
 int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int buffer_len,

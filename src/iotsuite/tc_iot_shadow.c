@@ -785,6 +785,35 @@ void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, c
     }
 }
 
+void * tc_iot_shadow_save_string_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, int len, void * p_cache) {
+    tc_iot_shadow_property_def * p_prop = NULL;
+    void * p_current = NULL;
+    void * p_dest = NULL;
+
+    IF_NULL_RETURN_DATA(c, p_dest);
+    IF_NULL_RETURN_DATA(c->p_shadow_config, p_dest);
+    IF_NULL_RETURN_DATA(c->p_shadow_config->properties, p_dest);
+    IF_NULL_RETURN_DATA(p_cache, p_dest);
+
+    p_prop = &c->p_shadow_config->properties[property_id];
+    p_dest = (char *)p_cache + p_prop->offset;
+
+    if (len >= p_prop->len) {
+        TC_IOT_LOG_ERROR("source data too long len=%d, field %s max len=%d", len, p_prop->name, p_prop->len-1);
+        return p_dest;
+    }
+
+    switch (p_prop->type) {
+        case TC_IOT_SHADOW_TYPE_STRING:
+            memcpy( p_dest, p_data, len);
+            ((char *)(p_dest))[len] = '\0';
+            return p_dest;
+        default:
+            TC_IOT_LOG_ERROR("invalid data type=%d found", p_prop->type);
+            return p_dest;
+    }
+}
+
 int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, char * buffer, int buffer_len) {
     int ret = 0;
     int pos = 0;

@@ -8,6 +8,7 @@ typedef struct _tc_iot_shadow_local_data {
     tc_iot_shadow_bool param_bool;
     tc_iot_shadow_enum param_enum;
     tc_iot_shadow_number param_number;
+    char param_string[50+1];
 }tc_iot_shadow_local_data;
 
 
@@ -15,8 +16,9 @@ typedef struct _tc_iot_shadow_local_data {
 #define TC_IOT_PROP_param_bool 0
 #define TC_IOT_PROP_param_enum 1
 #define TC_IOT_PROP_param_number 2
+#define TC_IOT_PROP_param_string 3
 
-#define TC_IOT_PROPTOTAL 3
+#define TC_IOT_PROPTOTAL 4
 
 
 /* enum macro definitions */

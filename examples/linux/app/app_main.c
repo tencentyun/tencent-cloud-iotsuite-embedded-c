@@ -52,6 +52,13 @@ void do_sim_data_change(void) {
     g_tc_iot_device_local_data.param_number += 1;
     g_tc_iot_device_local_data.param_number = g_tc_iot_device_local_data.param_number > 4095?0:g_tc_iot_device_local_data.param_number;
 
+    for (i = 0; i < 0+1;i++) {
+        g_tc_iot_device_local_data.param_string[i] += 1;
+        g_tc_iot_device_local_data.param_string[i] = g_tc_iot_device_local_data.param_string[0] > 'Z'?'A':g_tc_iot_device_local_data.param_string[0];
+        g_tc_iot_device_local_data.param_string[i] = g_tc_iot_device_local_data.param_string[0] < 'A'?'A':g_tc_iot_device_local_data.param_string[0];
+    }
+    g_tc_iot_device_local_data.param_string[0+2] = 0;
+
 
     /* 上报数据最新状态 */
     tc_iot_report_device_data(tc_iot_get_shadow_client());
