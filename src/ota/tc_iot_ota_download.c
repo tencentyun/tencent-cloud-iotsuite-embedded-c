@@ -3,6 +3,7 @@
 int tc_iot_try_parse_int(const char * str, int * num_char_count) {
     int result = 0;
     int count = 0;
+
     if (num_char_count) {
         *num_char_count = 0;
     }
@@ -23,6 +24,16 @@ int tc_iot_try_parse_int(const char * str, int * num_char_count) {
     return result;
 }
 
+bool tc_iot_http_has_line_ended(const char * str) {
+    while (*str) {
+        if (*str == '\r') {
+            return true;
+        }
+        str ++;
+    }
+    return false;
+}
+
 void tc_iot_http_parser_init(tc_iot_http_response_parser * parser) {
     if (parser) {
         parser->state = _PARSER_START;
@@ -35,6 +46,7 @@ void tc_iot_http_parser_init(tc_iot_http_response_parser * parser) {
 }
 
 int tc_iot_http_parser_analysis(tc_iot_http_response_parser * parser, const char * buffer, int buffer_len) {
+    bool header_complete = false;
     const char * pos = NULL;
     int buffer_parsed = 0;
     int i = 0;
@@ -68,7 +80,6 @@ start:
                 return TC_IOT_FAILURE;
             } else {
                 parser->version = pos[0] - '0';
-                TC_IOT_LOG_TRACE("version: 1.%d",parser->version);
             }
 
             if (' ' != pos[1]) {
@@ -86,7 +97,7 @@ start:
                     parser->status_code = parser->status_code * 10 + pos[i] - '0';
                 }
             }
-            TC_IOT_LOG_TRACE("status code: %d", parser->status_code);
+            TC_IOT_LOG_TRACE("version: 1.%d, status code: %d",parser->version, parser->status_code);
             buffer_parsed += 3;
             pos = buffer + buffer_parsed;
             parser->state = _PARSER_IGNORE_TO_RETURN_CHAR;
@@ -130,17 +141,30 @@ start:
                     if (':' == pos[i]) {
                         if ((i == tc_iot_const_str_len(HTTP_HEADER_CONTENT_LENGTH)) 
                                 && (0 == memcmp(pos, HTTP_HEADER_CONTENT_LENGTH, i))) {
-                            TC_IOT_LOG_TRACE("%s found:%s",HTTP_HEADER_CONTENT_LENGTH, pos+i+2);
-                            parser->content_length = tc_iot_try_parse_int(pos+i+2, NULL);
+                            header_complete = tc_iot_http_has_line_ended(pos+i+2);
+                            if (header_complete) {
+                                /* TC_IOT_LOG_TRACE("%s found:%s",HTTP_HEADER_CONTENT_LENGTH, pos+i+2); */
+                                parser->content_length = tc_iot_try_parse_int(pos+i+2, NULL);
+                            } else {
+                                TC_IOT_LOG_TRACE("%s not complete, continue reading:%s",HTTP_HEADER_CONTENT_LENGTH, pos+i+2);
+                                return buffer_parsed;
+                            }
+
                         } else if ((i == tc_iot_const_str_len(HTTP_HEADER_LOCATION)) 
                                 && (0 == memcmp(pos, HTTP_HEADER_LOCATION, i))) {
-                            TC_IOT_LOG_TRACE("%s found:%s",HTTP_HEADER_LOCATION, pos+i+2);
-                            parser->location = pos+i+2;
+                            header_complete = tc_iot_http_has_line_ended(pos+i+2);
+                            if (header_complete) {
+                                TC_IOT_LOG_TRACE("%s found:%s",HTTP_HEADER_LOCATION, pos+i+2);
+                                parser->location = pos+i+2;
+                            } else {
+                                TC_IOT_LOG_TRACE("%s not complete, continue reading:%s",HTTP_HEADER_LOCATION, pos+i+2);
+                                return buffer_parsed;
+                            }
                         } else if ((i == tc_iot_const_str_len(HTTP_HEADER_CONTENT_TYPE)) 
                                 && (0 == memcmp(pos, HTTP_HEADER_CONTENT_TYPE, i))) {
-                            TC_IOT_LOG_TRACE("%s found:%s",HTTP_HEADER_CONTENT_TYPE, pos+i+2);
+                            /* TC_IOT_LOG_TRACE("%s found:%s",HTTP_HEADER_CONTENT_TYPE, pos+i+2); */
                         } else {
-                            TC_IOT_LOG_TRACE("ignore i=%d,pos=%s",i, pos);
+                            /* TC_IOT_LOG_TRACE("ignore i=%d,pos=%s",i, pos); */
                         }
                         buffer_parsed += i+2;
                         pos = buffer + buffer_parsed;
@@ -148,7 +172,7 @@ start:
                         goto start;
                     }
                 }
-                TC_IOT_LOG_ERROR("no ':' found in header, buffer_parsed=%d, buffer_len=%d,cur=%s", buffer_parsed, buffer_len, pos);
+                TC_IOT_LOG_TRACE("buffer_parsed=%d, buffer_len=%d,left=%s", buffer_parsed, buffer_len, pos);
                 return buffer_parsed;
             }
             break;
@@ -285,7 +309,7 @@ parse_url:
         if (parse_left > 0) {
             memmove(http_buffer, http_buffer+parse_ret, parse_left);
             http_buffer[parse_left] = '\0';
-            TC_IOT_LOG_TRACE("buffer left:%s", http_buffer);
+            /* TC_IOT_LOG_TRACE("buffer left:%s", http_buffer); */
         }
         
         if (301 == parser.status_code || 302 == parser.status_code) {
@@ -320,8 +344,8 @@ parse_url:
         }
 
         if (parser.status_code != 200 && parser.status_code != 206) {
-            network.do_disconnect(&network);
             TC_IOT_LOG_ERROR("http resoponse parser.status_code = %d", parser.status_code);
+            network.do_disconnect(&network);
             return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
         }
 
@@ -368,8 +392,7 @@ parse_url:
             ret += parse_left;
         }
 
-        TC_IOT_LOG_TRACE("temp=%d,ver=1.%d, code=%d,content_length=%d",
-                         temp, parser.version, parser.status_code, parser.content_length);
+        TC_IOT_LOG_TRACE("ver=1.%d, code=%d,content_length=%d", parser.version, parser.status_code, parser.content_length);
     }
 
     return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
