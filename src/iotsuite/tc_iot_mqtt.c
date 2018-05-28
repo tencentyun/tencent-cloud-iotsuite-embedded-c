@@ -892,6 +892,9 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
         goto exit;
     }
 
+    tc_iot_mqtt_set_message_handler(c, topicFilter, qos,
+                                         message_handler, context);
+
     if (waitfor(c, SUBACK, &timer) == SUBACK) {
         data->grantedQoS = TC_IOT_QOS0;
         if (MQTTDeserialize_suback(&mypacketid, 1, &count,
@@ -902,14 +905,17 @@ int tc_iot_mqtt_subscribe_with_results(tc_iot_mqtt_client* c,
             data->grantedQoS &= 0xFF;
             /* TC_IOT_LOG_TRACE("grantedQoS = 0x%x", data->grantedQoS); */
             if (data->grantedQoS != TC_IOT_SUBFAIL) {
-                rc = tc_iot_mqtt_set_message_handler(c, topicFilter, qos,
-                                                     message_handler, context);
+                TC_IOT_LOG_TRACE("subscribe %s GrantedQos=%d.", topicFilter, data->grantedQoS);
             } else {
+                rc = tc_iot_mqtt_set_message_handler(c, topicFilter, TC_IOT_QOS0,
+                                                     NULL, NULL);
                 rc = TC_IOT_MQTT_SUBACK_FAILED;
                 TC_IOT_LOG_WARN("subscribe %s failed.", topicFilter);
             }
         }
     } else {
+        rc = tc_iot_mqtt_set_message_handler(c, topicFilter, TC_IOT_QOS0,
+                                             NULL, NULL);
         TC_IOT_LOG_TRACE("waitfor SUBACK timeout");
         rc = TC_IOT_MQTT_WAIT_ACT_TIMEOUT;
     }
