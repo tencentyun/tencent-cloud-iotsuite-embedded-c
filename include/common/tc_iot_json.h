@@ -24,4 +24,21 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
 
 #define TC_IOT_MAX_JSON_TOKEN_COUNT     120
 
+typedef struct _tc_iot_json_writer {
+    char * buffer;
+    int buffer_len;
+    int pos;
+}tc_iot_json_writer;
+
+int tc_iot_json_writer_open(tc_iot_json_writer * w, char * buffer, int buffer_len);
+int tc_iot_json_writer_close(tc_iot_json_writer * w);
+int tc_iot_json_writer_object_begin(tc_iot_json_writer * w, const char * name);
+int tc_iot_json_writer_object_end(tc_iot_json_writer * w);
+char * tc_iot_json_writer_buffer(tc_iot_json_writer * w);
+int tc_iot_json_writer_string(tc_iot_json_writer * w, const char * name, const char * value);
+int tc_iot_json_writer_int(tc_iot_json_writer * w, const char * name, long value);
+int tc_iot_json_writer_decimal(tc_iot_json_writer * w, const char * name, double value);
+int tc_iot_json_writer_bool(tc_iot_json_writer * w, const char * name, bool value);
+int tc_iot_json_writer_null(tc_iot_json_writer * w, const char * name);
+
 #endif /* end of include guard */

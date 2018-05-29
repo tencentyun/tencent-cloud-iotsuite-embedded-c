@@ -8,7 +8,7 @@ TEST(testbase64, test_base64_decode);
 TEST(test_ya_buffer, test_ya_buffer_all);
 TEST(testjson, test_json_unescape);
 TEST(testjson, test_json_escape);
-TEST(testjson, test_json_property);
+TEST(testjson, test_json_writer);
 TEST(testbit, test_bit_all);
 
 
@@ -21,7 +21,7 @@ int main(int ac, char **argv) {
     TC_IOT_UT_RUN_TEST(test_ya_buffer, test_ya_buffer_all, g_tc_unit_test_state);
     TC_IOT_UT_RUN_TEST(testjson, test_json_unescape, g_tc_unit_test_state);
     TC_IOT_UT_RUN_TEST(testjson, test_json_escape, g_tc_unit_test_state);
-    TC_IOT_UT_RUN_TEST(testjson, test_json_property, g_tc_unit_test_state);
+    TC_IOT_UT_RUN_TEST(testjson, test_json_writer, g_tc_unit_test_state);
     TC_IOT_UT_RUN_TEST(testbit, test_bit_all, g_tc_unit_test_state);
 
     TC_IOT_UT_PRINT_STAT_FOOTER(g_tc_unit_test_state);

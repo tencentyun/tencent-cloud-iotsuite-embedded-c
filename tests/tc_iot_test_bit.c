@@ -23,17 +23,17 @@ TEST(testbit, test_bit_all)
             CHECK_EQUAL(0, TC_IOT_BIT_GET(&bitmap[0], i));
         }
     }
-    unsigned char test[4] = {0,0,0,0};
-    /* unsigned int test[] = {0,0}; */
-    printf("seq\tbit\tset\tflip\n");
-    for (i = 0; i < 8*sizeof(test); i ++) {
-        printf("%d\t", i);
-        TC_IOT_BIT_SET(&test[0], i);
-        printf("0x%X\t", *(int *)&test[0]);
-        TC_IOT_BIT_CLEAR(&test[0], i);
-        printf("0x%X\t", *(int *)&test[0]);
-        TC_IOT_BIT_FLIP(&test[0], i);
-        printf("0x%X\n", *(int *)&test[0]);
-    }
+    /* unsigned char test[4] = {0,0,0,0}; */
+    /* #<{(| unsigned int test[] = {0,0}; |)}># */
+    /* printf("seq\tbit\tset\tflip\n"); */
+    /* for (i = 0; i < 8*sizeof(test); i ++) { */
+    /*     printf("%d\t", i); */
+    /*     TC_IOT_BIT_SET(&test[0], i); */
+    /*     printf("0x%X\t", *(int *)&test[0]); */
+    /*     TC_IOT_BIT_CLEAR(&test[0], i); */
+    /*     printf("0x%X\t", *(int *)&test[0]); */
+    /*     TC_IOT_BIT_FLIP(&test[0], i); */
+    /*     printf("0x%X\n", *(int *)&test[0]); */
+    /* } */
 }
 

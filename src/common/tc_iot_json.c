@@ -404,6 +404,281 @@ int tc_iot_json_parse(const char * json, int json_len, jsmntok_t * tokens, int t
 }
 
 
+int tc_iot_json_writer_open(tc_iot_json_writer * w, char * buffer, int buffer_len) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(buffer, TC_IOT_NULL_POINTER);
+    w->buffer = buffer;
+    w->buffer_len = buffer_len;
+    w->pos = 0;
+
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "{");
+    w->pos += ret;
+    return ret;
+}
+
+int tc_iot_json_writer_close(tc_iot_json_writer * w) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(w->buffer_len, w->pos+1, TC_IOT_BUFFER_OVERFLOW);
+    
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "}");
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    } else {
+        w->buffer[w->pos] = '\0';
+        return ret;
+    }
+}
+
+int tc_iot_json_writer_object_begin(tc_iot_json_writer * w, const char * name) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(w->buffer_len, w->pos+1, TC_IOT_BUFFER_OVERFLOW);
+    IF_LESS_RETURN(w->pos, 1, TC_IOT_JSON_PARSE_FAILED);
+
+    if (w->buffer[w->pos-1] != '{') {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, ",\"");
+    } else {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\"");
+    }
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_json_escape(&w->buffer[w->pos], w->buffer_len-w->pos, name, strlen(name));
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":{");
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    return ret;
+}
+
+int tc_iot_json_writer_object_end(tc_iot_json_writer * w) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(w->buffer_len, w->pos+1, TC_IOT_BUFFER_OVERFLOW);
+    
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "}");
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    } else {
+        w->buffer[w->pos] = '\0';
+        return ret;
+    }
+}
+
+char * tc_iot_json_writer_buffer(tc_iot_json_writer * w) {
+    if (!w) {
+        return NULL;
+    } else {
+        return w->buffer;
+    }
+}
+
+int tc_iot_json_writer_string(tc_iot_json_writer * w, const char * name, const char * value) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(w->buffer_len, w->pos+1, TC_IOT_BUFFER_OVERFLOW);
+    IF_LESS_RETURN(w->pos, 1, TC_IOT_JSON_PARSE_FAILED);
+
+    if (w->buffer[w->pos-1] != '{') {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, ",\"");
+    } else {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\"");
+    }
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_json_escape(&w->buffer[w->pos], w->buffer_len-w->pos, name, strlen(name));
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":\"");
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_json_escape(&w->buffer[w->pos], w->buffer_len-w->pos, value, strlen(value));
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\"");
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    return ret;
+}
+
+int tc_iot_json_writer_int(tc_iot_json_writer * w, const char * name, long value) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(w->buffer_len, w->pos+1, TC_IOT_BUFFER_OVERFLOW);
+
+    if (w->buffer[w->pos-1] != '{') {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, ",\"");
+    } else {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\"");
+    }
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_json_escape(&w->buffer[w->pos], w->buffer_len-w->pos, name, strlen(name));
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":%ld", value);
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    return ret;
+}
+
+int tc_iot_json_writer_decimal(tc_iot_json_writer * w, const char * name, double value) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(w->buffer_len, w->pos+1, TC_IOT_BUFFER_OVERFLOW);
+
+    if (w->buffer[w->pos-1] != '{') {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, ",\"");
+    } else {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\"");
+    }
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_json_escape(&w->buffer[w->pos], w->buffer_len-w->pos, name, strlen(name));
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":%f", value);
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    return ret;
+}
+
+int tc_iot_json_writer_bool(tc_iot_json_writer * w, const char * name, bool value) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(w->buffer_len, w->pos+1, TC_IOT_BUFFER_OVERFLOW);
+
+    if (w->buffer[w->pos-1] != '{') {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, ",\"");
+    } else {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\"");
+    }
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_json_escape(&w->buffer[w->pos], w->buffer_len-w->pos, name,strlen(name));
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    if (value) {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":true");
+    } else {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":false");
+    }
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    return ret;
+}
+
+int tc_iot_json_writer_null(tc_iot_json_writer * w, const char * name) {
+    int ret = 0;
+
+    IF_NULL_RETURN(w, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(w->buffer_len, w->pos+1, TC_IOT_BUFFER_OVERFLOW);
+
+    if (w->buffer[w->pos-1] != '{') {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, ",\"");
+    } else {
+        ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\"");
+    }
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_json_escape(&w->buffer[w->pos], w->buffer_len-w->pos, name, strlen(name));
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":null");
+    w->pos += ret;
+    if (w->pos == w->buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+    return ret;
+}
+
 #ifdef __cplusplus
 }
 #endif
