@@ -822,8 +822,6 @@ int tc_iot_mqtt_set_message_handler(tc_iot_mqtt_client* c,
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicFilter, TC_IOT_NULL_POINTER);
-    IF_NULL_RETURN(msg_handler, TC_IOT_NULL_POINTER);
-
 
     for (i = 0; i < TC_IOT_MAX_MESSAGE_HANDLERS; ++i) {
         if (c->message_handlers[i].topicFilter != NULL &&

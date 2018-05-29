@@ -346,6 +346,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                             val_len = root_token[tok_index].end -
                                     root_token[tok_index].start;
                             if (val_len > result_len) {
+                                TC_IOT_LOG_ERROR("result buffer not enough val_len=%d, result_len=%d", val_len, result_len)
                                 return TC_IOT_BUFFER_OVERFLOW;
                             }
 
@@ -356,7 +357,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
                                 result[val_len] = 0;
                             }
                         }
-                        /* TC_IOT_LOG_TRACE("result=%s", tc_iot_log_summary_string(result,val_len)); */
+                        /* TC_IOT_LOG_TRACE("result=%s, index=%d", tc_iot_log_summary_string(result,val_len), tok_index); */
                         return tok_index;
                     }
                     break;
