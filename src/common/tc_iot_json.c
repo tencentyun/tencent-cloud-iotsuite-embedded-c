@@ -403,30 +403,6 @@ int tc_iot_json_parse(const char * json, int json_len, jsmntok_t * tokens, int t
     return ret;
 }
 
-DEFINE_TC_IOT_PROPERTY_FUNC(int8_t, TC_IOT_INT8);
-DEFINE_TC_IOT_PROPERTY_FUNC(int16_t, TC_IOT_INT16);
-DEFINE_TC_IOT_PROPERTY_FUNC(int32_t, TC_IOT_INT32);
-DEFINE_TC_IOT_PROPERTY_FUNC(uint8_t, TC_IOT_UINT8);
-DEFINE_TC_IOT_PROPERTY_FUNC(uint16_t, TC_IOT_UINT16);
-DEFINE_TC_IOT_PROPERTY_FUNC(uint32_t, TC_IOT_UINT32);
-DEFINE_TC_IOT_PROPERTY_FUNC(bool, TC_IOT_BOOL);
-DEFINE_TC_IOT_PROPERTY_FUNC(float, TC_IOT_FLOAT);
-DEFINE_TC_IOT_PROPERTY_FUNC(double, TC_IOT_DOUBLE);
-
-tc_iot_property tc_iot_property_ref(const char *key, void *ptr,
-                                    tc_iot_type_e type, int length) {
-    tc_iot_property prop;
-    prop.key = key;
-    prop.length = length;
-    prop.data.as_string = ptr;
-    prop.type = type;
-    return prop;
-}
-
-int _tc_iot_shadow_req_construct(char *buffer, int len, tc_iot_shadow_client *c,
-                                 const char *method) {
-    return snprintf(buffer, len, "{\"method\":\"%s\"}", method);
-}
 
 #ifdef __cplusplus
 }

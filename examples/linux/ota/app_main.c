@@ -2,6 +2,7 @@
 #include "tc_iot_export.h"
 
 #define TC_IOT_TROUBLE_SHOOTING_URL "https://git.io/vN9le"
+#define TC_IOT_MAX_FIELD_LEN  22
 
 extern void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv);
 
@@ -35,6 +36,8 @@ tc_iot_mqtt_client_config g_client_config = {
     my_default_msg_handler,
 };
 
+tc_iot_ota_handler handler;
+
 char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_SUB_TOPIC_DEF;
 char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_PUB_TOPIC_DEF;
 
@@ -64,9 +67,41 @@ int main(int argc, char** argv) {
     run_mqtt(&g_client_config);
 }
 
-void _on_message_received(tc_iot_message_data* md) {
+void _on_ota_message_received(tc_iot_message_data* md) {
+    jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
+    char field_buf[TC_IOT_MAX_FIELD_LEN];
+    int field_index = 0;
+    int ret = 0;
+    tc_iot_mqtt_client * p_mqtt_client = (tc_iot_mqtt_client *)md->mqtt_client;
     tc_iot_mqtt_message* message = md->message;
-    tc_iot_hal_printf("[s->c] %s\n", (char*)message->payload);
+
+    TC_IOT_LOG_TRACE("[s->c] %s", (char*)message->payload);
+    memset(field_buf, 0, sizeof(field_buf));
+
+    /* 有效性检查 */
+    ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));
+    if (ret <= 0) {
+        return ;
+    }
+
+    field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, "method", field_buf, sizeof(field_buf));
+    if (field_index <= 0 ) {
+        TC_IOT_LOG_ERROR("field method not found in JSON: %s", (char*)message->payload);
+        return ;
+    }
+
+    if (strncmp(TC_IOT_MQTT_METHOD_CONTROL, field_buf, strlen(field_buf)) == 0) {
+        TC_IOT_LOG_TRACE("Control data receved.");
+    } else if (strncmp(TC_IOT_MQTT_METHOD_REPLY, field_buf, strlen(field_buf)) == 0) {
+        TC_IOT_LOG_TRACE("Reply pack recevied.");
+    } else if (strncmp(TC_IOT_MQTT_METHOD_REPORT_FIRM, field_buf, strlen(field_buf)) == 0) {
+        TC_IOT_LOG_TRACE("request report firm info.");
+        tc_iot_ota_report_firm(&handler,
+                "product", g_client_config.device_info.product_id,
+                "device", g_client_config.device_info.device_name, "sdk-ver", TC_IOT_SDK_VERSION,
+                "firm-ver","Linux_V1.00", NULL);
+        return;
+    }
 }
 
 void _refresh_token() {
@@ -125,7 +160,6 @@ void sig_handler(int sig) {
     }
 }
 
-tc_iot_ota_handler handler;
 
 int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     int ret;
@@ -146,7 +180,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
         return TC_IOT_FAILURE;
     }
     ret = tc_iot_mqtt_client_subscribe(p_client, sub_topic, TC_IOT_QOS1,
-                                           _on_message_received, NULL);
+                                           _on_ota_message_received, NULL);
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("subscribe topic %s failed, trouble shooting guide: " "%s#%d\n", sub_topic, TC_IOT_TROUBLE_SHOOTING_URL, ret);
         return TC_IOT_FAILURE;
@@ -154,10 +188,18 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
 
     tc_iot_mqtt_client_yield(p_client, timeout);
 
-    tc_iot_ota_init(ota_handler, p_client, 
+    ret = tc_iot_ota_init(ota_handler, p_client, 
             p_client_config->device_info.product_id, 
             p_client_config->device_info.device_name);
+    if (ret != TC_IOT_SUCCESS) {
+        tc_iot_hal_printf("init ota handler failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
+    }
     tc_iot_ota_set_ota_id(ota_handler, "ota_100000");
+
+    tc_iot_ota_report_firm(&handler,
+            "product", g_client_config.device_info.product_id,
+            "device", g_client_config.device_info.device_name, "sdk-ver", TC_IOT_SDK_VERSION,
+            "firm-ver","Linux_V1.00", NULL);
 
     tc_iot_ota_report(ota_handler, OTA_COMMAND_RECEIVED, NULL, 0);
     tc_iot_ota_report(ota_handler, OTA_DOWNLOAD, NULL, 0);

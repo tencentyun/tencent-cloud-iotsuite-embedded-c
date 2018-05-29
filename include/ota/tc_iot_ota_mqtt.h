@@ -43,4 +43,12 @@ int tc_iot_ota_send_message(tc_iot_ota_handler * ota_handler, char * message);
 int tc_iot_ota_set_ota_id(tc_iot_ota_handler * ota_handler, const char * ota_id);
 int tc_iot_ota_report(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent);
 
+int tc_iot_ota_report_firm(tc_iot_ota_handler * ota_handler, ...);
+    int tc_iot_ota_update_firm_info(tc_iot_ota_handler * ota_handler, char * buffer, int buffer_len, va_list p_args);
+int tc_iot_ota_doc_pack_start(char *buffer, int buffer_len,
+                                 char * session_id, int session_id_len,
+                                 const char * method,
+                                 tc_iot_ota_handler * ota_handler);
+int tc_iot_ota_doc_pack_end(char *buffer, int buffer_len, tc_iot_ota_handler * ota_handler);
+
 #endif /* end of include guard */

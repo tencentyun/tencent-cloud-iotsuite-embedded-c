@@ -57,7 +57,7 @@ int tc_iot_ota_init(tc_iot_ota_handler * ota_handler, tc_iot_mqtt_client * mqtt_
 
     ota_handler->p_mqtt_client = mqtt_client;
     tc_iot_hal_snprintf(ota_handler->sub_topic, sizeof(ota_handler->sub_topic), "ota/get/%s/%s", product_id, device_name);
-    tc_iot_hal_snprintf(ota_handler->pub_topic, sizeof(ota_handler->pub_topic), "ota/pub/%s/%s", product_id, device_name);
+    tc_iot_hal_snprintf(ota_handler->pub_topic, sizeof(ota_handler->pub_topic), "ota/update/%s/%s", product_id, device_name);
 
     ret = tc_iot_mqtt_subscribe(ota_handler->p_mqtt_client, ota_handler->sub_topic, TC_IOT_QOS1, _tc_iot_on_ota_message_received,ota_handler);
 
@@ -126,6 +126,7 @@ int tc_iot_ota_send_message(tc_iot_ota_handler * ota_handler, char * message) {
     pubmsg.retained = 0;
     pubmsg.dup = 0;
 
+    TC_IOT_LOG_TRACE("report: %s|%s", ota_handler->pub_topic, message);
     return tc_iot_mqtt_publish(ota_handler->p_mqtt_client, ota_handler->pub_topic, &pubmsg);
 }
 
@@ -144,10 +145,183 @@ int tc_iot_ota_report(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
-    TC_IOT_LOG_TRACE("report: %s", buffer);
 
     return tc_iot_ota_send_message(ota_handler, buffer);
 }
 
+int tc_iot_ota_report_firm(tc_iot_ota_handler * ota_handler, ...) {
+    char buffer[512];
+    int buffer_len = sizeof(buffer);
 
+    int ret = 0;
+    va_list p_args;
+
+    va_start(p_args, ota_handler);
+    ret = tc_iot_ota_update_firm_info(ota_handler, buffer, buffer_len, p_args);
+    if (ret == TC_IOT_SUCCESS) {
+        TC_IOT_LOG_TRACE("[c-s]update_firm_info: %s", buffer);
+    } else {
+        TC_IOT_LOG_TRACE("[c-s]update_firm_info failed(%d): %s", ret, buffer);
+    }
+    va_end( p_args);
+    return ret;
+}
+
+int tc_iot_ota_update_firm_info(tc_iot_ota_handler * ota_handler, char * buffer, int buffer_len, va_list p_args) {
+    char *pub_topic ;
+    int rc ;
+    tc_iot_mqtt_message pubmsg;
+
+    int ret = 0;
+    int i = 0;
+    int pos = 0;
+    const char * info_name = NULL;
+    const char * info_value = NULL;
+
+    IF_NULL_RETURN(ota_handler, TC_IOT_NULL_POINTER);
+
+    ret = tc_iot_ota_doc_pack_start(buffer+pos, buffer_len-pos, NULL, TC_IOT_SESSION_ID_LEN+1, TC_IOT_MQTT_METHOD_UPDATE_FIRM, ota_handler);
+    if (ret <= 0) {
+        rc = TC_IOT_BUFFER_OVERFLOW;
+        goto exit;
+    }
+    pos += ret;
+
+    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"state\":{");
+    if (ret <= 0) {
+        rc = TC_IOT_BUFFER_OVERFLOW;
+        goto exit;
+    }
+    pos += ret;
+
+    for(i = 0; i < TC_IOT_MAX_FIRM_INFO_COUNT; i++) {
+        info_name = va_arg (p_args, const char *);
+        if (info_name == NULL) {
+            break;
+        }
+
+        info_value = va_arg (p_args, const char *);
+        if (info_value == NULL) {
+            break;
+        }
+
+        if (strlen(info_name) > TC_IOT_MAX_FIRM_INFO_NAME_LEN) {
+            TC_IOT_LOG_ERROR("firm name too long:%s", info_name);
+            rc = TC_IOT_FIRM_INFO_NAME_TOO_LONG;
+            goto exit;
+        }
+
+        if (strlen(info_value) > TC_IOT_MAX_FIRM_INFO_VALUE_LEN) {
+            TC_IOT_LOG_ERROR("firm value too long:%s", info_value);
+            rc = TC_IOT_FIRM_INFO_VALUE_TOO_LONG;
+            goto exit;
+        }
+
+        if (i == 0) {
+            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\"");
+            if (ret <= 0) {
+                rc = TC_IOT_BUFFER_OVERFLOW;
+                goto exit;
+            }
+            pos += ret;
+        } else {
+            ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, ",\"");
+            if (ret <= 0) {
+                rc = TC_IOT_BUFFER_OVERFLOW;
+                goto exit;
+            }
+            pos += ret;
+        }
+
+        ret = tc_iot_json_escape(buffer + pos, buffer_len-pos, info_name, strlen(info_name));
+        if (ret <= 0) {
+            rc = TC_IOT_BUFFER_OVERFLOW;
+            goto exit;
+        }
+        pos += ret;
+
+
+        ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\":\"");
+        if (ret <= 0) {
+            rc = TC_IOT_BUFFER_OVERFLOW;
+            goto exit;
+        }
+        pos += ret;
+
+        ret = tc_iot_json_escape(buffer + pos, buffer_len-pos, info_value, strlen(info_value));
+        if (ret <= 0) {
+            rc = TC_IOT_BUFFER_OVERFLOW;
+            goto exit;
+        }
+        pos += ret;
+
+        ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "\"");
+        if (ret <= 0) {
+            rc = TC_IOT_BUFFER_OVERFLOW;
+            goto exit;
+        }
+        pos += ret;
+    }
+
+    ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos, "}");
+    if (ret <= 0) {
+        rc = TC_IOT_BUFFER_OVERFLOW;
+        goto exit;
+    }
+    pos += ret;
+
+    ret = tc_iot_ota_doc_pack_end(buffer+pos, buffer_len-pos, ota_handler);
+    if (ret <= 0) {
+        rc = TC_IOT_BUFFER_OVERFLOW;
+        goto exit;
+    }
+    pos += ret;
+
+    memset(&pubmsg, 0, sizeof(pubmsg));
+    pubmsg.payload = buffer;
+    pubmsg.payloadlen = strlen(pubmsg.payload);
+    pubmsg.qos = TC_IOT_QOS1;
+    pubmsg.retained = 0;
+    pubmsg.dup = 0;
+
+    pub_topic = ota_handler->pub_topic;
+    rc = tc_iot_mqtt_client_publish(ota_handler->p_mqtt_client, pub_topic, &pubmsg);
+    if (TC_IOT_SUCCESS != rc) {
+        TC_IOT_LOG_ERROR("tc_iot_mqtt_client_publish failed, return=%d", rc);
+    } else {
+        TC_IOT_LOG_TRACE("publish success:%s|%s", pub_topic, buffer);
+    }
+exit:
+    /* if (rc != TC_IOT_SUCCESS) { */
+    /* } */
+    return rc;
+}
+
+int tc_iot_ota_doc_pack_start(char *buffer, int buffer_len,
+                                 char * session_id, int session_id_len,
+                                 const char * method,
+                                 tc_iot_ota_handler *c) {
+    int ret;
+    int buffer_used = 0;
+    int sid_len = 0;
+
+    ret = tc_iot_hal_snprintf(buffer + buffer_used, buffer_len, "{\"method\":\"%s\"", method);
+
+    buffer_used += ret;
+    return buffer_used;
+}
+
+int tc_iot_ota_doc_pack_end(char *buffer, int buffer_len, tc_iot_ota_handler * ota_handler) {
+    int ret;
+    int buffer_used = 0;
+
+    ret = tc_iot_hal_snprintf(buffer, buffer_len, "}");
+
+    buffer_used += ret;
+    if (buffer_used < buffer_len) {
+        buffer[buffer_used] = '\0';
+    }
+
+    return buffer_used;
+}
 

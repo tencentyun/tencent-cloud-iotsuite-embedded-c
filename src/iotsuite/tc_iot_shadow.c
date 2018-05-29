@@ -799,7 +799,7 @@ void * tc_iot_shadow_save_string_to_cached(tc_iot_shadow_client * c, int propert
     p_dest = (char *)p_cache + p_prop->offset;
 
     if (len >= p_prop->len) {
-        TC_IOT_LOG_ERROR("source data too long len=%d, field %s max len=%d", len, p_prop->name, p_prop->len-1);
+        TC_IOT_LOG_ERROR("source data too long len=%d, field %s max len=%d", len,p_prop->name, p_prop->len-1);
         return p_dest;
     }
 
