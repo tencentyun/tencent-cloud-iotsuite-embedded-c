@@ -1,5 +1,5 @@
 # SDK接口说明
-以下是C SDK 提供的功能和对应 API，用于客户编写业务逻辑，更加详细的说明请查看 [include/tc_iot_export.h](https://tencentyun.github.io/tencent-cloud-iotsuite-embedded-c/sdk/tc__iot__export_8h.html) 中的注释。
+以下是C SDK 提供的功能和对应 API，用于设备端编写业务逻辑，API 接口暂不支持多线程调用，请勿在多线程环境下，跨线程调用。 更加详细的接口功能说明请查看 [include/tc_iot_export.h](https://tencentyun.github.io/tencent-cloud-iotsuite-embedded-c/sdk/tc__iot__export_8h.html) 中的注释。
 
 ## 1. 日志接口
 
@@ -17,7 +17,7 @@
 | ---------- | ---------- | ---------- |
 | 1 | tc_iot_mqtt_client_construct | 构造 MQTT client，并连接MQ服务器 |
 | 2 | tc_iot_mqtt_client_destroy | 关闭 MQTT client 连接，并销毁 MQTT client |
-| 3 | tc_iot_mqtt_client_yield | 在当前线程为底层 MQTT client，让出一定 CPU 执行时间 |
+| 3 | tc_iot_mqtt_client_yield | MQTT Client 主循环，包含心跳维持、上行消息响应超时检测、服务器下行消息收取等操作。|
 | 4 | tc_iot_mqtt_client_publish | 向指定的 Topic 发布消息 |
 | 5 | tc_iot_mqtt_client_subscribe | 订阅指定 Topic 的消息 |
 | 6 | tc_iot_mqtt_client_unsubscribe | 取消订阅已订阅的 Topic |
