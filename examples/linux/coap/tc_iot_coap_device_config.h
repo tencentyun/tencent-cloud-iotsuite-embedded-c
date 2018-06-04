@@ -31,14 +31,17 @@
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_NAME "device_name"
 
-
-#define TC_IOT_COAP_DTLS_PSK "secretPSK"
-#define TC_IOT_COAP_DTLS_PSK_ID TC_IOT_CONFIG_DEVICE_NAME
+#define  TC_IOT_PUB_TOPIC_PARM_FMT   "tp=shadow/get/%s/%s"
 
 /* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
 #define TC_IOT_CONFIG_DEVICE_CLIENT_ID TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "@" TC_IOT_CONFIG_DEVICE_NAME
 
-#define TC_IOT_PUB_TOPIC_DEF TC_IOT_CONFIG_DEVICE_PRODUCT_ID "/" TC_IOT_CONFIG_DEVICE_NAME "/cmd"
+//#define TC_IOT_PUB_TOPIC_DEF TC_IOT_CONFIG_DEVICE_PRODUCT_ID "/" TC_IOT_CONFIG_DEVICE_NAME "/cmd"
+
+
+
+#define TC_IOT_COAP_DTLS_PSK "secretPSK"
+#define TC_IOT_COAP_DTLS_PSK_ID TC_IOT_CONFIG_DEVICE_NAME
 
 /* TLS 握手执行超时时长，单位是毫秒*/
 #define TC_IOT_CONFIG_DTLS_HANDSHAKE_TIMEOUT_MS  10000

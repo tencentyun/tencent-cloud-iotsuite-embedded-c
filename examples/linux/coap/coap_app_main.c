@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
         return 0;
     }
 
-    tc_iot_hal_snprintf(pub_topic_query_param, sizeof(pub_topic_query_param), "tp=%s/%s/cmd",
+    tc_iot_hal_snprintf(pub_topic_query_param, sizeof(pub_topic_query_param), TC_IOT_PUB_TOPIC_PARM_FMT,
             coap_config.device_info.product_id, 
             coap_config.device_info.device_name);
     while (!stop) {

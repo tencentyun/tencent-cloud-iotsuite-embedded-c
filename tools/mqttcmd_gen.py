@@ -1,7 +1,7 @@
 #coding:utf-8
 #import paho.mqtt.client as mqtt
 '''
-使用前先根据控制台产品信息设置环境变量
+使用前先根据控制台产品信息设置环境变量, 不要用下面的, 因为 密钥被改了
 export TENCENT_CLOUD_DEMO_PRODUCT_ID="iot-i0ujhadi"
 export TENCENT_CLOUD_DEMO_DEVICE_NAME="device_t1"
 export TENCENT_CLOUD_DEMO_DEVICE_SECRET="xxxxxxxxxxxxxxxxx"
@@ -40,33 +40,41 @@ product_key = mqtt_host.split(".")[0]
 if not client_id or len(client_id) < 2 :
     client_id = product_key + '@' + device_name
 
+def gen_cmd( _client_id) :
+
+    params = OrderedDict([
+        ['clientId', _client_id],
+        ['deviceName', device_name],
+        ['expire', 2592000], #30 days
+        ['nonce', 123456],
+        ['productId', product_id],
+        ['timestamp', int(time.time())]])
+    params['signature'] = binascii.b2a_base64(hmac.new(device_secret, '&'.join(k + '=' + str(params[k]) for k in params), hashlib.sha256).digest())[:-1]
+
+    auth_url = 'http://gz.auth-device-iot.tencentcloudapi.com/device' 
+    if mqtt_host.find("beijing")>=0 :
+        auth_url = 'http://bj.auth-device-iot.tencentcloudapi.com/device' 
 
 
-params = OrderedDict([
-    ['clientId', client_id],
-    ['deviceName', device_name],
-    ['expire', 72000],
-    ['nonce', 123456],
-    ['productId', product_id],
-    ['timestamp', int(time.time())]])
-params['signature'] = binascii.b2a_base64(hmac.new(device_secret, '&'.join(k + '=' + str(params[k]) for k in params), hashlib.sha256).digest())[:-1]
+    print "======================================================================="
+    print "POST BODY:" , urllib.urlencode(params)
+
+    request = urllib2.Request( auth_url , urllib.urlencode(params))
+
+    with contextlib.closing(urllib2.urlopen(request, timeout=3)) as response:
+        code = response.getcode()
+        rsp = response.read()
+        print "RESPONSE:" , code, rsp
+        data = json.loads(rsp)['data']
+
+    print "-------------------------------------------------\n"
+
+    print 'examples/coap-client  -m post coap://122.152.224.121/auth -e "%s" \n' %  urllib.urlencode(params)
+    print 'mosquitto_sub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d\n'%( mqtt_host, data['id'], data['secret'] , client_id, "%s/%s/#" %(product_id, device_name) )
+    print 'mosquitto_pub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d -m "just4test" -q 1\n'%( mqtt_host, data['id'], data['secret'] , client_id, "%s/%s/XXXXX_PLS_MODIFY" %(product_id, device_name) )
 
 
+gen_cmd( client_id )
 
-
-print "======================================================================="
-print "POST BODY:" , urllib.urlencode(params)
-
-request = urllib2.Request('http://gz.auth-device-iot.tencentcloudapi.com/device', urllib.urlencode(params))
-
-with contextlib.closing(urllib2.urlopen(request, timeout=3)) as response:
-    code = response.getcode()
-    rsp = response.read()
-    print "RESPONSE:" , code, rsp
-    data = json.loads(rsp)['data']
-
-print "-------------------------------------------------\n"
-
-print 'examples/coap-client  -m post coap://122.152.224.121/auth -e "%s" \n' %  urllib.urlencode(params)
-print 'mosquitto_sub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d\n'%( mqtt_host, data['id'], data['secret'] , client_id, "%s/%s/#" %(product_id, device_name) )
-print 'mosquitto_pub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d -m "just4test" -q 1\n'%( mqtt_host, data['id'], data['secret'] , client_id, "%s/%s/XXXXX_PLS_MODIFY" %(product_id, device_name) )
+#gen_cmd( client_id + "_sub1")
+#gen_cmd( client_id + "_pub1")
