@@ -211,8 +211,13 @@ void _on_ota_message_received(tc_iot_message_data* md) {
             return ;
         }
 
-        tc_iot_ota_report(ota_handler, OTA_DOWNLOAD, NULL, 0);
-        do_download(ota_handler->download_url, ota_handler->version, ota_handler->firmware_md5);
+        if (tc_iot_ota_version_larger(ota_handler->version, TC_IOT_FIRM_VERSION)) {
+            tc_iot_ota_report(ota_handler, OTA_DOWNLOAD, NULL, 0);
+            do_download(ota_handler->download_url, ota_handler->version, ota_handler->firmware_md5);
+        } else {
+            TC_IOT_LOG_ERROR("upgradable version=%s not bigger than current version=%s, upgrade can not proceed.", 
+                    ota_handler->version, TC_IOT_FIRM_VERSION)
+        }
     } else if (strncmp(TC_IOT_MQTT_METHOD_REPLY, field_buf, strlen(field_buf)) == 0) {
         TC_IOT_LOG_TRACE("Reply pack recevied.");
     } else if (strncmp(TC_IOT_MQTT_METHOD_REPORT_FIRM, field_buf, strlen(field_buf)) == 0) {

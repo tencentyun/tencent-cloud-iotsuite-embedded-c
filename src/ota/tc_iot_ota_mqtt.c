@@ -232,3 +232,54 @@ exit:
     return rc;
 }
 
+/* 版本号校验规则：固件版本号的组成 为 “客户自定义部分” + “系统强制部分”； */
+/* 系统强制部分 以大写字母V开头，然后后面可以跟只允许一个小数点的数字。 */
+/* 设备端根据这个V后面的数字大小去比对版本，设备只允许向高版本升级；  */
+/* 例如某个客户是一个基于某ESP8266模组的固件程序，则命名为ESP8266V1.0，ESP8266V11.198 都可以通过， */
+/* 系统只需验证V后面必须是一个数值型数字。 */
+/* 版本数字比较：V1.9 与V1.10 哪个大，本系统约定1.9 > 1.10，按V后面的数值大小比较大小 */
+double tc_iot_ota_find_version_number(const char * version) {
+    const char * pos = NULL;
+    double num = 0;
+    char chr = 0;
+
+    if (!version) {
+        return 0;
+    }
+
+    pos = version + strlen(version) - 1;
+    while (pos >= version) {
+        chr = *pos;
+        if ('V' == chr || 'v' == chr) {
+            break;
+        }
+        pos--;
+    }
+
+    num = atof(pos+1);
+
+    return num;
+}
+
+bool tc_iot_ota_version_larger(const char * mine_version, const char * their_version) {
+    const char * mine_pos = NULL;
+    const char * their_pos = NULL;
+    double mine_no = 0;
+    double their_no = 0;
+
+    if (!mine_version || !their_version) {
+        return false;
+    }
+    mine_no = tc_iot_ota_find_version_number(mine_version);
+    if (mine_no == 0) {
+        return false;
+    }
+
+    their_no = tc_iot_ota_find_version_number(their_version);
+    if (their_no == 0) {
+        return false;
+    }
+    
+    return mine_no > their_no;
+}
+
