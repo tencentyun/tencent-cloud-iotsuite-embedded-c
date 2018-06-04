@@ -222,6 +222,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     c->disconnect_handler = p_client_config->disconnect_handler;
     c->ping_outstanding = 0;
     c->next_packetid = 1;
+    c->reconnect_timeout_ms = 0;
     tc_iot_hal_timer_init(&c->last_sent);
     tc_iot_hal_timer_init(&c->last_received);
     tc_iot_hal_timer_init(&c->ping_timer);
