@@ -141,7 +141,7 @@ start:
                     if (':' == pos[i]) {
                         if ((i == tc_iot_const_str_len(HTTP_HEADER_CONTENT_LENGTH)) 
                                 && (0 == memcmp(pos, HTTP_HEADER_CONTENT_LENGTH, i))) {
-                            header_complete = tc_iot_http_has_line_ended(pos+i+2);
+                            header_complete = tc_iot_http_has_line_ended(pos+i+1);
                             if (header_complete) {
                                 /* TC_IOT_LOG_TRACE("%s found:%s",HTTP_HEADER_CONTENT_LENGTH, pos+i+2); */
                                 parser->content_length = tc_iot_try_parse_int(pos+i+2, NULL);
@@ -152,7 +152,7 @@ start:
 
                         } else if ((i == tc_iot_const_str_len(HTTP_HEADER_LOCATION)) 
                                 && (0 == memcmp(pos, HTTP_HEADER_LOCATION, i))) {
-                            header_complete = tc_iot_http_has_line_ended(pos+i+2);
+                            header_complete = tc_iot_http_has_line_ended(pos+i+1);
                             if (header_complete) {
                                 TC_IOT_LOG_TRACE("%s found:%s",HTTP_HEADER_LOCATION, pos+i+2);
                                 parser->location = pos+i+2;
@@ -166,7 +166,7 @@ start:
                         } else {
                             /* TC_IOT_LOG_TRACE("ignore i=%d,pos=%s",i, pos); */
                         }
-                        buffer_parsed += i+2;
+                        buffer_parsed += i+1;
                         pos = buffer + buffer_parsed;
                         parser->state = _PARSER_IGNORE_TO_RETURN_CHAR;
                         goto start;
@@ -368,6 +368,12 @@ parse_url:
                         return TC_IOT_FAILURE;
                     }
                     received_bytes += ret;
+
+                    if (received_bytes >= content_length) {
+                        TC_IOT_LOG_TRACE("%s=%d, received_bytes=%d", HTTP_HEADER_CONTENT_LENGTH, content_length, received_bytes);
+                        network.do_disconnect(&network);
+                        return TC_IOT_SUCCESS;
+                    }
                 } else if (ret == 0){
                     TC_IOT_LOG_TRACE("server closed connection, ret = %d", ret);
                     break;
