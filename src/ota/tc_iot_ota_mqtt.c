@@ -79,8 +79,11 @@ int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, i
     if (OTA_DOWNLOAD != state) {
         if (message) {
             return tc_iot_hal_snprintf(buffer, buffer_len, 
-                    /* "{\"method\":\"ota_report\",\"payload\":" */
-                    "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\",\"ota_message\":\"%s\"}",
+                    "{\"method\":\"%s\",\"payload\":"
+                    "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\",\"ota_message\":\"%s\"}"
+                    "}"
+                    ,
+                    TC_IOT_OTA_METHOD_REPORT_UPGRADE,
                     ota_handler->ota_id,
                     state_item->code,
                     state_item->status,
@@ -88,8 +91,11 @@ int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, i
                     );
         } else {
             return tc_iot_hal_snprintf(buffer, buffer_len, 
-                    /* "{\"method\":\"ota_report\",\"payload\":" */
-                    "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\"}",
+                    "{\"method\":\"%s\",\"payload\":"
+                    "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\"}"
+                    "}"
+                    ,
+                    TC_IOT_OTA_METHOD_REPORT_UPGRADE,
                     ota_handler->ota_id,
                     state_item->code,
                     state_item->status
@@ -97,8 +103,11 @@ int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, i
         }
     } else {
         return tc_iot_hal_snprintf(buffer, buffer_len, 
-                /* "{\"method\":\"ota_report\",\"payload\":" */
-                "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\",\"ota_message\":\"%d\"}",
+                "{\"method\":\"%s\",\"payload\":"
+                "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\",\"ota_message\":\"%d\"}"
+                "}"
+                ,
+                TC_IOT_OTA_METHOD_REPORT_UPGRADE,
                 ota_handler->ota_id,
                 state_item->code,
                 state_item->status,
@@ -132,7 +141,7 @@ int tc_iot_ota_send_message(tc_iot_ota_handler * ota_handler, char * message) {
 }
 
 int tc_iot_ota_report(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent) {
-    char buffer[128];
+    char buffer[256];
     int ret;
 
     ret = tc_iot_ota_format_message(ota_handler, buffer, sizeof(buffer), state, message, percent);

@@ -112,7 +112,7 @@ void do_download (const char * download_url, const char * filename, const char *
     }
 
 
-    helper.fp = fopen(filename,"ab+");
+    helper.fp = fopen(filename,"wb+");
     if(helper.fp == NULL){
         tc_iot_hal_printf("%s file open failed.\n", filename);
         return ;
@@ -324,7 +324,6 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("init ota handler failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
     }
-    /* tc_iot_ota_set_ota_id(ota_handler, "ota_100000"); */
 
     tc_iot_ota_report_firm(&handler,
             "product", g_client_config.device_info.product_id,

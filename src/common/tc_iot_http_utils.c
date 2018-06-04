@@ -454,7 +454,7 @@ int tc_iot_http_get(tc_iot_network_t* network,
                                        result.host_len);
     }
 
-    if (extra_header != NULL) {
+    if (extra_header != NULL && extra_header[0] != '\0') {
         tc_iot_yabuffer_forward(&request->buf, -2);
         /* Range: bytes=%d- */
         ret = tc_iot_hal_snprintf(tc_iot_yabuffer_current(&request->buf), 

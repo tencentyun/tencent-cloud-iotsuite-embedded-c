@@ -7,7 +7,9 @@
 #define TC_IOT_OTA_MESSAGE_LEN       40
 #define TC_IOT_OTA_MAX_VERSION_LEN   40
 
-#define TC_IOT_OTA_METHOD_UPGRADE   "upgrade"
+#define TC_IOT_OTA_METHOD_UPGRADE          "upgrade"
+#define TC_IOT_OTA_METHOD_REPORT_UPGRADE   "report_upgrade"
+#define TC_IOT_OTA_METHOD_REPORT_FIRM      "report_firm"
 
 
 typedef enum _tc_iot_ota_state_e {
