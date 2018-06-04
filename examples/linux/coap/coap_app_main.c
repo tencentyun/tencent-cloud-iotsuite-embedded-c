@@ -21,8 +21,23 @@ static void _tc_iot_coap_con_get_time_handler(tc_iot_coap_client * client, tc_io
     }
 }
 
-void tc_iot_coap_con_default_handler(void * client, tc_iot_coap_message * message ) {
-    TC_IOT_LOG_TRACE("called");
+void _coap_con_default_handler(void * client, tc_iot_coap_message * message ) {
+    unsigned char * payload = NULL;
+    int payload_len;
+    unsigned short message_code = 0;
+
+    message_code = tc_iot_coap_get_message_code(message);
+
+    tc_iot_coap_get_message_payload(message, &payload_len, &payload);
+    if (payload == NULL) {
+        payload = "";
+    }
+
+    TC_IOT_LOG_TRACE("response coap code=%s,payload_len=%d,message=%s",
+            tc_iot_coap_get_message_code_str(message_code),
+            payload_len,
+            payload
+            );
 }
 
 
@@ -84,6 +99,38 @@ static void _tc_iot_coap_get_wellknown( tc_iot_coap_client * c) {
     }
 }
 
+static void _coap_con_rpc_handler(tc_iot_coap_client * client, tc_iot_coap_con_status_e ack_status, 
+        tc_iot_coap_message * message , void * session_context) {
+    unsigned char * payload = NULL;
+    int payload_len;
+    unsigned short message_code = 0;
+
+    if (ack_status == TC_IOT_COAP_CON_TIMEOUT) {
+        TC_IOT_LOG_ERROR("message timeout");
+        return;
+    }
+    message_code = tc_iot_coap_get_message_code(message);
+
+    tc_iot_coap_get_message_payload(message, &payload_len, &payload);
+    if (message_code != COAP_CODE_201_CREATED) {
+        if (payload == NULL) {
+            payload = "";
+        }
+        TC_IOT_LOG_ERROR("publish failed, response coap code=%s,message=%s",
+                tc_iot_coap_get_message_code_str(message_code),
+                payload
+                );
+        return ;
+    }
+
+    if (message && payload) {
+        TC_IOT_LOG_TRACE("len=%d,payload=%s", payload_len, payload);
+    } else {
+        TC_IOT_LOG_TRACE("[no payload]");
+    }
+}
+
+
 int main(int argc, char * argv[])
 {
     tc_iot_coap_client coap_client;
@@ -95,7 +142,7 @@ int main(int argc, char * argv[])
         },
         TC_IOT_CONFIG_COAP_SERVER_HOST,
         TC_IOT_CONFIG_COAP_SERVER_PORT,
-        tc_iot_coap_con_default_handler,
+        _coap_con_default_handler,
         TC_IOT_CONFIG_DTLS_HANDSHAKE_TIMEOUT_MS,
         TC_IOT_CONFIG_USE_DTLS,
         TC_IOT_COAP_DTLS_PSK,
@@ -110,6 +157,8 @@ int main(int argc, char * argv[])
     int ret = 0;
     int i = 0;
     char pub_topic_query_param[128];
+    char rpc_pub_topic_query_param[128];
+    char rpc_sub_topic_query_param[128];
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
     setbuf(stdout, NULL);
@@ -128,10 +177,24 @@ int main(int argc, char * argv[])
     tc_iot_hal_snprintf(pub_topic_query_param, sizeof(pub_topic_query_param), TC_IOT_PUB_TOPIC_PARM_FMT,
             coap_config.device_info.product_id, 
             coap_config.device_info.device_name);
+
+    tc_iot_hal_snprintf(rpc_pub_topic_query_param, sizeof(rpc_pub_topic_query_param), TC_IOT_RPC_PUB_TOPIC_PARM_FMT,
+            coap_config.device_info.product_id, 
+            coap_config.device_info.device_name);
+    tc_iot_hal_snprintf(rpc_sub_topic_query_param, sizeof(rpc_sub_topic_query_param), TC_IOT_RPC_SUB_TOPIC_PARM_FMT,
+            coap_config.device_info.product_id, 
+            coap_config.device_info.device_name);
+
     while (!stop) {
-        tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, pub_topic_query_param, "{\"method\":\"get\"}");
+        tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, pub_topic_query_param, "{\"method\":\"get\"}", NULL);
         tc_iot_hal_printf("yielding ...\n");
         tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
+
+        tc_iot_coap_rpc(&coap_client, TC_IOT_COAP_SERVICE_RPC_PATH, rpc_pub_topic_query_param, 
+                rpc_sub_topic_query_param, "{\"method\":\"get\"}", _coap_con_rpc_handler);
+        tc_iot_hal_printf("yielding ...\n");
+        tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
+        break;
         for (i = 5; i > 0; i--) {
             tc_iot_hal_printf("%d ...\n", i);
             tc_iot_hal_sleep_ms(1000);

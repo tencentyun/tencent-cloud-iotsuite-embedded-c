@@ -36,6 +36,7 @@
 
 #define TC_IOT_COAP_SERVICE_AUTH_PATH      "auth"
 #define TC_IOT_COAP_SERVICE_PUBLISH_PATH   "mqttpub"
+#define TC_IOT_COAP_SERVICE_RPC_PATH       "mqttrpc"
 
 typedef enum _tc_iot_coap_auth_state {
     COAP_AUTH_INITIAL,
@@ -338,7 +339,12 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
 int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
 int tc_iot_coap_auth(tc_iot_coap_client* c);
 void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, 
-        const char * topic_query_uri, const char * msg);
+        const char * topic_query_uri, const char * msg, tc_iot_coap_con_handler callback);
+
+void tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path, 
+        const char * topic_query_uri, const char * topic_resp_uri,
+        const char * msg, tc_iot_coap_con_handler callback);
+
 unsigned short tc_iot_coap_get_next_pack_id(tc_iot_coap_client* c);
 int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message,
         tc_iot_coap_con_handler callback, int timeout_ms, void * session_context);

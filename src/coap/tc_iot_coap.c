@@ -454,6 +454,7 @@ int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_cl
     memset(p_network, 0, sizeof(tc_iot_network_t));
 
     c->device_info = p_client_config->device_info;
+    c->default_handler = p_client_config->default_handler;
     netcontext.fd = -1;
     netcontext.use_tls = p_client_config->use_tls;
     netcontext.host = p_client_config->host;
@@ -843,38 +844,9 @@ auth_start:
     return TC_IOT_SUCCESS;
 }
 
-static void _tc_iot_coap_con_publish_handler(tc_iot_coap_client * client, tc_iot_coap_con_status_e ack_status, 
-        tc_iot_coap_message * message , void * session_context) {
-    unsigned char * payload = NULL;
-    int payload_len;
-    unsigned short message_code = 0;
 
-    if (ack_status == TC_IOT_COAP_CON_TIMEOUT) {
-        TC_IOT_LOG_ERROR("message timeout");
-        return;
-    }
-    message_code = tc_iot_coap_get_message_code(message);
-
-    tc_iot_coap_get_message_payload(message, &payload_len, &payload);
-    if (message_code != COAP_CODE_201_CREATED) {
-        if (payload == NULL) {
-            payload = "";
-        }
-        TC_IOT_LOG_ERROR("publish failed, response coap code=%s,message=%s",
-                tc_iot_coap_get_message_code_str(message_code),
-                payload
-                );
-        return ;
-    }
-
-    if (message && payload) {
-        TC_IOT_LOG_TRACE("len=%d,payload=%s", payload_len, payload);
-    } else {
-        TC_IOT_LOG_TRACE("[no payload]");
-    }
-}
-
-void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, const char * topic_query_uri, const char * msg) {
+void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, const char * topic_query_uri, 
+        const char * msg, tc_iot_coap_con_handler callback) {
     int ret  = 0;
     tc_iot_coap_message message;
 
@@ -886,7 +858,31 @@ void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, const c
     tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_QUERY, strlen(c->auth_token), (unsigned char *)c->auth_token);
     tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_QUERY, strlen(topic_query_uri), (unsigned char *)topic_query_uri);
     tc_iot_coap_message_set_payload(&message, strlen(msg), (unsigned char *)msg);
-    ret = tc_iot_coap_send_message(c, &message, _tc_iot_coap_con_publish_handler, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS, NULL);
+    ret = tc_iot_coap_send_message(c, &message, callback, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS, NULL);
+    if (ret <= 0) {
+        TC_IOT_LOG_ERROR("send message failed, ret=%d", ret);
+    } else {
+        TC_IOT_LOG_TRACE("send message success, sent size=%d", ret);
+    }
+}
+
+
+void tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path, 
+        const char * topic_query_uri, const char * topic_resp_uri,
+        const char * msg, tc_iot_coap_con_handler callback) {
+    int ret  = 0;
+    tc_iot_coap_message message;
+
+    tc_iot_coap_message_init(&message);
+    tc_iot_coap_message_set_message_id(&message, tc_iot_coap_get_next_pack_id(c));
+    tc_iot_coap_message_set_type(&message, COAP_CON);
+    tc_iot_coap_message_set_code(&message, COAP_CODE_002_POST);
+    tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_PATH, strlen(uri_path), (unsigned char *)uri_path);
+    tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_QUERY, strlen(c->auth_token), (unsigned char *)c->auth_token);
+    tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_QUERY, strlen(topic_query_uri), (unsigned char *)topic_query_uri);
+    tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_QUERY, strlen(topic_resp_uri), (unsigned char *)topic_resp_uri);
+    tc_iot_coap_message_set_payload(&message, strlen(msg), (unsigned char *)msg);
+    ret = tc_iot_coap_send_message(c, &message, callback, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS, NULL);
     if (ret <= 0) {
         TC_IOT_LOG_ERROR("send message failed, ret=%d", ret);
     } else {
