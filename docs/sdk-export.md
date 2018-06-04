@@ -24,7 +24,7 @@
 | 7 | tc_iot_mqtt_client_is_connected | 判断 MQTT client 目前是否已连接 |
 | 8 | tc_iot_mqtt_client_disconnecd | 断开 MQTT client 与服务端的连接 |
 
-3. 数据模板接口
+## 3. 数据模板接口
 
 | 序号        | 函数名      | 说明        |
 | ---------- | ---------- | ---------- |
