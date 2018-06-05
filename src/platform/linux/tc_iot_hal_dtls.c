@@ -273,7 +273,7 @@ int tc_iot_hal_dtls_connect(tc_iot_network_t* network, const char* host,
         mbedtls_ssl_get_ciphersuite(&(tls_data->ssl_context)),
         mbedtls_ssl_get_record_expansion(&(tls_data->ssl_context)));
 
-    TC_IOT_LOG_TRACE("Verifying peer X.509 certificate...");
+    TC_IOT_LOG_TRACE("Verifying peer PSK ...");
 
     if ((tls_data->flags = mbedtls_ssl_get_verify_result(
                     &(tls_data->ssl_context))) != 0) {
