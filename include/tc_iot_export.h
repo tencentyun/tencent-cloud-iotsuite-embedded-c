@@ -187,27 +187,6 @@ int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client);
 int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client);
 
 /**
- *  @brief tc_iot_report_firm
-     上报设备系统信息
- @par
- 上报固件信息，固件信息 key 和 value 由根据实际应用场景指定。例如，要上报 固件版本，sdk 版本，
- 硬件版本，调用方式为：
-
- @code{.c}
- tc_iot_report_firm("firm_version":"1.0.192", "sdk_version":"1.8", "harderwaer_ver":"gprs.v.1.0.2018092", NULL)
- @endcode
-
- *  @param  p_shadow_client 设备影子对象
- *  @param va_list 可变参数列表，根据实际上报情况指定，格式为 key1,value1,key2,value2, ..., NULL
- * 按照 key value 对方式，依次指定，最后一个参数必须为NULL，作为变参终止符。
- *  @return 结果返回码
- * @see tc_iot_sys_code_e
- */
-int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, ...);
-
-
-
-/**
  * @brief tc_iot_coap_construct 初始化 CoAP 客户端数据
  *
  * @param c 待初始化的 CoAP 客户端数据结构。
@@ -336,5 +315,95 @@ unsigned char tc_iot_coap_get_message_code(tc_iot_coap_message* message);
  */
 int tc_iot_coap_get_message_payload(tc_iot_coap_message* message, int *payload_len, unsigned char **payload);
 
+
+
+/**
+ * @brief tc_iot_ota_construct 初始化 OTA 服务对象
+ *
+ * @param ota_handler 待初始化的 OTA 对象
+ * @param mqtt_client OTA 对象通过 MQTT 协议与服务端通讯，需要指定用于通讯的
+ * MQTT Client。
+ * @param sub_topic OTA 下行消息 Topic
+ * @param pub_topic OTA 上行消息 Topic
+ * @param ota_msg_callback OTA 下行消息回调通知函数
+ *
+ * @return 结果返回码，返回 TC_IOT_SUCCESS 则说明获取成功。
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_ota_construct(tc_iot_ota_handler * ota_handler, tc_iot_mqtt_client * mqtt_client, 
+        const char * sub_topic, const char * pub_topic, message_handler ota_msg_callback);
+
+
+/**
+ * @brief tc_iot_ota_destroy OTA 服务析构处理，取消 OTA 消息订阅，释放资源。
+ *
+ * @param ota_handler 待释放的 OTA 服务对象
+ */
+void tc_iot_ota_destroy(tc_iot_ota_handler * ota_handler);
+
+
+/**
+ * @brief tc_iot_ota_report_status OTA 升级执行过程中，上报固件下载及升级进度。
+ *
+ * @param ota_handler OTA 服务对象
+ * @param state 当前升级进展枚举
+ * @param message 辅助消息
+ * @param percent 百分比，0~100，仅当 state 为 OTA_DOWNLOAD
+ * 时有效，用来上报下载完成百分比。
+ *
+ * @return 结果返回码，返回 TC_IOT_SUCCESS 则说明获取成功。
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_ota_report_status(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent);
+
+/**
+ *  @brief tc_iot_ota_report_firm
+     上报设备系统信息
+ @par
+ 上报固件信息，固件信息 key 和 value 由根据实际应用场景指定。例如，要上报 固件版本，sdk 版本，
+ 硬件版本，调用方式为：
+
+ @code{.c}
+ tc_iot_ota_report_firm(&handler,
+         "product", g_client_config.device_info.product_id,
+         "device", g_client_config.device_info.device_name,
+         "sdk-ver", TC_IOT_SDK_VERSION,
+         "firm-ver",TC_IOT_FIRM_VERSION, NULL);
+ @endcode
+
+ *  @param ota_handler OTA 对象
+ *  @param va_list 可变参数列表，根据实际上报情况指定，格式为 key1,value1,key2,value2, ..., NULL
+ * 按照 key value 对方式，依次指定，最后一个参数必须为NULL，作为变参终止符。
+ *  @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_ota_report_firm(tc_iot_ota_handler * ota_handler, ...);
+
+
+/**
+ * @brief tc_iot_ota_request_content_length 获取指定 URL 文件的大小。
+ *
+ * @param api_url 带获取信息的文件 URL
+ *
+ *  @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_ota_request_content_length(const char* api_url);
+
+
+/**
+ * @brief tc_iot_ota_download 根据指定的固件 URL 地址，下载固件
+ *
+ * @param api_url 固件地址
+ * @param partial_start 下载偏移地址，默认填 0，当需要续传时，传需要偏移的值。
+ * @param download_callback
+ * 下载过程回调，由于缓存区有限，每下载成功一段数据，就会通过本回调，通知设备端
+ * 进行处理，例如，写入到 Flash 中。
+ * @param context 回调透传数据
+ *
+ *  @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_ota_download(const char* api_url, int partial_start, tc_iot_http_download_callback download_callback, const void * context);
 
 #endif /* end of include guard */

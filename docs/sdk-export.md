@@ -33,17 +33,28 @@
 | 3 | tc_iot_server_destroy | 数据模板服务析构处理，释放资源。 |
 | 4 | tc_iot_report_device_data | 上报设备数据模板参数最新数据状态，更新到服务端。|
 | 5 | tc_iot_confirm_devcie_data | 根据设备控制端要求，发送设备数据模板参数控制指令，更新到服务端，推送给设备。 |
-| 6 | tc_iot_report_firm | 上报设备系统信息，例如，硬件版本、MAC 地址、IMEI、固件版本、SDK 版本等。|
 
 ## 4. CoAP 接口
 
 | 序号        | 函数名      | 说明        |
 | ---------- | ---------- | ---------- |
 | 1 | tc_iot_coap_construct | 根据 CoAP 设备配置参数，初始化服务。 |
-| 2 | tc_iot_coap_auth | 发起认证，获取后续服务所需的设备 Token。 |
-| 3 | tc_iot_coap_send_message | 向服务端发送 CoAP 消息。 |
-| 4 | tc_iot_coap_yield | CoAP client 主循环，包含上行消息响应超时检测、服务器下行消息收取等操作。|
-| 5 | tc_iot_coap_get_message_code | 获取 CoAP 消息请求或返回码。 |
-| 6 | tc_iot_coap_get_message_payload | 获取 CoAP 消息的 Payload 内容。|
+| 2 | tc_iot_coap_destroy | CoAP 服务析构处理，释放资源。 |
+| 3 | tc_iot_coap_auth | 发起认证，获取后续服务所需的设备 Token。 |
+| 4 | tc_iot_coap_send_message | 向服务端发送 CoAP 消息。 |
+| 5 | tc_iot_coap_yield | CoAP client 主循环，包含上行消息响应超时检测、服务器下行消息收取等操作。|
+| 6 | tc_iot_coap_get_message_code | 获取 CoAP 消息请求或返回码。 |
+| 7 | tc_iot_coap_get_message_payload | 获取 CoAP 消息的 Payload 内容。|
+
+## 4. OTA 接口
+
+| 序号        | 函数名      | 说明        |
+| ---------- | ---------- | ---------- |
+| 1 | tc_iot_ota_construct | 根据设备配置参数，初始化 OTA 服务。 |
+| 2 | tc_iot_ota_destroy | OTA 服务析构处理，取消 OTA 消息订阅，释放资源。 |
+| 3 | tc_iot_ota_report_firm | 上报设备系统信息，例如，硬件版本、MAC 地址、IMEI、固件版本、SDK 版本等。|
+| 4 | tc_iot_ota_report_status | OTA 升级执行过程中，上报固件下载及升级进度。 |
+| 5 | tc_iot_ota_request_content_length | 向固件下载服务器，发起 HTTP HEAD 请求，获取固件长度。|
+| 6 | tc_iot_ota_download | 根据指定的固件 URL 地址，下载固件 |
 
 

@@ -89,12 +89,6 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
         }
 
         return _tc_iot_property_change(p_property->id, msg->data);
-    } else if (msg->event == TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM) {
-        tc_iot_report_firm(tc_iot_get_shadow_client(),
-                "product", g_tc_iot_shadow_config.mqtt_client_config.device_info.product_id,
-                "device", g_tc_iot_shadow_config.mqtt_client_config.device_info.device_name,
-                "sdk-ver", TC_IOT_SDK_VERSION,
-                "firm-ver","1.0", NULL);
     } else {
         TC_IOT_LOG_TRACE("unkown event received, event=%d", msg->event);
     }

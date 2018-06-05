@@ -87,11 +87,11 @@ int my_http_download_callback(const void * context, const char * data, int data_
     if (new_percent == 100) {
         TC_IOT_LOG_TRACE("success: progress %d/%d(%d/100)", offset+data_len, total, new_percent);
         helper->percent = new_percent;
-        tc_iot_ota_report(helper->ota_handler, OTA_DOWNLOAD, NULL, new_percent);
+        tc_iot_ota_report_status(helper->ota_handler, OTA_DOWNLOAD, NULL, new_percent);
     } else if (new_percent > (helper->percent+10)) {
         TC_IOT_LOG_TRACE("progress %d/%d(%d/100)", offset+data_len, total, new_percent);
         helper->percent = new_percent;
-        tc_iot_ota_report(helper->ota_handler, OTA_DOWNLOAD, NULL, new_percent);
+        tc_iot_ota_report_status(helper->ota_handler, OTA_DOWNLOAD, NULL, new_percent);
     }
     return TC_IOT_SUCCESS;
 }
@@ -176,15 +176,15 @@ download_success:
 
     if (strcmp(md5str, firmware_md5) != 0) {
         TC_IOT_LOG_ERROR("firmware_md5=%s, download file md5=%s, not match", firmware_md5, md5str);
-        tc_iot_ota_report(ota_handler, OTA_MD5_CHECK, "md5 not match", 0);
+        tc_iot_ota_report_status(ota_handler, OTA_MD5_CHECK, "md5 not match", 0);
         return;
     }
 
-    tc_iot_ota_report(ota_handler, OTA_MD5_CHECK, "success", 0);
+    tc_iot_ota_report_status(ota_handler, OTA_MD5_CHECK, "success", 0);
 
-    tc_iot_ota_report(ota_handler, OTA_START_UPGRADE, NULL, 0);
+    tc_iot_ota_report_status(ota_handler, OTA_START_UPGRADE, NULL, 0);
 
-    tc_iot_ota_report(ota_handler, OTA_UPGRADING, NULL, 0);
+    tc_iot_ota_report_status(ota_handler, OTA_UPGRADING, NULL, 0);
 }
 
 
@@ -220,7 +220,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
 
     if (strncmp(TC_IOT_OTA_METHOD_UPGRADE, field_buf, strlen(field_buf)) == 0) {
         TC_IOT_LOG_TRACE("Upgrade command receved.");
-        tc_iot_ota_report(ota_handler, OTA_COMMAND_RECEIVED, NULL, 0);
+        tc_iot_ota_report_status(ota_handler, OTA_COMMAND_RECEIVED, NULL, 0);
 
         field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, "version", ota_handler->version, sizeof(ota_handler->version));
         if (field_index <= 0 ) {
@@ -247,7 +247,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
         }
 
         if (tc_iot_ota_version_larger(ota_handler->version, TC_IOT_FIRM_VERSION)) {
-            tc_iot_ota_report(ota_handler, OTA_DOWNLOAD, NULL, 0);
+            tc_iot_ota_report_status(ota_handler, OTA_DOWNLOAD, NULL, 0);
             do_download(ota_handler->download_url, ota_handler->version, ota_handler->firmware_md5);
         } else {
             TC_IOT_LOG_ERROR("upgradable version=%s not bigger than current version=%s, upgrade can not proceed.", 
@@ -255,14 +255,6 @@ void _on_ota_message_received(tc_iot_message_data* md) {
         }
     } else if (strncmp(TC_IOT_MQTT_METHOD_REPLY, field_buf, strlen(field_buf)) == 0) {
         TC_IOT_LOG_TRACE("Reply pack recevied.");
-    } else if (strncmp(TC_IOT_MQTT_METHOD_REPORT_FIRM, field_buf, strlen(field_buf)) == 0) {
-        TC_IOT_LOG_TRACE("request report firm info.");
-        tc_iot_ota_report_firm(&handler,
-                "product", g_client_config.device_info.product_id,
-                "device", g_client_config.device_info.device_name,
-                "sdk-ver", TC_IOT_SDK_VERSION,
-                "firm-ver",TC_IOT_FIRM_VERSION, NULL);
-        return;
     }
 }
 

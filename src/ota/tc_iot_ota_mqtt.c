@@ -170,7 +170,7 @@ int tc_iot_ota_send_message(tc_iot_ota_handler * ota_handler, char * message) {
     return tc_iot_mqtt_publish(ota_handler->p_mqtt_client, ota_handler->pub_topic, &pubmsg);
 }
 
-int tc_iot_ota_report(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent) {
+int tc_iot_ota_report_status(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent) {
     char buffer[256];
     int ret;
 
@@ -189,23 +189,7 @@ int tc_iot_ota_report(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state
     return tc_iot_ota_send_message(ota_handler, buffer);
 }
 
-int tc_iot_ota_report_firm(tc_iot_ota_handler * ota_handler, ...) {
-    char buffer[200];
-    int buffer_len = sizeof(buffer);
-
-    int ret = 0;
-    va_list p_args;
-
-    va_start(p_args, ota_handler);
-    ret = tc_iot_ota_update_firm_info(ota_handler, buffer, buffer_len, p_args);
-    if (ret != TC_IOT_SUCCESS) {
-        TC_IOT_LOG_ERROR("[c-s]update_firm_info failed(%d): %s", ret, buffer);
-    }
-    va_end( p_args);
-    return ret;
-}
-
-int tc_iot_ota_update_firm_info(tc_iot_ota_handler * ota_handler, char * buffer, int buffer_len, va_list p_args) {
+static int tc_iot_ota_report_firm_info(tc_iot_ota_handler * ota_handler, char * buffer, int buffer_len, va_list p_args) {
     int rc ;
     tc_iot_mqtt_message pubmsg;
 
@@ -260,6 +244,22 @@ exit:
     /* if (rc != TC_IOT_SUCCESS) { */
     /* } */
     return rc;
+}
+
+int tc_iot_ota_report_firm(tc_iot_ota_handler * ota_handler, ...) {
+    char buffer[200];
+    int buffer_len = sizeof(buffer);
+
+    int ret = 0;
+    va_list p_args;
+
+    va_start(p_args, ota_handler);
+    ret = tc_iot_ota_report_firm_info(ota_handler, buffer, buffer_len, p_args);
+    if (ret != TC_IOT_SUCCESS) {
+        TC_IOT_LOG_ERROR("[c-s]update_firm_info failed(%d): %s", ret, buffer);
+    }
+    va_end( p_args);
+    return ret;
 }
 
 /* 版本号校验规则：固件版本号的组成 为 “客户自定义部分” + “系统强制部分”； */

@@ -3,7 +3,7 @@
  /* 长度需要足够存放：
   * 1) 2^64 的十进制数据值。
   * 2) true or false 布尔字符串。
-  * 3) method 字段数据: get, update, update_firm_info, report_firm_info, reply */
+  * 3) method 字段数据: get, update, control,reply */
 #define TC_IOT_MAX_FIELD_LEN  22
 
 
@@ -234,10 +234,6 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
         TC_IOT_LOG_TRACE("Control data receved.");
     } else if (strncmp(TC_IOT_MQTT_METHOD_REPLY, field_buf, strlen(field_buf)) == 0) {
         TC_IOT_LOG_TRACE("Reply pack recevied.");
-    } else if (strncmp(TC_IOT_MQTT_METHOD_REPORT_FIRM, field_buf, strlen(field_buf)) == 0) {
-        TC_IOT_LOG_TRACE("request report firm info.");
-        tc_iot_shadow_event_notify(p_shadow_client, TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM, NULL, NULL);
-        return;
     }
 
     tc_iot_shadow_doc_parse(p_shadow_client, (const char *)message->payload, json_token, ret, field_buf, sizeof(field_buf));
@@ -316,26 +312,6 @@ int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client) {
     return ret;
 }
 
-int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, ...) {
-    char buffer[512];
-    int buffer_len = sizeof(buffer);
-
-    int ret = 0;
-    va_list p_args;
-
-    va_start(p_args, p_shadow_client);
-    ret = tc_iot_shadow_update_firm_info(p_shadow_client, buffer, buffer_len,
-            _tc_iot_update_firm_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, p_args);
-    if (ret == TC_IOT_SUCCESS) {
-        TC_IOT_LOG_TRACE("[c-s]update_firm_info: %s", buffer);
-    } else {
-        TC_IOT_LOG_TRACE("[c-s]update_firm_info failed(%d): %s", ret, buffer);
-    }
-    va_end( p_args);
-    return ret;
-}
-
-
 int tc_iot_shadow_event_notify(tc_iot_shadow_client * p_shadow_client, tc_iot_event_e event, void * data, void * context) {
     tc_iot_event_message event_msg;
 
@@ -376,8 +352,6 @@ int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_conf
     /* 执行 yield 收取影子服务端前序指令消息，清理历史状态。 */
     tc_iot_shadow_yield(p_shadow_client, 200);
     TC_IOT_LOG_INFO("yield waiting for server finished.");
-
-    tc_iot_shadow_event_notify(p_shadow_client, TC_IOT_SHADOW_EVENT_REQUEST_REPORT_FIRM, NULL, NULL);
 
     /* 通过get操作主动获取服务端影子设备状态，以便设备端同步更新至最新状态*/
     ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, _tc_iot_get_message_ack_callback,

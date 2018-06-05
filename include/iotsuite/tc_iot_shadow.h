@@ -137,14 +137,6 @@ int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shad
  * */
 #define TC_IOT_MQTT_METHOD_CONTROL   "control"
 
-/**< 上报固件信息（设备主动上报）
- * {"method":"update_firm_info","state":{"mac":"xxxxx", "uuid": 123455}}
- * */
-#define TC_IOT_MQTT_METHOD_UPDATE_FIRM    "update_firm_info"
-/**< 上报固件信息控制指令（服务端下发指令，要求客户端上报）
- * {"method":"report_firm_info"}
- * */
-#define TC_IOT_MQTT_METHOD_REPORT_FIRM   "report_firm_info"
 /* 响应类 */
 /**< 读取请求响应*/
 #define TC_IOT_MQTT_METHOD_REPLY     "reply"
@@ -330,7 +322,6 @@ const char * tc_iot_shadow_get_property_name(tc_iot_shadow_client * p_shadow_cli
 int tc_iot_shadow_get_property_type(tc_iot_shadow_client * p_shadow_client, int property_id);
 int tc_iot_shadow_get_property_offset(tc_iot_shadow_client * p_shadow_client, int property_id);
 
-int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, ...);
 int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client);
 
 int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_config * p_client_config);
