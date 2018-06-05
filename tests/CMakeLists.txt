@@ -21,7 +21,7 @@ target_link_libraries(unit_test tc_iot_common)
 
 if (ENABLE_MQTT)
     add_executable(st_download st/st_download.c)
-    if (ENABLE_DTLS)
+    if (ENABLE_TLS)
         target_link_libraries(st_download tc_iot_common tc_iot_hal mbedtls)
     else()
         target_link_libraries(st_download tc_iot_common tc_iot_hal)

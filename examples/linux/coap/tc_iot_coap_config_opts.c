@@ -136,6 +136,7 @@ void parse_command(tc_iot_coap_client_config * config, int argc, char ** argv) {
                     tc_iot_hal_printf ("secret=%s\n", optarg);
                 }
                 break;
+#if defined(ENABLE_DTLS)
             case 'a':
                 if (optarg) {
                     config->p_root_ca = optarg;
@@ -154,6 +155,7 @@ void parse_command(tc_iot_coap_client_config * config, int argc, char ** argv) {
                     tc_iot_hal_printf ("client key=%s\n", config->p_client_key);
                 }
                 break;
+#endif
             case 't':
                 if (optarg) {
                     strncpy(config->device_info.product_id, optarg, TC_IOT_MAX_PRODUCT_ID_LEN);
