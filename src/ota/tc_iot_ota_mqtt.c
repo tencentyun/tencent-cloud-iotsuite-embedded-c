@@ -37,7 +37,7 @@ int tc_iot_ota_set_ota_id(tc_iot_ota_handler * ota_handler, const char * ota_id)
     return TC_IOT_SUCCESS;
 }
 
-int tc_iot_ota_init(tc_iot_ota_handler * ota_handler, tc_iot_mqtt_client * mqtt_client, 
+int tc_iot_ota_construct(tc_iot_ota_handler * ota_handler, tc_iot_mqtt_client * mqtt_client, 
         const char * sub_topic, const char * pub_topic, message_handler ota_msg_callback) {
     int ret = 0;
     if (!ota_handler) {
@@ -63,6 +63,36 @@ int tc_iot_ota_init(tc_iot_ota_handler * ota_handler, tc_iot_mqtt_client * mqtt_
     ret = tc_iot_mqtt_subscribe(ota_handler->p_mqtt_client, ota_handler->sub_topic, TC_IOT_QOS1, ota_msg_callback, ota_handler);
 
     return ret;
+}
+
+void tc_iot_ota_destroy(tc_iot_ota_handler * ota_handler) {
+    int ret = 0;
+
+    if (!ota_handler) {
+        TC_IOT_LOG_ERROR("ota_handler is null");
+        return ;
+    }
+
+    if (!ota_handler->p_mqtt_client) {
+        TC_IOT_LOG_ERROR("ota_handler->p_mqtt_client is null");
+        return ;
+    }
+
+    TC_IOT_LOG_TRACE("unsubscribing from topic:%s", ota_handler->sub_topic);
+    tc_iot_mqtt_unsubscribe(ota_handler->p_mqtt_client, ota_handler->sub_topic);
+    TC_IOT_LOG_TRACE("yielding for unsub ack");
+    tc_iot_mqtt_yield(ota_handler->p_mqtt_client, 100);
+
+    ota_handler->state = OTA_INITIALIZED;
+    ota_handler->ota_id[0] = '\0';
+    ota_handler->firmware_md5[0] = '\0';
+    ota_handler->download_url[0] = '\0';
+    ota_handler->version[0] = '\0';
+
+    ota_handler->p_mqtt_client = NULL;
+    ota_handler->sub_topic = NULL;
+    ota_handler->pub_topic = NULL;
+    TC_IOT_LOG_TRACE("OTA handler released");
 }
 
 int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, int buffer_len, 
@@ -190,7 +220,7 @@ int tc_iot_ota_update_firm_info(tc_iot_ota_handler * ota_handler, char * buffer,
     IF_NULL_RETURN(ota_handler, TC_IOT_NULL_POINTER);
 
     tc_iot_json_writer_open(w, buffer, buffer_len);
-    tc_iot_json_writer_string(w ,"method", TC_IOT_MQTT_METHOD_UPDATE_FIRM);
+    tc_iot_json_writer_string(w ,"method", TC_IOT_OTA_METHOD_REPORT_FIRM);
     tc_iot_json_writer_object_begin(w ,"state");
 
     for(i = 0; i < TC_IOT_MAX_FIRM_INFO_COUNT; i++) {

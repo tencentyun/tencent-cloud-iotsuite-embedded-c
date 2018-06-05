@@ -359,7 +359,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
             p_client_config->device_info.product_id, 
             p_client_config->device_info.device_name);
 
-    ret = tc_iot_ota_init(ota_handler, p_client, ota_sub_topic, ota_pub_topic, _on_ota_message_received);
+    ret = tc_iot_ota_construct(ota_handler, p_client, ota_sub_topic, ota_pub_topic, _on_ota_message_received);
 
     if (ret != TC_IOT_SUCCESS) {
         tc_iot_hal_printf("init ota handler failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
@@ -374,6 +374,8 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     while (!stop) {
         tc_iot_mqtt_client_yield(p_client, timeout);
     }
+    
+    tc_iot_ota_destroy(&handler);
 
     tc_iot_mqtt_client_disconnect(p_client);
 }
