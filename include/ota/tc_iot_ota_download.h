@@ -24,5 +24,6 @@ void tc_iot_http_parser_init(tc_iot_http_response_parser * parser);
 int tc_iot_http_parser_analysis(tc_iot_http_response_parser * parser, const char * buffer, int buffer_len);
 
 int tc_iot_ota_download(const char* api_url, int partial_start, tc_iot_http_download_callback download_callback, const void * context);
+int tc_iot_ota_request_content_length(const char* api_url);
 
 #endif /* end of include guard */

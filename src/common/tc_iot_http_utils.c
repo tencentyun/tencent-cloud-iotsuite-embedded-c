@@ -480,7 +480,6 @@ int tc_iot_http_get(tc_iot_network_t* network,
 
 int tc_iot_http_head(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
-                         char* resp, int resp_max_len,
                          int timeout_ms) {
     tc_iot_url_parse_result_t result;
     char temp_host[512];
@@ -523,13 +522,11 @@ int tc_iot_http_head(tc_iot_network_t* network,
     written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
     TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
-
-    read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
-    if (read_len < resp_max_len) {
-        network->do_disconnect(network);
+    if (written_len == request->buf.pos) {
+        return TC_IOT_SUCCESS;
+    } else {
+        return TC_IOT_FAILURE;
     }
-
-    return read_len;
 }
 
 

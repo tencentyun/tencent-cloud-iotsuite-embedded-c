@@ -233,7 +233,7 @@ int tc_iot_prepare_network(tc_iot_network_t * p_network, bool over_tls, const ch
 int tc_iot_ota_download(const char* api_url, int partial_start, tc_iot_http_download_callback download_callback, const void * context) {
     tc_iot_network_t network;
     tc_iot_http_request request;
-    unsigned char http_buffer[201];
+    unsigned char http_buffer[256];
     int max_http_resp_len = sizeof(http_buffer) - 1;
     char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int ret;
@@ -350,6 +350,7 @@ parse_url:
         }
 
         if (_PARSER_END == parser.state) {
+            TC_IOT_LOG_TRACE("ver=1.%d, code=%d,content_length=%d", parser.version, parser.status_code, parser.content_length);
             content_length = parser.content_length;
             received_bytes = parse_left;
 
@@ -398,8 +399,143 @@ parse_url:
             ret += parse_left;
         }
 
-        TC_IOT_LOG_TRACE("ver=1.%d, code=%d,content_length=%d", parser.version, parser.status_code, parser.content_length);
     }
 
     return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
 }
+
+int tc_iot_ota_request_content_length(const char* api_url) {
+    tc_iot_network_t network;
+    tc_iot_http_request request;
+    unsigned char http_buffer[256];
+    int max_http_resp_len = sizeof(http_buffer) - 1;
+    char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
+    int ret;
+    char* rsp_body;
+    int redirect_count = 0;
+    int temp_len = 0;
+    int i = 0;
+    int callback_ret = 0;
+    int http_code = 0;
+    char * content_length_pos = NULL;
+    int content_length = 0;
+    int received_bytes = 0;
+    int http_timeout_ms = 2000;
+    tc_iot_http_response_parser parser;
+    char http_header[32];
+    int temp = 0;
+    int parse_ret = 0;
+    int parse_left = 0;
+
+    IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
+
+parse_url:
+
+    memset(&network, 0, sizeof(network));
+
+    TC_IOT_LOG_TRACE("request url=%s", api_url);
+    if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
+        tc_iot_prepare_network(&network, true, g_tc_iot_https_root_ca_certs);
+    } else {
+        tc_iot_prepare_network(&network, false, NULL);
+    }
+
+    tc_iot_yabuffer_init(&request.buf, (char *)http_buffer,
+                         sizeof(http_buffer));
+
+    TC_IOT_LOG_TRACE("request url=%s", api_url);
+
+    ret = tc_iot_http_head(&network, &request, api_url, http_timeout_ms);
+    if (TC_IOT_SUCCESS != ret) {
+        TC_IOT_LOG_ERROR("request url=%s failed, ret=%d", api_url, ret);
+        return ret;
+    }
+
+    ret = network.do_read(&network, (unsigned char *)http_buffer, max_http_resp_len, http_timeout_ms);
+    if (ret <= 0) {
+        TC_IOT_LOG_ERROR("read from request url=%s failed, ret=%d", api_url, ret);
+        return ret;
+    }
+
+    http_buffer[ret] = 0;
+    tc_iot_http_parser_init(&parser);
+
+    while (ret > 0) {
+        parse_ret = tc_iot_http_parser_analysis(&parser, http_buffer, ret);
+        if (parse_ret < 0) {
+            TC_IOT_LOG_ERROR("read from request url=%s failed, ret=%d", api_url, ret);
+            network.do_disconnect(&network);
+            return parse_ret;
+        }
+
+        if (parse_ret > ret) {
+            TC_IOT_LOG_ERROR("tc_iot_http_parser_analysis parse_ret=%d too large, ret=%d", parse_ret, ret);
+            network.do_disconnect(&network);
+            return TC_IOT_FAILURE;
+        }
+
+        parse_left = ret - parse_ret;
+        if (parse_left > 0) {
+            memmove(http_buffer, http_buffer+parse_ret, parse_left);
+            http_buffer[parse_left] = '\0';
+        }
+        
+        if (301 == parser.status_code || 302 == parser.status_code) {
+            TC_IOT_LOG_TRACE("server return redirect code=%d", parser.status_code);
+            if (redirect_count < 5) {
+                redirect_count++;
+            } else {
+                TC_IOT_LOG_ERROR("http code %d, redirect exceed maxcount=%d.", http_code, redirect_count);
+                return TC_IOT_HTTP_REDIRECT_TOO_MANY;
+            }
+
+            if (parser.location) {
+                TC_IOT_LOG_TRACE("new_url=%s",  parser.location);
+                for (i = 0; i < ret; i++) {
+                    temp_buf[i] = parser.location[i];
+                    if (temp_buf[i] == '\r') {
+                        TC_IOT_LOG_TRACE("truncate api url");
+                        temp_buf[i] = '\0';
+                    }
+                    if (temp_buf[i] == '\0') {
+                        break;
+                    }
+                }
+                api_url = temp_buf;
+                TC_IOT_LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", 
+                        ret, redirect_count, api_url);
+            } else {
+                TC_IOT_LOG_ERROR("http code %d, Location header not found.", ret);
+            }
+
+            goto parse_url;
+        }
+
+        if (parser.status_code != 200 && parser.status_code != 206) {
+            TC_IOT_LOG_ERROR("http resoponse parser.status_code = %d", parser.status_code);
+            network.do_disconnect(&network);
+            return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
+        }
+
+        if (parser.content_length > 0) {
+            TC_IOT_LOG_TRACE("ver=1.%d, code=%d,content_length=%d", parser.version, parser.status_code, parser.content_length);
+            network.do_disconnect(&network);
+            return parser.content_length;
+        }
+
+        if (ret <= 0) {
+            TC_IOT_LOG_TRACE("ret=%d, len=%d", ret, max_http_resp_len);
+            return TC_IOT_SUCCESS;
+        }
+
+        ret = network.do_read(&network, (unsigned char *)http_buffer+parse_left,
+                max_http_resp_len-parse_left, http_timeout_ms);
+        if (ret >= 0) {
+            ret += parse_left;
+        }
+    }
+
+    return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
+}
+
+

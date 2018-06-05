@@ -72,16 +72,27 @@ int main(int argc, char** argv) {
 
 typedef struct _tc_iot_down_helper{
     FILE * fp;
-    /* const char * digest; */
+    int percent;
     tc_iot_md5_t md5_context;
+    tc_iot_ota_handler * ota_handler;
 }tc_iot_download_helper;
 
 int my_http_download_callback(const void * context, const char * data, int data_len, int offset, int total) {
     tc_iot_download_helper * helper = (tc_iot_download_helper *)context;
-    /* tc_iot_hal_printf("\n[%d/%d]\n->%s", offset+data_len, total, data); */
-    /* tc_iot_hal_printf("%d/%d\n", offset+data_len, total); */
-    fwrite(data,1,data_len,helper->fp);
+    int new_percent = 0;
+
+    fwrite(data, 1, data_len, helper->fp);
     tc_iot_md5_update(&helper->md5_context, data, data_len);
+    new_percent = (100*offset)/total;
+    if (new_percent == 100) {
+        TC_IOT_LOG_TRACE("success: progress %d/%d(%d/100)", offset+data_len, total, new_percent);
+        helper->percent = new_percent;
+        tc_iot_ota_report(helper->ota_handler, OTA_DOWNLOAD, NULL, new_percent);
+    } else if (new_percent > (helper->percent+10)) {
+        TC_IOT_LOG_TRACE("progress %d/%d(%d/100)", offset+data_len, total, new_percent);
+        helper->percent = new_percent;
+        tc_iot_ota_report(helper->ota_handler, OTA_DOWNLOAD, NULL, new_percent);
+    }
     return TC_IOT_SUCCESS;
 }
 
@@ -94,6 +105,7 @@ void do_download (const char * download_url, const char * filename, const char *
     char buffer[512];
     int partial_start = 0;
     int ret = 0;
+    int content_length = 0;
 
     tc_iot_ota_handler * ota_handler = &handler;
 
@@ -111,9 +123,11 @@ void do_download (const char * download_url, const char * filename, const char *
         }
     }
 
+    memset(&helper, 0, sizeof(helper));
+    helper.ota_handler = ota_handler;
 
-    helper.fp = fopen(filename,"wb+");
-    if(helper.fp == NULL){
+    helper.fp = fopen(filename,"ab+");
+    if (helper.fp == NULL){
         tc_iot_hal_printf("%s file open failed.\n", filename);
         return ;
     }
@@ -126,28 +140,49 @@ void do_download (const char * download_url, const char * filename, const char *
         partial_start += byte_read;
     }
 
+    content_length = tc_iot_ota_request_content_length(download_url);
+    if (content_length == partial_start) {
+        TC_IOT_LOG_TRACE("all %d bytes already download to local, skip download process.", content_length);
+        goto download_success;
+        
+    } else if (content_length < partial_start) {
+        TC_IOT_LOG_ERROR("local length=%d larger than real length=%d, restart download process.", partial_start, content_length);
+        ftruncate(fileno(helper.fp), 0);
+        tc_iot_md5_init(&helper.md5_context);
+        partial_start = 0;
+    } else {
+        TC_IOT_LOG_TRACE("start partial download form pos=%d, total=%d", partial_start, content_length);
+    }
+
     ret = tc_iot_ota_download(download_url, partial_start, my_http_download_callback, &helper);
     if (ret != TC_IOT_SUCCESS) {
+        fclose(helper.fp);
+        helper.fp = NULL;
         tc_iot_hal_printf("ERROR: %s download as %s failed.\n", download_url, filename);
-    } else {
-        tc_iot_md5_finish(&helper.md5_context, file_md5_digest);
-        tc_iot_hal_printf("%s download as %s success\n", download_url, filename);
-        tc_iot_hal_printf("md5=%s\n", tc_iot_util_byte_to_hex(file_md5_digest, sizeof(file_md5_digest), md5str, sizeof(md5str)));
+        return;
     }
-    
-    tc_iot_ota_report(ota_handler, OTA_DOWNLOAD, NULL, 100);
-
     fclose(helper.fp);
+
+download_success:
+
+    tc_iot_md5_finish(&helper.md5_context, file_md5_digest);
+    tc_iot_hal_printf("%s download as %s success\n", download_url, filename);
+    tc_iot_hal_printf("md5=%s\n", tc_iot_util_byte_to_hex(file_md5_digest, sizeof(file_md5_digest), md5str, sizeof(md5str)));
+    if (0 != strcmp(md5str, ota_handler->firmware_md5)) {
+        return;
+    }
+
     chmod(filename, S_IRWXU);
 
-    if (strcmp(md5str, firmware_md5) == 0) {
-        tc_iot_ota_report(ota_handler, OTA_MD5_CHECK, NULL, 0);
-    } else {
-        tc_iot_ota_report(ota_handler, OTA_MD5_CHECK, "md5 check not match", 0);
+    if (strcmp(md5str, firmware_md5) != 0) {
+        TC_IOT_LOG_ERROR("firmware_md5=%s, download file md5=%s, not match", firmware_md5, md5str);
+        tc_iot_ota_report(ota_handler, OTA_MD5_CHECK, "md5 not match", 0);
+        return;
     }
 
-    tc_iot_ota_report(ota_handler, OTA_START_UPGRADE, NULL, 0);
+    tc_iot_ota_report(ota_handler, OTA_MD5_CHECK, "success", 0);
 
+    tc_iot_ota_report(ota_handler, OTA_START_UPGRADE, NULL, 0);
 
     tc_iot_ota_report(ota_handler, OTA_UPGRADING, NULL, 0);
 }
@@ -335,7 +370,6 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
             "device", g_client_config.device_info.device_name,
             "sdk-ver", TC_IOT_SDK_VERSION,
             "firm-ver",TC_IOT_FIRM_VERSION, NULL);
-
 
     while (!stop) {
         tc_iot_mqtt_client_yield(p_client, timeout);
