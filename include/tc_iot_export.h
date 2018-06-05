@@ -61,8 +61,8 @@ char tc_iot_mqtt_client_is_connected(tc_iot_mqtt_client* p_mqtt_client);
 
 
 /**
- * @brief tc_iot_mqtt_client_yield 在当前线程为底层服务，让出一定 CPU 执
- * 行时间
+ * @brief tc_iot_mqtt_client_yield MQTT client
+ * 主循环，包含心跳维持、上行消息响应超时检测、服务器下行消息收取等操作。
  *
  * @param p_mqtt_client MQTT client 对象
  * @param timeout_ms 等待时延，单位毫秒
@@ -204,5 +204,137 @@ int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client);
  * @see tc_iot_sys_code_e
  */
 int tc_iot_report_firm(tc_iot_shadow_client* p_shadow_client, ...);
+
+
+
+/**
+ * @brief tc_iot_coap_construct 初始化 CoAP 客户端数据
+ *
+ * @param c 待初始化的 CoAP 客户端数据结构。
+ * @param p_client_config 初始化相关参数，包括
+ * CoAP 服务地址及端口、是否使用 DTLS及DTLS PSK、
+ * 产品信息、设备名称、设备密钥、回调函数等。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
+
+
+/**
+ * @brief tc_iot_coap_auth 发起认证，获取后续服务所需的设备 Token。
+ *
+ * @param c 已初始化好的 CoAP 客户端。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_auth(tc_iot_coap_client* c);
+
+
+/**
+ * @brief tc_iot_coap_send_message 向服务端发送 CoAP 消息。
+ *
+ * @param c 已成功获取获取授权 Token 的 CoAP 客户端。
+ * @param message 待发送的消息
+ * @param callback 消息回调
+ * @param timeout_ms 消息最大等待时延
+ * @param session_context 消息回调透传参数
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_send_message(tc_iot_coap_client* c, tc_iot_coap_message* message,
+        tc_iot_coap_con_handler callback, int timeout_ms, void * session_context);
+
+
+/**
+ * @brief tc_iot_coap_publish 为基于 tc_iot_coap_send_message
+ * 的上层逻辑封装，用来单向发送上报消息。
+ *
+ * @param c 已成功获取获取授权 Token 的 CoAP 客户端。
+ * @param uri_path 上报接口 URI Path，当前固定填写
+ * TC_IOT_COAP_SERVICE_PUBLISH_PATH。
+ * @param topic_query_uri 上报消息发送目的 Topic
+ * 参数，参数固定格式为：tp=Topic_Name，即如果上报消息到 TopicA，
+ * 参数应增加 tp= 前缀后，填写为 “tp=TopicA”
+ * @param msg 上报消息 Payload 。
+ * @param callback 上报结果回调。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ *
+ */
+int tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, 
+        const char * topic_query_uri, const char * msg, tc_iot_coap_con_handler callback);
+
+/**
+ * @brief tc_iot_coap_rpc 为基于 tc_iot_coap_send_message 
+ * 的上层逻辑封装，用来调用影子服务或基于自定义 Topic 的远程服务。
+ *
+ * @param c 已成功获取获取授权 Token 的 CoAP 客户端。
+ * @param uri_path 上报接口 URI Path，当前固定填写
+ * TC_IOT_COAP_SERVICE_RPC_PATH。
+ * @param topic_query_uri RPC 请求参数发送目的 Topic
+ * 参数，参数固定格式为：pt=Topic_Name，即如果到 TopicUpdate，
+ * 参数应增加 pt= 前缀后，填写为 “pt=TopicUpdate”
+ * @param topic_resp_uri RPC 调用响应 Topic
+ * 参数，参数固定格式为：st=Topic_Name，即如果到 TopicCmd，
+ * 参数应增加 st= 前缀后，填写为 “st=TopicUpdate”
+ * @param msg 上报消息 Payload 。
+ * @param callback RPC 调用结果回调。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ *
+ */
+int tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path, 
+        const char * topic_query_uri, const char * topic_resp_uri,
+        const char * msg, tc_iot_coap_con_handler callback);
+
+/**
+ *
+ * @brief tc_iot_coap_yield  CoAP client 主循环，包含上行消息响应超时
+ * 检测、服务器下行消息收取等操作。
+ *
+ * @param c CoAP client 对象
+ * @param timeout_ms 等待时延，单位毫秒
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms);
+
+
+/**
+ * @brief tc_iot_coap_destroy 释放 CoAP client 对象相关资源。
+ *
+ * @param c CoAP client 对象
+ */
+void tc_iot_coap_destroy(tc_iot_coap_client* c);
+
+
+/**
+ * @brief tc_iot_coap_get_message_code 获取消息请求或返回码。
+ *
+ * @param message CoAP 消息
+ *
+ * @return 消息请求或返回码
+ * @see tc_iot_coap_rsp_code
+ */
+unsigned char tc_iot_coap_get_message_code(tc_iot_coap_message* message);
+
+/**
+ * @brief tc_iot_coap_get_message_payload 获取 CoAP 消息的 Payload 内容。
+ *
+ * @param message CoAP 消息
+ * @param payload_len Payload 的长度
+ * @param payload Payload 内容首地址
+ *
+ * @return 结果返回码，返回 TC_IOT_SUCCESS 则说明获取成功。
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_get_message_payload(tc_iot_coap_message* message, int *payload_len, unsigned char **payload);
+
 
 #endif /* end of include guard */

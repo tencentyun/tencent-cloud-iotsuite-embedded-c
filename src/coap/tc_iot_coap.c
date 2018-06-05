@@ -842,7 +842,7 @@ auth_start:
 }
 
 
-void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, const char * topic_query_uri, 
+int tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, const char * topic_query_uri, 
         const char * msg, tc_iot_coap_con_handler callback) {
     int ret  = 0;
     tc_iot_coap_message message;
@@ -861,10 +861,11 @@ void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, const c
     } else {
         TC_IOT_LOG_TRACE("send message success, sent size=%d", ret);
     }
+    return ret;
 }
 
 
-void tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path, 
+int tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path, 
         const char * topic_query_uri, const char * topic_resp_uri,
         const char * msg, tc_iot_coap_con_handler callback) {
     int ret  = 0;
@@ -885,6 +886,7 @@ void tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path,
     } else {
         TC_IOT_LOG_TRACE("send message success, sent size=%d", ret);
     }
+    return ret;
 }
 
 void tc_iot_coap_destroy(tc_iot_coap_client* c) {

@@ -1,11 +1,14 @@
 var searchData=
 [
+  ['htonl',['htonl',['../generic_2tc__iot__platform_8h.html#ad18844f748ac5d31bec4d4bd42ff7bc0',1,'tc_iot_platform.h']]],
+  ['htons',['htons',['../generic_2tc__iot__platform_8h.html#a9b692b4e54f2123a233bb43c7645fbb0',1,'tc_iot_platform.h']]],
   ['http_5fbody_5ffmt',['HTTP_BODY_FMT',['../tc__iot__http__utils_8h.html#aa68b720d6fb26c01e03fb17b12d645a0',1,'tc_iot_http_utils.h']]],
   ['http_5fcontent_5fform_5fdata',['HTTP_CONTENT_FORM_DATA',['../tc__iot__http__utils_8h.html#ac5b4f778b9a691ba77c5d9997043e649',1,'tc_iot_http_utils.h']]],
   ['http_5fcontent_5fform_5furlencoded',['HTTP_CONTENT_FORM_URLENCODED',['../tc__iot__http__utils_8h.html#a8dd1b05859cf063416887f866fc8b523',1,'tc_iot_http_utils.h']]],
   ['http_5fcontent_5fjson',['HTTP_CONTENT_JSON',['../tc__iot__http__utils_8h.html#ae9f5b25caaacfb0b6db790b97fb8c397',1,'tc_iot_http_utils.h']]],
   ['http_5fdefault_5fport',['HTTP_DEFAULT_PORT',['../tc__iot__url_8h.html#a1f192f3009865e9f9a3cd83609c866c2',1,'tc_iot_url.h']]],
   ['http_5fget',['HTTP_GET',['../tc__iot__http__utils_8h.html#aa276b433bb7caee9ec1bb1386063707b',1,'tc_iot_http_utils.h']]],
+  ['http_5fhead',['HTTP_HEAD',['../tc__iot__http__utils_8h.html#a4e69ea7b8d7e381ceaf2601e10471059',1,'tc_iot_http_utils.h']]],
   ['http_5fheader_5faccept',['HTTP_HEADER_ACCEPT',['../tc__iot__http__utils_8h.html#a8916816e8bd30ab2ac3e8b66e2be2fb0',1,'tc_iot_http_utils.h']]],
   ['http_5fheader_5faccept_5fencoding',['HTTP_HEADER_ACCEPT_ENCODING',['../tc__iot__http__utils_8h.html#a935fe42723329d65ac28a93bbb3c8446',1,'tc_iot_http_utils.h']]],
   ['http_5fheader_5fcontent_5flength',['HTTP_HEADER_CONTENT_LENGTH',['../tc__iot__http__utils_8h.html#a46aa73d58026fc6ef40d5cc5b400933f',1,'tc_iot_http_utils.h']]],
@@ -24,6 +27,8 @@ var searchData=
   ['http_5fver_5f1_5f0',['HTTP_VER_1_0',['../tc__iot__http__utils_8h.html#aa1fba6d811f034342514deb4d0098832',1,'tc_iot_http_utils.h']]],
   ['http_5fver_5f1_5f1',['HTTP_VER_1_1',['../tc__iot__http__utils_8h.html#ae45966f1474a39efde4a753d566c9272',1,'tc_iot_http_utils.h']]],
   ['https_5fdefault_5fport',['HTTPS_DEFAULT_PORT',['../tc__iot__url_8h.html#a82d74cd57b8f785ada5520396ef113bc',1,'tc_iot_url.h']]],
+  ['https_5fprefix',['HTTPS_PREFIX',['../tc__iot__http__utils_8h.html#a94ba9cb35f04c02615366bedd784fe35',1,'tc_iot_http_utils.h']]],
+  ['https_5fprefix_5flen',['HTTPS_PREFIX_LEN',['../tc__iot__http__utils_8h.html#af77802f628c90b3d3821528c9f7f6cf8',1,'tc_iot_http_utils.h']]],
   ['https_5fscheme_5fprefix',['HTTPS_SCHEME_PREFIX',['../tc__iot__url_8h.html#abb0b85e63146e9f91eadb1d49d7f7d25',1,'tc_iot_url.h']]],
   ['https_5fscheme_5fprefix_5flen',['HTTPS_SCHEME_PREFIX_LEN',['../tc__iot__url_8h.html#acbe10647a98b6ff5d6cac0f9523b30e7',1,'tc_iot_url.h']]]
 ];
