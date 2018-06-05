@@ -35,4 +35,15 @@
 | 5 | tc_iot_confirm_devcie_data | 根据设备控制端要求，发送设备数据模板参数控制指令，更新到服务端，推送给设备。 |
 | 6 | tc_iot_report_firm | 上报设备系统信息，例如，硬件版本、MAC 地址、IMEI、固件版本、SDK 版本等。|
 
+## 4. CoAP 接口
+
+| 序号        | 函数名      | 说明        |
+| ---------- | ---------- | ---------- |
+| 1 | tc_iot_coap_construct | 根据 CoAP 设备配置参数，初始化服务。 |
+| 2 | tc_iot_coap_auth | 发起认证，获取后续服务所需的设备 Token。 |
+| 3 | tc_iot_coap_send_message | 向服务端发送 CoAP 消息。 |
+| 4 | tc_iot_coap_yield | CoAP client 主循环，包含上行消息响应超时检测、服务器下行消息收取等操作。|
+| 5 | tc_iot_coap_get_message_code | 获取 CoAP 消息请求或返回码。 |
+| 6 | tc_iot_coap_get_message_payload | 获取 CoAP 消息的 Payload 内容。|
+
 

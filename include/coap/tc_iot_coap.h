@@ -338,10 +338,10 @@ int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffe
 
 int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
 int tc_iot_coap_auth(tc_iot_coap_client* c);
-void tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, 
+int tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, 
         const char * topic_query_uri, const char * msg, tc_iot_coap_con_handler callback);
 
-void tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path, 
+int tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path, 
         const char * topic_query_uri, const char * topic_resp_uri,
         const char * msg, tc_iot_coap_con_handler callback);
 

@@ -186,15 +186,21 @@ int main(int argc, char * argv[])
             coap_config.device_info.device_name);
 
     while (!stop) {
+        // 基于 CoAP 协议上报数据
         tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, pub_topic_query_param, "{\"method\":\"get\"}", NULL);
-        tc_iot_hal_printf("yielding ...\n");
+        tc_iot_hal_printf("Publish yielding ...\n");
         tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
 
+        for (i = 5; i > 0; i--) {
+            tc_iot_hal_printf("%d ...\n", i);
+            tc_iot_hal_sleep_ms(1000);
+        }
+
+        // 基于 CoAP 协议的 RPC 调用
         tc_iot_coap_rpc(&coap_client, TC_IOT_COAP_SERVICE_RPC_PATH, rpc_pub_topic_query_param, 
                 rpc_sub_topic_query_param, "{\"method\":\"get\"}", _coap_con_rpc_handler);
-        tc_iot_hal_printf("yielding ...\n");
+        tc_iot_hal_printf("Rpc yielding ...\n");
         tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
-        break;
         for (i = 5; i > 0; i--) {
             tc_iot_hal_printf("%d ...\n", i);
             tc_iot_hal_sleep_ms(1000);

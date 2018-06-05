@@ -35,8 +35,10 @@ bin
 |-- demo_shadow             # Shadow 影子设备操作演示程序
 |-- iotsuite_app            # 通用数据模板演示程序
 |-- light                   # 基于数据模板的 RGB LED Light 演示程序
+|-- demo_coap_client        # CoAP 连接云服务演示程序
 lib
 |-- libtc_iot_suite.a       # SDK 的核心层, libtc_iot_hal、libtc_iot_common 提供连接云服务的能力
+|-- libtc_iot_coap.a        # SDK CoAP 协议封装
 |-- libtc_iot_common.a      # SDK 基础工具库，负责http、json、base64等解析和编解码功能
 |-- libtc_iot_hal.a         # SDK 的硬件及操作系统抽象，负责内存、定时器、网络交互等功能
 ```
