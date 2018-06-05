@@ -1,10 +1,7 @@
 # 操作指南
 ## 准备工作
-1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，注意事项：创建产品时，“鉴权模式”建议选择“临时token模式”；
-2. 为产品定义创建如下2个自定义Topic：
-    - ${product_id}/${device_name}/cmd ，用来接收云端指令。
-    - ${product_id}/${device_name}/update ，用来发布设备上报消息。
-
+1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，注意事项：创建产品时，“鉴权模式”建议选择“临时token模式”，“数据协议”选择“数据模板”；
+2. 通过【数据模板】功能，为产品定义数据模板；
 3. 修改 tc_iot_coap_device_config.h 编译配置文件，配置产品信息相关参数，详见注释：
 ```shell
 /* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
