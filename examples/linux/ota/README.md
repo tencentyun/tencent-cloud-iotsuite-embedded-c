@@ -1,7 +1,10 @@
 # 操作指南
 ## 准备工作 & 编译本示例
-参见 [准备工作](../README.md) 。
-
+1. 参考 [准备工作](../README.md) 。
+2. 配置固件版本号 tc_iot_ota_logic.h ：
+```shell
+#define TC_IOT_FIRM_VERSION "DEMO_OTA_LINUX_X86-64_V1.0"
+```
 
 ## 运行程序
 编译完成后，在 build/bin/ 目录下，会产生一个 demo_ota 程序。
