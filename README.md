@@ -78,6 +78,8 @@ src/platform/
     |-- tc_iot_hal_os.c     # 内存及时间戳实现
     |-- tc_iot_hal_timer.c  # 定时器相关实现
     |-- tc_iot_hal_tls.c    # TLS 加密网络接口实现
+    |-- tc_iot_hal_udp.c    # UDP 接口实现
+    |-- tc_iot_hal_dtls.c    # DTLS 加密网络接口实现
 ```
 
 C-SDK 中提供的 HAL 层是基于 Linux 等 POSIX 体系系统的参考实现，但并不强耦合要求实现按照 POSIX 接口方式，移植时可根据目标系统的情况，灵活调整。
@@ -86,7 +88,7 @@ C-SDK 中提供的 HAL 层是基于 Linux 等 POSIX 体系系统的参考实现�
 
 以下是需要实现的 HAL 层接口，详细信息可以参考注释。
 
-#### 基础功能
+### 基础功能
 | 功能分类    | 函数名     | 说明        | 是否可选   |
 | ---------- | ---------- | ---------- | ---------- |
 | 内存 | tc_iot_hal_malloc | 分配所需的内存空间，并返回一个指向它的指针。 | 基础必选 |
@@ -103,9 +105,10 @@ C-SDK 中提供的 HAL 层是基于 Linux 等 POSIX 体系系统的参考实现�
 | 随机数 | tc_iot_hal_srandom | 设置随机数种子值 | 基础必选 |
 | 随机数 | tc_iot_hal_random | 获取随机数 | 基础必选 |
 
-#### 网络功能（二选一或全选）
+### 网络功能（二选一或全选）
 根据实际连接方式选择，如是否走MQTT over TLS加密，是否通过HTTPS接口获取Token等，选择性实现 TCP 或 TLS 相关接口。
 
+#### 基于 MQTT 协议接入
 ##### TCP
 
 | 功能分类    | 函数名     | 说明        | 是否可选   |
@@ -129,3 +132,29 @@ C-SDK 中提供的 HAL 层是基于 Linux 等 POSIX 体系系统的参考实现�
 | TLS 连接 | tc_iot_hal_tls_read | 接收 TLS 对端发送的数据 | 可选，基于TLS加密通讯时实现 |
 | TLS 连接 | tc_iot_hal_tls_disconnect | 断开 TLS 连接 | 可选，基于TLS加密通讯时实现 |
 | TLS 连接 | tc_iot_hal_tls_destroy | 释放 TLS 相关资源 | 可选，基于TLS加密通讯时实现 |
+
+#### 基于 CoAP 协议接入
+##### UDP
+
+| 功能分类    | 函数名     | 说明        | 是否可选   |
+| ---------- | ---------- | ---------- | ---------- |
+| UDP 连接 | tc_iot_hal_udp_init | 初始化网络连接数据 | 可选，非加密直连时实现 |
+| UDP 连接 | tc_iot_hal_udp_connect | 连接服务端 | 可选，非加密直连时实现 |
+| UDP 连接 | tc_iot_hal_udp_is_connected | 判断当前是否已成功建立网络连接 | 可选，非加密直连时实现 |
+| UDP 连接 | tc_iot_hal_udp_write | 发送数据到网络对端 | 可选，非加密直连时实现 |
+| UDP 连接 | tc_iot_hal_udp_read | 接收网络对端发送的数据 | 可选，非加密直连时实现 |
+| UDP 连接 | tc_iot_hal_udp_disconnect | 断开网络连接 | 可选，非加密直连时实现 |
+| UDP 连接 | tc_iot_hal_udp_destroy | 释放网络相关资源 | 可选，非加密直连时实现 |
+
+##### DTLS
+
+| 功能分类    | 函数名     | 说明        | 是否可选   |
+| ---------- | ---------- | ---------- | ---------- |
+| DTLS 连接 | tc_iot_hal_dtls_init | 初始化 DTLS 连接数据 | 可选，基于DTLS加密通讯时实现 |
+| DTLS 连接 | tc_iot_hal_dtls_connect | 连接 DTLS 服务端并进行相关握手及认证 | 可选，基于DTLS加密通讯时实现 |
+| DTLS 连接 | tc_iot_hal_dtls_is_connected | 判断当前是否已成功建立 DTLS 连接 | 可选，基于DTLS加密通讯时实现 |
+| DTLS 连接 | tc_iot_hal_dtls_write | 发送数据到 DTLS 对端 | 可选，基于DTLS加密通讯时实现 |
+| DTLS 连接 | tc_iot_hal_dtls_read | 接收 DTLS 对端发送的数据 | 可选，基于DTLS加密通讯时实现 |
+| DTLS 连接 | tc_iot_hal_dtls_disconnect | 断开 DTLS 连接 | 可选，基于DTLS加密通讯时实现 |
+| DTLS 连接 | tc_iot_hal_dtls_destroy | 释放 DTLS 相关资源 | 可选，基于DTLS加密通讯时实现 |
+
