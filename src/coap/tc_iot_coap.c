@@ -703,8 +703,8 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
             } else {
                 session = tc_iot_coap_session_find(c, message.message_id);
                 if (session && session->handler) {
-                    TC_IOT_LOG_TRACE("Response for request mid=%d, Total time spent=%dms", 
-                            message.message_id, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS-tc_iot_hal_timer_left_ms(&session->timer));
+                    TC_IOT_LOG_TRACE("Response for request mid=%d, Total timer left=%dms", 
+                            message.message_id, tc_iot_hal_timer_left_ms(&session->timer));
                     session->handler(c, TC_IOT_COAP_CON_SUCCESS,  &message, session->session_context);
                     tc_iot_coap_session_release(session);
                 } else if (c->default_handler) {
