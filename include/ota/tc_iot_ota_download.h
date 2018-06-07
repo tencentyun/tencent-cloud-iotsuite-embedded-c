@@ -1,6 +1,8 @@
 #ifndef TC_IOT_OTA_DOWNLOAD
 #define TC_IOT_OTA_DOWNLOAD
 
+typedef int (*tc_iot_http_download_callback)(const void * context, const char * data, int data_len, int offset, int total);
+
 typedef enum _tc_iot_http_response_parse_state {
     _PARSER_START,
     _PARSER_VERSION,

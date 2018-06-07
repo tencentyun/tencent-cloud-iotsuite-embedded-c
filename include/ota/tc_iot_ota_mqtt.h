@@ -18,7 +18,6 @@ typedef enum _tc_iot_ota_state_e {
     OTA_VERSION_CHECK,
     OTA_DOWNLOAD,
     OTA_MD5_CHECK,
-    OTA_START_UPGRADE,
     OTA_UPGRADING,
     OTA_MAX_STATE,
 }tc_iot_ota_state_e;
@@ -50,7 +49,7 @@ int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, i
         tc_iot_ota_state_e state, const char * message, int percent);
 int tc_iot_ota_set_ota_id(tc_iot_ota_handler * ota_handler, const char * ota_id);
 int tc_iot_ota_set_state(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state);
-int tc_iot_ota_report_status(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent);
+int tc_iot_ota_report_upgrade(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent);
 
 bool tc_iot_ota_version_larger(const char * mine_version, const char * their_version);
 int tc_iot_ota_send_message(tc_iot_ota_handler * ota_handler, char * message);

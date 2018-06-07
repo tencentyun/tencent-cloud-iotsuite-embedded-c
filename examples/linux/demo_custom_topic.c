@@ -219,11 +219,11 @@ void do_sim_data(tc_iot_mqtt_client * p_client) {
             binary_data.var_array
             );
 
-    /* tc_iot_util_byte_to_hex(pubmsg.payload, pubmsg.payloadlen, encode_buffer, sizeof(encode_buffer)); */
-    /* tc_iot_hal_printf("payload hex    : %s\n", encode_buffer); */
-    /* ret = tc_iot_base64_encode(pubmsg.payload, pubmsg.payloadlen, encode_buffer, sizeof(encode_buffer)); */
-    /* encode_buffer[ret] = '\0'; */
-    /* tc_iot_hal_printf("payload base64 : %s\n",encode_buffer); */
+    tc_iot_util_byte_to_hex(pubmsg.payload, pubmsg.payloadlen, encode_buffer, sizeof(encode_buffer));
+    tc_iot_hal_printf("payload hex    : %s\n", encode_buffer);
+    ret = tc_iot_base64_encode(pubmsg.payload, pubmsg.payloadlen, encode_buffer, sizeof(encode_buffer));
+    encode_buffer[ret] = '\0';
+    tc_iot_hal_printf("payload base64 : %s\n",encode_buffer);
     ret = tc_iot_mqtt_client_publish(p_client, pub_topic, &pubmsg);
     if (TC_IOT_SUCCESS != ret) {
         if (ret != TC_IOT_MQTT_RECONNECT_IN_PROGRESS) {

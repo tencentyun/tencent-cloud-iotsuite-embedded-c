@@ -5,11 +5,13 @@
 static int _log_level = TC_IOT_LOG_LEVEL_DEBUG;
 static int request_token = 1;
 static int use_tls = TC_IOT_CONFIG_USE_TLS;
+static int show_version = 0;
 
 static struct option long_options[] =
 {
     {"verbose",      no_argument,          &_log_level, TC_IOT_LOG_LEVEL_WARN},
     {"trace",        no_argument,          &_log_level, TC_IOT_LOG_LEVEL_TRACE},
+    {"version",        no_argument,        &show_version, 1},
     {"host",         optional_argument,    0, 'h'},
     {"port",         optional_argument,    0, 'p'},
     {"product",      optional_argument,    0, 't'},
@@ -229,6 +231,10 @@ void parse_command(tc_iot_mqtt_client_config * config, int argc, char ** argv) {
             tc_iot_hal_printf ("%s ", argv[optind++]);
         }
         tc_iot_hal_printf ("\n");
+    }
+    if (show_version) {
+        tc_iot_hal_printf ("%s based on Tencent Cloud IoT Suite C SDK Version %s\n", argv[0], TC_IOT_SDK_VERSION);
+        exit(0);
     }
 }
 

@@ -1,13 +1,12 @@
 #include "tc_iot_inc.h"
 
 tc_iot_ota_state_item g_tc_iot_ota_state_items[] = {
-    {"00","OTA Initialized"},
-    {"01","OTA command received"},
-    {"02","Firmware version checking"},
-    {"03","OTA firmware downloading"},
-    {"04","OTA MD5 checking"},
-    {"05","OTA start upgrade"},
-    {"06","OTA upgrading"},
+    {"0","OTA Initialized"},
+    {"1","OTA command received"},
+    {"2","Firmware version checking"},
+    {"3","OTA firmware downloading"},
+    {"4","OTA MD5 checking"},
+    {"5","OTA upgrading"},
 };
 
 
@@ -170,7 +169,7 @@ int tc_iot_ota_send_message(tc_iot_ota_handler * ota_handler, char * message) {
     return tc_iot_mqtt_publish(ota_handler->p_mqtt_client, ota_handler->pub_topic, &pubmsg);
 }
 
-int tc_iot_ota_report_status(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent) {
+int tc_iot_ota_report_upgrade(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent) {
     char buffer[256];
     int ret;
 
@@ -205,7 +204,7 @@ static int tc_iot_ota_report_firm_info(tc_iot_ota_handler * ota_handler, char * 
 
     tc_iot_json_writer_open(w, buffer, buffer_len);
     tc_iot_json_writer_string(w ,"method", TC_IOT_OTA_METHOD_REPORT_FIRM);
-    tc_iot_json_writer_object_begin(w ,"state");
+    tc_iot_json_writer_object_begin(w ,"payload");
 
     for(i = 0; i < TC_IOT_MAX_FIRM_INFO_COUNT; i++) {
         info_name = va_arg (p_args, const char *);
