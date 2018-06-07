@@ -11,6 +11,12 @@
  */
 #define TC_IOT_MAX_PACKET_ID 65535
 
+/* 长度需要足够存放：
+ * 1) 2^64 的十进制数据值。
+ * 2) true or false 布尔字符串。
+ * 3) method 字段数据: get, update, control,reply */
+#define TC_IOT_MAX_FIELD_LEN  22
+
 
 /**
  * @brief 客户端最大订阅 Topic 数，请根据业务场景，
