@@ -388,6 +388,8 @@ def main():
         device_config.Domain = device_config.domain
         device_config.Username = device_config.username
         device_config.Password = device_config.password
+        if 'data_template' not in device_config:
+            device_config.data_template = []
         device_config.DataTemplate = device_config.data_template
 
         print(u"加载 {} 文件成功".format(config_path))

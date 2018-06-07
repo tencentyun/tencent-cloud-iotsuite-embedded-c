@@ -292,16 +292,6 @@ int tc_iot_hal_dtls_connect(tc_iot_network_t* network, const char* host,
         ret = TC_IOT_SUCCESS;
     }
 
-    /* #ifdef ENABLE_TC_IOT_LOG_TRACE */
-    /* if (mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context)) != NULL) { */
-    /* info_buf[sizeof(info_buf) - 1] = '\0'; */
-    /* mbedtls_x509_crt_info( */
-    /* (char*)info_buf, sizeof(info_buf) - 1, "", */
-    /* mbedtls_ssl_get_peer_cert(&(tls_data->ssl_context))); */
-    /* TC_IOT_LOG_TRACE("peer cert info:%s\n", info_buf); */
-    /* } */
-    /* #endif */
-
     return ret;
 }
 
