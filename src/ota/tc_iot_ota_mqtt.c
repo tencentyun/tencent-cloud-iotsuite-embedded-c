@@ -121,13 +121,14 @@ int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, i
         } else {
             return tc_iot_hal_snprintf(buffer, buffer_len, 
                     "{\"method\":\"%s\",\"payload\":"
-                    "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\"}"
+                    "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\",\"ota_message\":\"%s\"}"
                     "}"
                     ,
                     TC_IOT_OTA_METHOD_REPORT_UPGRADE,
                     ota_handler->ota_id,
                     state_item->code,
-                    state_item->status
+                    state_item->status,
+                    ""
                     );
         }
     } else {
