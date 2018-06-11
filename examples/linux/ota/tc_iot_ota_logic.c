@@ -166,9 +166,6 @@ void _on_ota_message_received(tc_iot_message_data* md) {
         // 升级指令下发
         TC_IOT_LOG_TRACE("Upgrade command receved.");
 
-        // 上报升级指令已收到
-        tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, NULL, 0);
-
         field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, "payload.version", ota_handler->version, sizeof(ota_handler->version));
         if (field_index <= 0 ) {
             TC_IOT_LOG_ERROR("field version not found in JSON: %s", (char*)message->payload);
@@ -193,6 +190,9 @@ void _on_ota_message_received(tc_iot_message_data* md) {
             return ;
         }
 
+        // 上报升级指令已收到
+        tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, NULL, 0);
+
         // 全部转换成小写字母
         for(int i = 0; ota_handler->firmware_md5[i]; i++){
             ota_handler->firmware_md5[i] = tolower(ota_handler->firmware_md5[i]);
@@ -200,12 +200,17 @@ void _on_ota_message_received(tc_iot_message_data* md) {
 
         // 判断版本，是否是更新版本
         if (tc_iot_ota_version_larger(ota_handler->version, TC_IOT_FIRM_VERSION)) {
+            // 上报版本检查结果
+            tc_iot_ota_report_upgrade(ota_handler, OTA_VERSION_CHECK, "success", 0);
+
             // 上报准备开始下载
             tc_iot_ota_report_upgrade(ota_handler, OTA_DOWNLOAD, NULL, 0);
             
             // 开始下载固件
             do_download(ota_handler->download_url, ota_handler->version, ota_handler->firmware_md5);
         } else {
+            // 上报版本检查结果
+            tc_iot_ota_report_upgrade(ota_handler, OTA_VERSION_CHECK, "failed", 0);
             TC_IOT_LOG_ERROR("upgradable version=%s not bigger than current version=%s, upgrade can not proceed.", 
                     ota_handler->version, TC_IOT_FIRM_VERSION)
         }

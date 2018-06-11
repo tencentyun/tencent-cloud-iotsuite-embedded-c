@@ -3,10 +3,10 @@
 tc_iot_ota_state_item g_tc_iot_ota_state_items[] = {
     {"0","OTA Initialized"},
     {"1","OTA command received"},
-    {"2","Firmware version checking"},
-    {"3","OTA firmware downloading"},
-    {"4","OTA MD5 checking"},
-    {"5","OTA upgrading"},
+    {"2","Firmware version check"},
+    {"3","OTA firmware download"},
+    {"4","OTA MD5 check"},
+    {"5","OTA upgrade"},
 };
 
 
@@ -97,6 +97,7 @@ void tc_iot_ota_destroy(tc_iot_ota_handler * ota_handler) {
 int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, int buffer_len, 
         tc_iot_ota_state_e state, const char * message, int percent) {
     tc_iot_ota_state_item * state_item = NULL;
+    static int mid = 0;
 
     if (!buffer) {
         TC_IOT_LOG_ERROR("buffer is null");
@@ -104,15 +105,19 @@ int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, i
     }
 
     state_item = tc_iot_ota_get_state_item(state);
+    mid++;
 
     if (OTA_DOWNLOAD != state) {
         if (message) {
             return tc_iot_hal_snprintf(buffer, buffer_len, 
-                    "{\"method\":\"%s\",\"payload\":"
+                    "{\"method\":\"%s\","
+                    "\"passthrough\":{\"mid\":%d},"
+                    "\"payload\":"
                     "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\",\"ota_message\":\"%s\"}"
                     "}"
                     ,
                     TC_IOT_OTA_METHOD_REPORT_UPGRADE,
+                    mid,
                     ota_handler->ota_id,
                     state_item->code,
                     state_item->status,
@@ -120,11 +125,14 @@ int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, i
                     );
         } else {
             return tc_iot_hal_snprintf(buffer, buffer_len, 
-                    "{\"method\":\"%s\",\"payload\":"
+                    "{\"method\":\"%s\","
+                    "\"passthrough\":{\"mid\":%d},"
+                    "\"payload\":"
                     "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\",\"ota_message\":\"%s\"}"
                     "}"
                     ,
                     TC_IOT_OTA_METHOD_REPORT_UPGRADE,
+                    mid,
                     ota_handler->ota_id,
                     state_item->code,
                     state_item->status,
@@ -133,11 +141,14 @@ int tc_iot_ota_format_message(tc_iot_ota_handler * ota_handler, char * buffer, i
         }
     } else {
         return tc_iot_hal_snprintf(buffer, buffer_len, 
-                "{\"method\":\"%s\",\"payload\":"
+                "{\"method\":\"%s\","
+                "\"passthrough\":{\"mid\":%d},"
+                "\"payload\":"
                 "{\"ota_id\":\"%s\",\"ota_code\":\"%s\",\"ota_status\":\"%s\",\"ota_message\":\"%d\"}"
                 "}"
                 ,
                 TC_IOT_OTA_METHOD_REPORT_UPGRADE,
+                mid,
                 ota_handler->ota_id,
                 state_item->code,
                 state_item->status,
