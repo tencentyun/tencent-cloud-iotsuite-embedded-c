@@ -11,6 +11,8 @@
 #define TC_IOT_OTA_METHOD_REPORT_UPGRADE   "report_upgrade"
 #define TC_IOT_OTA_METHOD_REPORT_FIRM      "report_firm"
 
+#define TC_IOT_OTA_MAX_DOWNLOAD_URL_LEN    512
+
 
 typedef enum _tc_iot_ota_state_e {
     OTA_INITIALIZED,
@@ -32,7 +34,7 @@ typedef struct _tc_iot_ota_handler {
     char ota_id[TC_IOT_OTA_ID_LEN];
     char firmware_md5[TC_IOT_MD5_DIGEST_SIZE*2+1];
     char version[TC_IOT_OTA_MAX_VERSION_LEN];
-    char download_url[TC_IOT_HTTP_MAX_URL_LENGTH];
+    char download_url[TC_IOT_OTA_MAX_DOWNLOAD_URL_LEN];
 
     const char * sub_topic;
     const char * pub_topic;

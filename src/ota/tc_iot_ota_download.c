@@ -233,7 +233,7 @@ int tc_iot_prepare_network(tc_iot_network_t * p_network, bool over_tls, const ch
 int tc_iot_ota_download(const char* api_url, int partial_start, tc_iot_http_download_callback download_callback, const void * context) {
     tc_iot_network_t network;
     tc_iot_http_request request;
-    unsigned char http_buffer[256];
+    unsigned char http_buffer[1024];
     int max_http_resp_len = sizeof(http_buffer) - 1;
     char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int ret;
@@ -335,7 +335,7 @@ parse_url:
                 }
                 api_url = temp_buf;
                 TC_IOT_LOG_TRACE("http response status code=%d, redirect times=%d, new_url=%s", 
-                        ret, redirect_count, api_url);
+                        parser.status_code, redirect_count, api_url);
             } else {
                 TC_IOT_LOG_ERROR("http code %d, Location header not found.", ret);
             }
@@ -407,7 +407,7 @@ parse_url:
 int tc_iot_ota_request_content_length(const char* api_url) {
     tc_iot_network_t network;
     tc_iot_http_request request;
-    unsigned char http_buffer[256];
+    unsigned char http_buffer[1024];
     int max_http_resp_len = sizeof(http_buffer) - 1;
     char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int ret;
