@@ -1,5 +1,5 @@
 <map id="include/tc_iot_export.h" name="include/tc_iot_export.h">
-<area shape="rect" id="node2" href="$tc__iot__inc_8h.html" title="tc_iot_inc.h" alt="" coords="2279,102,2368,129"/>
+<area shape="rect" id="node2" href="$tc__iot__inc_8h.html" title="tc_iot_inc.h" alt="" coords="1856,102,1945,129"/>
 <area shape="rect" id="node3" href="$tc__iot__external_8h.html" title="tc_iot_external.h" alt="" coords="320,206,439,233"/>
 <area shape="rect" id="node8" href="$tc__iot__log_8h.html" title="common/tc_iot_log.h" alt="" coords="605,206,748,233"/>
 <area shape="rect" id="node9" href="$tc__iot__const_8h.html" title="common/tc_iot_const.h" alt="" coords="772,206,931,233"/>
@@ -17,9 +17,4 @@
 <area shape="rect" id="node21" href="$tc__iot__url_8h.html" title="common/tc_iot_url.h" alt="" coords="2876,206,3016,233"/>
 <area shape="rect" id="node22" href="$tc__iot__config_8h.html" title="tc_iot_config.h" alt="" coords="3041,206,3147,233"/>
 <area shape="rect" id="node23" href="$tc__iot__certs_8h.html" title="common/tc_iot_certs.h" alt="" coords="3171,206,3326,233"/>
-<area shape="rect" id="node24" href="$tc__iot__mqtt_8h.html" title="iotsuite/tc_iot_mqtt.h" alt="" coords="3350,206,3494,233"/>
-<area shape="rect" id="node25" href="$tc__iot__client_8h.html" title="iotsuite/tc_iot_client.h" alt="" coords="3518,206,3667,233"/>
-<area shape="rect" id="node26" href="$tc__iot__shadow_8h.html" title="iotsuite/tc_iot_shadow.h" alt="" coords="3691,206,3854,233"/>
-<area shape="rect" id="node27" href="$tc__iot__token_8h.html" title="iotsuite/tc_iot_token.h" alt="" coords="3879,206,4029,233"/>
-<area shape="rect" id="node28" href="$tc__iot__coap_8h.html" title="coap/tc_iot_coap.h" alt="" coords="4053,206,4185,233"/>
 </map>

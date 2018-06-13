@@ -99,7 +99,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <div class="dyncontent">
 <div class="center"><img src="tc__iot__ya__buffer_8h__dep__incl.png" border="0" usemap="#include_2common_2tc__iot__ya__buffer_8hdep" alt=""/></div>
 <map name="include_2common_2tc__iot__ya__buffer_8hdep" id="include_2common_2tc__iot__ya__buffer_8hdep">
-<area shape="rect" id="node2" href="tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="686,95,821,121"/>
+<area shape="rect" id="node2" href="tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="759,95,894,121"/>
 <area shape="rect" id="node3" href="tc__iot__coap_8h.html" title="include/coap/tc_iot\l_coap.h" alt="" coords="5,169,136,211"/>
 <area shape="rect" id="node4" href="tc__iot__http__utils_8h.html" title="include/common/tc_iot\l_http_utils.h" alt="" coords="159,169,313,211"/>
 <area shape="rect" id="node5" href="tc__iot__json_8h.html" title="include/common/tc_iot\l_json.h" alt="" coords="337,169,490,211"/>
@@ -138,6 +138,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <tr class="memitem:a94a22b588c0c3d73e4af5842030128d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__ya__buffer_8h.html#a94a22b588c0c3d73e4af5842030128d8">tc_iot_yabuffer_left</a> (<a class="el" href="tc__iot__ya__buffer_8h.html#aaccf5f398459b30313e470dad2b27f98">tc_iot_yabuffer_t</a> *buffer)</td></tr>
 <tr class="memdesc:a94a22b588c0c3d73e4af5842030128d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_yabuffer_left 获得缓存剩余空间大小  <a href="#a94a22b588c0c3d73e4af5842030128d8">更多...</a><br /></td></tr>
 <tr class="separator:a94a22b588c0c3d73e4af5842030128d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6342b6f99007690f65e3450cdd9aa35"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__ya__buffer_8h.html#ab6342b6f99007690f65e3450cdd9aa35">tc_iot_yabuffer_len</a> (<a class="el" href="tc__iot__ya__buffer_8h.html#aaccf5f398459b30313e470dad2b27f98">tc_iot_yabuffer_t</a> *yabuffer)</td></tr>
+<tr class="memdesc:ab6342b6f99007690f65e3450cdd9aa35"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_yabuffer_len 获得缓存总大小  <a href="#ab6342b6f99007690f65e3450cdd9aa35">更多...</a><br /></td></tr>
+<tr class="separator:ab6342b6f99007690f65e3450cdd9aa35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2256ecb9a94b31e3ce716e2ff929d05"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__ya__buffer_8h.html#aa2256ecb9a94b31e3ce716e2ff929d05">tc_iot_yabuffer_n_append</a> (<a class="el" href="tc__iot__ya__buffer_8h.html#aaccf5f398459b30313e470dad2b27f98">tc_iot_yabuffer_t</a> *yabuffer, const char *input, int len)</td></tr>
 <tr class="memdesc:aa2256ecb9a94b31e3ce716e2ff929d05"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_yabuffer_n_append 追加数据到缓存中  <a href="#aa2256ecb9a94b31e3ce716e2ff929d05">更多...</a><br /></td></tr>
 <tr class="separator:aa2256ecb9a94b31e3ce716e2ff929d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -331,6 +334,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   </dd>
 </dl>
 <dl class="section return"><dt>返回</dt><dd>&gt;=0 剩余空间大小，&lt;0 失败错误码 </dd></dl>
+<dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab6342b6f99007690f65e3450cdd9aa35"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_yabuffer_len </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__ya__buffer_8h.html#aaccf5f398459b30313e470dad2b27f98">tc_iot_yabuffer_t</a> *&#160;</td>
+          <td class="paramname"><em>yabuffer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tc_iot_yabuffer_len 获得缓存总大小 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">yabuffer</td><td>缓存对象</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>&gt;=0 空间大小，&lt;0 失败错误码 </dd></dl>
 <dl class="section see"><dt>参见</dt><dd><a class="el" href="tc__iot__const_8h.html#a22976d49fd798dc8f3625734a8b6f6f6" title="系统常见错误码定义，基本定义原则： ">tc_iot_sys_code_e</a> </dd></dl>
 
 </div>

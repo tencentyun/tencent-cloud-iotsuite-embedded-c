@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ntohl',['ntohl',['../generic_2tc__iot__platform_8h.html#a5f520f83a29e104953b9ccacd2efa919',1,'tc_iot_platform.h']]],
-  ['ntohs',['ntohs',['../generic_2tc__iot__platform_8h.html#a26dfed27a0078d4c620e8d436922cd55',1,'tc_iot_platform.h']]]
+  ['scheme_5fsplit_5fstr',['SCHEME_SPLIT_STR',['../tc__iot__url_8h.html#a5225cbc145009735c012f310d1196b9a',1,'tc_iot_url.h']]],
+  ['scheme_5fsplit_5fstr_5flen',['SCHEME_SPLIT_STR_LEN',['../tc__iot__url_8h.html#a5a3cbcd53dfa62a3ff423c0d3d444234',1,'tc_iot_url.h']]]
 ];

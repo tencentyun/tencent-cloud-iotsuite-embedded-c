@@ -66,8 +66,9 @@ var searchData=
   ['coap_5foption_5furi_5fport',['COAP_OPTION_URI_PORT',['../tc__iot__coap_8h.html#a990db69a7da6e3d768f987146cfa4ebca344707b9f4cb71310f2ccf5e8050d17a',1,'tc_iot_coap.h']]],
   ['coap_5foption_5furi_5fquery',['COAP_OPTION_URI_QUERY',['../tc__iot__coap_8h.html#a990db69a7da6e3d768f987146cfa4ebcadb4d27052247b9a79ad7fcc0cc30c71c',1,'tc_iot_coap.h']]],
   ['coap_5frst',['COAP_RST',['../tc__iot__coap_8h.html#a89d67499218c8b09a5aca592e58269c5a92859c7244669a116d9eea9a410dcebc',1,'tc_iot_coap.h']]],
-  ['code',['code',['../struct__tc__iot__coap__message.html#a6a7818f5d5fdad74213b93a938302432',1,'_tc_iot_coap_message::code()'],['../struct__tc__iot__code__map.html#ae7bd41745e35b022c3dce69464063596',1,'_tc_iot_code_map::code()']]],
+  ['code',['code',['../struct__tc__iot__coap__message.html#a6a7818f5d5fdad74213b93a938302432',1,'_tc_iot_coap_message::code()'],['../struct__tc__iot__code__map.html#ae7bd41745e35b022c3dce69464063596',1,'_tc_iot_code_map::code()'],['../struct__tc__iot__ota__state__item.html#a3d688d32e1ac2fd680f682c9ce3a9953',1,'_tc_iot_ota_state_item::code()']]],
   ['command_5ftimeout_5fms',['command_timeout_ms',['../struct__tc__iot__mqtt__client.html#aaac2751d6fc922642e7ac81452f643d6',1,'_tc_iot_mqtt_client::command_timeout_ms()'],['../struct__tc__iot__mqtt__client__config.html#a7af645007f7fc1c5c2ff64c866da2ad1',1,'_tc_iot_mqtt_client_config::command_timeout_ms()']]],
   ['connect_5foptions',['connect_options',['../struct__tc__iot__coap__client.html#a3cf999a65171c9f8737e348a65593519',1,'_tc_iot_coap_client::connect_options()'],['../struct__tc__iot__mqtt__client.html#ae5ead9821d53cb73f33635b846ef32be',1,'_tc_iot_mqtt_client::connect_options()']]],
+  ['content_5flength',['content_length',['../struct__tc__iot__http__response__parser.html#ab78dd725da0d8c13bb305ec6aa3f3c71',1,'_tc_iot_http_response_parser']]],
   ['context',['context',['../struct__tc__iot__message__data.html#ab114b7e6adedc839637b921f3af195b7',1,'_tc_iot_message_data::context()'],['../struct__tc__iot__mqtt__client_1_1MessageHandlers.html#a690f0eb430e15edce6a86fe0dbfc40a4',1,'_tc_iot_mqtt_client::MessageHandlers::context()']]]
 ];

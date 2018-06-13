@@ -79,7 +79,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
   <div id="navrow4" class="tabs3">
     <ul class="tablist">
       <li><a href="globals_func.html#index__"><span>_</span></a></li>
-      <li><a href="globals_func_d.html#index_d"><span>d</span></a></li>
       <li><a href="globals_func_h.html#index_h"><span>h</span></a></li>
       <li class="current"><a href="globals_func_t.html#index_t"><span>t</span></a></li>
     </ul>
@@ -250,9 +249,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li>tc_iot_device_on_message_received()
 : <a class="el" href="tc__iot__shadow_8h.html#ab4e99d480baf1dc61c740f8e7c5aa811">tc_iot_shadow.h</a>
 </li>
-<li>tc_iot_do_download()
-: <a class="el" href="tc__iot__http__utils_8h.html#aa7d35253d623e357d1d76e16271486ad">tc_iot_http_utils.h</a>
-</li>
 <li>tc_iot_find_empty_session()
 : <a class="el" href="tc__iot__shadow_8h.html#ac5fe0691acad6169e6145be24a2646be">tc_iot_shadow.h</a>
 </li>
@@ -348,10 +344,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 : <a class="el" href="tc__iot__hmac_8h.html#a229320414aa00c3a64a0ae1acc38d95d">tc_iot_hmac.h</a>
 </li>
 <li>tc_iot_http_get()
-: <a class="el" href="tc__iot__http__utils_8h.html#a183329a5d665ccdfe6105455ffd90615">tc_iot_http_utils.h</a>
+: <a class="el" href="tc__iot__http__utils_8h.html#a4aed80dcbeecff83ae807afd1b64e3f6">tc_iot_http_utils.h</a>
 </li>
 <li>tc_iot_http_head()
-: <a class="el" href="tc__iot__http__utils_8h.html#a8c051a1a3fa2d8e85ff9c8e1451fcad9">tc_iot_http_utils.h</a>
+: <a class="el" href="tc__iot__http__utils_8h.html#a2209c6c483e864ef8e48f8da385ea8ed">tc_iot_http_utils.h</a>
+</li>
+<li>tc_iot_http_parser_analysis()
+: <a class="el" href="tc__iot__ota__download_8h.html#a47e5bcd1e293ed73926d9b62bf38126f">tc_iot_ota_download.h</a>
+</li>
+<li>tc_iot_http_parser_init()
+: <a class="el" href="tc__iot__ota__download_8h.html#adf8f8ee00a029039c647db57b22cdf0b">tc_iot_ota_download.h</a>
 </li>
 <li>tc_iot_http_request_append_body()
 : <a class="el" href="tc__iot__http__utils_8h.html#a5f674325b0c4866aaa7732cb6f7597dd">tc_iot_http_utils.h</a>
@@ -383,14 +385,41 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li>tc_iot_json_print_node()
 : <a class="el" href="tc__iot__json_8h.html#acec27650088b9197917760340ca5f265">tc_iot_json.h</a>
 </li>
-<li>tc_iot_json_property_printf()
-: <a class="el" href="tc__iot__json_8h.html#a9065f44a9dd07e41484fb7ded3c92aee">tc_iot_json.h</a>
-</li>
 <li>tc_iot_json_token_type_str()
 : <a class="el" href="tc__iot__json_8h.html#afb4af3b8de6a5cdc46c54630e12e336e">tc_iot_json.h</a>
 </li>
 <li>tc_iot_json_unescape()
 : <a class="el" href="tc__iot__json_8h.html#a344041773ded953f60e44b65e8772ec1">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_bool()
+: <a class="el" href="tc__iot__json_8h.html#a34a6c8548f67b09c8d0e12b4fc0c700f">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_buffer()
+: <a class="el" href="tc__iot__json_8h.html#aa26d8d338ea30bd10a4dcb448c25dc0b">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_close()
+: <a class="el" href="tc__iot__json_8h.html#a6b5f1f832bf75dd42eb02759033d4394">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_decimal()
+: <a class="el" href="tc__iot__json_8h.html#aa99c64e2a78fa1af1315fa0f382e9663">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_int()
+: <a class="el" href="tc__iot__json_8h.html#a7268240f35252938fa2e08f4f2581af4">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_null()
+: <a class="el" href="tc__iot__json_8h.html#ac6f9fc7c9c81d6b441cad4984206d41e">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_object_begin()
+: <a class="el" href="tc__iot__json_8h.html#a718c5dfad1d8e8ac74fa596f0c83fdfa">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_object_end()
+: <a class="el" href="tc__iot__json_8h.html#a942b4ac5937799f745a9da4f98094a84">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_open()
+: <a class="el" href="tc__iot__json_8h.html#a5358467941f50916b3b12d84986736e3">tc_iot_json.h</a>
+</li>
+<li>tc_iot_json_writer_string()
+: <a class="el" href="tc__iot__json_8h.html#a65e049ed6a83a7233ddb6836aee452c6">tc_iot_json.h</a>
 </li>
 <li>tc_iot_jsoneq()
 : <a class="el" href="tc__iot__json_8h.html#a389158ae241f34b2fa9056ac3b46ec84">tc_iot_json.h</a>
@@ -399,8 +428,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 : <a class="el" href="tc__iot__json_8h.html#a97196facfe6bfd50c07ad80010551e3e">tc_iot_json.h</a>
 </li>
 <li>tc_iot_log_level_enabled()
-: <a class="el" href="tc__iot__export_8h.html#a942f2cbf099b30ee0af067b365b87013">tc_iot_export.h</a>
-, <a class="el" href="tc__iot__log_8h.html#a942f2cbf099b30ee0af067b365b87013">tc_iot_log.h</a>
+: <a class="el" href="tc__iot__log_8h.html#a942f2cbf099b30ee0af067b365b87013">tc_iot_log.h</a>
+, <a class="el" href="tc__iot__export_8h.html#a942f2cbf099b30ee0af067b365b87013">tc_iot_export.h</a>
 </li>
 <li>tc_iot_log_summary_string()
 : <a class="el" href="tc__iot__log_8h.html#ae27da72de788dab35dfed1ddf2f3091d">tc_iot_log.h</a>
@@ -427,28 +456,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 : <a class="el" href="tc__iot__client_8h.html#ae94b6e8640a9c31b54db73a305f8604f">tc_iot_client.h</a>
 </li>
 <li>tc_iot_mqtt_client_construct()
-: <a class="el" href="tc__iot__client_8h.html#a139d227adb9a4269908fc8a4936eddfc">tc_iot_client.h</a>
-, <a class="el" href="tc__iot__export_8h.html#a139d227adb9a4269908fc8a4936eddfc">tc_iot_export.h</a>
+: <a class="el" href="tc__iot__export_8h.html#a139d227adb9a4269908fc8a4936eddfc">tc_iot_export.h</a>
+, <a class="el" href="tc__iot__client_8h.html#a139d227adb9a4269908fc8a4936eddfc">tc_iot_client.h</a>
 </li>
 <li>tc_iot_mqtt_client_destroy()
-: <a class="el" href="tc__iot__export_8h.html#a4e1eb8d9f4ab1914b9b0e062bdc3de15">tc_iot_export.h</a>
-, <a class="el" href="tc__iot__client_8h.html#a4e1eb8d9f4ab1914b9b0e062bdc3de15">tc_iot_client.h</a>
+: <a class="el" href="tc__iot__client_8h.html#a4e1eb8d9f4ab1914b9b0e062bdc3de15">tc_iot_client.h</a>
+, <a class="el" href="tc__iot__export_8h.html#a4e1eb8d9f4ab1914b9b0e062bdc3de15">tc_iot_export.h</a>
 </li>
 <li>tc_iot_mqtt_client_disconnect()
 : <a class="el" href="tc__iot__client_8h.html#a56f0792b713a4067f8ec6f39a6f9cf70">tc_iot_client.h</a>
 , <a class="el" href="tc__iot__export_8h.html#a56f0792b713a4067f8ec6f39a6f9cf70">tc_iot_export.h</a>
 </li>
 <li>tc_iot_mqtt_client_is_connected()
-: <a class="el" href="tc__iot__export_8h.html#ab31be1a9fd2ad5ae1627cb0e686f911b">tc_iot_export.h</a>
-, <a class="el" href="tc__iot__client_8h.html#ab31be1a9fd2ad5ae1627cb0e686f911b">tc_iot_client.h</a>
+: <a class="el" href="tc__iot__client_8h.html#ab31be1a9fd2ad5ae1627cb0e686f911b">tc_iot_client.h</a>
+, <a class="el" href="tc__iot__export_8h.html#ab31be1a9fd2ad5ae1627cb0e686f911b">tc_iot_export.h</a>
 </li>
 <li>tc_iot_mqtt_client_publish()
 : <a class="el" href="tc__iot__client_8h.html#aa673b011aecfe47e0edff75f73b39afd">tc_iot_client.h</a>
 , <a class="el" href="tc__iot__export_8h.html#aa673b011aecfe47e0edff75f73b39afd">tc_iot_export.h</a>
 </li>
 <li>tc_iot_mqtt_client_subscribe()
-: <a class="el" href="tc__iot__export_8h.html#a82181f39263c85a68b8b2e077fa213e9">tc_iot_export.h</a>
-, <a class="el" href="tc__iot__client_8h.html#a82181f39263c85a68b8b2e077fa213e9">tc_iot_client.h</a>
+: <a class="el" href="tc__iot__client_8h.html#a82181f39263c85a68b8b2e077fa213e9">tc_iot_client.h</a>
+, <a class="el" href="tc__iot__export_8h.html#a82181f39263c85a68b8b2e077fa213e9">tc_iot_export.h</a>
 </li>
 <li>tc_iot_mqtt_client_unsubscribe()
 : <a class="el" href="tc__iot__client_8h.html#a09134bf2b5efb12b4f3f653958819b46">tc_iot_client.h</a>
@@ -509,11 +538,51 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <li>tc_iot_mqtt_yield()
 : <a class="el" href="tc__iot__mqtt_8h.html#aaf0b9192e214111cb04f7fde181d9cf8">tc_iot_mqtt.h</a>
 </li>
+<li>tc_iot_ota_construct()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#ada88e7088bee10e67e2ee1f5efdb2e26">tc_iot_ota_mqtt.h</a>
+, <a class="el" href="tc__iot__export_8h.html#ada88e7088bee10e67e2ee1f5efdb2e26">tc_iot_export.h</a>
+</li>
+<li>tc_iot_ota_destroy()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#a1ad390c38e963aeac4b838d476ff90a3">tc_iot_ota_mqtt.h</a>
+, <a class="el" href="tc__iot__export_8h.html#a1ad390c38e963aeac4b838d476ff90a3">tc_iot_export.h</a>
+</li>
+<li>tc_iot_ota_download()
+: <a class="el" href="tc__iot__ota__download_8h.html#a4e44c55e55e97b7437f5fdc82fdb2d1f">tc_iot_ota_download.h</a>
+, <a class="el" href="tc__iot__export_8h.html#a4e44c55e55e97b7437f5fdc82fdb2d1f">tc_iot_export.h</a>
+</li>
+<li>tc_iot_ota_format_message()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#aa36270c9f6e507246a1c30e1eba8fc8b">tc_iot_ota_mqtt.h</a>
+</li>
+<li>tc_iot_ota_get_state_item()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#a0aa217c971a37a29912ed4fcde55ed59">tc_iot_ota_mqtt.h</a>
+</li>
+<li>tc_iot_ota_report_firm()
+: <a class="el" href="tc__iot__export_8h.html#ac6a809ba432d1e7a85535464940dc0f3">tc_iot_export.h</a>
+</li>
+<li>tc_iot_ota_report_status()
+: <a class="el" href="tc__iot__export_8h.html#adf9251282fe54b36b4da3b8904ea9c2f">tc_iot_export.h</a>
+</li>
+<li>tc_iot_ota_report_upgrade()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#ac5afcda2817b5958c738207192fda070">tc_iot_ota_mqtt.h</a>
+</li>
+<li>tc_iot_ota_request_content_length()
+: <a class="el" href="tc__iot__ota__download_8h.html#a11d429d2cac023a2e7a98629bf491f68">tc_iot_ota_download.h</a>
+, <a class="el" href="tc__iot__export_8h.html#a11d429d2cac023a2e7a98629bf491f68">tc_iot_export.h</a>
+</li>
+<li>tc_iot_ota_send_message()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#a7faa7f0101036f688563ad672ef796f5">tc_iot_ota_mqtt.h</a>
+</li>
+<li>tc_iot_ota_set_ota_id()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#afcd823981a6f734b619ba02e1f22b9d0">tc_iot_ota_mqtt.h</a>
+</li>
+<li>tc_iot_ota_set_state()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#ab2e8daaac1a7c19e2ee0386501a6dc2e">tc_iot_ota_mqtt.h</a>
+</li>
+<li>tc_iot_ota_version_larger()
+: <a class="el" href="tc__iot__ota__mqtt_8h.html#ac223078f9e6f31e27c02b2b91289894b">tc_iot_ota_mqtt.h</a>
+</li>
 <li>tc_iot_parse_http_response_code()
 : <a class="el" href="tc__iot__http__utils_8h.html#aba8a80606b36c51db6525aaba12b8b6c">tc_iot_http_utils.h</a>
-</li>
-<li>tc_iot_property_ref()
-: <a class="el" href="tc__iot__json_8h.html#abfe54dd9e43decbb8667908a4827c5af">tc_iot_json.h</a>
 </li>
 <li>tc_iot_release_session()
 : <a class="el" href="tc__iot__shadow_8h.html#a74b963a646616436a2ce01ad9ffb0054">tc_iot_shadow.h</a>
@@ -522,17 +591,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 : <a class="el" href="tc__iot__shadow_8h.html#a9f98e70812afbe8f44dadb3201227580">tc_iot_shadow.h</a>
 , <a class="el" href="tc__iot__export_8h.html#a9f98e70812afbe8f44dadb3201227580">tc_iot_export.h</a>
 </li>
-<li>tc_iot_report_firm()
-: <a class="el" href="tc__iot__shadow_8h.html#a3cbc74d68b2288180180df1c7c09d76f">tc_iot_shadow.h</a>
-, <a class="el" href="tc__iot__export_8h.html#a3cbc74d68b2288180180df1c7c09d76f">tc_iot_export.h</a>
-</li>
 <li>tc_iot_server_destroy()
 : <a class="el" href="tc__iot__shadow_8h.html#aa9ac071176fa16739d07b3ab20fa3e7b">tc_iot_shadow.h</a>
 , <a class="el" href="tc__iot__export_8h.html#aa9ac071176fa16739d07b3ab20fa3e7b">tc_iot_export.h</a>
 </li>
 <li>tc_iot_server_init()
-: <a class="el" href="tc__iot__shadow_8h.html#ac19ed60474eda4cb0aa71f5502702674">tc_iot_shadow.h</a>
-, <a class="el" href="tc__iot__export_8h.html#ac19ed60474eda4cb0aa71f5502702674">tc_iot_export.h</a>
+: <a class="el" href="tc__iot__export_8h.html#ac19ed60474eda4cb0aa71f5502702674">tc_iot_export.h</a>
+, <a class="el" href="tc__iot__shadow_8h.html#ac19ed60474eda4cb0aa71f5502702674">tc_iot_shadow.h</a>
 </li>
 <li>tc_iot_server_loop()
 : <a class="el" href="tc__iot__shadow_8h.html#acb1e29725d6bf7b8dd0cce6a13570958">tc_iot_shadow.h</a>
@@ -661,6 +726,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 </li>
 <li>tc_iot_yabuffer_left()
 : <a class="el" href="tc__iot__ya__buffer_8h.html#a94a22b588c0c3d73e4af5842030128d8">tc_iot_ya_buffer.h</a>
+</li>
+<li>tc_iot_yabuffer_len()
+: <a class="el" href="tc__iot__ya__buffer_8h.html#ab6342b6f99007690f65e3450cdd9aa35">tc_iot_ya_buffer.h</a>
 </li>
 <li>tc_iot_yabuffer_n_append()
 : <a class="el" href="tc__iot__ya__buffer_8h.html#aa2256ecb9a94b31e3ce716e2ff929d05">tc_iot_ya_buffer.h</a>

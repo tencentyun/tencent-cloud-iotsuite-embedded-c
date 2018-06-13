@@ -90,7 +90,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <a href="#nested-classes">结构体</a> &#124;
 <a href="#define-members">宏定义</a> &#124;
 <a href="#typedef-members">类型定义</a> &#124;
-<a href="#enum-members">枚举</a> &#124;
 <a href="#func-members">函数</a>  </div>
   <div class="headertitle">
 <div class="title">tc_iot_json.h 文件参考</div>  </div>
@@ -102,7 +101,7 @@ tc_iot_json.h 的引用(Include)关系图:</div>
 <div class="dyncontent">
 <div class="center"><img src="tc__iot__json_8h__incl.png" border="0" usemap="#include_2common_2tc__iot__json_8h" alt=""/></div>
 <map name="include_2common_2tc__iot__json_8h" id="include_2common_2tc__iot__json_8h">
-<area shape="rect" id="node2" href="tc__iot__inc_8h.html" title="tc_iot_inc.h" alt="" coords="2099,95,2188,121"/>
+<area shape="rect" id="node2" href="tc__iot__inc_8h.html" title="tc_iot_inc.h" alt="" coords="1771,95,1860,121"/>
 <area shape="rect" id="node3" href="tc__iot__external_8h.html" title="tc_iot_external.h" alt="" coords="320,177,439,203"/>
 <area shape="rect" id="node8" href="tc__iot__log_8h.html" title="common/tc_iot_log.h" alt="" coords="605,177,748,203"/>
 <area shape="rect" id="node9" href="tc__iot__const_8h.html" title="common/tc_iot_const.h" alt="" coords="772,177,931,203"/>
@@ -119,11 +118,6 @@ tc_iot_json.h 的引用(Include)关系图:</div>
 <area shape="rect" id="node20" href="tc__iot__url_8h.html" title="common/tc_iot_url.h" alt="" coords="2701,177,2841,203"/>
 <area shape="rect" id="node21" href="tc__iot__config_8h.html" title="tc_iot_config.h" alt="" coords="2866,177,2973,203"/>
 <area shape="rect" id="node22" href="tc__iot__certs_8h.html" title="common/tc_iot_certs.h" alt="" coords="2997,177,3151,203"/>
-<area shape="rect" id="node23" href="tc__iot__mqtt_8h.html" title="iotsuite/tc_iot_mqtt.h" alt="" coords="3175,177,3319,203"/>
-<area shape="rect" id="node24" href="tc__iot__client_8h.html" title="iotsuite/tc_iot_client.h" alt="" coords="3343,177,3493,203"/>
-<area shape="rect" id="node25" href="tc__iot__shadow_8h.html" title="iotsuite/tc_iot_shadow.h" alt="" coords="3517,177,3679,203"/>
-<area shape="rect" id="node26" href="tc__iot__token_8h.html" title="iotsuite/tc_iot_token.h" alt="" coords="3704,177,3855,203"/>
-<area shape="rect" id="node27" href="tc__iot__coap_8h.html" title="coap/tc_iot_coap.h" alt="" coords="3879,177,4011,203"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -131,7 +125,7 @@ tc_iot_json.h 的引用(Include)关系图:</div>
 <div class="dyncontent">
 <div class="center"><img src="tc__iot__json_8h__dep__incl.png" border="0" usemap="#include_2common_2tc__iot__json_8hdep" alt=""/></div>
 <map name="include_2common_2tc__iot__json_8hdep" id="include_2common_2tc__iot__json_8hdep">
-<area shape="rect" id="node2" href="tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="657,95,791,121"/>
+<area shape="rect" id="node2" href="tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="731,95,866,121"/>
 <area shape="rect" id="node3" href="tc__iot__coap_8h.html" title="include/coap/tc_iot\l_coap.h" alt="" coords="5,169,136,211"/>
 <area shape="rect" id="node4" href="tc__iot__http__utils_8h.html" title="include/common/tc_iot\l_http_utils.h" alt="" coords="159,169,313,211"/>
 <area shape="rect" id="node5" href="tc__iot__log_8h.html" title="include/common/tc_iot\l_log.h" alt="" coords="337,169,490,211"/>
@@ -148,9 +142,7 @@ tc_iot_json.h 的引用(Include)关系图:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 结构体</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">union &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="union__tc__iot__variant__data.html">_tc_iot_variant_data</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__property.html">_tc_iot_property</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__tc__iot__json__writer.html">_tc_iot_json_writer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -161,50 +153,13 @@ tc_iot_json.h 的引用(Include)关系图:</div>
 <tr class="separator:ae57218e89b8d7addb960cfcb2116b64d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab167558249f2471d6e6ff9fd59387c1f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#ab167558249f2471d6e6ff9fd59387c1f">TC_IOT_JSON_FALSE</a>&#160;&#160;&#160;&quot;false&quot;</td></tr>
 <tr class="separator:ab167558249f2471d6e6ff9fd59387c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9148a50b2c77e3f531e8456da4bf6f8b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a9148a50b2c77e3f531e8456da4bf6f8b">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a>(sys_type,  iot_type)&#160;&#160;&#160;<a class="el" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">tc_iot_property</a> tc_iot_property_ ## sys_type(const char * key, sys_type val)</td></tr>
-<tr class="separator:a9148a50b2c77e3f531e8456da4bf6f8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa5f477807c17ee610c6130d61d21177"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#afa5f477807c17ee610c6130d61d21177">DEFINE_TC_IOT_PROPERTY_FUNC</a>(sys_type,  iot_type)</td></tr>
-<tr class="separator:afa5f477807c17ee610c6130d61d21177"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac673b27d1667160e406db6337b1923a6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#ac673b27d1667160e406db6337b1923a6">TC_IOT_PROPERTY</a>(key,  val,  sys_type)&#160;&#160;&#160;tc_iot_property_ ## sys_type(key, val)</td></tr>
-<tr class="separator:ac673b27d1667160e406db6337b1923a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b88c8ef60628bbc8370166b646133c8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a2b88c8ef60628bbc8370166b646133c8">TC_IOT_PROPERTY_REF</a>(key,  val,  type,  length)&#160;&#160;&#160;<a class="el" href="tc__iot__json_8h.html#abfe54dd9e43decbb8667908a4827c5af">tc_iot_property_ref</a>(key, val, type, length)</td></tr>
-<tr class="separator:a2b88c8ef60628bbc8370166b646133c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15e85e64900b1443dabb487eb4ede9e0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a15e85e64900b1443dabb487eb4ede9e0">TC_IOT_MAX_JSON_TOKEN_COUNT</a>&#160;&#160;&#160;120</td></tr>
 <tr class="separator:a15e85e64900b1443dabb487eb4ede9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 类型定义</h2></td></tr>
-<tr class="memitem:a0c3dd635f415119781f8e6c88f97a81c"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608d">_tc_iot_type_e</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a0c3dd635f415119781f8e6c88f97a81c">tc_iot_type_e</a></td></tr>
-<tr class="separator:a0c3dd635f415119781f8e6c88f97a81c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f8e3c8dc03b1c750da13bd49ce4c439"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a4f8e3c8dc03b1c750da13bd49ce4c439">pointer</a></td></tr>
-<tr class="separator:a4f8e3c8dc03b1c750da13bd49ce4c439"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abecac5c6f7aefe0dc7756d2e03524758"><td class="memItemLeft" align="right" valign="top">typedef union <a class="el" href="union__tc__iot__variant__data.html">_tc_iot_variant_data</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#abecac5c6f7aefe0dc7756d2e03524758">tc_iot_variant_data</a></td></tr>
-<tr class="separator:abecac5c6f7aefe0dc7756d2e03524758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0f5cfbdf9365139da771f6143dcaf38"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct__tc__iot__property.html">_tc_iot_property</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">tc_iot_property</a></td></tr>
-<tr class="separator:ac0f5cfbdf9365139da771f6143dcaf38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-枚举</h2></td></tr>
-<tr class="memitem:a9016466b8b1d0f93e11d8bd8bdde608d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608d">_tc_iot_type_e</a> { <br />
-&#160;&#160;<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da598fd6e13cdc90601750665e07c74abc">TC_IOT_UNKNOW_TYPE</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dab79581da316dc6e511deb58e21c8d69b">TC_IOT_INT8</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da67c842d4dc9a910e2732c1753a750bd9">TC_IOT_INT16</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da7e9097bfa93d63469f670349bd7b014f">TC_IOT_INT32</a>, 
-<br />
-&#160;&#160;<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dacd2c37f0ca23ea85e9598ce931c4c6fd">TC_IOT_UINT8</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da89209d080ba18867b32e145939edbb57">TC_IOT_UINT16</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da6d9d1959f205609fc9769e989543e3f6">TC_IOT_UINT32</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da48742d3097aaa788395ee8f177bbd635">TC_IOT_FLOAT</a>, 
-<br />
-&#160;&#160;<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da77a16695acbc141eee8d2d5906ebdf84">TC_IOT_DOUBLE</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da05bfb684772f154cd409e2717e9f44d1">TC_IOT_BOOL</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dac473f8dd447d37241da62030a117507e">TC_IOT_STRING</a>, 
-<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dae97346e4e8e922e321435b770298cdb0">TC_IOT_ARRAY</a>, 
-<br />
-&#160;&#160;<a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dab0cbb7d2e2e2c253643eccd1a50d9b97">TC_IOT_OBJECT</a>
-<br />
- }</td></tr>
-<tr class="separator:a9016466b8b1d0f93e11d8bd8bdde608d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a14f0d5777538d0f71b6d3ba7f9898d"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct__tc__iot__json__writer.html">_tc_iot_json_writer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a></td></tr>
+<tr class="separator:a8a14f0d5777538d0f71b6d3ba7f9898d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
@@ -226,85 +181,28 @@ tc_iot_json.h 的引用(Include)关系图:</div>
 <tr class="separator:acec27650088b9197917760340ca5f265"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fc8bc630e23104a284f79546331eaa0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a8fc8bc630e23104a284f79546331eaa0">tc_iot_json_find_token</a> (const char *json, const jsmntok_t *root_token, int count, const char *path, char *result, int result_len)</td></tr>
 <tr class="separator:a8fc8bc630e23104a284f79546331eaa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab389618cc6f75687c5a6b4e88c3b844e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#ab389618cc6f75687c5a6b4e88c3b844e">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (int8_t, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dab79581da316dc6e511deb58e21c8d69b">TC_IOT_INT8</a>)</td></tr>
-<tr class="separator:ab389618cc6f75687c5a6b4e88c3b844e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47c8e87efc27743a50eac9a6d271e95c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a47c8e87efc27743a50eac9a6d271e95c">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (int16_t, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da67c842d4dc9a910e2732c1753a750bd9">TC_IOT_INT16</a>)</td></tr>
-<tr class="separator:a47c8e87efc27743a50eac9a6d271e95c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9bc8f67d6dd4586aa9b53e046a8ac87"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#aa9bc8f67d6dd4586aa9b53e046a8ac87">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (int32_t, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da7e9097bfa93d63469f670349bd7b014f">TC_IOT_INT32</a>)</td></tr>
-<tr class="separator:aa9bc8f67d6dd4586aa9b53e046a8ac87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab09504723a32bc8301d9a5ba9acd8e76"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#ab09504723a32bc8301d9a5ba9acd8e76">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (uint8_t, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dacd2c37f0ca23ea85e9598ce931c4c6fd">TC_IOT_UINT8</a>)</td></tr>
-<tr class="separator:ab09504723a32bc8301d9a5ba9acd8e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1b29c8176a8f6f466b602c4794c14ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#ad1b29c8176a8f6f466b602c4794c14ee">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (uint16_t, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da89209d080ba18867b32e145939edbb57">TC_IOT_UINT16</a>)</td></tr>
-<tr class="separator:ad1b29c8176a8f6f466b602c4794c14ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e964a0df85695fb460a49f96b6cab24"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a2e964a0df85695fb460a49f96b6cab24">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (uint32_t, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da6d9d1959f205609fc9769e989543e3f6">TC_IOT_UINT32</a>)</td></tr>
-<tr class="separator:a2e964a0df85695fb460a49f96b6cab24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae6f82c450a5a657aabdc2e2026f3e10"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#aae6f82c450a5a657aabdc2e2026f3e10">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (bool, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da05bfb684772f154cd409e2717e9f44d1">TC_IOT_BOOL</a>)</td></tr>
-<tr class="separator:aae6f82c450a5a657aabdc2e2026f3e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8a4e79869d25bd6e66277f009cde733"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#ad8a4e79869d25bd6e66277f009cde733">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (float, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da48742d3097aaa788395ee8f177bbd635">TC_IOT_FLOAT</a>)</td></tr>
-<tr class="separator:ad8a4e79869d25bd6e66277f009cde733"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39a7c27f052e57f6fd5413799b2780cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a39a7c27f052e57f6fd5413799b2780cf">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</a> (double, <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da77a16695acbc141eee8d2d5906ebdf84">TC_IOT_DOUBLE</a>)</td></tr>
-<tr class="separator:a39a7c27f052e57f6fd5413799b2780cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfe54dd9e43decbb8667908a4827c5af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">tc_iot_property</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#abfe54dd9e43decbb8667908a4827c5af">tc_iot_property_ref</a> (const char *key, void *ptr, <a class="el" href="tc__iot__json_8h.html#a0c3dd635f415119781f8e6c88f97a81c">tc_iot_type_e</a> type, int length)</td></tr>
-<tr class="separator:abfe54dd9e43decbb8667908a4827c5af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9065f44a9dd07e41484fb7ded3c92aee"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a9065f44a9dd07e41484fb7ded3c92aee">tc_iot_json_property_printf</a> (char *buffer, int len, int count,...)</td></tr>
-<tr class="separator:a9065f44a9dd07e41484fb7ded3c92aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5358467941f50916b3b12d84986736e3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a5358467941f50916b3b12d84986736e3">tc_iot_json_writer_open</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w, char *buffer, int buffer_len)</td></tr>
+<tr class="separator:a5358467941f50916b3b12d84986736e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b5f1f832bf75dd42eb02759033d4394"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a6b5f1f832bf75dd42eb02759033d4394">tc_iot_json_writer_close</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w)</td></tr>
+<tr class="separator:a6b5f1f832bf75dd42eb02759033d4394"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a718c5dfad1d8e8ac74fa596f0c83fdfa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a718c5dfad1d8e8ac74fa596f0c83fdfa">tc_iot_json_writer_object_begin</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w, const char *name)</td></tr>
+<tr class="separator:a718c5dfad1d8e8ac74fa596f0c83fdfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a942b4ac5937799f745a9da4f98094a84"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a942b4ac5937799f745a9da4f98094a84">tc_iot_json_writer_object_end</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w)</td></tr>
+<tr class="separator:a942b4ac5937799f745a9da4f98094a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa26d8d338ea30bd10a4dcb448c25dc0b"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#aa26d8d338ea30bd10a4dcb448c25dc0b">tc_iot_json_writer_buffer</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w)</td></tr>
+<tr class="separator:aa26d8d338ea30bd10a4dcb448c25dc0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65e049ed6a83a7233ddb6836aee452c6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a65e049ed6a83a7233ddb6836aee452c6">tc_iot_json_writer_string</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w, const char *name, const char *value)</td></tr>
+<tr class="separator:a65e049ed6a83a7233ddb6836aee452c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7268240f35252938fa2e08f4f2581af4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a7268240f35252938fa2e08f4f2581af4">tc_iot_json_writer_int</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w, const char *name, long value)</td></tr>
+<tr class="separator:a7268240f35252938fa2e08f4f2581af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa99c64e2a78fa1af1315fa0f382e9663"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#aa99c64e2a78fa1af1315fa0f382e9663">tc_iot_json_writer_decimal</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w, const char *name, double value)</td></tr>
+<tr class="separator:aa99c64e2a78fa1af1315fa0f382e9663"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34a6c8548f67b09c8d0e12b4fc0c700f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#a34a6c8548f67b09c8d0e12b4fc0c700f">tc_iot_json_writer_bool</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w, const char *name, bool value)</td></tr>
+<tr class="separator:a34a6c8548f67b09c8d0e12b4fc0c700f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f9fc7c9c81d6b441cad4984206d41e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__json_8h.html#ac6f9fc7c9c81d6b441cad4984206d41e">tc_iot_json_writer_null</a> (<a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *w, const char *name)</td></tr>
+<tr class="separator:ac6f9fc7c9c81d6b441cad4984206d41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">宏定义说明</h2>
-<a class="anchor" id="afa5f477807c17ee610c6130d61d21177"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEFINE_TC_IOT_PROPERTY_FUNC</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">sys_type, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">iot_type&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>值:</b><div class="fragment"><div class="line"><a class="code" href="struct__tc__iot__property.html">tc_iot_property</a> tc_iot_property_ ## sys_type(<span class="keyword">const</span> <span class="keywordtype">char</span> * key, sys_type val) { <a class="code" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">\</a></div><div class="line"><a class="code" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">    tc_iot_property</a> prop; \</div><div class="line">    prop.<a class="code" href="struct__tc__iot__property.html#a4d4c7ce4e5eaf20d6576ef4d4d7c7223">key</a> = key; \</div><div class="line">    prop.length = <span class="keyword">sizeof</span>(sys_type); \</div><div class="line">    prop.data.as_ ## sys_type = val;\</div><div class="line">    prop.type = iot_type; \</div><div class="line">    return prop; \</div><div class="line">} \</div><div class="ttc" id="struct__tc__iot__property_html_a4d4c7ce4e5eaf20d6576ef4d4d7c7223"><div class="ttname"><a href="struct__tc__iot__property.html#a4d4c7ce4e5eaf20d6576ef4d4d7c7223">_tc_iot_property::key</a></div><div class="ttdeci">const char * key</div><div class="ttdef"><b>Definition:</b> tc_iot_json.h:61</div></div>
-<div class="ttc" id="struct__tc__iot__property_html"><div class="ttname"><a href="struct__tc__iot__property.html">_tc_iot_property</a></div><div class="ttdef"><b>Definition:</b> tc_iot_json.h:60</div></div>
-<div class="ttc" id="tc__iot__json_8h_html_ac0f5cfbdf9365139da771f6143dcaf38"><div class="ttname"><a href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">tc_iot_property</a></div><div class="ttdeci">struct _tc_iot_property tc_iot_property</div></div>
-</div><!-- fragment -->
-</div>
-</div>
-<a class="anchor" id="a9148a50b2c77e3f531e8456da4bf6f8b"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEFINE_TC_IOT_PROPERTY_FUNC_PROTO</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">sys_type, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">iot_type&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;<a class="el" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">tc_iot_property</a> tc_iot_property_ ## sys_type(const char * key, sys_type val)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="ab167558249f2471d6e6ff9fd59387c1f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -353,401 +251,20 @@ tc_iot_json.h 的引用(Include)关系图:</div>
 
 </div>
 </div>
-<a class="anchor" id="ac673b27d1667160e406db6337b1923a6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define TC_IOT_PROPERTY</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">key, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">val, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">sys_type&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;tc_iot_property_ ## sys_type(key, val)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a2b88c8ef60628bbc8370166b646133c8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define TC_IOT_PROPERTY_REF</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">key, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">val, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">type, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">length&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;<a class="el" href="tc__iot__json_8h.html#abfe54dd9e43decbb8667908a4827c5af">tc_iot_property_ref</a>(key, val, type, length)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">类型定义说明</h2>
-<a class="anchor" id="a4f8e3c8dc03b1c750da13bd49ce4c439"></a>
+<a class="anchor" id="a8a14f0d5777538d0f71b6d3ba7f9898d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void* <a class="el" href="tc__iot__json_8h.html#a4f8e3c8dc03b1c750da13bd49ce4c439">pointer</a></td>
+          <td class="memname">typedef struct <a class="el" href="struct__tc__iot__json__writer.html">_tc_iot_json_writer</a> <a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac0f5cfbdf9365139da771f6143dcaf38"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef struct <a class="el" href="struct__tc__iot__property.html">_tc_iot_property</a> <a class="el" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">tc_iot_property</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0c3dd635f415119781f8e6c88f97a81c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef enum <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608d">_tc_iot_type_e</a> <a class="el" href="tc__iot__json_8h.html#a0c3dd635f415119781f8e6c88f97a81c">tc_iot_type_e</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="abecac5c6f7aefe0dc7756d2e03524758"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef union <a class="el" href="union__tc__iot__variant__data.html">_tc_iot_variant_data</a> <a class="el" href="tc__iot__json_8h.html#abecac5c6f7aefe0dc7756d2e03524758">tc_iot_variant_data</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">枚举类型说明</h2>
-<a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608d">_tc_iot_type_e</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608da598fd6e13cdc90601750665e07c74abc"></a>TC_IOT_UNKNOW_TYPE&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608dab79581da316dc6e511deb58e21c8d69b"></a>TC_IOT_INT8&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608da67c842d4dc9a910e2732c1753a750bd9"></a>TC_IOT_INT16&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608da7e9097bfa93d63469f670349bd7b014f"></a>TC_IOT_INT32&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608dacd2c37f0ca23ea85e9598ce931c4c6fd"></a>TC_IOT_UINT8&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608da89209d080ba18867b32e145939edbb57"></a>TC_IOT_UINT16&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608da6d9d1959f205609fc9769e989543e3f6"></a>TC_IOT_UINT32&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608da48742d3097aaa788395ee8f177bbd635"></a>TC_IOT_FLOAT&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608da77a16695acbc141eee8d2d5906ebdf84"></a>TC_IOT_DOUBLE&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608da05bfb684772f154cd409e2717e9f44d1"></a>TC_IOT_BOOL&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608dac473f8dd447d37241da62030a117507e"></a>TC_IOT_STRING&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608dae97346e4e8e922e321435b770298cdb0"></a>TC_IOT_ARRAY&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a9016466b8b1d0f93e11d8bd8bdde608dab0cbb7d2e2e2c253643eccd1a50d9b97"></a>TC_IOT_OBJECT&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
 
 </div>
 </div>
 <h2 class="groupheader">函数说明</h2>
-<a class="anchor" id="ab389618cc6f75687c5a6b4e88c3b844e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">int8_t&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dab79581da316dc6e511deb58e21c8d69b">TC_IOT_INT8</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a47c8e87efc27743a50eac9a6d271e95c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da67c842d4dc9a910e2732c1753a750bd9">TC_IOT_INT16</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aa9bc8f67d6dd4586aa9b53e046a8ac87"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da7e9097bfa93d63469f670349bd7b014f">TC_IOT_INT32</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab09504723a32bc8301d9a5ba9acd8e76"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608dacd2c37f0ca23ea85e9598ce931c4c6fd">TC_IOT_UINT8</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad1b29c8176a8f6f466b602c4794c14ee"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da89209d080ba18867b32e145939edbb57">TC_IOT_UINT16</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a2e964a0df85695fb460a49f96b6cab24"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da6d9d1959f205609fc9769e989543e3f6">TC_IOT_UINT32</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aae6f82c450a5a657aabdc2e2026f3e10"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da05bfb684772f154cd409e2717e9f44d1">TC_IOT_BOOL</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad8a4e79869d25bd6e66277f009cde733"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da48742d3097aaa788395ee8f177bbd635">TC_IOT_FLOAT</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a39a7c27f052e57f6fd5413799b2780cf"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DEFINE_TC_IOT_PROPERTY_FUNC_PROTO </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a9016466b8b1d0f93e11d8bd8bdde608da77a16695acbc141eee8d2d5906ebdf84">TC_IOT_DOUBLE</a>&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a546fc5fa1f78de4147a98838de158861"></a>
 <div class="memitem">
 <div class="memproto">
@@ -944,44 +461,6 @@ tc_iot_json.h 的引用(Include)关系图:</div>
 
 </div>
 </div>
-<a class="anchor" id="a9065f44a9dd07e41484fb7ded3c92aee"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int tc_iot_json_property_printf </td>
-          <td>(</td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>buffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>len</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>...</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="afb4af3b8de6a5cdc46c54630e12e336e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1025,6 +504,266 @@ tc_iot_json.h 的引用(Include)关系图:</div>
           <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>src_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a34a6c8548f67b09c8d0e12b4fc0c700f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_bool </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa26d8d338ea30bd10a4dcb448c25dc0b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* tc_iot_json_writer_buffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6b5f1f832bf75dd42eb02759033d4394"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_close </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa99c64e2a78fa1af1315fa0f382e9663"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_decimal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7268240f35252938fa2e08f4f2581af4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_int </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac6f9fc7c9c81d6b441cad4984206d41e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_null </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a718c5dfad1d8e8ac74fa596f0c83fdfa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_object_begin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a942b4ac5937799f745a9da4f98094a84"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_object_end </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5358467941f50916b3b12d84986736e3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_open </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>buffer_len</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a65e049ed6a83a7233ddb6836aee452c6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tc_iot_json_writer_string </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a8a14f0d5777538d0f71b6d3ba7f9898d">tc_iot_json_writer</a> *&#160;</td>
+          <td class="paramname"><em>w</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1095,44 +834,6 @@ tc_iot_json.h 的引用(Include)关系图:</div>
           <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>len</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="abfe54dd9e43decbb8667908a4827c5af"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="tc__iot__json_8h.html#ac0f5cfbdf9365139da771f6143dcaf38">tc_iot_property</a> tc_iot_property_ref </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>key</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>ptr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="tc__iot__json_8h.html#a0c3dd635f415119781f8e6c88f97a81c">tc_iot_type_e</a>&#160;</td>
-          <td class="paramname"><em>type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

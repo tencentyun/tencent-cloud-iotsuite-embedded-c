@@ -1,5 +1,5 @@
 <map id="include/tc_iot_config.h" name="include/tc_iot_config.h">
-<area shape="rect" id="node2" href="$tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="686,80,821,107"/>
+<area shape="rect" id="node2" href="$tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="759,80,894,107"/>
 <area shape="rect" id="node3" href="$tc__iot__coap_8h.html" title="include/coap/tc_iot\l_coap.h" alt="" coords="5,155,136,196"/>
 <area shape="rect" id="node4" href="$tc__iot__http__utils_8h.html" title="include/common/tc_iot\l_http_utils.h" alt="" coords="159,155,313,196"/>
 <area shape="rect" id="node5" href="$tc__iot__json_8h.html" title="include/common/tc_iot\l_json.h" alt="" coords="337,155,490,196"/>

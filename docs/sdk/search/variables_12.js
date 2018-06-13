@@ -9,5 +9,5 @@ var searchData=
   ['topicname',['topicName',['../struct__tc__iot__message__data.html#a75514a12b8cc9285ccca96f30cc36fc7',1,'_tc_iot_message_data']]],
   ['total_5fhigh',['total_high',['../struct__tc__iot__md5__t.html#a2bfbea2518db5a1ac326eda5945ec3f6',1,'_tc_iot_md5_t']]],
   ['total_5flow',['total_low',['../struct__tc__iot__md5__t.html#a0f3c155dd76bec31993fc4579f3c8220',1,'_tc_iot_md5_t']]],
-  ['type',['type',['../union__tc__iot__coap__header.html#af28a1e36c3efc6dfd5d3df7669ac3b04',1,'_tc_iot_coap_header::type()'],['../struct__tc__iot__property.html#a95c14779b75359ba25c589b40edb3327',1,'_tc_iot_property::type()'],['../struct__tc__iot__shadow__property__def.html#a0af0203db2f26ef35fcf18476bd4ba8b',1,'_tc_iot_shadow_property_def::type()']]]
+  ['type',['type',['../union__tc__iot__coap__header.html#af28a1e36c3efc6dfd5d3df7669ac3b04',1,'_tc_iot_coap_header::type()'],['../struct__tc__iot__shadow__property__def.html#a0af0203db2f26ef35fcf18476bd4ba8b',1,'_tc_iot_shadow_property_def::type()']]]
 ];
