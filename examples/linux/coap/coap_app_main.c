@@ -145,6 +145,7 @@ int main(int argc, char * argv[])
         _coap_con_default_handler,
         TC_IOT_CONFIG_DTLS_HANDSHAKE_TIMEOUT_MS,
         TC_IOT_CONFIG_USE_DTLS,
+#if defined(ENABLE_DTLS)
         TC_IOT_COAP_DTLS_PSK,
         sizeof(TC_IOT_COAP_DTLS_PSK)-1,
         TC_IOT_COAP_DTLS_PSK_ID,
@@ -152,6 +153,7 @@ int main(int argc, char * argv[])
         NULL,
         NULL,
         NULL,
+#endif
     };
 
     int ret = 0;
