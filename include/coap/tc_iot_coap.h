@@ -35,8 +35,8 @@
 
 
 #define TC_IOT_COAP_SERVICE_AUTH_PATH      "auth"
-#define TC_IOT_COAP_SERVICE_PUBLISH_PATH   "mqttpub"
-#define TC_IOT_COAP_SERVICE_RPC_PATH       "mqttrpc"
+#define TC_IOT_COAP_SERVICE_PUBLISH_PATH   "iotpub"
+#define TC_IOT_COAP_SERVICE_RPC_PATH       "iotrpc"
 
 typedef enum _tc_iot_coap_auth_state {
     COAP_AUTH_INITIAL,

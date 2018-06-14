@@ -29,7 +29,7 @@ make
 编译完成后，在 build/bin/ 目录下，会产生一个 demo_coap_client 程序。
 
 ```shell
-# MQTT 直连并开启详细日志模式，运行 demo_coap_client 设备端应用，
+# 开启详细日志模式，运行 demo_coap_client 设备端应用，
 # 此种方式运行，可以有效查看日志及抓包定位问题
 # 备注：
 # -d device_xxxx 参数是指定当前连接使用的设备名
