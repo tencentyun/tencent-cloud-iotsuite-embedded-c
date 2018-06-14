@@ -41,6 +41,11 @@ int main(int argc, char** argv) {
     int ret = 0;
     tc_iot_mqtt_client_config * p_client_config;
 
+    if (argc == 2 && strcmp(argv[1],"--firm-version") == 0) {
+        tc_iot_hal_printf("%s\n", TC_IOT_FIRM_VERSION);
+        return 0;
+    }
+
     p_client_config = &(g_client_config);
     parse_command(p_client_config, argc, argv);
 

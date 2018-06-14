@@ -12,7 +12,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     char err_str[100];
     tc_iot_timer timer;
 
-    TC_IOT_FUNC_ENTRY;
+    /* TC_IOT_FUNC_ENTRY; */
 
     tc_iot_hal_timer_init(&timer);
     tc_iot_hal_timer_countdown_ms(&timer, timeout_ms);

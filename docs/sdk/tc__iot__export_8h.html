@@ -204,9 +204,9 @@ tc_iot_export.h 的引用(Include)关系图:</div>
 <tr class="memitem:a1ad390c38e963aeac4b838d476ff90a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#a1ad390c38e963aeac4b838d476ff90a3">tc_iot_ota_destroy</a> (<a class="el" href="tc__iot__ota__mqtt_8h.html#a701414996b15d90930d3bb1b7925c8b8">tc_iot_ota_handler</a> *ota_handler)</td></tr>
 <tr class="memdesc:a1ad390c38e963aeac4b838d476ff90a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_ota_destroy OTA 服务析构处理，取消 OTA 消息订阅，释放资源。  <a href="#a1ad390c38e963aeac4b838d476ff90a3">更多...</a><br /></td></tr>
 <tr class="separator:a1ad390c38e963aeac4b838d476ff90a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf9251282fe54b36b4da3b8904ea9c2f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#adf9251282fe54b36b4da3b8904ea9c2f">tc_iot_ota_report_status</a> (<a class="el" href="tc__iot__ota__mqtt_8h.html#a701414996b15d90930d3bb1b7925c8b8">tc_iot_ota_handler</a> *ota_handler, <a class="el" href="tc__iot__ota__mqtt_8h.html#a92100f9c84297cd8a36099c8a58faa5b">tc_iot_ota_state_e</a> state, char *message, int percent)</td></tr>
-<tr class="memdesc:adf9251282fe54b36b4da3b8904ea9c2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_ota_report_status OTA 升级执行过程中，上报固件下载及升级进度。  <a href="#adf9251282fe54b36b4da3b8904ea9c2f">更多...</a><br /></td></tr>
-<tr class="separator:adf9251282fe54b36b4da3b8904ea9c2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5afcda2817b5958c738207192fda070"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#ac5afcda2817b5958c738207192fda070">tc_iot_ota_report_upgrade</a> (<a class="el" href="tc__iot__ota__mqtt_8h.html#a701414996b15d90930d3bb1b7925c8b8">tc_iot_ota_handler</a> *ota_handler, <a class="el" href="tc__iot__ota__mqtt_8h.html#a92100f9c84297cd8a36099c8a58faa5b">tc_iot_ota_state_e</a> state, char *message, int percent)</td></tr>
+<tr class="memdesc:ac5afcda2817b5958c738207192fda070"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_ota_report_upgrade OTA 升级执行过程中，上报固件下载及升级进度。  <a href="#ac5afcda2817b5958c738207192fda070">更多...</a><br /></td></tr>
+<tr class="separator:ac5afcda2817b5958c738207192fda070"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6a809ba432d1e7a85535464940dc0f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tc__iot__export_8h.html#ac6a809ba432d1e7a85535464940dc0f3">tc_iot_ota_report_firm</a> (<a class="el" href="tc__iot__ota__mqtt_8h.html#a701414996b15d90930d3bb1b7925c8b8">tc_iot_ota_handler</a> *ota_handler,...)</td></tr>
 <tr class="memdesc:ac6a809ba432d1e7a85535464940dc0f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">tc_iot_ota_report_firm 上报设备系统信息  <a href="#ac6a809ba432d1e7a85535464940dc0f3">更多...</a><br /></td></tr>
 <tr class="separator:ac6a809ba432d1e7a85535464940dc0f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1122,12 +1122,12 @@ tc_iot_export.h 的引用(Include)关系图:</div>
 
 </div>
 </div>
-<a class="anchor" id="adf9251282fe54b36b4da3b8904ea9c2f"></a>
+<a class="anchor" id="ac5afcda2817b5958c738207192fda070"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int tc_iot_ota_report_status </td>
+          <td class="memname">int tc_iot_ota_report_upgrade </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="tc__iot__ota__mqtt_8h.html#a701414996b15d90930d3bb1b7925c8b8">tc_iot_ota_handler</a> *&#160;</td>
           <td class="paramname"><em>ota_handler</em>, </td>
@@ -1158,12 +1158,12 @@ tc_iot_export.h 的引用(Include)关系图:</div>
       </table>
 </div><div class="memdoc">
 
-<p>tc_iot_ota_report_status OTA 升级执行过程中，上报固件下载及升级进度。 </p>
+<p>tc_iot_ota_report_upgrade OTA 升级执行过程中，上报固件下载及升级进度。 </p>
 <dl class="params"><dt>参数</dt><dd>
   <table class="params">
     <tr><td class="paramname">ota_handler</td><td>OTA 服务对象 </td></tr>
     <tr><td class="paramname">state</td><td>当前升级进展枚举 </td></tr>
-    <tr><td class="paramname">message</td><td>辅助消息 </td></tr>
+    <tr><td class="paramname">message</td><td>辅助消息 1.当前进展为成功时：上报 TC_IOT_OTA_MESSAGE_SUCCESS ； 2.出错或失败时：上报对应的失败消息或者 TC_IOT_OTA_MESSAGE_FAILED ； </td></tr>
     <tr><td class="paramname">percent</td><td>百分比，0~100，仅当 state 为 OTA_DOWNLOAD 时有效，用来上报下载完成百分比。</td></tr>
   </table>
   </dd>

@@ -53,7 +53,7 @@
 | 1 | tc_iot_ota_construct | 根据设备配置参数，初始化 OTA 服务。 |
 | 2 | tc_iot_ota_destroy | OTA 服务析构处理，取消 OTA 消息订阅，释放资源。 |
 | 3 | tc_iot_ota_report_firm | 上报设备系统信息，例如，硬件版本、MAC 地址、IMEI、固件版本、SDK 版本等。|
-| 4 | tc_iot_ota_report_status | OTA 升级执行过程中，上报固件下载及升级进度。 |
+| 4 | tc_iot_ota_report_upgrade | OTA 升级执行过程中，上报固件下载及升级进度。 |
 | 5 | tc_iot_ota_request_content_length | 向固件下载服务器，发起 HTTP HEAD 请求，获取固件长度。|
 | 6 | tc_iot_ota_download | 根据指定的固件 URL 地址，下载固件 |
 

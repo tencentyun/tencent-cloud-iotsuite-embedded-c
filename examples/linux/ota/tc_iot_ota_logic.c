@@ -16,7 +16,7 @@ int my_http_download_callback(const void * context, const char * data, int data_
 
     // 更新 md5 数据
     tc_iot_md5_update(&helper->md5_context, data, data_len);
-    new_percent = (100*offset)/total;
+    new_percent = (100*(offset+data_len))/total;
     if (new_percent == 100) {
         TC_IOT_LOG_TRACE("success: progress %d/%d(%d/100)", offset+data_len, total, new_percent);
         helper->percent = new_percent;
@@ -120,11 +120,11 @@ download_success:
     }
 
     // 上报 MD5SUM 检查结果
-    tc_iot_ota_report_upgrade(ota_handler, OTA_MD5_CHECK, "success", 0);
+    tc_iot_ota_report_upgrade(ota_handler, OTA_MD5_CHECK, TC_IOT_OTA_MESSAGE_SUCCESS, 0);
 
     // 开始升级，例如，覆盖旧的固件区域或设置启动参数，切换启动分区
     // 升级或切换完成后，上报开始升级。
-    tc_iot_ota_report_upgrade(ota_handler, OTA_UPGRADING, NULL, 0);
+    tc_iot_ota_report_upgrade(ota_handler, OTA_UPGRADING, TC_IOT_OTA_MESSAGE_SUCCESS, 0);
 
     // 重启设备或应用
     tc_iot_hal_printf(
@@ -191,7 +191,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
         }
 
         // 上报升级指令已收到
-        tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, NULL, 0);
+        tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, TC_IOT_OTA_MESSAGE_SUCCESS, 0);
 
         // 全部转换成小写字母
         for(int i = 0; ota_handler->firmware_md5[i]; i++){
@@ -201,7 +201,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
         // 判断版本，是否是更新版本
         if (tc_iot_ota_version_larger(ota_handler->version, TC_IOT_FIRM_VERSION)) {
             // 上报版本检查结果
-            tc_iot_ota_report_upgrade(ota_handler, OTA_VERSION_CHECK, "success", 0);
+            tc_iot_ota_report_upgrade(ota_handler, OTA_VERSION_CHECK, TC_IOT_OTA_MESSAGE_SUCCESS, 0);
 
             // 上报准备开始下载
             tc_iot_ota_report_upgrade(ota_handler, OTA_DOWNLOAD, NULL, 0);
@@ -210,7 +210,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
             do_download(ota_handler->download_url, ota_handler->version, ota_handler->firmware_md5);
         } else {
             // 上报版本检查结果
-            tc_iot_ota_report_upgrade(ota_handler, OTA_VERSION_CHECK, "failed", 0);
+            tc_iot_ota_report_upgrade(ota_handler, OTA_VERSION_CHECK, "version check failed", 0);
             TC_IOT_LOG_ERROR("upgradable version=%s not bigger than current version=%s, upgrade can not proceed.", 
                     ota_handler->version, TC_IOT_FIRM_VERSION)
         }

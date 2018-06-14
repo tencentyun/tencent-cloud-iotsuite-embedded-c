@@ -343,18 +343,20 @@ void tc_iot_ota_destroy(tc_iot_ota_handler * ota_handler);
 
 
 /**
- * @brief tc_iot_ota_report_status OTA 升级执行过程中，上报固件下载及升级进度。
+ * @brief tc_iot_ota_report_upgrade OTA 升级执行过程中，上报固件下载及升级进度。
  *
  * @param ota_handler OTA 服务对象
  * @param state 当前升级进展枚举
  * @param message 辅助消息
+ * 1.当前进展为成功时：上报 TC_IOT_OTA_MESSAGE_SUCCESS ；
+ * 2.出错或失败时：上报对应的失败消息或者 TC_IOT_OTA_MESSAGE_FAILED ；
  * @param percent 百分比，0~100，仅当 state 为 OTA_DOWNLOAD
  * 时有效，用来上报下载完成百分比。
  *
  * @return 结果返回码，返回 TC_IOT_SUCCESS 则说明获取成功。
  * @see tc_iot_sys_code_e
  */
-int tc_iot_ota_report_status(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent);
+int tc_iot_ota_report_upgrade(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent);
 
 /**
  *  @brief tc_iot_ota_report_firm

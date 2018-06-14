@@ -11,6 +11,9 @@
 #define TC_IOT_OTA_METHOD_REPORT_UPGRADE   "report_upgrade"
 #define TC_IOT_OTA_METHOD_REPORT_FIRM      "report_firm"
 
+#define TC_IOT_OTA_MESSAGE_SUCCESS      "success"
+#define TC_IOT_OTA_MESSAGE_FAILED       "failed"
+
 #define TC_IOT_OTA_MAX_DOWNLOAD_URL_LEN    512
 
 
