@@ -367,8 +367,6 @@ int tc_iot_ota_report_upgrade(tc_iot_ota_handler * ota_handler, tc_iot_ota_state
 
  @code{.c}
  tc_iot_ota_report_firm(&handler,
-         "product", g_client_config.device_info.product_id,
-         "device", g_client_config.device_info.device_name,
          "sdk-ver", TC_IOT_SDK_VERSION,
          "firm-ver",TC_IOT_FIRM_VERSION, NULL);
  @endcode

@@ -155,8 +155,6 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
 
     // 上报设备信息及当前版本号
     tc_iot_ota_report_firm(&handler,
-            "product", g_client_config.device_info.product_id, // 上报产品ID
-            "device", g_client_config.device_info.device_name, // 上报设备名
             "sdk-ver", TC_IOT_SDK_VERSION,  // 上报 SDK 版本
             "firm-ver",TC_IOT_FIRM_VERSION,  // 上报固件信息，OTA 升级版本号判断依据
             NULL); // 最后一个参数固定填写 NULL，作为变参结束判断
