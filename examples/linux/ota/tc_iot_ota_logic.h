@@ -3,7 +3,7 @@
 #include "tc_iot_export.h"
 
 #ifndef TC_IOT_FIRM_VERSION
-#define TC_IOT_FIRM_VERSION "DEMO_OTA_LINUX_X86-64_V1.0"
+#define TC_IOT_FIRM_VERSION "LINUXV1.0"
 #endif
 
 typedef struct _tc_iot_down_helper{
