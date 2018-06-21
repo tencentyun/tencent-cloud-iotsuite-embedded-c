@@ -3,7 +3,7 @@
 1. 参考 [准备工作](../README.md) 。
 2. 配置固件版本号 tc_iot_ota_logic.h ：
 ```shell
-#define TC_IOT_FIRM_VERSION "DEMO_OTA_LINUX_X86-64_V1.0"
+#define TC_IOT_FIRM_VERSION "LINUXV1.0"
 ```
 
 ## 运行程序
