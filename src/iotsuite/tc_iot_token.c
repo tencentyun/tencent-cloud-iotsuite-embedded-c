@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 int http_post_urlencoded(tc_iot_network_t* network,
@@ -448,6 +444,3 @@ parse_url:
         return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
     }
 }
-#ifdef __cplusplus
-}
-#endif

@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 static unsigned char hexchars[] = "0123456789ABCDEF";
@@ -205,7 +201,3 @@ int tc_iot_url_parse(const char *input_url, int input_url_len,
 
     return 0;
 }
-
-#ifdef __cplusplus
-}
-#endif

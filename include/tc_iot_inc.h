@@ -40,5 +40,4 @@
 #include "ota/tc_iot_ota_download.h"
 #endif
 
-
 #endif /* end of include guard */

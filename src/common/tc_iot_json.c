@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 
@@ -679,7 +675,3 @@ int tc_iot_json_writer_null(tc_iot_json_writer * w, const char * name) {
     }
     return ret;
 }
-
-#ifdef __cplusplus
-}
-#endif

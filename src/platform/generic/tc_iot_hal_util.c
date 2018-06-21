@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 int tc_iot_copy_net_context(tc_iot_net_context_t * net_context, tc_iot_net_context_init_t * init) {
@@ -23,8 +19,4 @@ int tc_iot_copy_net_context(tc_iot_net_context_t * net_context, tc_iot_net_conte
     net_context->tls_config = init->tls_config;
 #endif
 }
-
-#ifdef __cplusplus
-}
-#endif
 

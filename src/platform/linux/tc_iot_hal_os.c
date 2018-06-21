@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 #include <sys/types.h>
@@ -71,7 +67,3 @@ int   tc_iot_hal_get_value(const char* key , char* value , size_t len )
     read(fd, value, len);
     return 0;
 }
-
-#ifdef __cplusplus
-}
-#endif

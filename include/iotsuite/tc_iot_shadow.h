@@ -323,6 +323,7 @@ int tc_iot_shadow_get_property_type(tc_iot_shadow_client * p_shadow_client, int 
 int tc_iot_shadow_get_property_offset(tc_iot_shadow_client * p_shadow_client, int property_id);
 
 int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client);
+int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client);
 
 int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_config * p_client_config);
 int tc_iot_server_loop(tc_iot_shadow_client* p_shadow_client, int yield_timeout);

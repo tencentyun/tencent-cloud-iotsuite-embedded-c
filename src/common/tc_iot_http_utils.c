@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 int tc_iot_http_request_init(tc_iot_http_request* request, const char* method,
@@ -528,8 +524,3 @@ int tc_iot_http_head(tc_iot_network_t* network,
         return TC_IOT_FAILURE;
     }
 }
-
-
-#ifdef __cplusplus
-}
-#endif

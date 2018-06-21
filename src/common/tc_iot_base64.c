@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 const static char encoding_table[] = {
@@ -105,7 +101,3 @@ int tc_iot_base64_decode(const char *data, int input_length,
 
     return output_length;
 }
-
-#ifdef __cplusplus
-}
-#endif

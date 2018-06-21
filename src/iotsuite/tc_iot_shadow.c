@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
@@ -1078,7 +1074,3 @@ int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_clien
 
     return buffer_used;
 }
-
-#ifdef __cplusplus
-}
-#endif

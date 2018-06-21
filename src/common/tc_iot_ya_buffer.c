@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 int tc_iot_yabuffer_init(tc_iot_yabuffer_t *yabuffer, char *buf, int len) {
@@ -76,7 +72,3 @@ int tc_iot_yabuffer_n_append(tc_iot_yabuffer_t *yabuffer, const char *input,
     yabuffer->pos += copy_len;
     return copy_len;
 }
-
-#ifdef __cplusplus
-}
-#endif

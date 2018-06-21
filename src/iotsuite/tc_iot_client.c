@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* c,
@@ -98,7 +94,3 @@ int tc_iot_mqtt_client_disconnect(tc_iot_mqtt_client* c) {
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     return tc_iot_mqtt_disconnect(c);
 }
-
-#ifdef __cplusplus
-}
-#endif

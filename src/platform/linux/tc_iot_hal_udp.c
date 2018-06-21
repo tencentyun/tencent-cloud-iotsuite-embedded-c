@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 int tc_iot_hal_udp_read(tc_iot_network_t* network, unsigned char* buffer,
@@ -192,7 +188,3 @@ int tc_iot_hal_udp_init(tc_iot_network_t* network,
 
     return TC_IOT_SUCCESS;
 }
-
-#ifdef __cplusplus
-}
-#endif

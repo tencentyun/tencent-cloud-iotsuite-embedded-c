@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
@@ -57,6 +53,3 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
 
-#ifdef __cplusplus
-}
-#endif

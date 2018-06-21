@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 void tc_iot_init_mqtt_conn_data(MQTTPacket_connectData * conn_data)
@@ -1140,7 +1136,3 @@ void tc_iot_mqtt_destroy(tc_iot_mqtt_client* c) {
         }
     }
 }
-
-#ifdef __cplusplus
-}
-#endif

@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "tc_iot_inc.h"
 
 long tc_iot_hal_timestamp(void* zone) {
@@ -35,7 +31,3 @@ int tc_iot_hal_get_value(const char* key , char* value , size_t len )
     TC_IOT_LOG_ERROR("not implemented");  
     return TC_IOT_FUCTION_NOT_IMPLEMENTED;
 }
-
-#ifdef __cplusplus
-}
-#endif
