@@ -146,6 +146,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
     char field_buf[TC_IOT_MAX_FIELD_LEN];
     int field_index = 0;
     int ret = 0;
+    int i = 0;
     tc_iot_mqtt_client * p_mqtt_client = (tc_iot_mqtt_client *)md->mqtt_client;
     tc_iot_mqtt_message* message = md->message;
     tc_iot_ota_handler * ota_handler = &handler;
@@ -208,7 +209,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
         }
 
         // 全部转换成小写字母
-        for(int i = 0; ota_handler->firmware_md5[i]; i++){
+        for(i = 0; ota_handler->firmware_md5[i]; i++){
             ota_handler->firmware_md5[i] = tolower(ota_handler->firmware_md5[i]);
         }
 
