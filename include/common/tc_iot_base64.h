@@ -1,6 +1,7 @@
 #ifndef IOT_BASE64_H
 #define IOT_BASE64_H
 
+#define TC_IOT_BASE64_ENCODE_OUT_LEN(x) (((x+3)*4)/3)
 
 /**
  * @brief tc_iot_base64_encode 对指定数据进行base64编码。

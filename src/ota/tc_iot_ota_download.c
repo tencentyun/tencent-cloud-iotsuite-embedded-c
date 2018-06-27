@@ -262,7 +262,11 @@ parse_url:
 
     TC_IOT_LOG_TRACE("request url=%s", api_url);
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
+#if defined(ENABLE_TLS)
         tc_iot_prepare_network(&network, true, g_tc_iot_https_root_ca_certs);
+#else
+        TC_IOT_LOG_ERROR("TLS not enabled.");
+#endif
     } else {
         tc_iot_prepare_network(&network, false, NULL);
     }
@@ -435,7 +439,11 @@ parse_url:
 
     TC_IOT_LOG_TRACE("request url=%s", api_url);
     if (strncmp(api_url, HTTPS_PREFIX, HTTPS_PREFIX_LEN) == 0) {
+#if defined(ENABLE_TLS)
         tc_iot_prepare_network(&network, true, g_tc_iot_https_root_ca_certs);
+#else
+        TC_IOT_LOG_ERROR("TLS not enabled.");
+#endif
     } else {
         tc_iot_prepare_network(&network, false, NULL);
     }

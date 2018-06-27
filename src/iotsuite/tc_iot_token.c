@@ -5,7 +5,7 @@ int http_post_urlencoded(tc_iot_network_t* network,
                          const char* encoded_body, char* resp, int resp_max_len,
                          int timeout_ms) {
     tc_iot_url_parse_result_t result;
-    char temp_host[512];
+    char temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH];
     int written_len;
     int read_len;
     int ret = tc_iot_url_parse(url, strlen(url), &result);
@@ -37,16 +37,20 @@ int http_post_urlencoded(tc_iot_network_t* network,
 
     strncpy(temp_host, url + result.host_start, result.host_len);
     temp_host[result.host_len] = '\0';
+    tc_iot_mem_usage_log("temp_host", sizeof(temp_host), result.host_len);
 
     TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
 
     network->do_connect(network, temp_host, result.port);
     written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
+
+    tc_iot_mem_usage_log("request buf", request->buf.len, request->buf.pos);
     TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
     read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
     TC_IOT_LOG_TRACE("response with:\n%s", resp);
 
+    tc_iot_mem_usage_log("request resp buf", resp_max_len, read_len);
     network->do_disconnect(network);
 
     return read_len;
@@ -61,12 +65,12 @@ int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timest
 int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info, long expire) {
 
-    char sign_out[512];
-    char http_resp[512];
+    char sign_out[TC_IOT_HTTP_TOKEN_REQUEST_FORM_LEN];
+    char http_resp[TC_IOT_HTTP_TOKEN_RESPONSE_LEN];
     int sign_len;
     tc_iot_network_t network;
     tc_iot_http_request request;
-    unsigned char http_request_buffer[2048];
+    unsigned char http_request_buffer[TC_IOT_HTTP_TOKEN_REQUEST_LEN];
     int ret;
     char* rsp_body;
     tc_iot_net_context_init_t netcontext;
@@ -77,7 +81,7 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
     jsmn_parser p;
     jsmntok_t t[20];
 
-    char temp_buf[256];
+    char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int returnCodeIndex = 0;
     char num_buf[25];
     int expire_index;
@@ -107,6 +111,8 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
         strlen(p_device_info->device_name), expire, nonce,
         p_device_info->product_id, strlen(p_device_info->product_id),
         timestamp);
+    
+    tc_iot_mem_usage_log("sign_out", sizeof(sign_out), sign_len);
 
     TC_IOT_LOG_TRACE("signed request form:\n%s", sign_out);
 

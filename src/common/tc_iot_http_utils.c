@@ -159,11 +159,14 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
                           int device_name_len, long expire, long nonce,
                           const char* product_id, int product_id_len,
                           long timestamp) {
-    char buf[512];
+#define SIGN_FORMAT "clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&timestamp=%ld"
+    // SIGN_FORMAT + 3个数字类型字段(expire,nonce,timestamp)值的长度+producut
+    // id+product key+ deviceName(clientId 也有deviceName，所以乘以2)
+    char buf[sizeof(SIGN_FORMAT) + TC_IOT_MAX_DEVICE_NAME_LEN *2 + 20*3 + TC_IOT_MAX_PRODUCT_ID_LEN + TC_IOT_MAX_PRODUCT_KEY_LEN];
     int buf_len = sizeof(buf);
     char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
     int ret;
-    char b64_buf[128];
+    char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)];
     int data_len;
     int url_ret;
 
@@ -180,8 +183,7 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
             && product_id_len == strlen(product_id)) {
         data_len = tc_iot_hal_snprintf(
             buf, buf_len,
-            "clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&"
-            "timestamp=%ld",
+            SIGN_FORMAT,
             client_id, device_name, expire, nonce,
             product_id, timestamp);
     } else {
@@ -198,11 +200,13 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
     }
 
     tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)secret, secret_len, (unsigned char *)sha256_digest);
+    tc_iot_mem_usage_log("buf", sizeof(buf), data_len);
 
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
     if (ret < sizeof(b64_buf) && ret > 0) {
        b64_buf[ret] = '\0'; 
+       tc_iot_mem_usage_log("b64_buf", sizeof(b64_buf), ret);
     }
 
     TC_IOT_LOG_TRACE("tc_iot_calc_auth_sign source %s sec %s sig %s\n", buf, secret, b64_buf);
@@ -327,9 +331,13 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
 
     tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)product_secret, secret_len, (unsigned char *)sha256_digest);
     
+    tc_iot_mem_usage_log("buf", sizeof(buf), data_len);
     
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
+
+    tc_iot_mem_usage_log("b64_buf", sizeof(b64_buf), ret);
+
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
     
     /* TC_IOT_LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret, sign_out, url_ret);  */
@@ -436,6 +444,7 @@ int tc_iot_http_get(tc_iot_network_t* network,
 
     strncpy(temp_host, url + result.host_start, result.host_len);
     temp_host[result.host_len] = '\0';
+    tc_iot_mem_usage_log("temp_host", sizeof(temp_host), result.host_len);
 
     TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
 
@@ -478,7 +487,7 @@ int tc_iot_http_head(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          int timeout_ms) {
     tc_iot_url_parse_result_t result;
-    char temp_host[512];
+    char temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH];
     int written_len;
     int read_len;
     int i = 0;
@@ -503,6 +512,8 @@ int tc_iot_http_head(tc_iot_network_t* network,
         return -1;
     }
 
+    tc_iot_mem_usage_log("temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH]", sizeof(temp_host), result.host_len);
+
     if (result.over_tls != network->net_context.use_tls) {
         TC_IOT_LOG_WARN("network type not match: url tls=%d, context tls=%d",
                  (int)result.over_tls, (int)network->net_context.use_tls);
@@ -518,9 +529,11 @@ int tc_iot_http_head(tc_iot_network_t* network,
     written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
     TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
+    tc_iot_mem_usage_log("request buf", request->buf.len, request->buf.pos);
     if (written_len == request->buf.pos) {
         return TC_IOT_SUCCESS;
     } else {
         return TC_IOT_FAILURE;
     }
 }
+

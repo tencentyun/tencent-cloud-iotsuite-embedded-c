@@ -29,3 +29,4 @@ const char * tc_iot_log_summary_string(const char * src, int src_len) {
 
     return &g_tc_iot_log_summary_print_str[0];
 }
+
