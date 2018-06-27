@@ -17,6 +17,8 @@ static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
         return ;
     }
 
+    tc_iot_mem_usage_log("json_token[TC_IOT_MAX_JSON_TOKEN_COUNT]", sizeof(json_token), sizeof(json_token[0])*ret);
+
     field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret,
             "passthrough.sid", session_id, sizeof(session_id));
     if (field_index > 0 ) {

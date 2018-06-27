@@ -37,7 +37,7 @@ int http_post_urlencoded(tc_iot_network_t* network,
 
     strncpy(temp_host, url + result.host_start, result.host_len);
     temp_host[result.host_len] = '\0';
-    tc_iot_mem_usage_log("temp_host", sizeof(temp_host), result.host_len);
+    tc_iot_mem_usage_log("temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH]", sizeof(temp_host), result.host_len);
 
     TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
 
@@ -45,12 +45,10 @@ int http_post_urlencoded(tc_iot_network_t* network,
     written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
 
-    tc_iot_mem_usage_log("request buf", request->buf.len, request->buf.pos);
     TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
     read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
     TC_IOT_LOG_TRACE("response with:\n%s", resp);
 
-    tc_iot_mem_usage_log("request resp buf", resp_max_len, read_len);
     network->do_disconnect(network);
 
     return read_len;
@@ -112,7 +110,7 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
         p_device_info->product_id, strlen(p_device_info->product_id),
         timestamp);
     
-    tc_iot_mem_usage_log("sign_out", sizeof(sign_out), sign_len);
+    tc_iot_mem_usage_log("sign_out[TC_IOT_HTTP_TOKEN_REQUEST_FORM_LEN]", sizeof(sign_out), sign_len);
 
     TC_IOT_LOG_TRACE("signed request form:\n%s", sign_out);
 
@@ -159,6 +157,8 @@ parse_url:
     TC_IOT_LOG_TRACE("request url=%s", api_url);
     ret = http_post_urlencoded(&network, &request, api_url, sign_out, http_resp,
                                sizeof(http_resp), 2000);
+
+    tc_iot_mem_usage_log("http_request_buffer[TC_IOT_HTTP_TOKEN_REQUEST_LEN]", sizeof(http_request_buffer), strlen(http_request_buffer));
 
     ret = tc_iot_parse_http_response_code(http_resp);
     if (ret != 200) {
@@ -265,12 +265,12 @@ parse_url:
 int http_get_device_secret(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info) {
 
-    char sign_out[512];
-    char http_resp[512];
+    char sign_out[TC_IOT_HTTP_ACTIVE_REQUEST_FORM_LEN];
+    char http_resp[TC_IOT_HTTP_ACTIVE_RESPONSE_LEN];
     int sign_len;
     tc_iot_network_t network;
     tc_iot_http_request request;
-    unsigned char http_request_buffer[2048];
+    unsigned char http_request_buffer[TC_IOT_HTTP_ACTIVE_REQUEST_LEN];
     int ret;
     char* rsp_body;
     tc_iot_net_context_init_t netcontext;
@@ -281,7 +281,7 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
     jsmn_parser p;
     jsmntok_t t[20];
 
-    char temp_buf[256];
+    char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int returnCodeIndex = 0;
     char num_buf[25];
     int expire_index;
@@ -293,12 +293,6 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
     int username_index;
     int redirect_count = 0;
 
-	/*
-    if (expire > TC_IOT_TOKEN_MAX_EXPIRE_SECOND) {
-        TC_IOT_LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
-        expire = TC_IOT_TOKEN_MAX_EXPIRE_SECOND;
-    }*/
-
     memset(&netcontext, 0, sizeof(netcontext));
 
     IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
@@ -309,6 +303,8 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
 		p_device_info->device_name,strlen(p_device_info->device_name), 
 		p_device_info->product_id, strlen(p_device_info->product_id),
 		nonce, timestamp);
+
+    tc_iot_mem_usage_log("sign_out[TC_IOT_HTTP_ACTIVE_REQUEST_FORM_LEN]", sizeof(sign_out), sign_len);
 
     if (sign_len < sizeof(sign_out)) {
         sign_out[sign_len] = '\0';
@@ -358,6 +354,9 @@ parse_url:
     TC_IOT_LOG_TRACE("request url=%s", api_url);
     ret = http_post_urlencoded(&network, &request, api_url, sign_out, http_resp,
                                sizeof(http_resp), 2000);
+
+    tc_iot_mem_usage_log("http_request_buffer[TC_IOT_HTTP_ACTIVE_REQUEST_LEN]", sizeof(http_request_buffer), strlen(http_request_buffer));
+    tc_iot_mem_usage_log("http_resp[TC_IOT_HTTP_ACTIVE_RESPONSE_LEN]", sizeof(http_resp), strlen(http_resp));
 
     ret = tc_iot_parse_http_response_code(http_resp);
     if (ret != 200) {

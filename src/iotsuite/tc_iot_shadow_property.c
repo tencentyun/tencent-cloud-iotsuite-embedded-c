@@ -218,6 +218,8 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
         return ;
     }
 
+    tc_iot_mem_usage_log("json_token[TC_IOT_MAX_JSON_TOKEN_COUNT]", sizeof(json_token), sizeof(json_token[0])*ret);
+
     field_index = tc_iot_json_find_token((char*)message->payload, json_token, ret, "method", field_buf, sizeof(field_buf));
     if (field_index <= 0 ) {
         TC_IOT_LOG_ERROR("field method not found in JSON: %s", (char*)message->payload);
@@ -282,22 +284,24 @@ int tc_iot_shadow_doc_parse(tc_iot_shadow_client * p_shadow_client,
 }
 
 int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client) {
-    char buffer[512];
+    char buffer[TC_IOT_REPORT_UPDATE_MSG_LEN];
     int buffer_len = sizeof(buffer);
     int ret = 0;
 
     ret = tc_iot_shadow_check_and_report(p_shadow_client, buffer, buffer_len,
             _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, false);
+    tc_iot_mem_usage_log("buffer[TC_IOT_REPORT_UPDATE_MSG_LEN]", sizeof(buffer), strlen(buffer));
     return ret;
 }
 
 int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client) {
-    char buffer[512];
+    char buffer[TC_IOT_UPDATE_DESIRED_MSG_LEN];
     int buffer_len = sizeof(buffer);
     int ret = 0;
 
     ret = tc_iot_shadow_check_and_report(p_shadow_client, buffer, buffer_len,
             _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, false);
+    tc_iot_mem_usage_log("buffer[TC_IOT_UPDATE_DESIRED_MSG_LEN]", sizeof(buffer), strlen(buffer));
     if (ret != TC_IOT_SUCCESS) {
         return ret;
     }
@@ -331,7 +335,7 @@ int tc_iot_shadow_event_notify(tc_iot_shadow_client * p_shadow_client, tc_iot_ev
 */
 int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_config * p_client_config) {
     int ret = 0;
-    char buffer[128];
+    char buffer[TC_IOT_GET_MSG_LEN];
     int buffer_len = sizeof(buffer);
 
     /* 初始化 shadow client */
@@ -351,6 +355,7 @@ int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_conf
     ret = tc_iot_shadow_get(p_shadow_client, buffer, buffer_len, _tc_iot_get_message_ack_callback,
             p_shadow_client->mqtt_client.command_timeout_ms, p_shadow_client);
     TC_IOT_LOG_TRACE("[c->s] shadow_get%s", buffer);
+    tc_iot_mem_usage_log("buffer[TC_IOT_GET_MSG_LEN]", sizeof(buffer), strlen(buffer));
 
     tc_iot_report_device_data(p_shadow_client);
 

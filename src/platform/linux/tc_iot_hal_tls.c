@@ -5,7 +5,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
     int read_len = 0;
     int ret = 0;
-    char err_str[100];
+    char err_str[TC_IOT_TLS_ERROR_STR_LEN];
     tc_iot_timer timer;
 
     /* TC_IOT_FUNC_ENTRY; */
@@ -38,6 +38,7 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
             if (MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY == ret) {
             }
             mbedtls_strerror(ret, err_str, sizeof(err_str));
+            tc_iot_mem_usage_log("err_str[TC_IOT_TLS_ERROR_STR_LEN]", sizeof(err_str), strlen(err_str));
             TC_IOT_LOG_TRACE("mbedtls_ssl_read returned %d/%s", ret, err_str);
             if (read_len > 0) {
                 TC_IOT_FUNC_EXIT_RC(read_len);
@@ -120,7 +121,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, const char* host,
     char port_str[6];
     int ret = 0;
     char* pers = "iot_client";
-    char info_buf[512];
+    char info_buf[TC_IOT_TLS_INFO_LEN];
 
     if (host) {
         network->net_context.host = (char *)host;
@@ -258,6 +259,7 @@ int tc_iot_hal_tls_connect(tc_iot_network_t* network, const char* host,
         mbedtls_x509_crt_verify_info(info_buf, sizeof(info_buf) - 1, "",
                 tls_data->flags);
         TC_IOT_LOG_ERROR("verify info:%s", info_buf);
+        tc_iot_mem_usage_log("info_buf[TC_IOT_TLS_INFO_LEN]", sizeof(info_buf), strlen(info_buf));
         if (tls_config->verify_server) {
             ret = TC_IOT_TLS_X509_CRT_VERIFY_FAILED;
         } else {

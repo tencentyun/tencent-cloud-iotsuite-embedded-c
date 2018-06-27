@@ -783,7 +783,7 @@ int tc_iot_coap_auth( tc_iot_coap_client * c) {
     const char * uri_path = "auth";
     int ret  = 0;
     int sign_len = 0;
-    char sign_out[256];
+    char sign_out[TC_IOT_HTTP_TOKEN_REQUEST_FORM_LEN];
     long timestamp = 0;
     long nonce = 0;
     tc_iot_coap_message message;

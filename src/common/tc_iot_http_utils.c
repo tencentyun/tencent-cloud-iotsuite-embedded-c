@@ -303,11 +303,12 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
                             const char* product_id,int product_id_len,
                             long nonce, 
                             long timestamp    ) {
-    char buf[512];
+#define ACTIVE_FORM_FORMAT "deviceName=%.*s&nonce=%ld&productId=%.*s&timestamp=%ld"
+    char buf[sizeof(ACTIVE_FORM_FORMAT) + TC_IOT_MAX_DEVICE_NAME_LEN + TC_IOT_MAX_PRODUCT_ID_LEN + 20*2];
     int buf_len = sizeof(buf);
     char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
     int ret;
-    char b64_buf[128];
+    char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)];
     int data_len;
     int url_ret;
 
@@ -319,7 +320,7 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
 
     data_len = tc_iot_hal_snprintf(
         buf, buf_len,
-        "deviceName=%.*s&nonce=%ld&productId=%.*s&timestamp=%ld",
+        ACTIVE_FORM_FORMAT,
         device_name_len, device_name, nonce,
         product_id_len, product_id, timestamp);
     
@@ -444,7 +445,7 @@ int tc_iot_http_get(tc_iot_network_t* network,
 
     strncpy(temp_host, url + result.host_start, result.host_len);
     temp_host[result.host_len] = '\0';
-    tc_iot_mem_usage_log("temp_host", sizeof(temp_host), result.host_len);
+    tc_iot_mem_usage_log("temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH]", sizeof(temp_host), result.host_len);
 
     TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
 
@@ -529,7 +530,6 @@ int tc_iot_http_head(tc_iot_network_t* network,
     written_len = network->do_write(network, (unsigned char *)request->buf.data,
                                     request->buf.pos, timeout_ms);
     TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
-    tc_iot_mem_usage_log("request buf", request->buf.len, request->buf.pos);
     if (written_len == request->buf.pos) {
         return TC_IOT_SUCCESS;
     } else {

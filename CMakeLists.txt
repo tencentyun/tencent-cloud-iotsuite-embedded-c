@@ -48,7 +48,7 @@ option(ENABLE_DATA_TEMPLATE "use Data Template" ON)
 option(ENABLE_COAP "use CoAP" ON)
 option(ENABLE_OTA "use OTA" ON)
 
-option(ENABLE_TLS "use mqtt/http over tls" OFF)
+option(ENABLE_TLS "use mqtt/http over tls" ON)
 option(ENABLE_DTLS "use CoAP over dtls" OFF)
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")

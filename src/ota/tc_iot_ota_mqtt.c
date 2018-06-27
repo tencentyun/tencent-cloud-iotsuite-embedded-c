@@ -182,7 +182,7 @@ int tc_iot_ota_send_message(tc_iot_ota_handler * ota_handler, char * message) {
 }
 
 int tc_iot_ota_report_upgrade(tc_iot_ota_handler * ota_handler, tc_iot_ota_state_e state, char * message, int percent) {
-    char buffer[256];
+    char buffer[TC_IOT_REPORT_UPGRADE_MSG_LEN];
     int ret;
 
     ret = tc_iot_ota_format_message(ota_handler, buffer, sizeof(buffer), state, message, percent);
@@ -196,6 +196,7 @@ int tc_iot_ota_report_upgrade(tc_iot_ota_handler * ota_handler, tc_iot_ota_state
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
+    tc_iot_mem_usage_log("buffer[TC_IOT_REPORT_UPGRADE_MSG_LEN]", sizeof(buffer), strlen(buffer));
 
     return tc_iot_ota_send_message(ota_handler, buffer);
 }
@@ -258,7 +259,7 @@ exit:
 }
 
 int tc_iot_ota_report_firm(tc_iot_ota_handler * ota_handler, ...) {
-    char buffer[200];
+    char buffer[TC_IOT_REPORT_FIRM_MSG_LEN];
     int buffer_len = sizeof(buffer);
 
     int ret = 0;
@@ -270,6 +271,7 @@ int tc_iot_ota_report_firm(tc_iot_ota_handler * ota_handler, ...) {
         TC_IOT_LOG_ERROR("[c-s]update_firm_info failed(%d): %s", ret, buffer);
     }
     va_end( p_args);
+    tc_iot_mem_usage_log("buffer[TC_IOT_REPORT_FIRM_MSG_LEN]", sizeof(buffer), strlen(buffer));
     return ret;
 }
 

@@ -1,6 +1,6 @@
 #include "tc_iot_inc.h"
 
-static char g_tc_iot_log_summary_print_str[128];
+static char g_tc_iot_log_summary_print_str[64];
 
 static tc_iot_log_level_e g_tc_iot_log_level = TC_IOT_LOG_LEVEL_TRACE;
 
