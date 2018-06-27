@@ -116,6 +116,10 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 
 const char * tc_iot_log_summary_string(const char * src, int src_len);
 
+#if defined(ENABLE_STACK_TRACE_LOG)
 #define tc_iot_mem_usage_log(name,total,used) TC_IOT_LOG_TRACE("MEM!%s,total=%d,used=%d,left=%d", name, (int)total, (int)used, (int)(total-used))
+#else
+#define tc_iot_mem_usage_log(name,total,used)
+#endif
 
 #endif /* end of include guard */

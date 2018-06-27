@@ -26,8 +26,8 @@ if (ENABLE_OTA)
     else()
         target_link_libraries(st_download tc_iot_ota tc_iot_common tc_iot_hal)
     endif()
+    add_executable(st_md5 st/st_md5.c)
+    target_link_libraries(st_md5 tc_iot_common tc_iot_hal)
 endif()
 
-add_executable(st_md5 st/st_md5.c)
-target_link_libraries(st_md5 tc_iot_common tc_iot_hal)
 

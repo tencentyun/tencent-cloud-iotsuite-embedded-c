@@ -50,6 +50,7 @@ option(ENABLE_OTA "use OTA" ON)
 
 option(ENABLE_TLS "use mqtt/http over tls" ON)
 option(ENABLE_DTLS "use CoAP over dtls" OFF)
+option(ENABLE_STACK_TRACE_LOG "Enable stack big mem usage" OFF)
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     set(ENABLE_TLS  OFF)
@@ -97,6 +98,9 @@ if (ENABLE_OTA)
     add_definitions(-DENABLE_OTA)
 endif()
 
+if (ENABLE_STACK_TRACE_LOG)
+    add_definitions(-DENABLE_STACK_TRACE_LOG)
+endif()
 
 # Linux, Windows, and Darwin for Mac OS X are the values found on the big three
 # operating systems.

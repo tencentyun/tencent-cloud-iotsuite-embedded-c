@@ -28,6 +28,7 @@ tc_iot_log_level_e tc_iot_get_log_level();
 char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 
 
+#if defined(ENABLE_MQTT)
 /**
  * @brief tc_iot_mqtt_client_construct 构造 MQTT client，并连接MQ服务器
  *
@@ -186,6 +187,9 @@ int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client);
  */
 int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client);
 
+#endif
+
+#if defined(ENABLE_COAP)
 /**
  * @brief tc_iot_coap_construct 初始化 CoAP 客户端数据
  *
@@ -315,8 +319,10 @@ unsigned char tc_iot_coap_get_message_code(tc_iot_coap_message* message);
  */
 int tc_iot_coap_get_message_payload(tc_iot_coap_message* message, int *payload_len, unsigned char **payload);
 
+#endif
 
 
+#if defined(ENABLE_OTA)
 /**
  * @brief tc_iot_ota_construct 初始化 OTA 服务对象
  *
@@ -405,5 +411,7 @@ int tc_iot_ota_request_content_length(const char* api_url);
  * @see tc_iot_sys_code_e
  */
 int tc_iot_ota_download(const char* api_url, int partial_start, tc_iot_http_download_callback download_callback, const void * context);
+
+#endif
 
 #endif /* end of include guard */
