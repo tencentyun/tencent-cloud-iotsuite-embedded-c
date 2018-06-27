@@ -84,8 +84,12 @@ void do_download (const char * download_url, const char * filename, const char *
         goto download_success;
         
     } else if (content_length < partial_start) {
-        // 长度异常，重新下载
-        TC_IOT_LOG_ERROR("local length=%d larger than real length=%d, restart download process.", partial_start, content_length);
+        if (content_length < 0) {
+            TC_IOT_LOG_ERROR("error no=%d, restart download process.", content_length);
+        } else {
+            // 长度异常，重新下载
+            TC_IOT_LOG_ERROR("local length=%d larger than real length=%d, restart download process.", partial_start, content_length);
+        }
         ftruncate(fileno(helper.fp), 0);
         tc_iot_md5_init(&helper.md5_context);
         partial_start = 0;
@@ -191,8 +195,18 @@ void _on_ota_message_received(tc_iot_message_data* md) {
             return ;
         }
 
-        // 上报升级指令已收到
-        tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, TC_IOT_OTA_MESSAGE_SUCCESS, 0);
+        if (strlen(ota_handler->download_url) == 0) {
+            TC_IOT_LOG_ERROR("ota payload url empty");
+            tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, "url empty", 0);
+            return;
+        } else if (strlen(ota_handler->firmware_md5) == 0) {
+            TC_IOT_LOG_ERROR("ota payload md5 empty");
+            tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, "md5 empty", 0);
+            return;
+        } else {
+            // 上报升级指令已收到
+            tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, TC_IOT_OTA_MESSAGE_SUCCESS, 0);
+        }
 
         // 全部转换成小写字母
         for(i = 0; ota_handler->firmware_md5[i]; i++){
