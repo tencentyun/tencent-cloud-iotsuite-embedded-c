@@ -6,7 +6,7 @@ tc_iot_ota_state_item g_tc_iot_ota_state_items[] = {
     {"2","Firmware version check"},
     {"3","OTA firmware download"},
     {"4","OTA MD5 check"},
-    {"5","OTA upgrade"},
+    {"5","Firmware upgrading"},
 };
 
 
