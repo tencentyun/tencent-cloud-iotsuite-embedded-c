@@ -388,8 +388,13 @@ int tc_iot_json_parse(const char * json, int json_len, jsmntok_t * tokens, int t
     ret = jsmn_parse(&p, json, json_len, tokens, token_count);
 
     if (ret < 0) {
-        TC_IOT_LOG_ERROR("Failed to parse JSON: %s", tc_iot_log_summary_string(json, json_len));
-        return TC_IOT_JSON_PARSE_FAILED;
+        if (JSMN_ERROR_NOMEM == ret) {
+            TC_IOT_LOG_ERROR("Mem not enough: %s", tc_iot_log_summary_string(json, json_len));
+            return  TC_IOT_JSON_PARSE_TOKEN_NO_MEM;
+        } else {
+            TC_IOT_LOG_ERROR("Failed to parse JSON, ret=%d: %s", ret, tc_iot_log_summary_string(json, json_len));
+            return TC_IOT_JSON_PARSE_FAILED;
+        }
     }
 
     if (ret < 1 || tokens[0].type != JSMN_OBJECT) {

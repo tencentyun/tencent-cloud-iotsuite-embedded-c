@@ -96,4 +96,6 @@
 #define TC_IOT_TLS_ERROR_STR_LEN            100
 #define TC_IOT_TLS_INFO_LEN                 512
 
+#define TC_IOT_MAX_JSON_TOKEN_COUNT         120
+
 #endif /* end of include guard */

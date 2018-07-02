@@ -1028,7 +1028,11 @@ int tc_iot_mqtt_publish(tc_iot_mqtt_client* c, const char* topicName,
         c->buf, c->buf_size, 0, message->qos, message->retained, message->id,
         topic, (unsigned char*)message->payload, message->payloadlen);
     if (len <= 0) {
-        TC_IOT_LOG_ERROR("MQTTSerialize_publish failed, please check you payload.");
+        if (MQTTPACKET_BUFFER_TOO_SHORT == len) {
+            TC_IOT_LOG_ERROR("MQTTSerialize_publish failed, buffer not enough, please increase c->buf_size=%d larger", (int)c->buf_size);
+        } else {
+            TC_IOT_LOG_ERROR("MQTTSerialize_publish failed, please check you payload.");
+        }
         goto exit;
     }
     if ((rc = _send_packet(c, len, &timer)) != TC_IOT_SUCCESS) {

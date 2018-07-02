@@ -22,7 +22,6 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
 #define TC_IOT_JSON_TRUE "true"
 #define TC_IOT_JSON_FALSE "false"
 
-#define TC_IOT_MAX_JSON_TOKEN_COUNT     120
 
 typedef struct _tc_iot_json_writer {
     char * buffer;
