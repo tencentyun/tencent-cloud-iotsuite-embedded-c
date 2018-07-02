@@ -5,9 +5,9 @@
 #define TC_IOT_SDK_VERSION     "2.5"
 
 /* mqtt消息接收缓冲区长度 */
-#define TC_IOT_CLIENT_SEND_BUF_SIZE 512
+#define TC_IOT_CLIENT_SEND_BUF_SIZE 1024
 /* mqtt消息发送缓冲区长度 */
-#define TC_IOT_CLIENT_READ_BUF_SIZE 512
+#define TC_IOT_CLIENT_READ_BUF_SIZE 1024
 
 /* 网络异常或超时重连配置 */
 /* 最小等待时间 */
@@ -41,14 +41,14 @@
  *    +
  * 数据点属性长度*数据点数
  * */
-#define TC_IOT_REPORT_UPDATE_MSG_LEN   512
+#define TC_IOT_REPORT_UPDATE_MSG_LEN   1024
 
 /**
  * 基本长度：{"method":"delete","passthrough":{"sid":"40b20006"},"state":{"desired":{}}}
  *    +
  * 数据点属性长度*数据点数
  * */
-#define TC_IOT_UPDATE_DESIRED_MSG_LEN   512
+#define TC_IOT_UPDATE_DESIRED_MSG_LEN   1024
 
 /**
  * 基本长度：{"method":"report_firm","payload":{"sdk-ver":"2.5","firm-ver":"LINUXV1.0"}}
