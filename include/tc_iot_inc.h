@@ -1,8 +1,9 @@
 #ifndef TC_IOT_INC_H
 #define TC_IOT_INC_H
 
-#include "tc_iot_external.h"
+#include "tc_iot_config.h"
 
+#include "tc_iot_external.h"
 #include "tc_iot_platform.h"
 
 #include "common/tc_iot_log.h"
@@ -20,7 +21,6 @@
 #include "common/tc_iot_base64.h"
 #include "common/tc_iot_json.h"
 #include "common/tc_iot_url.h"
-#include "tc_iot_config.h"
 
 #include "common/tc_iot_certs.h"
 

@@ -12,12 +12,6 @@ endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS, 1)
 
-add_definitions(-DENABLE_TC_IOT_LOG_TRACE)
-add_definitions(-DENABLE_TC_IOT_LOG_DEBUG)
-add_definitions(-DENABLE_TC_IOT_LOG_INFO)
-add_definitions(-DENABLE_TC_IOT_LOG_WARN)
-add_definitions(-DENABLE_TC_IOT_LOG_ERROR)
-add_definitions(-DENABLE_TC_IOT_LOG_FATAL)
 add_definitions(-Werror=pointer-arith)
 
 message(STATUS "CMake version: " ${CMAKE_VERSION})
@@ -31,7 +25,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 set(TC_IOT_VERSION_MAJOR 1)
 set(TC_IOT_VERSION_MINOR 0)
 set(TC_IOT_VERSION_PATCH 0)
-set(CLIENT_VERSION ${TC_IOT_VERSION_MAJOR}.${TC_IOT_VERSION_MINOR}.${TC_IOT_VERSION_PATCH})
+set(CLIENT_VERSION ${TC_IOT_VERSION_MAJOR}.${TC_IOT_VERSION_MINOR}${TC_IOT_VERSION_PATCH})
 
 string(TIMESTAMP BUILD_TIMESTAMP UTC)
 message(STATUS "Timestamp is ${BUILD_TIMESTAMP}")
@@ -50,7 +44,14 @@ option(ENABLE_OTA "use OTA" ON)
 
 option(ENABLE_TLS "use mqtt/http over tls" ON)
 option(ENABLE_DTLS "use CoAP over dtls" OFF)
+
 option(ENABLE_STACK_TRACE_LOG "Enable stack big mem usage" ON)
+option(ENABLE_TC_IOT_LOG_TRACE "Enable log" ON)
+option(ENABLE_TC_IOT_LOG_DEBUG "Enable log" ON)
+option(ENABLE_TC_IOT_LOG_INFO  "Enable log" ON)
+option(ENABLE_TC_IOT_LOG_WARN  "Enable log" ON)
+option(ENABLE_TC_IOT_LOG_ERROR  "Enable log" ON)
+option(ENABLE_TC_IOT_LOG_FATAL  "Enable log" ON)
 
 if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     set(ENABLE_TLS  OFF)
@@ -71,35 +72,8 @@ endif()
 
 
 if(ENABLE_TLS OR ENABLE_DTLS)
-    if(ENABLE_TLS)
-        add_definitions(-DENABLE_TLS)
-    endif()
-
-    if(ENABLE_DTLS)
-        add_definitions(-DENABLE_DTLS)
-    endif()
     # add mbedtls
     include_directories(external/mbedtls/include)
-endif()
-
-if (ENABLE_COAP)
-    add_definitions(-DENABLE_COAP)
-endif()
-
-if (ENABLE_MQTT)
-    add_definitions(-DENABLE_MQTT)
-endif()
-
-if (ENABLE_DATA_TEMPLATE)
-    add_definitions(-DENABLE_DATA_TEMPLATE)
-endif()
-
-if (ENABLE_OTA)
-    add_definitions(-DENABLE_OTA)
-endif()
-
-if (ENABLE_STACK_TRACE_LOG)
-    add_definitions(-DENABLE_STACK_TRACE_LOG)
 endif()
 
 # Linux, Windows, and Darwin for Mac OS X are the values found on the big three
@@ -109,6 +83,8 @@ SET(CMAKE_SYSTEM_NAME Linux)
 
 include_directories(include)
 include_directories(include/platform/${TC_IOT_PLATFORM_NAME})
+
+configure_file ("${CMAKE_SOURCE_DIR}/include/tc_iot_config.h.in" "${CMAKE_SOURCE_DIR}/include/tc_iot_config.h")
 
 # enable_testing()
 ADD_SUBDIRECTORY(external)
