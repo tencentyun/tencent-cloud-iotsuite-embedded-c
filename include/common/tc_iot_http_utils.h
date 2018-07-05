@@ -260,5 +260,9 @@ int tc_iot_http_get(tc_iot_network_t* network,
 int tc_iot_http_head(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          int timeout_ms);
+int http_post_urlencoded(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* encoded_body, char* resp, int resp_max_len,
+                         int timeout_ms);
 
 #endif /* end of include guard */

@@ -537,3 +537,61 @@ int tc_iot_http_head(tc_iot_network_t* network,
     }
 }
 
+int http_post_urlencoded(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* encoded_body, char* resp, int resp_max_len,
+                         int timeout_ms) {
+    tc_iot_url_parse_result_t result;
+    char temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH];
+    int written_len;
+    int read_len;
+    int ret = tc_iot_url_parse(url, strlen(url), &result);
+
+    if (ret < 0) {
+        return ret;
+    }
+
+    if (result.path_len) {
+        ret = tc_iot_create_post_request(
+            request, url + result.path_start, result.path_len,
+            url + result.host_start, result.host_len, encoded_body);
+    } else {
+        ret =
+            tc_iot_create_post_request(request, "/", 1, url + result.host_start,
+                                       result.host_len, encoded_body);
+    }
+
+    if (result.host_len >= sizeof(temp_host)) {
+        TC_IOT_LOG_ERROR("host address too long.");
+        return -1;
+    }
+
+    if (result.over_tls != network->net_context.use_tls) {
+        TC_IOT_LOG_WARN("network type not match: url tls=%d, context tls=%d",
+                 (int)result.over_tls, (int)network->net_context.use_tls);
+        return -1;
+    }
+
+    strncpy(temp_host, url + result.host_start, result.host_len);
+    temp_host[result.host_len] = '\0';
+    tc_iot_mem_usage_log("temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH]", sizeof(temp_host), result.host_len);
+
+    TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
+
+    network->do_connect(network, temp_host, result.port);
+    written_len = network->do_write(network, (unsigned char *)request->buf.data,
+                                    request->buf.pos, timeout_ms);
+
+    TC_IOT_LOG_TRACE("request with:\n%s", request->buf.data);
+    read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
+    if (resp_max_len > read_len) {
+        resp[read_len] = '\0';
+    }
+    TC_IOT_LOG_TRACE("response with:\n%s", resp);
+
+    network->do_disconnect(network);
+
+    return read_len;
+}
+
+

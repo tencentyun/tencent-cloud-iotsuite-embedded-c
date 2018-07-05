@@ -25,10 +25,10 @@
 #include "common/tc_iot_certs.h"
 
 #if defined(ENABLE_MQTT)
-#include "iotsuite/tc_iot_mqtt.h"
-#include "iotsuite/tc_iot_client.h"
+#include "mqtt/tc_iot_mqtt.h"
+#include "mqtt/tc_iot_client.h"
 #include "iotsuite/tc_iot_shadow.h"
-#include "iotsuite/tc_iot_token.h"
+#include "http/tc_iot_token.h"
 #endif
 
 #if defined(ENABLE_COAP)
