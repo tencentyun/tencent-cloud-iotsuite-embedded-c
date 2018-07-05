@@ -87,11 +87,13 @@ int main(int argc, char** argv) {
 
         }
         tc_iot_hal_printf("requesting username and password for mqtt by token interface.\n");
-        ret = http_refresh_auth_token(
+        ret = http_refresh_auth_token_with_expire(
                 TC_IOT_CONFIG_AUTH_API_URL, //TC_IOT_CONFIG_AUTH_API_URL_DEBUG
                 TC_IOT_CONFIG_ROOT_CA,
                 timestamp, nonce,
-                &p_client_config->device_info);
+                &p_client_config->device_info,
+                TC_IOT_TOKEN_MAX_EXPIRE_SECOND
+                );
         if (ret != TC_IOT_SUCCESS) {
             tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
             return 0;
@@ -187,6 +189,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     }
 
     tc_iot_mqtt_client_disconnect(p_client);
+    tc_iot_mqtt_client_destroy(p_client);
     return 0;
 }
 

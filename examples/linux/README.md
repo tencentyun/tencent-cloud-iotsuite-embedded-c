@@ -88,7 +88,7 @@ make
 
 ```
 
-## MQTT 收发消息
+#### MQTT 收发消息
 收发 MQTT 消息，参见 demo_mqtt.c 中tc_iot_mqtt_client_publish(发送消息) & tc_iot_mqtt_client_subscribe(订阅 Topic) 。
 
 ### 基于自定义二进制协议的 MQTT 示例
@@ -115,8 +115,218 @@ make
 
 ```
 
-## MQTT 收发消息
+#### MQTT 收发消息
 1. 收发 MQTT 消息，参见 demo_custom_topic.c 中tc_iot_mqtt_client_publish(发送消息) & tc_iot_mqtt_client_subscribe(订阅 Topic) 。
 2. 本示例仅定义了的 ${product_id}/${device_name}/cmd 1个Topic，同时用于上行和下行消息收发，仅为演示使用。实际使用时，应该至少定义2个Topic，分别作为上行和下行用。
+
+## SDK MQTT API 样例及说明
+
+### 1. 初始化 SDK
+tc_iot_mqtt_client_construct 初始化 MQTT 客户端，并与云端 MQ 服务建立连接
+
+#### 样例
+
+```c
+    int ret = 0;
+    ret = tc_iot_mqtt_client_construct(p_client, p_client_config);
+```
+
+#### 函数原型及说明
+
+```c
+/**
+* @brief tc_iot_mqtt_client_construct 构造 MQTT client，并连接MQ服务器
+*
+* @param p_mqtt_client MQTT client 对象，出参。
+* @param p_client_config 用来初始化 MQTT Client 对象的配置信息, 入参。
+*
+* @return 结果返回码
+* @see tc_iot_sys_code_e
+*/
+int tc_iot_mqtt_client_construct(tc_iot_mqtt_client* p_mqtt_client,
+                                tc_iot_mqtt_client_config* p_client_config);
+```
+
+### 2. 订阅主题
+tc_iot_mqtt_client_subscribe 订阅云端下行消息 Topic，接收云端下发数据
+
+#### 样例 
+
+```c
+// 订阅消息回调
+void _on_message_received(tc_iot_message_data* md) {
+    tc_iot_mqtt_message* message = md->message;
+    tc_iot_hal_printf("[s->c] %s\n", (char*)message->payload);
+}
+   
+    ...
+    int ret = 0;
+    const char * sub_topic = "iot-product_id/device_name_001/cmd";
+    ret = tc_iot_mqtt_client_subscribe(p_client,
+              sub_topic,
+              TC_IOT_QOS1,
+              _on_message_received, // 回调函数，接收发布到当前订阅主题的消息
+              NULL //context 参数，在回调 _on_message_received 是，
+                   // 会通过 md->context 透传
+              );
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ * @brief tc_iot_mqtt_client_subscribe 订阅指定一个或多个 Topic 的消息
+ *
+ * @param p_mqtt_client MQTT client 对象
+ * @param topic_filter 待订阅 Topic 名称
+ * @param qos 本次订阅的 QOS 等级
+ * @param msg_handler 订阅消息回调
+ * @param context 订阅响应回调 context
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_mqtt_client_subscribe(tc_iot_mqtt_client* p_mqtt_client,
+                                 const char* topic_filter,
+                                 tc_iot_mqtt_qos_e qos,
+                                 message_handler msg_handler,
+                                 void * context);
+
+```
+
+### 3. 取消订阅
+
+tc_iot_mqtt_client_unsubscribe 取消订阅已订阅的 Topic
+
+#### 样例
+```c
+    int ret = 0;
+    const char * sub_topic = "iot-product_id/device_name_001/cmd";
+    ret = tc_iot_mqtt_client_unsubscribe(p_client,
+                                    sub_topic // 待取消订阅的 Topic 名称
+                                    );
+```
+
+#### 函数原型及说明
+```c
+/**
+ * @brief tc_iot_mqtt_client_unsubscribe 取消对某个或多个 Topic 订阅
+ *
+ * @param p_mqtt_client MQTT client 对象
+ * @param topic_filter 待取消订阅 Topic 名称
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_mqtt_client_unsubscribe(tc_iot_mqtt_client* p_mqtt_client,
+                                   const char* topic_filter);
+```
+
+### 4. 发布消息
+
+tc_iot_mqtt_client_publish 向指定的上行 Topic 发布消息，上报数据给服务端
+
+#### 样例
+
+```c
+    int ret = 0;
+    const char * action_get = "{\"method\":\"get\"}";
+    tc_iot_mqtt_message pubmsg;
+    const char * pub_topic = "iot-product_id/device_name_001/update";
+
+    memset(&pubmsg, '\0', sizeof(pubmsg));
+    pubmsg.payload = action_get;
+    pubmsg.payloadlen = strlen(pubmsg.payload);
+    pubmsg.qos = TC_IOT_QOS1;
+    pubmsg.retained = 0;
+    pubmsg.dup = 0;
+
+    ret = tc_iot_mqtt_client_publish(p_client, pub_topic, &pubmsg);
+
+```
+
+#### 函数原型及说明
+```c
+/**
+ * @brief tc_iot_mqtt_client_publish 向指定的 Topic 发布消息
+ *
+ * @param p_mqtt_client MQTT client 对象
+ * @param topic Topic 名称
+ * @param msg 待发送消息
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_mqtt_client_publish(tc_iot_mqtt_client* p_mqtt_client,
+                               const char* topic, tc_iot_mqtt_message* msg);
+```
+
+### 5. MQTT 主循环
+
+tc_iot_mqtt_client_yield 主循环，包含心跳维持、上行消息响应超时检测、服务器下行消息收取等操作。
+
+#### 样例
+```c
+    int timeout = 200; // 单位为毫秒
+    while (!stop) {
+        tc_iot_mqtt_client_yield(p_client, timeout);
+    }
+
+```
+
+#### 函数原型及说明
+```c
+/**
+ * @brief tc_iot_mqtt_client_yield MQTT client
+ * 主循环，包含心跳维持、上行消息响应超时检测、服务器下行消息收取等操作。
+ *
+ * @param p_mqtt_client MQTT client 对象
+ * @param timeout_ms 等待时延，单位毫秒
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_mqtt_client_yield(tc_iot_mqtt_client* p_mqtt_client, int timeout_ms);
+```
+
+### 6.断开连接
+
+tc_iot_mqtt_client_disconnect 断开设备端与服务端的连接。
+#### 样例
+
+```c
+    tc_iot_mqtt_client_disconnect(p_client);
+```
+
+#### 函数原型及说明
+```c
+/**
+ * @brief tc_iot_mqtt_client_disconnect 断开 MQTT client 与服务端的连接
+ *
+ * @param p_mqtt_client MQTT client 对象
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_mqtt_client_disconnect(tc_iot_mqtt_client* p_mqtt_client);
+```
+
+### 7. 释放资源
+tc_iot_mqtt_client_destroy 释放相关资源。
+
+#### 样例
+```c
+    tc_iot_mqtt_client_destroy(p_client);
+```
+
+#### 函数原型及说明
+```c
+/**
+ * @brief tc_iot_mqtt_client_destroy 关闭 MQTT client 连接，并销毁 MQTT client
+ *
+ * @param p_mqtt_client MQTT client 对象
+ */
+void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* p_mqtt_client);
+```
 
 
