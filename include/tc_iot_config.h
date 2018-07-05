@@ -1,14 +1,15 @@
 #ifndef TC_IOT_CONFIG_H
 #define TC_IOT_CONFIG_H
 
-#define ENABLE_TLS
-/* #undef ENABLE_DTLS */
 #define ENABLE_MQTT
-#define ENABLE_DATA_TEMPLATE
-#define ENABLE_COAP
 #define ENABLE_OTA
+#define ENABLE_DATA_TEMPLATE
+
+#define ENABLE_COAP
+
 #define ENABLE_TLS
 /* #undef ENABLE_DTLS */
+
 #define ENABLE_STACK_TRACE_LOG
 
 // Enabled Log Levels
@@ -110,9 +111,9 @@
 // 请求 Token 接口响应数据
 #define TC_IOT_HTTP_TOKEN_RESPONSE_LEN      512  
 
-#define TC_IOT_TLS_ERROR_STR_LEN            100
-#define TC_IOT_TLS_INFO_LEN                 512
-
 #define TC_IOT_MAX_JSON_TOKEN_COUNT         120
+
+#define TC_IOT_TLS_ERROR_STR_LEN            64
+#define TC_IOT_TLS_INFO_LEN                 64
 
 #endif /* end of include guard */
