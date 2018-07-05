@@ -140,6 +140,7 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
  * @param host 服务器地址
  * @param host_len 服务器地址长度
  * @param body HTTP 请求Body
+ * @param content_type HTTP 请求Body 格式
  *
  * @return 返回码
  * @see tc_iot_sys_code_e
@@ -147,7 +148,7 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
 int tc_iot_create_post_request(tc_iot_http_request* request,
                                const char* abs_path, int abs_path_len,
                                const char* host, int host_len,
-                               const char* body);
+                               const char* body, const char * content_type);
 
 /**
  * @brief tc_iot_create_get_request 创建 HTTP GET 请求
@@ -263,6 +264,10 @@ int tc_iot_http_head(tc_iot_network_t* network,
 int http_post_urlencoded(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          const char* encoded_body, char* resp, int resp_max_len,
+                         int timeout_ms);
+int http_post_json(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* json_body, char* resp, int resp_max_len,
                          int timeout_ms);
 
 #endif /* end of include guard */

@@ -131,10 +131,10 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
 int tc_iot_create_post_request(tc_iot_http_request* request,
                                const char* abs_path, int abs_path_len,
                                const char* host, int host_len,
-                               const char* body) {
+                               const char* body, const char * content_type) {
     return tc_iot_create_http_request(request, host, host_len, HTTP_POST, abs_path,
                                abs_path_len, HTTP_VER_1_0,TC_IOT_USER_AGENT,
-                               HTTP_CONTENT_FORM_URLENCODED, body);
+                               content_type, body);
 }
 
 int tc_iot_create_get_request(tc_iot_http_request* request,
@@ -537,10 +537,10 @@ int tc_iot_http_head(tc_iot_network_t* network,
     }
 }
 
-int http_post_urlencoded(tc_iot_network_t* network,
+static int http_post_data(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          const char* encoded_body, char* resp, int resp_max_len,
-                         int timeout_ms) {
+                         int timeout_ms, const char * content_type) {
     tc_iot_url_parse_result_t result;
     char temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH];
     int written_len;
@@ -554,11 +554,11 @@ int http_post_urlencoded(tc_iot_network_t* network,
     if (result.path_len) {
         ret = tc_iot_create_post_request(
             request, url + result.path_start, result.path_len,
-            url + result.host_start, result.host_len, encoded_body);
+            url + result.host_start, result.host_len, encoded_body, content_type);
     } else {
         ret =
             tc_iot_create_post_request(request, "/", 1, url + result.host_start,
-                                       result.host_len, encoded_body);
+                                       result.host_len, encoded_body, content_type);
     }
 
     if (result.host_len >= sizeof(temp_host)) {
@@ -592,6 +592,20 @@ int http_post_urlencoded(tc_iot_network_t* network,
     network->do_disconnect(network);
 
     return read_len;
+}
+
+int http_post_urlencoded(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* encoded_body, char* resp, int resp_max_len,
+                         int timeout_ms) {
+    return http_post_data(network, request, url, encoded_body, resp, resp_max_len, timeout_ms, HTTP_CONTENT_FORM_URLENCODED);
+}
+
+int http_post_json(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* json_body, char* resp, int resp_max_len,
+                         int timeout_ms) {
+    return http_post_data(network, request, url, json_body, resp, resp_max_len, timeout_ms, HTTP_CONTENT_JSON);
 }
 
 
