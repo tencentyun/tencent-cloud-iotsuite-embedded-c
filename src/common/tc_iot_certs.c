@@ -1,3 +1,4 @@
+#include "tc_iot_inc.h"
 
 #if defined(ENABLE_TLS)
 const char* g_tc_iot_https_root_ca_certs =

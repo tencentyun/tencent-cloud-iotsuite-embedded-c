@@ -1,23 +1,23 @@
 #ifndef TC_IOT_CONFIG_H
 #define TC_IOT_CONFIG_H
 
-#define ENABLE_TLS
-/* #undef ENABLE_DTLS */
-#define ENABLE_MQTT
-#define ENABLE_DATA_TEMPLATE
-#define ENABLE_COAP
-#define ENABLE_OTA
-#define ENABLE_TLS
-/* #undef ENABLE_DTLS */
-#define ENABLE_STACK_TRACE_LOG
+#cmakedefine ENABLE_TLS
+#cmakedefine ENABLE_DTLS
+#cmakedefine ENABLE_MQTT
+#cmakedefine ENABLE_DATA_TEMPLATE
+#cmakedefine ENABLE_COAP
+#cmakedefine ENABLE_OTA
+#cmakedefine ENABLE_TLS
+#cmakedefine ENABLE_DTLS
+#cmakedefine ENABLE_STACK_TRACE_LOG
 
 // Enabled Log Levels
-#define ENABLE_TC_IOT_LOG_TRACE
-#define ENABLE_TC_IOT_LOG_DEBUG
-#define ENABLE_TC_IOT_LOG_INFO
-#define ENABLE_TC_IOT_LOG_WARN
-#define ENABLE_TC_IOT_LOG_ERROR
-#define ENABLE_TC_IOT_LOG_FATAL
+#cmakedefine ENABLE_TC_IOT_LOG_TRACE
+#cmakedefine ENABLE_TC_IOT_LOG_DEBUG
+#cmakedefine ENABLE_TC_IOT_LOG_INFO
+#cmakedefine ENABLE_TC_IOT_LOG_WARN
+#cmakedefine ENABLE_TC_IOT_LOG_ERROR
+#cmakedefine ENABLE_TC_IOT_LOG_FATAL
 
 #define TC_IOT_SDK_VERSION     "2.5"
 
@@ -112,7 +112,5 @@
 
 #define TC_IOT_TLS_ERROR_STR_LEN            100
 #define TC_IOT_TLS_INFO_LEN                 512
-
-#define TC_IOT_MAX_JSON_TOKEN_COUNT         120
 
 #endif /* end of include guard */

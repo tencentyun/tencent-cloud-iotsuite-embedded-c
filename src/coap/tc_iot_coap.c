@@ -36,20 +36,6 @@ int tc_iot_coap_write_short(unsigned char * buffer, int buffer_len, unsigned sho
     return sizeof(val);
 }
 
-int tc_iot_coap_write_int(unsigned char * buffer, int buffer_len, unsigned int val) {
-    if (NULL == buffer){
-        TC_IOT_LOG_ERROR("buffer is null");
-        return TC_IOT_NULL_POINTER;
-    }
-
-    if (buffer_len < sizeof(val)) {
-        TC_IOT_LOG_ERROR("buffer overflow ");
-        return TC_IOT_BUFFER_OVERFLOW;
-    }
-
-    *(unsigned int *)buffer = htonl(val);
-    return sizeof(val);
-}
 
 
 int tc_iot_coap_write_bytes(unsigned char * buffer, int buffer_len, const unsigned char * bytes, int bytes_len) {

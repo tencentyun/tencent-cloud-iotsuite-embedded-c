@@ -21,12 +21,16 @@ void tc_iot_set_log_level(tc_iot_log_level_e log_level);
 tc_iot_log_level_e tc_iot_get_log_level(void);
 char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 
+#if !defined(TC_IOT_LOG_NEWLINE)
+#define TC_IOT_LOG_NEWLINE "\n"
+#endif
+
 #ifdef ENABLE_TC_IOT_LOG_TRACE
 #define TC_IOT_LOG_TRACE(...)                                             \
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_TRACE)){               \
         tc_iot_hal_printf("TRACE %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                            \
-        tc_iot_hal_printf("\n");                                   \
+        tc_iot_hal_printf(TC_IOT_LOG_NEWLINE);                                   \
     }
 
 #define TC_IOT_FUNC_ENTRY \
@@ -59,7 +63,7 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_DEBUG)){               \
         tc_iot_hal_printf("DEBUG %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                            \
-        tc_iot_hal_printf("\n");                                   \
+        tc_iot_hal_printf(TC_IOT_LOG_NEWLINE);                                   \
     }
 
 #else
@@ -71,7 +75,7 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_INFO)){   \
         tc_iot_hal_printf("INFO %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__); \
-        tc_iot_hal_printf("\n");        \
+        tc_iot_hal_printf(TC_IOT_LOG_NEWLINE);        \
     }
 
 #else
@@ -83,7 +87,7 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_WARN)){               \
         tc_iot_hal_printf("WARN  %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                           \
-        tc_iot_hal_printf("\n");                                  \
+        tc_iot_hal_printf(TC_IOT_LOG_NEWLINE);                                  \
     }
 
 #else
@@ -95,7 +99,7 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_ERROR)){               \
         tc_iot_hal_printf("ERROR %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                            \
-        tc_iot_hal_printf("\n");                                   \
+        tc_iot_hal_printf(TC_IOT_LOG_NEWLINE);                                   \
     }
 
 #else
@@ -107,7 +111,7 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
     if (tc_iot_log_level_enabled(TC_IOT_LOG_LEVEL_FATAL)){               \
         tc_iot_hal_printf("FATAL %s:%d ", __FUNCTION__, __LINE__); \
         tc_iot_hal_printf(__VA_ARGS__);                           \
-        tc_iot_hal_printf("\n");                                  \
+        tc_iot_hal_printf(TC_IOT_LOG_NEWLINE);                                  \
     }
 
 #else
