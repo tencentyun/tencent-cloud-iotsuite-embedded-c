@@ -1,7 +1,9 @@
 #include "tc_iot_device_config.h"
 #include <sys/stat.h>
 #include "tc_iot_device_logic.h"
+#if defined(ENABLE_OTA)
 #include "../ota/tc_iot_ota_logic.h"
+#endif
 #include "tc_iot_export.h"
 
 
@@ -125,7 +127,9 @@ int main(int argc, char** argv) {
     long timestamp = tc_iot_hal_timestamp(NULL);
     tc_iot_hal_srandom(timestamp);
     long nonce = tc_iot_hal_random();
+#if defined(ENABLE_OTA)
     tc_iot_ota_handler * ota_handler = &handler;
+#endif
 
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
@@ -167,6 +171,7 @@ int main(int argc, char** argv) {
         return 0;
     }
 
+#if defined(ENABLE_OTA)
     tc_iot_hal_snprintf(ota_sub_topic, sizeof(ota_sub_topic), "ota/get/%s/%s", 
             p_client_config->device_info.product_id, 
             p_client_config->device_info.device_name);
@@ -189,6 +194,7 @@ int main(int argc, char** argv) {
             "firm-ver",TC_IOT_FIRM_VERSION,  // 上报固件信息，OTA 升级版本号判断依据
             NULL); // 最后一个参数固定填写 NULL，作为变参结束判断
 
+#endif
     while (!stop) {
         tc_iot_server_loop(tc_iot_get_shadow_client(), 200);
         light_power_usage_calc(tc_iot_get_shadow_client());
