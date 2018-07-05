@@ -1,22 +1,12 @@
 
+list(APPEND DEMO_LIGHT_SRCS app_main.c tc_iot_device_logic.c ../tc_iot_client_config_opts.c)
+list(APPEND DEMO_LIGHT_LIBS tc_iot_suite tc_iot_common tc_iot_hal jsmn MQTTPacketClient)
+
 if (ENABLE_OTA) 
-    add_executable(light app_main.c tc_iot_device_logic.c ../ota/tc_iot_ota_logic.c ../tc_iot_client_config_opts.c)
-else()
-    add_executable(light app_main.c tc_iot_device_logic.c ../tc_iot_client_config_opts.c)
+    list(APPEND DEMO_LIGHT_SRCS ../ota/tc_iot_ota_logic.c)
+    list(APPEND DEMO_LIGHT_LIBS tc_iot_ota)
 endif()
 
-if(ENABLE_TLS)
-    if (ENABLE_OTA) 
-        target_link_libraries(light tc_iot_ota tc_iot_suite tc_iot_common tc_iot_hal mbedtls jsmn MQTTPacketClient)
-    else()
-        target_link_libraries(light tc_iot_suite tc_iot_common tc_iot_hal mbedtls jsmn MQTTPacketClient)
-    endif()
-else()
-    if (ENABLE_OTA) 
-        target_link_libraries(light tc_iot_ota tc_iot_suite tc_iot_common tc_iot_hal jsmn MQTTPacketClient)
-    else()
-        target_link_libraries(light tc_iot_suite tc_iot_common tc_iot_hal jsmn MQTTPacketClient)
-    endif()
-endif()
-
+add_executable(light ${DEMO_LIGHT_SRCS})
+target_link_libraries(light ${DEMO_LIGHT_LIBS})
 
