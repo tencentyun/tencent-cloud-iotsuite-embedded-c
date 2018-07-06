@@ -36,9 +36,9 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
     IF_NULL_RETURN(p_device_info, TC_IOT_NULL_POINTER);
 
     sign_len = tc_iot_create_active_device_form(
-        sign_out, sizeof(sign_out), p_device_info->password, strlen(p_device_info->password),
-        p_device_info->device_name,strlen(p_device_info->device_name), 
-        p_device_info->product_id, strlen(p_device_info->product_id),
+        sign_out, sizeof(sign_out), p_device_info->password, 
+        p_device_info->device_name, 
+        p_device_info->product_id, 
         nonce, timestamp);
 
     tc_iot_mem_usage_log("sign_out[TC_IOT_HTTP_ACTIVE_REQUEST_FORM_LEN]", sizeof(sign_out), sign_len);

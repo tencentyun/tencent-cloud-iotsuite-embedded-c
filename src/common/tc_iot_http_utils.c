@@ -153,11 +153,9 @@ int tc_iot_create_head_request(tc_iot_http_request* request,
                                NULL, NULL);
 }
 
-int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
-                          int secret_len, const char* client_id,
-                          int client_id_len, const char* device_name,
-                          int device_name_len, long expire, long nonce,
-                          const char* product_id, int product_id_len,
+int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret, const char* client_id, const char* device_name,
+                          long expire, long nonce,
+                          const char* product_id,
                           long timestamp) {
 #define SIGN_FORMAT "clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&timestamp=%ld"
     // SIGN_FORMAT + 3个数字类型字段(expire,nonce,timestamp)值的长度+producut
@@ -178,28 +176,19 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
     IF_EQUAL_RETURN(max_sign_len, 0, TC_IOT_INVALID_PARAMETER);
 
     memset(buf, 0, buf_len);
-    if (client_id_len == strlen(client_id)
-            && device_name_len == strlen(device_name)
-            && product_id_len == strlen(product_id)) {
-        data_len = tc_iot_hal_snprintf(
-            buf, buf_len,
-            SIGN_FORMAT,
-            client_id, device_name, expire, nonce,
-            product_id, timestamp);
-    } else {
-        data_len = tc_iot_hal_snprintf(
-                buf, buf_len,
-                "deviceName=%.*s&nonce=%ld&productId=%.*s&timestamp=%ld",
-                device_name_len, device_name, nonce,
-                product_id_len, product_id, timestamp);
-    }
+
+    data_len = tc_iot_hal_snprintf(
+        buf, buf_len,
+        SIGN_FORMAT,
+        client_id, device_name, expire, nonce,
+        product_id, timestamp);
 
     if (data_len >= buf_len) {
         TC_IOT_LOG_ERROR("generate_auth_sign buffer overflow.");
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
-    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)secret, secret_len, (unsigned char *)sha256_digest);
+    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)secret, strlen(secret), (unsigned char *)sha256_digest);
     tc_iot_mem_usage_log("buf", sizeof(buf), data_len);
 
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
@@ -263,12 +252,13 @@ static int add_url_long_field(tc_iot_yabuffer_t* buffer, const char* prefix,
 }
 
 int tc_iot_create_auth_request_form(char* form, int max_form_len,
-                                    const char* secret, int secret_len,
-                                    const char* client_id, int client_id_len,
+                                    const char* secret,
+                                    const char* client_id,
                                     const char* device_name,
-                                    int device_name_len, long expire,
-                                    long nonce, const char* product_id,
-                                    int product_id_len, long timestamp) {
+                                    long expire,
+                                    long nonce,
+                                    const char* product_id,
+                                    long timestamp) {
     tc_iot_yabuffer_t form_buf;
     int total = 0;
 
@@ -280,30 +270,30 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
 
     tc_iot_yabuffer_init(&form_buf, form, max_form_len);
     total += add_tc_iot_url_encoded_field(&form_buf, "clientId=", client_id,
-                                          client_id_len);
+                                          strlen(client_id));
     total += add_tc_iot_url_encoded_field(&form_buf, "&deviceName=",
-                                          device_name, device_name_len);
+                                          device_name, strlen(device_name));
     total += add_url_long_field(&form_buf, "&expire=", expire);
     total += add_url_long_field(&form_buf, "&nonce=", nonce);
     total += add_tc_iot_url_encoded_field(&form_buf, "&productId=", product_id,
-                                          product_id_len);
+                                          strlen(product_id));
     total += add_url_long_field(&form_buf, "&timestamp=", timestamp);
     total += add_tc_iot_url_encoded_field(&form_buf, "&signature=", "", 0);
 
     total += tc_iot_calc_auth_sign(
         tc_iot_yabuffer_current(&form_buf), tc_iot_yabuffer_left(&form_buf),
-        secret, secret_len, client_id, client_id_len, device_name,
-        device_name_len, expire, nonce, product_id, product_id_len, timestamp);
+        secret, client_id, device_name,
+        expire, nonce, product_id, timestamp);
     return total;
 }
 
 static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len, 
-                            const char* product_secret, int secret_len,
-                            const char* device_name, int device_name_len, 
-                            const char* product_id,int product_id_len,
+                            const char* product_secret,
+                            const char* device_name,  
+                            const char* product_id,
                             long nonce, 
                             long timestamp    ) {
-#define ACTIVE_FORM_FORMAT "deviceName=%.*s&nonce=%ld&productId=%.*s&timestamp=%ld"
+#define ACTIVE_FORM_FORMAT "deviceName=%s&nonce=%ld&productId=%s&timestamp=%ld"
     char buf[sizeof(ACTIVE_FORM_FORMAT) + TC_IOT_MAX_DEVICE_NAME_LEN + TC_IOT_MAX_PRODUCT_ID_LEN + 20*2];
     int buf_len = sizeof(buf);
     char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
@@ -321,8 +311,8 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
     data_len = tc_iot_hal_snprintf(
         buf, buf_len,
         ACTIVE_FORM_FORMAT,
-        device_name_len, device_name, nonce,
-        product_id_len, product_id, timestamp);
+        device_name, nonce,
+        product_id, timestamp);
     
     
     if (data_len >= buf_len) {
@@ -330,7 +320,7 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
-    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)product_secret, secret_len, (unsigned char *)sha256_digest);
+    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)product_secret, strlen(product_secret), (unsigned char *)sha256_digest);
     
     tc_iot_mem_usage_log("buf", sizeof(buf), data_len);
     
@@ -350,9 +340,9 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
 }
 
 int tc_iot_create_active_device_form(char* form, int max_form_len,
-                                    const char* product_secret, int secret_len,
-                                    const char* device_name, int device_name_len, 
-                                    const char* product_id,int product_id_len,
+                                    const char* product_secret, 
+                                    const char* device_name,  
+                                    const char* product_id,
                                     long nonce, long timestamp) {
     tc_iot_yabuffer_t form_buf;
     int total = 0;
@@ -366,9 +356,9 @@ int tc_iot_create_active_device_form(char* form, int max_form_len,
     tc_iot_yabuffer_init(&form_buf, form, max_form_len);
     
     total += add_tc_iot_url_encoded_field(&form_buf, "productId=", product_id,
-                                      product_id_len);
+                                      strlen(product_id));
     total += add_tc_iot_url_encoded_field(&form_buf, "&deviceName=",
-                                          device_name, device_name_len);
+                                          device_name, strlen(device_name));
     
     total += add_url_long_field(&form_buf, "&nonce=", nonce);
 
@@ -377,8 +367,8 @@ int tc_iot_create_active_device_form(char* form, int max_form_len,
 
     total += tc_iot_calc_active_device_sign(
         tc_iot_yabuffer_current(&form_buf), tc_iot_yabuffer_left(&form_buf),
-        product_secret, secret_len, 
-        device_name, device_name_len, product_id, product_id_len,
+        product_secret,  
+        device_name, product_id, 
         nonce, timestamp);
     return total;
 }

@@ -781,10 +781,10 @@ int tc_iot_coap_auth( tc_iot_coap_client * c) {
 
     sign_len = tc_iot_create_auth_request_form(
         sign_out, sizeof(sign_out), p_device_info->secret,
-        strlen(p_device_info->secret), p_device_info->client_id,
-        strlen(p_device_info->client_id), p_device_info->device_name,
-        strlen(p_device_info->device_name), TC_IOT_COAP_AUTH_TOKEN_EXPIRE_TIME, nonce,
-        p_device_info->product_id, strlen(p_device_info->product_id),
+         p_device_info->client_id,
+         p_device_info->device_name,
+         TC_IOT_COAP_AUTH_TOKEN_EXPIRE_TIME, nonce,
+        p_device_info->product_id, 
         timestamp);
     if (sign_len < sizeof(sign_out)) {
         sign_out[sign_len] = '\0';

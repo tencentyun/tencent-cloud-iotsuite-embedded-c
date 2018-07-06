@@ -49,10 +49,10 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 
     sign_len = tc_iot_create_auth_request_form(
         sign_out, sizeof(sign_out), p_device_info->secret,
-        strlen(p_device_info->secret), p_device_info->client_id,
-        strlen(p_device_info->client_id), p_device_info->device_name,
-        strlen(p_device_info->device_name), expire, nonce,
-        p_device_info->product_id, strlen(p_device_info->product_id),
+         p_device_info->client_id,
+         p_device_info->device_name,
+         expire, nonce,
+        p_device_info->product_id,
         timestamp);
     
     tc_iot_mem_usage_log("sign_out[TC_IOT_HTTP_TOKEN_REQUEST_FORM_LEN]", sizeof(sign_out), sign_len);
