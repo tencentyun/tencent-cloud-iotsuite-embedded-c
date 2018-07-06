@@ -44,8 +44,6 @@ void tc_iot_sha256_update(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
     uint32_t is0, is1, ms0, ms1;
     uint32_t ch, temp1, temp2, maj;
 
-    /* tc_iot_hal_printf("%.*s",len, buffer); */
-
     for (i = 7; i >= 0; --i) {
         if (i == 7) {
             bits = len << 3;

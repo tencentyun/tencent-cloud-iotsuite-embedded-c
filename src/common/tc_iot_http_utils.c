@@ -157,11 +157,6 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret, 
                           long expire, long nonce,
                           const char* product_id,
                           long timestamp) {
-#define SIGN_FORMAT "clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&timestamp=%ld"
-    // SIGN_FORMAT + 3个数字类型字段(expire,nonce,timestamp)值的长度+producut
-    // id+product key+ deviceName(clientId 也有deviceName，所以乘以2)
-    char buf[sizeof(SIGN_FORMAT) + TC_IOT_MAX_DEVICE_NAME_LEN *2 + 20*3 + TC_IOT_MAX_PRODUCT_ID_LEN + TC_IOT_MAX_PRODUCT_KEY_LEN];
-    int buf_len = sizeof(buf);
     char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
     int ret;
     char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)];
@@ -175,21 +170,12 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret, 
     IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
     IF_EQUAL_RETURN(max_sign_len, 0, TC_IOT_INVALID_PARAMETER);
 
-    memset(buf, 0, buf_len);
-
-    data_len = tc_iot_hal_snprintf(
-        buf, buf_len,
-        SIGN_FORMAT,
+    ret = tc_iot_calc_sign(
+        sha256_digest, sizeof(sha256_digest),
+        secret,
+        "clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&timestamp=%ld",
         client_id, device_name, expire, nonce,
         product_id, timestamp);
-
-    if (data_len >= buf_len) {
-        TC_IOT_LOG_ERROR("generate_auth_sign buffer overflow.");
-        return TC_IOT_BUFFER_OVERFLOW;
-    }
-
-    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)secret, strlen(secret), (unsigned char *)sha256_digest);
-    tc_iot_mem_usage_log("buf", sizeof(buf), data_len);
 
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
@@ -198,7 +184,10 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret, 
        tc_iot_mem_usage_log("b64_buf", sizeof(b64_buf), ret);
     }
 
-    TC_IOT_LOG_TRACE("tc_iot_calc_auth_sign source %s sec %s sig %s\n", buf, secret, b64_buf);
+    TC_IOT_LOG_TRACE("tc_iot_calc_auth_sign source clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&timestamp=%ld sec %s sig %s\n", 
+            client_id, device_name, expire, nonce,product_id, timestamp,
+            secret, b64_buf);
+
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
     if (url_ret < max_sign_len) {
         sign_out[url_ret] = '\0';
@@ -293,9 +282,6 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
                             const char* product_id,
                             long nonce, 
                             long timestamp    ) {
-#define ACTIVE_FORM_FORMAT "deviceName=%s&nonce=%ld&productId=%s&timestamp=%ld"
-    char buf[sizeof(ACTIVE_FORM_FORMAT) + TC_IOT_MAX_DEVICE_NAME_LEN + TC_IOT_MAX_PRODUCT_ID_LEN + 20*2];
-    int buf_len = sizeof(buf);
     char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
     int ret;
     char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)];
@@ -308,22 +294,13 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
     IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
     IF_EQUAL_RETURN(max_sign_len, 0, TC_IOT_INVALID_PARAMETER);
 
-    data_len = tc_iot_hal_snprintf(
-        buf, buf_len,
-        ACTIVE_FORM_FORMAT,
+    ret = tc_iot_calc_sign(
+        sha256_digest, sizeof(sha256_digest),
+        product_secret,
+        "deviceName=%s&nonce=%ld&productId=%s&timestamp=%ld",
         device_name, nonce,
         product_id, timestamp);
-    
-    
-    if (data_len >= buf_len) {
-        TC_IOT_LOG_ERROR("generate_active_device_sign buffer overflow.");
-        return TC_IOT_BUFFER_OVERFLOW;
-    }
 
-    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)product_secret, strlen(product_secret), (unsigned char *)sha256_digest);
-    
-    tc_iot_mem_usage_log("buf", sizeof(buf), data_len);
-    
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
 
@@ -335,7 +312,8 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
     if (url_ret < max_sign_len) {
         sign_out[url_ret] = '\0';
     }
-    TC_IOT_LOG_DEBUG(" tc_iot_calc_active_device_sign  source:%s sign:%s", buf , sign_out);
+    TC_IOT_LOG_DEBUG(" tc_iot_calc_active_device_sign deviceName=%s&nonce=%ld&productId=%s&timestamp=%ld sign:%s", 
+            device_name, nonce,product_id, timestamp , sign_out);
     return url_ret;
 }
 
@@ -603,7 +581,6 @@ int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret
     const char * pos  = format;
     const char * prev = format;
     const char * name = NULL;
-    int var_int;
     char num_buf[20];
     char format_str[4];
     const char * var_str;
@@ -612,6 +589,7 @@ int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret
     unsigned char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
     tc_iot_hmac_sha256_t hmac;
     tc_iot_hmac_sha256_init(&hmac, secret, strlen(secret));
+    TC_IOT_LOG_TRACE("secret=%s,format=%s",secret, format);
 
     if (output_len < TC_IOT_SHA256_DIGEST_SIZE) {
         return TC_IOT_BUFFER_OVERFLOW;
@@ -628,27 +606,59 @@ int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret
                 prev = pos;
             }
             switch(*pos) {
+                case 'c':
                 case 'd':
                 case 'i':
-                /* case 'u': */
-                /* case 'o': */
-                /* case 'x': */
-                /* case 'X': */
-                /* case 'f': */
-                /* case 'F': */
-                /* case 'e': */
-                /* case 'E': */
-                /* case 'g': */
-                /* case 'G': */
-                /* case 'a': */
-                    var_int  = va_arg(ap, int);
                     tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%%c", *pos);
-                    tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, var_int);
+                    tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, int));
+                    tc_iot_sha256_update(&(hmac.sha), num_buf, strlen(num_buf));
+                    break;
+                case 'u':
+                case 'o':
+                case 'x':
+                case 'X':
+                    tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%%c", *pos);
+                    tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, unsigned int));
+                    tc_iot_sha256_update(&(hmac.sha), num_buf, strlen(num_buf));
+                    break;
+                case 'f':
+                case 'F':
+                case 'e':
+                case 'E':
+                case 'g':
+                case 'G':
+                case 'a':
+                    tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%%c", *pos);
+                    tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, double));
                     tc_iot_sha256_update(&(hmac.sha), num_buf, strlen(num_buf));
                     break;
                 case 's':
                     var_str = va_arg(ap, const char *);
                     tc_iot_sha256_update(&(hmac.sha), var_str, strlen(var_str));
+                    break;
+
+                case 'l':
+                    pos++;
+                    switch(*pos) {
+                        case 'd':
+                        case 'i':
+                            tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%l%c", *pos);
+                            tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, long int));
+                            tc_iot_sha256_update(&(hmac.sha), num_buf, strlen(num_buf));
+                            break;
+                        case 'u':
+                        case 'o':
+                        case 'x':
+                        case 'X':
+                            tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%l%c", *pos);
+                            tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, unsigned long int));
+                            tc_iot_sha256_update(&(hmac.sha), num_buf, strlen(num_buf));
+                            break;
+                        default:
+                            TC_IOT_LOG_ERROR("unkown *pos=%c", *pos);
+                            va_end(ap);
+                            return TC_IOT_INVALID_PARAMETER;
+                    }
                     break;
                 case '%':
                     *pos++;
