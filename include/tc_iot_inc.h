@@ -10,6 +10,7 @@
 #include "common/tc_iot_const.h"
 #include "common/tc_iot_bit.h"
 #include "common/tc_iot_safety_check.h"
+#include "common/tc_iot_string_utils.h"
 #include "common/tc_iot_md5.h"
 #include "common/tc_iot_hmac.h"
 #include "platform/tc_iot_hal_os.h"

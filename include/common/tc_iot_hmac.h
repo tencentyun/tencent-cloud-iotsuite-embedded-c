@@ -23,6 +23,10 @@ typedef struct _tc_iot_hmac_sha256_t {
 } tc_iot_hmac_sha256_t;
 
 
+void tc_iot_hmac_sha256_init(tc_iot_hmac_sha256_t *hmac, const uint8_t *key, int len);
+void tc_iot_sha256_update(tc_iot_sha256_t *p_sha, const uint8_t *buffer, uint32_t len);
+void tc_iot_hmac_sha256_finish(tc_iot_hmac_sha256_t *hmac, const uint8_t *buffer, int len);
+
 /**
  * @brief tc_iot_hmac_sha256 计算数据的 sha256 签名
  *

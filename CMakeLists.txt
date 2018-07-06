@@ -13,6 +13,7 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS, 1)
 
 add_definitions(-Werror=pointer-arith)
+# add_definitions(-Wall)
 
 message(STATUS "CMake version: " ${CMAKE_VERSION})
 message(STATUS "CMake system name: " ${CMAKE_SYSTEM_NAME})
@@ -58,7 +59,8 @@ if(${TC_IOT_PLATFORM_NAME} STREQUAL "generic")
     set(ENABLE_DTLS  OFF)
 endif()
 
-option(ENABLE_TESTING "enable testting" ON)
+option(ENABLE_TESTING "enable testing" OFF)
+option(ENABLE_GTEST   "enable gtest" OFF)
 
 if(LIB_INSTALL_DIR)
 else()
@@ -92,6 +94,33 @@ ADD_SUBDIRECTORY(examples)
 ADD_SUBDIRECTORY(src)
 
 if(ENABLE_TESTING)
-    ADD_SUBDIRECTORY(tests)
+enable_testing()
+
+    if(ENABLE_GTEST)
+# Download and unpack googletest at configure time
+	configure_file(tests/gtest/CMakeLists.txt.gtest.in googletest-download/CMakeLists.txt)
+	execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
+	execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
+
+# Prevent GoogleTest from overriding our compiler/linker options
+# when building with Visual Studio
+	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+# Add googletest directly to our build. This adds
+# the following targets: gtest, gtest_main, gmock
+# and gmock_main
+	add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
+					"${CMAKE_BINARY_DIR}/googletest-build")
+
+    include_directories("${gtest_SOURCE_DIR}/include"
+                        "${gmock_SOURCE_DIR}/include")
+
+# Now simply link your own targets against gtest, gmock,
+# etc. as appropriate
+endif()
+
+	ADD_SUBDIRECTORY(tests)
 endif()
 

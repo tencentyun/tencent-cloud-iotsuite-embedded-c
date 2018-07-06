@@ -1,3 +1,4 @@
+project(tc_iot_test)
 
 aux_source_directory(. IOT_TESTS_SRCS)
 add_executable(unit_test ${IOT_TESTS_SRCS})
@@ -27,7 +28,14 @@ if (ENABLE_OTA)
         target_link_libraries(st_download tc_iot_ota tc_iot_common tc_iot_hal)
     endif()
     add_executable(st_md5 st/st_md5.c)
-    target_link_libraries(st_md5 tc_iot_common tc_iot_hal)
+    target_link_libraries(st_md5 tc_iot_common)
+
+    add_executable(st_hmac st/st_hmac.c)
+    target_link_libraries(st_hmac tc_iot_common)
+endif()
+
+if (ENABLE_GTEST)
+    add_subdirectory(gtest)
 endif()
 
 

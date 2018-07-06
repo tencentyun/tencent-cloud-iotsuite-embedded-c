@@ -270,4 +270,6 @@ int http_post_json(tc_iot_network_t* network,
                          const char* json_body, char* resp, int resp_max_len,
                          int timeout_ms);
 
+int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret, const char * format, ...) ;
+
 #endif /* end of include guard */

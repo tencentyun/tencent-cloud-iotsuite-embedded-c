@@ -608,4 +608,83 @@ int http_post_json(tc_iot_network_t* network,
     return http_post_data(network, request, url, json_body, resp, resp_max_len, timeout_ms, HTTP_CONTENT_JSON);
 }
 
+int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret, const char * format, ...) {
+    va_list ap;
+    const char * pos  = format;
+    const char * prev = format;
+    const char * name = NULL;
+    int var_int;
+    char num_buf[20];
+    char format_str[4];
+    const char * var_str;
+    int result_len = 0;
+
+    unsigned char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
+    tc_iot_hmac_sha256_t hmac;
+    tc_iot_hmac_sha256_init(&hmac, secret, strlen(secret));
+
+    if (output_len < TC_IOT_SHA256_DIGEST_SIZE) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    int arg_count = strlen(format);
+    va_start(ap, format);
+    
+    while(*pos) {
+        if ('%' == *pos) {
+            pos++;
+            if ((pos-1) > prev) {
+                tc_iot_sha256_update(&(hmac.sha), prev, pos-1-prev);
+                prev = pos;
+            }
+            switch(*pos) {
+                case 'd':
+                case 'i':
+                /* case 'u': */
+                /* case 'o': */
+                /* case 'x': */
+                /* case 'X': */
+                /* case 'f': */
+                /* case 'F': */
+                /* case 'e': */
+                /* case 'E': */
+                /* case 'g': */
+                /* case 'G': */
+                /* case 'a': */
+                    var_int  = va_arg(ap, int);
+                    tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%%c", *pos);
+                    tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, var_int);
+                    tc_iot_sha256_update(&(hmac.sha), num_buf, strlen(num_buf));
+                    break;
+                case 's':
+                    var_str = va_arg(ap, const char *);
+                    tc_iot_sha256_update(&(hmac.sha), var_str, strlen(var_str));
+                    break;
+                case '%':
+                    *pos++;
+                    continue;
+                default:
+                    TC_IOT_LOG_ERROR("unkown *pos=%c", *pos);
+                    va_end(ap);
+                    return TC_IOT_INVALID_PARAMETER;
+            }
+            pos++;
+            prev = pos;
+        } else {
+            pos++;
+        }
+    }
+
+    if ((pos-1) > prev) {
+        tc_iot_sha256_update(&(hmac.sha), prev, pos-1-prev);
+    }
+
+    tc_iot_hmac_sha256_finish(&hmac, NULL, 0);
+
+    memcpy(output, hmac.digest, TC_IOT_SHA256_DIGEST_SIZE);
+
+    va_end(ap);
+
+    return TC_IOT_SHA256_DIGEST_SIZE;    
+}
 

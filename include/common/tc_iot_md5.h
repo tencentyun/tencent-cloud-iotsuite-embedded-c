@@ -35,7 +35,5 @@ void tc_iot_md5_update( tc_iot_md5_t *p_md5, const unsigned char *input, int inp
 void tc_iot_md5_finish( tc_iot_md5_t *p_md5, unsigned char digest[TC_IOT_MD5_DIGEST_SIZE] );
 void tc_iot_md5_process( tc_iot_md5_t *p_md5, const unsigned char data[TC_IOT_MD5_BLOCK_SIZE] );
 void tc_iot_md5_digest( const unsigned char *input, int input_len, unsigned char digest[TC_IOT_MD5_DIGEST_SIZE] );
-const char * tc_iot_util_byte_to_hex( const unsigned char * bytes, int bytes_len, char * output, int max_output_len );
-
 
 #endif /* end of include guard */

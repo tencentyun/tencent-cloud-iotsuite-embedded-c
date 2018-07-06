@@ -3,11 +3,11 @@
 
 #define ENABLE_MQTT
 #define ENABLE_OTA
-#define ENABLE_DATA_TEMPLATE
+/* #undef ENABLE_DATA_TEMPLATE */
 
 #define ENABLE_COAP
 
-#define ENABLE_TLS
+/* #undef ENABLE_TLS */
 /* #undef ENABLE_DTLS */
 
 #define ENABLE_STACK_TRACE_LOG
