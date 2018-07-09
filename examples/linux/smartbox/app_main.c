@@ -53,7 +53,6 @@ char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_CONFIG_DEVICE_PRODUCT_ID "/
 char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_CONFIG_DEVICE_PRODUCT_ID "/" TC_IOT_CONFIG_DEVICE_NAME "/update";
 
 int main(int argc, char** argv) {
-    int ret = 0;
     tc_iot_mqtt_client_config * p_client_config;
 
     p_client_config = &(g_client_config);
@@ -106,17 +105,14 @@ void report_status(tc_iot_mqtt_client * p_client)
 }
 
 void _on_message_received(tc_iot_message_data* md) {
-    timestamp_t uts = 0;
-    timestamp_t uts_now = 0;
     tc_iot_mqtt_message* message = md->message;
-    char * pos = NULL;
     jsmntok_t  json_token[TC_IOT_MAX_JSON_TOKEN_COUNT];
     char field_buf[32];
     int field_index = 0;
     int ret = 0;
     char * start = NULL;
     char * payload = NULL;
-    int len = 0;
+    /* int len = 0; */
     tc_iot_mqtt_client* p_client = NULL;
 
     tc_iot_hal_printf("[s->c] %s\n",  (char*)message->payload);
@@ -135,7 +131,7 @@ void _on_message_received(tc_iot_message_data* md) {
     field_index = tc_iot_json_find_token(payload, json_token, ret, "door_switch", field_buf, sizeof(field_buf));
     if (field_index > 0 ) {
         start = payload + json_token[field_index].start;
-        len = json_token[field_index].end - json_token[field_index].start;
+        /* len = json_token[field_index].end - json_token[field_index].start; */
         if (start[0] == 't') {
             g_tc_smartbox_data.door_switch = true;
         } else {
@@ -240,5 +236,6 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     }
 
     tc_iot_mqtt_client_disconnect(p_client);
+    return 0;
 }
 

@@ -14,14 +14,13 @@ int my_http_download_callback(const void * context, const char * data, int data_
     /* tc_iot_hal_printf("\n[%d/%d]\n->%s", offset+data_len, total, data); */
     /* tc_iot_hal_printf("%d/%d\n", offset+data_len, total); */
     fwrite(data,1,data_len,helper->fp);
-    tc_iot_md5_update(&helper->md5_context, data, data_len);
+    tc_iot_md5_update(&helper->md5_context, (const unsigned char *)data, data_len);
     return TC_IOT_SUCCESS;
 }
 
 int main(int argc, char** argv) {
     int i = 0;
     int ret = 0;
-    int fd = -1;
     const char * download_url = NULL;
     const char * filename = NULL;
     unsigned char file_md5_digest[TC_IOT_MD5_DIGEST_SIZE];
@@ -87,7 +86,7 @@ print_help:
 
     fseek(helper.fp, 0, SEEK_SET);
     while((byte_read = fread( buffer, 1, sizeof(buffer), helper.fp)) > 0) {
-        tc_iot_md5_update(&helper.md5_context, buffer, byte_read);
+        tc_iot_md5_update(&helper.md5_context, (const unsigned char *)buffer, byte_read);
         partial_start += byte_read;
     }
 

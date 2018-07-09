@@ -45,7 +45,7 @@ int tc_iot_hal_net_read(tc_iot_network_t* network, unsigned char* buffer,
 int tc_iot_hal_net_write(tc_iot_network_t* network, const unsigned char* buffer,
                          int len, int timeout_ms) {
     int rc;
-    struct timeval tv;
+    /* struct timeval tv; */
     int socket_fd = network->net_context.fd;
 
     /* if (timeout_ms > 0) { */

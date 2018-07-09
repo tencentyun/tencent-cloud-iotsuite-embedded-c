@@ -1,8 +1,6 @@
 #include "tc_iot_inc.h"
 
 void test(const char * data, const char * secret) {
-    int i = 0;
-    int len = 0;
     unsigned char sha256_digest_old[TC_IOT_SHA256_DIGEST_SIZE];
     char sha256_digest_str_old[TC_IOT_SHA256_DIGEST_SIZE*2+1];
 
@@ -42,7 +40,6 @@ int main(int argc, char const* argv[])
     char var_char = 'Z';
     int var_int = 0x12345678;
     unsigned int var_uint = 0xFFFFFFFF;
-    long var_long = 0xFFFFFFFF;
     int var_oct = 01234567;
     unsigned int var_ulong = 0x87654321;
 

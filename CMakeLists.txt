@@ -12,8 +12,8 @@ endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS, 1)
 
-add_definitions(-Werror=pointer-arith)
-# add_definitions(-Wall)
+# add_definitions(-Werror=pointer-arith)
+add_definitions(-Wall)
 
 message(STATUS "CMake version: " ${CMAKE_VERSION})
 message(STATUS "CMake system name: " ${CMAKE_SYSTEM_NAME})

@@ -124,6 +124,7 @@ char* MQTTFormat_toClientString(char* strbuf, int strbuflen, unsigned char* buf,
 
 	header.byte = buf[index++];
 	index += MQTTPacket_decodeBuf(&buf[index], &rem_length);
+    (void)strindex;
 
 	switch (header.bits.type)
 	{

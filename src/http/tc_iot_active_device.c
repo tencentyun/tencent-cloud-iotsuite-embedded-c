@@ -20,14 +20,10 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
 
     char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int returnCodeIndex = 0;
-    char num_buf[25];
-    int expire_index;
-    long ret_expire;
     int password_index;
     int r;
     int i;
     int temp_len;
-    int username_index;
     int redirect_count = 0;
 
     memset(&netcontext, 0, sizeof(netcontext));

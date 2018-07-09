@@ -10,7 +10,7 @@
  */
 void _tc_iot_get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc_iot_message_data * md , void * session_context) {
 
-    tc_iot_mqtt_message* message = NULL;
+    /* tc_iot_mqtt_message* message = NULL; */
 
     if (ack_status != TC_IOT_ACK_SUCCESS) {
         if (ack_status == TC_IOT_ACK_TIMEOUT) {
@@ -19,7 +19,7 @@ void _tc_iot_get_message_ack_callback(tc_iot_command_ack_status_e ack_status, tc
         return;
     }
 
-    message = md->message;
+    /* message = md->message; */
     tc_iot_device_on_message_received(md);
 }
 
@@ -93,7 +93,6 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
     jsmntok_t  * key_tok = NULL;
     jsmntok_t  * val_tok = NULL;
     char field_buf[TC_IOT_MAX_FIELD_LEN];
-    int field_len = sizeof(field_buf);
     tc_iot_shadow_number new_number = 0;
     tc_iot_shadow_bool new_bool = 0;
     tc_iot_shadow_enum new_enum = 0;

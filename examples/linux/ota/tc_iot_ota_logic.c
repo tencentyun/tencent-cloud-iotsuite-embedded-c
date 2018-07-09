@@ -15,7 +15,7 @@ int my_http_download_callback(const void * context, const char * data, int data_
     fwrite(data, 1, data_len, helper->fp);
 
     // 更新 md5 数据
-    tc_iot_md5_update(&helper->md5_context, data, data_len);
+    tc_iot_md5_update(&helper->md5_context, (const unsigned char *)data, data_len);
     new_percent = (100*(offset+data_len))/total;
     if (new_percent == 100) {
         TC_IOT_LOG_TRACE("success: progress %d/%d(%d/100)", offset+data_len, total, new_percent);
@@ -72,7 +72,7 @@ void do_download (const char * download_url, const char * filename, const char *
     // 检查之前的下载进度，恢复下载进程，续传数据
     fseek(helper.fp, 0, SEEK_SET);
     while((byte_read = fread( buffer, 1, sizeof(buffer), helper.fp)) > 0) {
-        tc_iot_md5_update(&helper.md5_context, buffer, byte_read);
+        tc_iot_md5_update(&helper.md5_context, (const unsigned char *)buffer, byte_read);
         partial_start += byte_read;
     }
 
@@ -147,7 +147,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
     int field_index = 0;
     int ret = 0;
     int i = 0;
-    tc_iot_mqtt_client * p_mqtt_client = (tc_iot_mqtt_client *)md->mqtt_client;
+    /* tc_iot_mqtt_client * p_mqtt_client = (tc_iot_mqtt_client *)md->mqtt_client; */
     tc_iot_mqtt_message* message = md->message;
     tc_iot_ota_handler * ota_handler = &handler;
 

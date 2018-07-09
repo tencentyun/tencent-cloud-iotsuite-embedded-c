@@ -197,7 +197,6 @@ int tc_iot_coap_serialize(unsigned char * buffer, int buffer_len, const tc_iot_c
     }
     pos += ret;
 
-    tc_iot_coap_option * current = NULL;
     for (i = 0; i < message->option_count; i++) {
         if (i == 0) {
             delta = message->options[i].number;
@@ -255,7 +254,7 @@ void tc_iot_coap_message_dump(const tc_iot_coap_message * message) {
     }
     
     if (message->payload_len && message->p_payload) {
-        if (strlen(message->p_payload) == message->payload_len) {
+        if (strlen((const char *)message->p_payload) == message->payload_len) {
             TC_IOT_LOG_TRACE("payload_len=%d,payload=%s",message->payload_len,message->p_payload);
         } else {
             TC_IOT_LOG_TRACE("payload_len=%d,payload=[binary data ...]",message->payload_len);
@@ -267,9 +266,7 @@ void tc_iot_coap_message_dump(const tc_iot_coap_message * message) {
 
 
 int tc_iot_coap_deserialize(tc_iot_coap_message * message, unsigned char * buffer, int buffer_len) {
-    int i = 0;
     int pos = 0;
-    int ret = 0;
     int delta = 0;
     int sum_delta = 0;
     int length = 0;
@@ -422,7 +419,6 @@ int tc_iot_coap_message_add_option(tc_iot_coap_message * message, int option_num
 
 int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config) {
 
-    int i;
     int ret;
     tc_iot_network_t* p_network; 
     tc_iot_net_context_init_t netcontext;
@@ -492,12 +488,8 @@ int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_cl
 }
 
 
-static char * _tc_iot_coap_message_id_to_token( unsigned short message_id, char token[TC_IOT_COAP_MAX_TOKEN_LEN])
+static unsigned char * _tc_iot_coap_message_id_to_token( unsigned short message_id, unsigned char token[TC_IOT_COAP_MAX_TOKEN_LEN])
 {
-    int i = 0;
-    unsigned char temp;
-    unsigned char high;
-    unsigned char low;
     static const char map_byte_to_hex[16] = {
         '0', '1', '2', '3', '4', '5', '6', '7',
         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
@@ -662,7 +654,6 @@ void tc_iot_coap_session_release(tc_iot_coap_session * session) {
 
 int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
     int rc = TC_IOT_SUCCESS;
-    int left_ms = 0;
     tc_iot_coap_message message;
     tc_iot_timer timer;
     tc_iot_coap_session * session = NULL;
@@ -714,6 +705,7 @@ int tc_iot_coap_get_message_payload(tc_iot_coap_message* message, int *payload_l
 
     *payload_len = message->payload_len;
     *payload = message->p_payload;
+    return TC_IOT_SUCCESS;
 }
 
 unsigned char tc_iot_coap_get_message_code(tc_iot_coap_message* message) {
@@ -738,7 +730,7 @@ static void _tc_iot_coap_con_auth_handler(tc_iot_coap_client * c, tc_iot_coap_co
     if (message_code != COAP_CODE_201_CREATED) {
         c->auth_state = COAP_AUTH_FAILED;
         if (payload == NULL) {
-            payload = "";
+            payload = (unsigned char *)"";
         }
         TC_IOT_LOG_ERROR("auth failed, response coap code=%s,message=%s",
                 tc_iot_coap_get_message_code_str(message_code),
@@ -798,7 +790,7 @@ int tc_iot_coap_auth( tc_iot_coap_client * c) {
     tc_iot_coap_message_set_type(&message, COAP_CON);
     tc_iot_coap_message_set_code(&message, COAP_CODE_002_POST);
     tc_iot_coap_message_add_option(&message, COAP_OPTION_URI_PATH, strlen(uri_path), (unsigned char *)uri_path);
-    tc_iot_coap_message_set_payload(&message, strlen(sign_out), sign_out);
+    tc_iot_coap_message_set_payload(&message, strlen(sign_out), (unsigned char *)sign_out);
 
 auth_start:
     c->auth_state = COAP_AUTH_INITIAL;
@@ -818,6 +810,12 @@ auth_start:
             case COAP_AUTH_FAILED:
                 TC_IOT_LOG_ERROR("Auth failed, please check config or network.");
                 return TC_IOT_FAILURE;
+            case COAP_AUTH_INITIAL:
+                break;
+            case COAP_AUTH_SUCCESS:
+                break;
+            default:
+                break;
         }
     }
 

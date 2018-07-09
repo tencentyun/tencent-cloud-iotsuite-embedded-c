@@ -237,19 +237,15 @@ int tc_iot_ota_download(const char* api_url, int partial_start, tc_iot_http_down
     int max_http_resp_len = sizeof(http_buffer) - 1;
     char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int ret;
-    char* rsp_body;
     int redirect_count = 0;
-    int temp_len = 0;
     int i = 0;
     int callback_ret = 0;
     int http_code = 0;
-    char * content_length_pos = NULL;
     int content_length = 0;
     int received_bytes = 0;
     int http_timeout_ms = 2000;
     tc_iot_http_response_parser parser;
     char http_header[32];
-    int temp = 0;
     int parse_ret = 0;
     int parse_left = 0;
 
@@ -296,7 +292,7 @@ parse_url:
     tc_iot_http_parser_init(&parser);
 
     while (ret > 0) {
-        parse_ret = tc_iot_http_parser_analysis(&parser, http_buffer, ret);
+        parse_ret = tc_iot_http_parser_analysis(&parser, (char *)http_buffer, ret);
         if (parse_ret < 0) {
             TC_IOT_LOG_ERROR("read from request url=%s failed, ret=%d", api_url, ret);
             network.do_disconnect(&network);
@@ -358,7 +354,7 @@ parse_url:
             content_length = parser.content_length;
             received_bytes = parse_left;
 
-            callback_ret = download_callback(context, http_buffer, received_bytes, 0, content_length);
+            callback_ret = download_callback(context, (const char *)http_buffer, received_bytes, 0, content_length);
             if (callback_ret != TC_IOT_SUCCESS) {
                 TC_IOT_LOG_ERROR("callback failed ret=%d, abort.", callback_ret);
                 return TC_IOT_FAILURE;
@@ -367,7 +363,7 @@ parse_url:
                 ret = network.do_read(&network, http_buffer, max_http_resp_len, http_timeout_ms);
                 if ((ret <= max_http_resp_len) && (ret > 0)) {
                     http_buffer[ret] = '\0';
-                    callback_ret = download_callback(context, http_buffer, ret, received_bytes , content_length);
+                    callback_ret = download_callback(context, (const char *)http_buffer, ret, received_bytes , content_length);
                     if (callback_ret != TC_IOT_SUCCESS) {
                         TC_IOT_LOG_ERROR("callback failed ret=%d, abort.", callback_ret);
                         return TC_IOT_FAILURE;
@@ -415,19 +411,11 @@ int tc_iot_ota_request_content_length(const char* api_url) {
     int max_http_resp_len = sizeof(http_buffer) - 1;
     char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int ret;
-    char* rsp_body;
     int redirect_count = 0;
-    int temp_len = 0;
     int i = 0;
-    int callback_ret = 0;
     int http_code = 0;
-    char * content_length_pos = NULL;
-    int content_length = 0;
-    int received_bytes = 0;
     int http_timeout_ms = 2000;
     tc_iot_http_response_parser parser;
-    char http_header[32];
-    int temp = 0;
     int parse_ret = 0;
     int parse_left = 0;
 
@@ -469,7 +457,7 @@ parse_url:
     tc_iot_http_parser_init(&parser);
 
     while (ret > 0) {
-        parse_ret = tc_iot_http_parser_analysis(&parser, http_buffer, ret);
+        parse_ret = tc_iot_http_parser_analysis(&parser, (const char *)http_buffer, ret);
         if (parse_ret < 0) {
             TC_IOT_LOG_ERROR("read from request url=%s failed, ret=%d", api_url, ret);
             network.do_disconnect(&network);

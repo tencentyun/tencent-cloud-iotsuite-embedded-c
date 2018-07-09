@@ -126,32 +126,32 @@ typedef int (*tc_iot_event_handler)(tc_iot_event_message *msg, void * client,  v
 #define tc_iot_const_str_len(a)  (sizeof(a)-1)
 
 #define tc_iot_str2_equal(m, c0, c1) \
-m[0] == c0 && m[1] == c1
+(m[0] == c0 && m[1] == c1)
 
 #define tc_iot_str3_equal(m, c0, c1, c2) \
-m[0] == c0 && m[1] == c1 && m[2] == c2
+(m[0] == c0 && m[1] == c1 && m[2] == c2)
 
 #define tc_iot_str4equal(m, c0, c1, c2, c3) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3)
 
 #define tc_iot_str5equal(m, c0, c1, c2, c3, c4) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 && m[4] == c4
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 && m[4] == c4)
 
 #define tc_iot_str6equal(m, c0, c1, c2, c3, c4, c5) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 \
-    && m[4] == c4 && m[5] == c5
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 \
+    && m[4] == c4 && m[5] == c5)
 
 #define tc_iot_str7equal(m, c0, c1, c2, c3, c4, c5, c6) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 \
-    && m[4] == c4 && m[5] == c5 && m[6] == c6
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 \
+    && m[4] == c4 && m[5] == c5 && m[6] == c6)
 
 #define tc_iot_str8equal(m, c0, c1, c2, c3, c4, c5, c6, c7) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3       \
-    && m[4] == c4 && m[5] == c5 && m[6] == c6 && m[7] == c7
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3       \
+    && m[4] == c4 && m[5] == c5 && m[6] == c6 && m[7] == c7)
 
 #define tc_iot_str9equal(m, c0, c1, c2, c3, c4, c5, c6, c7, c8) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3            \
-    && m[4] == c4 && m[5] == c5 && m[6] == c6 && m[7] == c7 && m[8] == c8
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3            \
+    && m[4] == c4 && m[5] == c5 && m[6] == c6 && m[7] == c7 && m[8] == c8)
 #define TC_IOT_MEMBER_SIZE(type, member) sizeof(((type *)0)->member)
 
 #endif /* end of include guard */

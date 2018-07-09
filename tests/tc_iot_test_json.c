@@ -4,8 +4,7 @@
 TEST(testjson, test_json_unescape)
 {
     char output[1024];
-    int buffer_len = sizeof(output);
-    int ret;
+    int ret = 0;
 
     const char * input ;
 
@@ -28,14 +27,14 @@ TEST(testjson, test_json_unescape)
     ret = tc_iot_json_unescape(output, sizeof(output), input, strlen(input));
     /* printf("'%s' -> '%s'\n", input, output); */
     STRCMP_EQUAL(output, "\ngood\r\n");
+    (void)ret;
 }
 
 
 TEST(testjson, test_json_escape)
 {
     char output[1024];
-    int buffer_len = sizeof(output);
-    int ret;
+    int ret = 0;
 
     const char * input ;
 
@@ -58,6 +57,7 @@ TEST(testjson, test_json_escape)
     ret = tc_iot_json_escape(output, sizeof(output), input, strlen(input));
     /* printf("'%s' -> '%s'\n", input, output); */
     STRCMP_EQUAL(output, "\\ngood\\r\\n");
+    (void)ret;
 }
 
 TEST(testjson, test_json_writer)

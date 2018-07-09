@@ -3,9 +3,8 @@
 int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info, const char * message) {
 
-    char sign_out[TC_IOT_HTTP_TOKEN_REQUEST_FORM_LEN];
-    char http_buffer[TC_IOT_HTTP_TOKEN_RESPONSE_LEN];
-    int sign_len;
+    char sign_out[TC_IOT_HTTP_MQAPI_REQUEST_FORM_LEN];
+    char http_buffer[TC_IOT_HTTP_MQAPI_RESPONSE_LEN];
     tc_iot_network_t network;
     tc_iot_http_request request;
     int ret;
@@ -20,14 +19,9 @@ int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long
 
     char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
     int returnCodeIndex = 0;
-    char num_buf[25];
-    int expire_index;
-    long ret_expire;
-    int password_index;
     int r;
     int i;
     int temp_len;
-    int username_index;
     int redirect_count = 0;
 
     memset(&netcontext, 0, sizeof(netcontext));
@@ -43,7 +37,7 @@ int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long
                                         p_device_info->product_id,
                                         timestamp);
     
-    tc_iot_mem_usage_log("sign_out[TC_IOT_HTTP_TOKEN_REQUEST_FORM_LEN]", sizeof(sign_out), sign_len);
+    tc_iot_mem_usage_log("sign_out[TC_IOT_HTTP_MQAPI_REQUEST_FORM_LEN]", sizeof(sign_out), ret);
 
     TC_IOT_LOG_TRACE("signed request form:\n%s", sign_out);
 

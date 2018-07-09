@@ -18,7 +18,6 @@ TEST(tc_iot_http_utils_testcases, tc_iot_calc_sign)
     char var_char = 'Z';
     int var_int = 0x12345678;
     unsigned int var_uint = 0xFFFFFFFF;
-    long var_long = 0xFFFFFFFF;
     int var_oct = 01234567;
     unsigned int var_ulong = 0x87654321;
 
