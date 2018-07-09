@@ -262,4 +262,13 @@ int http_post_json(tc_iot_network_t* network,
 
 int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret, const char * format, ...) ;
 
+int tc_iot_create_mqapi_rpc_json(char* form, int max_form_len,
+                                    const char* secret,
+                                    const char* device_name,
+                                    const char* message,
+                                    long nonce,
+                                    const char* product_id,
+                                    long timestamp
+                                    );
+
 #endif /* end of include guard */

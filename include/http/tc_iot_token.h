@@ -55,4 +55,7 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 int http_get_device_secret(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info);
 
+int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long nonce,
+        tc_iot_device_info* p_device_info, const char * message);
+
 #endif /* end of include guard */

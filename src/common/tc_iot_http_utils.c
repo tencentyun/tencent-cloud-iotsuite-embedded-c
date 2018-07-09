@@ -688,3 +688,57 @@ int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret
     return TC_IOT_SHA256_DIGEST_SIZE;    
 }
 
+int tc_iot_create_mqapi_rpc_json(char* form, int max_form_len,
+                                    const char* secret,
+                                    const char* device_name,
+                                    const char* message,
+                                    long nonce,
+                                    const char* product_id,
+                                    long timestamp
+                                    ) {
+    char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
+    int ret;
+    char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)];
+    int total = 0;
+    tc_iot_json_writer writer;
+    tc_iot_json_writer * w = &writer;
+
+    IF_NULL_RETURN(form, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(secret, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(device_name, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
+
+    ret = tc_iot_calc_sign(
+            sha256_digest, sizeof(sha256_digest),
+            secret,
+            "productId=%s&deviceName=%s&message=%s&nonce=%ld&timestamp=%ld",
+             product_id,device_name,message,nonce,timestamp
+        );
+
+    ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
+                               sizeof(b64_buf));
+    if (ret < sizeof(b64_buf) && ret > 0) {
+       b64_buf[ret] = '\0'; 
+       tc_iot_mem_usage_log("b64_buf", sizeof(b64_buf), ret);
+    } else {
+        TC_IOT_LOG_ERROR("b64_buf for sha256 digest overflow, ret=%d.", ret);
+        if (ret < 0) {
+            return ret;
+        } else {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+    }
+
+    tc_iot_json_writer_open(w, form, max_form_len);
+    tc_iot_json_writer_string(w ,"productId", product_id);
+    tc_iot_json_writer_string(w ,"deviceName", device_name);
+    tc_iot_json_writer_int(w ,"nonce", nonce);
+    tc_iot_json_writer_int(w ,"timestamp", timestamp);
+    tc_iot_json_writer_string(w ,"message", message);
+    tc_iot_json_writer_string(w ,"signature", b64_buf);
+    ret = tc_iot_json_writer_close(w);
+
+    return ret;
+}
+
