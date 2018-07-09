@@ -3,11 +3,11 @@
 
 #define ENABLE_MQTT
 #define ENABLE_OTA
-/* #undef ENABLE_DATA_TEMPLATE */
+#define ENABLE_DATA_TEMPLATE
 
 #define ENABLE_COAP
 
-/* #undef ENABLE_TLS */
+#define ENABLE_TLS
 /* #undef ENABLE_DTLS */
 
 #define ENABLE_STACK_TRACE_LOG
@@ -110,6 +110,12 @@
 #define TC_IOT_HTTP_TOKEN_REQUEST_LEN       1024
 // 请求 Token 接口响应数据
 #define TC_IOT_HTTP_TOKEN_RESPONSE_LEN      512  
+
+// 请求 Rpc 接口表单长度
+#define TC_IOT_HTTP_MQAPI_REQUEST_FORM_LEN  256
+// 请求 Rpc 接口 HTTP 请求或响应最大长度
+#define TC_IOT_HTTP_MQAPI_RESPONSE_LEN       1024
+
 
 #define TC_IOT_MAX_JSON_TOKEN_COUNT         120
 
