@@ -1,11 +1,13 @@
 #ifndef TC_IOT_CONFIG_H
 #define TC_IOT_CONFIG_H
 
+/* buffer 长度的倍数因子, 当属性太多json太长的时候, 一些buffer长度需要增加, 可以设置成 2 , 4 ,8 等数值 */
+#define BUF_MULTIPLE 			(1)
 
 #define TC_IOT_SDK_VERSION     "2.5"
 
 /* mqtt消息接收缓冲区长度 */
-#define TC_IOT_CLIENT_SEND_BUF_SIZE 1024
+#define TC_IOT_CLIENT_SEND_BUF_SIZE (1024*BUF_MULTIPLE)
 /* mqtt消息发送缓冲区长度 */
 #define TC_IOT_CLIENT_READ_BUF_SIZE 1024
 
@@ -41,14 +43,14 @@
  *    +
  * 数据点属性长度*数据点数
  * */
-#define TC_IOT_REPORT_UPDATE_MSG_LEN   1024
+#define TC_IOT_REPORT_UPDATE_MSG_LEN   (1024*BUF_MULTIPLE)
 
 /**
  * 基本长度：{"method":"delete","passthrough":{"sid":"40b20006"},"state":{"desired":{}}}
  *    +
  * 数据点属性长度*数据点数
  * */
-#define TC_IOT_UPDATE_DESIRED_MSG_LEN   1024
+#define TC_IOT_UPDATE_DESIRED_MSG_LEN   (1024*BUF_MULTIPLE)
 
 /**
  * 基本长度：{"method":"report_firm","payload":{"sdk-ver":"2.5","firm-ver":"LINUXV1.0"}}
@@ -96,6 +98,6 @@
 #define TC_IOT_TLS_ERROR_STR_LEN            100
 #define TC_IOT_TLS_INFO_LEN                 512
 
-#define TC_IOT_MAX_JSON_TOKEN_COUNT         120
+#define TC_IOT_MAX_JSON_TOKEN_COUNT         (120*BUF_MULTIPLE)
 
 #endif /* end of include guard */
