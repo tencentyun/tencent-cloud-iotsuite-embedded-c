@@ -25,10 +25,10 @@
 
 #define TC_IOT_SDK_VERSION     "2.5"
 
-/* mqtt消息发送缓冲区长度 */
-#define TC_IOT_CLIENT_SEND_BUF_SIZE (1024*BUF_MULTIPLE)
 /* mqtt消息接收缓冲区长度 */
 #define TC_IOT_CLIENT_READ_BUF_SIZE (1024*BUF_MULTIPLE)
+/* mqtt消息发送缓冲区长度 */
+#define TC_IOT_CLIENT_SEND_BUF_SIZE (1024*BUF_MULTIPLE)
 
 /* 网络异常或超时重连配置 */
 /* 最小等待时间 */
