@@ -12,6 +12,7 @@ if (ENABLE_MQTT)
         ADD_SUBDIRECTORY(app)
         ADD_SUBDIRECTORY(light)
         ADD_SUBDIRECTORY(smartbox)
+        ADD_SUBDIRECTORY(http)
     endif()
 
     if (ENABLE_OTA)

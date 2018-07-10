@@ -701,8 +701,8 @@ int tc_iot_create_mqapi_rpc_json(char* form, int max_form_len,
     ret = tc_iot_calc_sign(
             sha256_digest, sizeof(sha256_digest),
             secret,
-            "productId=%s&deviceName=%s&message=%s&nonce=%ld&timestamp=%ld",
-             product_id,device_name,message,nonce,timestamp
+            "deviceName=%s&message=%s&nonce=%ld&productId=%s&timestamp=%ld",
+             device_name,message,nonce,product_id,timestamp
         );
 
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,

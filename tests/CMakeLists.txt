@@ -30,9 +30,6 @@ if (ENABLE_OTA)
     add_executable(st_md5 st/st_md5.c)
     target_link_libraries(st_md5 tc_iot_common)
 
-    add_executable(st_http_mqapi st/st_http_mqapi.c)
-    target_link_libraries(st_http_mqapi tc_iot_common tc_iot_token)
-
     add_executable(st_hmac st/st_hmac.c)
     target_link_libraries(st_hmac tc_iot_common)
 endif()

@@ -59,7 +59,7 @@ parse_url:
         if (root_ca_path) {
             config->root_ca_location = root_ca_path;
         }
-        config->timeout_ms = 10000;
+        config->timeout_ms = TC_IOT_DEFAULT_TLS_HANSHAKE_TIMEOUT_MS;
         if (netcontext.use_tls) {
             config->verify_server = 1;
         }

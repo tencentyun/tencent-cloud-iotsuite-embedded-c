@@ -1,7 +1,8 @@
 #include "tc_iot_inc.h"
 
 int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long nonce,
-        tc_iot_device_info* p_device_info, const char * message) {
+        tc_iot_device_info* p_device_info, const char * message, 
+        char * return_message, int max_len) {
 
     char sign_out[TC_IOT_HTTP_MQAPI_REQUEST_FORM_LEN];
     char http_buffer[TC_IOT_HTTP_MQAPI_RESPONSE_LEN];
@@ -18,7 +19,7 @@ int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long
     jsmntok_t t[20];
 
     char temp_buf[TC_IOT_HTTP_MAX_URL_LENGTH];
-    int returnCodeIndex = 0;
+    int json_field_index = 0;
     int r;
     int i;
     int temp_len;
@@ -56,7 +57,7 @@ parse_url:
         if (root_ca_path) {
             config->root_ca_location = root_ca_path;
         }
-        config->timeout_ms = 10000;
+        config->timeout_ms = TC_IOT_DEFAULT_TLS_HANSHAKE_TIMEOUT_MS;
         if (netcontext.use_tls) {
             config->verify_server = 1;
         }
@@ -85,7 +86,7 @@ parse_url:
     ret = http_post_json(&network, &request, api_url, sign_out, http_buffer,
                                sizeof(http_buffer), 2000);
 
-    tc_iot_mem_usage_log("http_buffer[TC_IOT_HTTP_TOKEN_REQUEST_LEN]", sizeof(http_buffer), strlen(http_buffer));
+    tc_iot_mem_usage_log("http_buffer[TC_IOT_HTTP_MQAPI_RESPONSE_LEN]", sizeof(http_buffer), strlen(http_buffer));
 
     ret = tc_iot_parse_http_response_code(http_buffer);
     if (ret != 200) {
@@ -124,17 +125,14 @@ parse_url:
         } else {
             TC_IOT_LOG_WARN("http response status code=%d", ret);
         }
-        return TC_IOT_REFRESH_TOKEN_FAILED;
+        return TC_IOT_HTTP_RPC_FAILED;
     }
 
     rsp_body = strstr(http_buffer, "\r\n\r\n");
     if (rsp_body) {
         /* skip \r\n\r\n */
         jsmn_init(&p);
-
         rsp_body += 4;
-        TC_IOT_LOG_TRACE("\nbody:\n%s\n", rsp_body);
-
         r = jsmn_parse(&p, rsp_body, strlen(rsp_body), t,
                        sizeof(t) / sizeof(t[0]));
         if (r < 0) {
@@ -147,16 +145,24 @@ parse_url:
             return TC_IOT_JSON_PARSE_FAILED;
         }
 
-        returnCodeIndex = tc_iot_json_find_token(rsp_body, t, r, "returnCode",
+        json_field_index = tc_iot_json_find_token(rsp_body, t, r, "returnCode",
                                                  temp_buf, sizeof(temp_buf));
-        if (returnCodeIndex <= 0 || strlen(temp_buf) != 1 ||
+        if (json_field_index <= 0 || strlen(temp_buf) != 1 ||
             temp_buf[0] != '0') {
-            TC_IOT_LOG_ERROR("failed to fetch token %d/%s: %s", returnCodeIndex,
+            TC_IOT_LOG_ERROR("failed to fetch token %d/%s: %s", json_field_index,
                       temp_buf, rsp_body);
-            return TC_IOT_REFRESH_TOKEN_FAILED;
+            return TC_IOT_HTTP_RPC_FAILED;
         }
 
-        return TC_IOT_SUCCESS;
+        json_field_index = tc_iot_json_find_token(rsp_body, t, r, "data.message",
+                                                 return_message, max_len);
+        if (json_field_index <= 0) {
+            TC_IOT_LOG_ERROR("failed to fetch token %d/%s: %s", json_field_index,
+                      temp_buf, rsp_body);
+            return TC_IOT_HTTP_RPC_FAILED;
+        }
+
+        return strlen(return_message);
     } else {
         return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
     }

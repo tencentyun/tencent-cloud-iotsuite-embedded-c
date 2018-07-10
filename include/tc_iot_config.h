@@ -95,6 +95,9 @@
 /* product key 长度 */
 #define TC_IOT_MAX_PRODUCT_KEY_LEN 20
 
+/* TLS 握手超时时长 */
+#define TC_IOT_DEFAULT_TLS_HANSHAKE_TIMEOUT_MS  10000
+
 // 请求 激活设备 Active 接口表单长度
 #define TC_IOT_HTTP_ACTIVE_REQUEST_FORM_LEN  256
 // 请求 激活设备 Active 接口总长度

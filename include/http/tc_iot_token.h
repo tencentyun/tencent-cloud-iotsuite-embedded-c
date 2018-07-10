@@ -56,6 +56,7 @@ int http_get_device_secret(const char* api_url, char* root_ca_path, long timesta
         tc_iot_device_info* p_device_info);
 
 int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long nonce,
-        tc_iot_device_info* p_device_info, const char * message);
+                    tc_iot_device_info* p_device_info, const char * message, 
+                    char * return_message, int max_len);
 
 #endif /* end of include guard */
