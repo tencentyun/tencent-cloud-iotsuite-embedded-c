@@ -428,7 +428,7 @@ int tc_iot_json_writer_close(tc_iot_json_writer * w) {
     
     ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "}");
     w->pos += ret;
-    if (w->pos == w->buffer_len) {
+    if (w->pos >= w->buffer_len) {
         return TC_IOT_BUFFER_OVERFLOW;
     } else {
         w->buffer[w->pos] = '\0';

@@ -1,6 +1,6 @@
 # 操作指南
 ## 准备工作
-1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，注意事项：创建产品时，“鉴权模式”建议选择“临时token模式”；
+1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，注意事项：创建产品时，“数据协议”选择“自定义”；
 2. 为产品定义创建如下2个自定义Topic：
     - ${product_id}/${device_name}/cmd ，用来接收云端指令。
     - ${product_id}/${device_name}/update ，用来发布设备上报消息。
@@ -50,14 +50,14 @@ make
 编译完成后，在 build/bin/ 目录下，会产生一个 smartbox 程序。
 
 ```shell
-# MQTT 直连并开启详细日志模式，运行 smartbox 设备端应用，
+# 运行 smartbox 设备端应用，
 # 此种方式运行，可以有效查看日志及抓包定位问题
 # 备注：
 # -d device_xxxx 参数是指定当前连接使用的设备名
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_NAME 指定了
 # 正确的设备名称，则命令行执行时，可以不用指定 -d device_xxx 参数。
 #
-# -s secret_abc  认证模式为Token模式时，-s 指定Device Secret
+# -s 指定Device Secret
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
 # ./smartbox --trace -p 1883

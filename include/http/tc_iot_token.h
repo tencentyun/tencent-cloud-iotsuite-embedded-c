@@ -55,8 +55,25 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 int http_get_device_secret(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info);
 
-int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long nonce,
-                    tc_iot_device_info* p_device_info, const char * message, 
-                    char * return_message, int max_len);
+
+/**
+ * @brief  http_mqapi_rpc 通过 HTTP 接口访问数据模板数据。
+ *
+ * @param result 响应数据缓存
+ * @param result_len 响应数据缓存最大长度
+ * @param api_url 请求接口地址
+ * @param root_ca_path TLS 外部证书路径
+ * @param timestamp 请求时间戳
+ * @param nonce 随机数
+ * @param p_device_info 设备信息
+ * @param message 请求消息
+ *
+ * @return 结果返回码，> 0  时表示result中有效数据长度，<= 0 时为错误码
+ * @see tc_iot_sys_code_e
+ */
+int http_mqapi_rpc( char * result, int result_len,
+        const char* api_url, char* root_ca_path, long timestamp, long nonce,
+        tc_iot_device_info* p_device_info, const char * message
+        );
 
 #endif /* end of include guard */

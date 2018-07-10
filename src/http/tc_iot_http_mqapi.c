@@ -1,8 +1,8 @@
 #include "tc_iot_inc.h"
 
-int http_mqapi_rpc(const char* api_url, char* root_ca_path, long timestamp, long nonce,
-        tc_iot_device_info* p_device_info, const char * message, 
-        char * return_message, int max_len) {
+int http_mqapi_rpc( char * result, int result_len,
+        const char* api_url, char* root_ca_path, long timestamp, long nonce,
+        tc_iot_device_info* p_device_info, const char * message) {
 
     char sign_out[TC_IOT_HTTP_MQAPI_REQUEST_FORM_LEN];
     char http_buffer[TC_IOT_HTTP_MQAPI_RESPONSE_LEN];
@@ -155,14 +155,14 @@ parse_url:
         }
 
         json_field_index = tc_iot_json_find_token(rsp_body, t, r, "data.message",
-                                                 return_message, max_len);
+                                                 result, result_len);
         if (json_field_index <= 0) {
             TC_IOT_LOG_ERROR("failed to fetch token %d/%s: %s", json_field_index,
                       temp_buf, rsp_body);
             return TC_IOT_HTTP_RPC_FAILED;
         }
 
-        return strlen(return_message);
+        return strlen(result);
     } else {
         return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
     }
