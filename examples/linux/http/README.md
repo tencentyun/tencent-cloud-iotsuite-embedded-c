@@ -58,7 +58,7 @@ make
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
 # ./demo_http_rpc --trace -p 1883
 
-./demo_http_rpc -d device_xxxx -s secret_abc --trace -p 1883
+./demo_http_rpc -d device_xxxx -s secret_abc --trace
 
 # 如 demo_http_rpc_device 运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
