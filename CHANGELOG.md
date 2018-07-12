@@ -3,11 +3,13 @@
 ## [2.6] - 2018-07-12
 ### 新增
 - 支持 HTTP RPC 功能，示例详见 examples/linux/http 。
+
+### 变更
 - 目录组织结构，依据细化功能划分 MQTT(mqtt)、数据模板(iotsuite)、CoAP(coap)、OTA(ota)、HTTP Token&RPC(http)等。
-- 编译方式优化：
+- 编译方式调整：
     1. 内存及主要参数配置放在 include/tc_iot_config.h 。
     2. 编译宏放在 include/tc_iot_compile_flags.h 。
-        >每次 cmake 执行时，会根据配置参数，从 include/tc_iot_compile_flags.h.in 
+        > cmake 会根据命令行和 CMakeLists.txt 参数设置，用 include/tc_iot_compile_flags.h.in 
         >生成 include/tc_iot_compile_flags.h，移植到其他平台时，可跳过 
         >include/tc_iot_compile_flags.h.in，直接拷贝及修改 
         >include/tc_iot_compile_flags.h 即可。
