@@ -2,7 +2,7 @@
 
 ## [2.6] - 2018-07-12
 ### 新增
-- 支持 HTTP RPC 功能，可在时延不敏感场景下，使用 HTTP 协议与物联网套件数据模板云端交互，示例详见 examples/linux/http 。
+- 支持 HTTP RPC 功能，可使用 HTTP 协议与物联网套件数据模板云端交互，示例详见 examples/linux/http 。
 
 ### 变更
 - 目录组织结构，依据细化功能划分 MQTT(mqtt)、数据模板(iotsuite)、CoAP(coap)、OTA(ota)、HTTP Token&RPC(http)等。
