@@ -154,7 +154,7 @@ int check_and_process_desired(unsigned char * p_desired_bits, tc_iot_shadow_loca
     return TC_IOT_SUCCESS;
 }
 
-int do_rpc_get(char * result, int result_len, tc_iot_device_info * p_device_info, bool meta, bool report) {
+int do_rpc_get(char * result, int result_len, tc_iot_device_info * p_device_info, bool metadata, bool reported) {
     int ret = 0;
     char request[1024];
     tc_iot_json_writer writer;
@@ -167,20 +167,20 @@ int do_rpc_get(char * result, int result_len, tc_iot_device_info * p_device_info
 
     tc_iot_json_writer_open(w, request, sizeof(request));
     tc_iot_json_writer_string(w ,"method", "get");
-    tc_iot_json_writer_bool(w ,"meta", meta);
-    tc_iot_json_writer_bool(w ,"report", report);
+    tc_iot_json_writer_bool(w ,"metadata", metadata);
+    tc_iot_json_writer_bool(w ,"reported", reported);
     ret = tc_iot_json_writer_close(w);
 
     if (ret <= 0) {
         TC_IOT_LOG_INFO("encode json failed ,ret=%d", ret);
     } else {
-        tc_iot_hal_printf("[c->s]:%s\n", request);
+        tc_iot_hal_printf("[client->server]:%s\n", request);
     }
 
     nonce = tc_iot_hal_random();
     ret = http_mqapi_rpc( result, result_len, TC_IOT_CONFIG_RPC_API_URL, NULL, timestamp, nonce, p_device_info, request);
     if (ret > 0) {
-        tc_iot_hal_printf("[s->c]:%s\n", result);
+        tc_iot_hal_printf("[server->client]:%s\n", result);
     } else {
         TC_IOT_LOG_INFO("request failed ,ret=%d", ret);
     }
@@ -279,17 +279,25 @@ int do_rpc_delete(char * result, int result_len, tc_iot_device_info * p_device_i
     if (ret <= 0) {
         TC_IOT_LOG_INFO("encode json failed ,ret=%d", ret);
     } else {
-        tc_iot_hal_printf("[c->s]:%s\n", request);
+        tc_iot_hal_printf("[client->server]:%s\n", request);
     }
 
     nonce = tc_iot_hal_random();
     ret = http_mqapi_rpc( result, result_len, TC_IOT_CONFIG_RPC_API_URL, NULL, timestamp, nonce, p_device_info, request);
     if (ret > 0) {
-        tc_iot_hal_printf("[s->c]:%s\n", result);
+        tc_iot_hal_printf("[server->client]:%s\n", result);
     } else {
         TC_IOT_LOG_ERROR("request failed ,ret=%d", ret);
     }
     return ret;
+}
+
+static void step_log(const char * step_desc, bool begin) {
+    if (begin) {
+        tc_iot_hal_printf("\n-----%s--------%s---------------\n","begin", step_desc);
+    } else {
+        tc_iot_hal_printf("-----%s--------%s---------------\n"," end ", step_desc);
+    }
 }
 
 int main(int argc, char** argv) {
@@ -299,41 +307,41 @@ int main(int argc, char** argv) {
 
     parse_command(&g_device_info, argc, argv);
 
-    tc_iot_hal_printf("-------------rpc get---------------\n");
+    step_log("rpc get: server desired data", true);
     ret = do_rpc_get(result, sizeof(result), &g_device_info, false, false);
     if (ret < 0) {
         return 0;
     }
-    tc_iot_hal_printf("-------------rpc get---------------\n");
+    step_log("rpc get: server desired data", false);
 
     memset(desired_bits, 0, sizeof(desired_bits));
     check_and_process_desired(desired_bits, &g_local_data, result);
     if (desired_bits[0]) {
-        tc_iot_hal_printf("-------------rpc update---------------\n");
+        step_log("rpc update: report latest device state", true);
         ret = do_rpc_update(result, sizeof(result), &g_device_info, desired_bits, &g_local_data);
         if (ret < 0) {
             return 0;
         }
-        tc_iot_hal_printf("-------------rpc update---------------\n");
-        tc_iot_hal_printf("-------------rpc delete---------------\n");
+        step_log("rpc update: report latest device state", false);
+
+        step_log("rpc delete: clear desired data after successfully processed.", true);
         ret = do_rpc_delete(result, sizeof(result), &g_device_info, desired_bits);
         if (ret < 0) {
             return 0;
         }
-        tc_iot_hal_printf("-------------rpc delete---------------\n");
+        step_log("rpc delete: clear desired data after successfully processed.", false);
 
-        tc_iot_hal_printf("-------------rpc get---------------\n");
-        ret = do_rpc_get(result, sizeof(result), &g_device_info, false, false);
+        step_log("rpc get: fetch latest state", true);
+        ret = do_rpc_get(result, sizeof(result), &g_device_info, false, true);
         if (ret < 0) {
             return 0;
         }
-        tc_iot_hal_printf("-------------rpc get---------------\n");
+        step_log("rpc get: fetch latest state", false);
 
-        tc_iot_hal_printf("> control command process finished, check latest report data over console:\n> https://console.cloud.tencent.com/iotsuite/product\n");
+        tc_iot_hal_printf("\n> control command process finished, check latest report data over console:\n> https://console.cloud.tencent.com/iotsuite/product\n");
     } else {
-        tc_iot_hal_printf("> no control command, try send control data over console:\n> https://console.cloud.tencent.com/iotsuite/product\n");
+        tc_iot_hal_printf("\n> no control command, try send control data over console:\n> https://console.cloud.tencent.com/iotsuite/product\n");
     }
-
 
     return 0;
 }
