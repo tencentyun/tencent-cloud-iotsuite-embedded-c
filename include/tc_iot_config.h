@@ -7,7 +7,7 @@
 /* buffer 长度的倍数因子, 当属性太多json太长的时候, 一些buffer长度需要增加, 可以设置成 2 , 4 ,8 等数值 */
 #define BUF_MULTIPLE 			(1)
 
-#define TC_IOT_SDK_VERSION     "2.5"
+#define TC_IOT_SDK_VERSION     "2.6"
 
 /* mqtt消息接收缓冲区长度 */
 #define TC_IOT_CLIENT_READ_BUF_SIZE (1024*BUF_MULTIPLE)
@@ -37,9 +37,9 @@
 #define TC_IOT_MAX_MQTT_TOPIC_LEN 128
 
 /*
- * 基本长度：{"method":"get","passthrough":{"sid":"3ffe0001"}}
+ * 基本长度：{"method":"get","passthrough":{"sid":"3ffe0001"},"metadata":false}
  * */
-#define TC_IOT_GET_MSG_LEN   64
+#define TC_IOT_GET_MSG_LEN   96
 
 /*
  * 基本长度：{"method":"update","passthrough":{"sid":"3ffe0001"},"state":{"reported":{}}}

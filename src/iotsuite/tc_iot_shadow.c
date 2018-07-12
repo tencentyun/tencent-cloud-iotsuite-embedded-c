@@ -178,13 +178,23 @@ int tc_iot_shadow_get(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         }
         rc = tc_iot_shadow_doc_pack_for_get_with_sid(buffer, buffer_len, &(p_session->sid[0]),
                 TC_IOT_SESSION_ID_LEN+1, c);
+        if (rc < 0) {
+            TC_IOT_LOG_ERROR("tc_iot_shadow_doc_pack_for_get_with_sid failed, return=%d", rc);
+            tc_iot_release_session(p_session);
+            return rc;
+        }
         tc_iot_hal_timer_init(&(p_session->timer));
         tc_iot_hal_timer_countdown_ms(&(p_session->timer), timeout_ms);
         p_session->handler = callback;
         p_session->session_context = session_context;
     } else {
         rc = tc_iot_shadow_doc_pack_for_get_with_sid(buffer, buffer_len, NULL, 0, c);
+        if (rc < 0) {
+            TC_IOT_LOG_ERROR("tc_iot_shadow_doc_pack_for_get_with_sid failed, return=%d", rc);
+            return rc;
+        }
     }
+
 
     memset(&pubmsg, 0, sizeof(pubmsg));
     pubmsg.payload = buffer;
@@ -318,8 +328,14 @@ int tc_iot_shadow_doc_pack_for_get_with_sid(char *buffer, int buffer_len,
     int buffer_used = 0;
     ret = tc_iot_shadow_doc_pack_start(buffer, buffer_len, session_id, session_id_len, TC_IOT_MQTT_METHOD_GET, c);
     buffer_used += ret;
+    ret = tc_iot_hal_snprintf(buffer+buffer_used, buffer_len-buffer_used,",\"metadata\":false");
+    buffer_used += ret;
     ret = tc_iot_shadow_doc_pack_end(buffer+buffer_used, buffer_len-buffer_used, c);
     buffer_used += ret;
+    if (buffer_used >= buffer_len) {
+        TC_IOT_LOG_ERROR("buffer overflow used=%d, max_len=%d", buffer_used, buffer_len);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
     return buffer_used;
 }
 
