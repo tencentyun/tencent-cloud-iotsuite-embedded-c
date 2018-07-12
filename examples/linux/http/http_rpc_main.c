@@ -178,7 +178,7 @@ int do_rpc_get(char * result, int result_len, tc_iot_device_info * p_device_info
     }
 
     nonce = tc_iot_hal_random();
-    ret = http_mqapi_rpc( result, result_len, TC_IOT_CONFIG_RPC_API_URL, NULL, timestamp, nonce, p_device_info, request);
+    ret = tc_iot_http_mqapi_rpc( result, result_len, TC_IOT_CONFIG_RPC_API_URL, NULL, timestamp, nonce, p_device_info, request);
     if (ret > 0) {
         tc_iot_hal_printf("[server->client]:%s\n", result);
     } else {
@@ -231,7 +231,7 @@ int do_rpc_update(char * result, int result_len, tc_iot_device_info * p_device_i
     }
 
     nonce = tc_iot_hal_random();
-    ret = http_mqapi_rpc( result, result_len, TC_IOT_CONFIG_RPC_API_URL, NULL, timestamp, nonce, p_device_info, request);
+    ret = tc_iot_http_mqapi_rpc( result, result_len, TC_IOT_CONFIG_RPC_API_URL, NULL, timestamp, nonce, p_device_info, request);
     if (ret > 0) {
         tc_iot_hal_printf("[s->c]:%s\n", result);
     } else {
@@ -283,7 +283,7 @@ int do_rpc_delete(char * result, int result_len, tc_iot_device_info * p_device_i
     }
 
     nonce = tc_iot_hal_random();
-    ret = http_mqapi_rpc( result, result_len, TC_IOT_CONFIG_RPC_API_URL, NULL, timestamp, nonce, p_device_info, request);
+    ret = tc_iot_http_mqapi_rpc( result, result_len, TC_IOT_CONFIG_RPC_API_URL, NULL, timestamp, nonce, p_device_info, request);
     if (ret > 0) {
         tc_iot_hal_printf("[server->client]:%s\n", result);
     } else {

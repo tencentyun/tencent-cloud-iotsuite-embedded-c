@@ -1,24 +1,8 @@
 #ifndef TC_IOT_CONFIG_H
 #define TC_IOT_CONFIG_H
 
-#define ENABLE_MQTT
-#define ENABLE_OTA
-#define ENABLE_DATA_TEMPLATE
+#include "tc_iot_compile_flags.h"
 
-#define ENABLE_COAP
-
-#define ENABLE_TLS
-/* #undef ENABLE_DTLS */
-
-#define ENABLE_STACK_TRACE_LOG
-
-// Enabled Log Levels
-#define ENABLE_TC_IOT_LOG_TRACE
-#define ENABLE_TC_IOT_LOG_DEBUG
-#define ENABLE_TC_IOT_LOG_INFO
-#define ENABLE_TC_IOT_LOG_WARN
-#define ENABLE_TC_IOT_LOG_ERROR
-#define ENABLE_TC_IOT_LOG_FATAL
 
 /* buffer 长度的倍数因子, 当属性太多json太长的时候, 一些buffer长度需要增加, 可以设置成 2 , 4 ,8 等数值 */
 #define BUF_MULTIPLE 			(1)

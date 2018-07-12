@@ -1,11 +1,5 @@
 #include "tc_iot_inc.h"
 
-int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timestamp, long nonce,
-        tc_iot_device_info* p_device_info) {
-    return http_refresh_auth_token_with_expire(api_url, root_ca_path, 
-            timestamp, nonce, p_device_info, TC_IOT_TOKEN_DEFAULT_EXPIRE_SECOND);
-}
-
 int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info, long expire) {
 
@@ -205,4 +199,11 @@ parse_url:
         return TC_IOT_ERROR_HTTP_REQUEST_FAILED;
     }
 }
+
+int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timestamp, long nonce,
+        tc_iot_device_info* p_device_info) {
+    return http_refresh_auth_token_with_expire(api_url, root_ca_path, 
+            timestamp, nonce, p_device_info, TC_IOT_TOKEN_DEFAULT_EXPIRE_SECOND);
+}
+
 

@@ -1,6 +1,6 @@
 #include "tc_iot_inc.h"
 
-int http_mqapi_rpc( char * result, int result_len,
+int tc_iot_http_mqapi_rpc( char * result, int result_len,
         const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info, const char * message) {
 

@@ -86,7 +86,8 @@ SET(CMAKE_SYSTEM_NAME Linux)
 include_directories(include)
 include_directories(include/platform/${TC_IOT_PLATFORM_NAME})
 
-configure_file ("${CMAKE_SOURCE_DIR}/include/tc_iot_config.h.in" "${CMAKE_SOURCE_DIR}/include/tc_iot_config.h")
+configure_file ("${CMAKE_SOURCE_DIR}/include/tc_iot_compile_flags.h.in"
+    "${CMAKE_SOURCE_DIR}/include/tc_iot_compile_flags.h")
 
 # enable_testing()
 ADD_SUBDIRECTORY(external)
