@@ -11,6 +11,7 @@
 /* #undef ENABLE_DTLS */
 
 #define ENABLE_STACK_TRACE_LOG
+#define ENABLE_MQTT_RECONNECT_FOREVER
 
 // Enabled Log Levels
 #define ENABLE_TC_IOT_LOG_TRACE

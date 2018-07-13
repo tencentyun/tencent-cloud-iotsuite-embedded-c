@@ -94,7 +94,7 @@ static int _handle_reconnect(tc_iot_mqtt_client* c) {
     }
 
     if (TC_IOT_MAX_RECONNECT_WAIT_INTERVAL < c->reconnect_timeout_ms) {
-#ifdef TC_IOT_MQTT_RECONNECT_FOREVER
+#ifdef ENABLE_MQTT_RECONNECT_FOREVER
         c->reconnect_timeout_ms = TC_IOT_MAX_RECONNECT_WAIT_INTERVAL;
         TC_IOT_LOG_TRACE("mqtt reconnect timer reset to %dms.", c->reconnect_timeout_ms);
 #else

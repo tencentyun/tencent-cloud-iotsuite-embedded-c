@@ -47,6 +47,8 @@ option(ENABLE_TLS "use mqtt/http over tls" ON)
 option(ENABLE_DTLS "use CoAP over dtls" OFF)
 
 option(ENABLE_STACK_TRACE_LOG "Enable stack big mem usage" ON)
+option(ENABLE_MQTT_RECONNECT_FOREVER "Enable mqtt reconnect forever" ON)
+
 option(ENABLE_TC_IOT_LOG_TRACE "Enable log" ON)
 option(ENABLE_TC_IOT_LOG_DEBUG "Enable log" ON)
 option(ENABLE_TC_IOT_LOG_INFO  "Enable log" ON)

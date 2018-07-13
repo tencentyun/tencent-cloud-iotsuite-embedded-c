@@ -103,20 +103,34 @@ void operate_device(tc_iot_shadow_local_data * light) {
 }
 
 int power_usage_inited = false;
+#define REPORT_DURATION  20
+int previous_left_seconds = REPORT_DURATION;
 tc_iot_timer power_usage_timer;
 
 void light_power_usage_calc(tc_iot_shadow_client * c) {
+    int left_seconds = 0;
     if (!power_usage_inited) {
         power_usage_inited = true;
         tc_iot_hal_timer_init(&power_usage_timer);
-        tc_iot_hal_timer_countdown_second(&power_usage_timer, 3);
+        tc_iot_hal_timer_countdown_second(&power_usage_timer, REPORT_DURATION);
+        previous_left_seconds = REPORT_DURATION;
         return;
     }
 
     if (tc_iot_hal_timer_is_expired(&power_usage_timer)) {
         g_tc_iot_device_local_data.power += 0.00001;
         tc_iot_report_device_data(c);
-        tc_iot_hal_timer_countdown_second(&power_usage_timer, 3);
+        tc_iot_hal_timer_countdown_second(&power_usage_timer, REPORT_DURATION);
+        previous_left_seconds = REPORT_DURATION;
+    } else {
+        left_seconds = tc_iot_hal_timer_left_ms(&power_usage_timer)/1000;
+        if (left_seconds != previous_left_seconds) {
+            tc_iot_hal_printf("|%d...", left_seconds+1);
+            if (left_seconds == 0) {
+                tc_iot_hal_printf("\n");
+            }
+            previous_left_seconds = left_seconds;
+        }
     }
 }
 
