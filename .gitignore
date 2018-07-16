@@ -1,6 +1,11 @@
 
 # ctags file
 TAGS
+# gtags file
+GPATH
+GRTAGS
+GSYMS
+GTAGS
 
 #cmake 
 build
