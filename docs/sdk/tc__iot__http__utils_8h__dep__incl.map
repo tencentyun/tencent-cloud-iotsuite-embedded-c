@@ -1,12 +1,12 @@
 <map id="include/common/tc_iot_http_utils.h" name="include/common/tc_iot_http_utils.h">
-<area shape="rect" id="node2" href="$tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="731,95,866,121"/>
+<area shape="rect" id="node2" href="$tc__iot__inc_8h.html" title="include/tc_iot_inc.h" alt="" coords="665,95,799,121"/>
 <area shape="rect" id="node3" href="$tc__iot__coap_8h.html" title="include/coap/tc_iot\l_coap.h" alt="" coords="5,169,136,211"/>
 <area shape="rect" id="node4" href="$tc__iot__json_8h.html" title="include/common/tc_iot\l_json.h" alt="" coords="159,169,313,211"/>
 <area shape="rect" id="node5" href="$tc__iot__log_8h.html" title="include/common/tc_iot\l_log.h" alt="" coords="337,169,490,211"/>
-<area shape="rect" id="node6" href="$tc__iot__client_8h.html" title="include/iotsuite/tc\l_iot_client.h" alt="" coords="514,169,638,211"/>
-<area shape="rect" id="node7" href="$tc__iot__mqtt_8h.html" title="include/iotsuite/tc\l_iot_mqtt.h" alt="" coords="662,169,786,211"/>
-<area shape="rect" id="node8" href="$tc__iot__hal__network_8h.html" title="include/platform/tc\l_iot_hal_network.h" alt="" coords="809,169,940,211"/>
-<area shape="rect" id="node9" href="$tc__iot__hal__os_8h.html" title="include/platform/tc\l_iot_hal_os.h" alt="" coords="963,169,1093,211"/>
-<area shape="rect" id="node10" href="$tc__iot__hal__timer_8h.html" title="include/platform/tc\l_iot_hal_timer.h" alt="" coords="1117,169,1246,211"/>
-<area shape="rect" id="node11" href="$tc__iot__export_8h.html" title="include/tc_iot_export.h" alt="" coords="1270,177,1423,203"/>
+<area shape="rect" id="node6" href="$tc__iot__client_8h.html" title="include/mqtt/tc_iot\l_client.h" alt="" coords="514,169,643,211"/>
+<area shape="rect" id="node7" href="$tc__iot__mqtt_8h.html" title="include/mqtt/tc_iot\l_mqtt.h" alt="" coords="667,169,797,211"/>
+<area shape="rect" id="node8" href="$tc__iot__hal__network_8h.html" title="include/platform/tc\l_iot_hal_network.h" alt="" coords="820,169,951,211"/>
+<area shape="rect" id="node9" href="$tc__iot__hal__os_8h.html" title="include/platform/tc\l_iot_hal_os.h" alt="" coords="974,169,1103,211"/>
+<area shape="rect" id="node10" href="$tc__iot__hal__timer_8h.html" title="include/platform/tc\l_iot_hal_timer.h" alt="" coords="1127,169,1257,211"/>
+<area shape="rect" id="node11" href="$tc__iot__export_8h.html" title="include/tc_iot_export.h" alt="" coords="1281,177,1434,203"/>
 </map>

@@ -90,12 +90,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <div class="title">tc_iot_inc.h 文件参考</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="tc__iot__external_8h_source.html">tc_iot_external.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="tc__iot__config_8h_source.html">tc_iot_config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__external_8h_source.html">tc_iot_external.h</a>&quot;</code><br />
 <code>#include &quot;tc_iot_platform.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__log_8h_source.html">common/tc_iot_log.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__const_8h_source.html">common/tc_iot_const.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__bit_8h_source.html">common/tc_iot_bit.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__safety__check_8h_source.html">common/tc_iot_safety_check.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__string__utils_8h_source.html">common/tc_iot_string_utils.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__md5_8h_source.html">common/tc_iot_md5.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__hmac_8h_source.html">common/tc_iot_hmac.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__hal__os_8h_source.html">platform/tc_iot_hal_os.h</a>&quot;</code><br />
@@ -106,30 +108,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'搜索');
 <code>#include &quot;<a class="el" href="tc__iot__base64_8h_source.html">common/tc_iot_base64.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__json_8h_source.html">common/tc_iot_json.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__url_8h_source.html">common/tc_iot_url.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="tc__iot__config_8h_source.html">tc_iot_config.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tc__iot__certs_8h_source.html">common/tc_iot_certs.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__mqtt_8h_source.html">mqtt/tc_iot_mqtt.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__client_8h_source.html">mqtt/tc_iot_client.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__shadow_8h_source.html">iotsuite/tc_iot_shadow.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__token_8h_source.html">http/tc_iot_token.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__coap_8h_source.html">coap/tc_iot_coap.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__ota__mqtt_8h_source.html">ota/tc_iot_ota_mqtt.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="tc__iot__ota__download_8h_source.html">ota/tc_iot_ota_download.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 tc_iot_inc.h 的引用(Include)关系图:</div>
 <div class="dyncontent">
 <div class="center"><img src="tc__iot__inc_8h__incl.png" border="0" usemap="#include_2tc__iot__inc_8h" alt=""/></div>
 <map name="include_2tc__iot__inc_8h" id="include_2tc__iot__inc_8h">
-<area shape="rect" id="node2" href="tc__iot__external_8h.html" title="tc_iot_external.h" alt="" coords="320,87,439,114"/>
-<area shape="rect" id="node7" href="tc__iot__log_8h.html" title="common/tc_iot_log.h" alt="" coords="605,87,748,114"/>
-<area shape="rect" id="node8" href="tc__iot__const_8h.html" title="common/tc_iot_const.h" alt="" coords="772,87,931,114"/>
-<area shape="rect" id="node9" href="tc__iot__bit_8h.html" title="common/tc_iot_bit.h" alt="" coords="955,87,1095,114"/>
-<area shape="rect" id="node10" href="tc__iot__safety__check_8h.html" title="common/tc_iot_safety\l_check.h" alt="" coords="1119,80,1269,121"/>
-<area shape="rect" id="node11" href="tc__iot__md5_8h.html" title="common/tc_iot_md5.h" alt="" coords="1293,87,1444,114"/>
-<area shape="rect" id="node12" href="tc__iot__hmac_8h.html" title="common/tc_iot_hmac.h" alt="" coords="1468,87,1627,114"/>
-<area shape="rect" id="node13" href="tc__iot__hal__os_8h.html" title="platform/tc_iot_hal_os.h" alt="" coords="1651,87,1812,114"/>
-<area shape="rect" id="node14" href="tc__iot__hal__timer_8h.html" title="platform/tc_iot_hal\l_timer.h" alt="" coords="1836,80,1965,121"/>
-<area shape="rect" id="node15" href="tc__iot__hal__network_8h.html" title="platform/tc_iot_hal\l_network.h" alt="" coords="1989,80,2119,121"/>
-<area shape="rect" id="node16" href="tc__iot__ya__buffer_8h.html" title="common/tc_iot_ya_buffer.h" alt="" coords="2143,87,2323,114"/>
-<area shape="rect" id="node17" href="tc__iot__http__utils_8h.html" title="common/tc_iot_http\l_utils.h" alt="" coords="2347,80,2484,121"/>
-<area shape="rect" id="node18" href="tc__iot__base64_8h.html" title="common/tc_iot_base64.h" alt="" coords="2509,87,2677,114"/>
-<area shape="rect" id="node19" href="tc__iot__json_8h.html" title="common/tc_iot_json.h" alt="" coords="2701,87,2852,114"/>
-<area shape="rect" id="node20" href="tc__iot__url_8h.html" title="common/tc_iot_url.h" alt="" coords="2876,87,3016,114"/>
-<area shape="rect" id="node21" href="tc__iot__config_8h.html" title="tc_iot_config.h" alt="" coords="3041,87,3147,114"/>
-<area shape="rect" id="node22" href="tc__iot__certs_8h.html" title="common/tc_iot_certs.h" alt="" coords="3171,87,3326,114"/>
+<area shape="rect" id="node2" href="tc__iot__config_8h.html" title="tc_iot_config.h" alt="" coords="67,87,173,114"/>
+<area shape="rect" id="node4" href="tc__iot__external_8h.html" title="tc_iot_external.h" alt="" coords="367,87,486,114"/>
+<area shape="rect" id="node9" href="tc__iot__log_8h.html" title="common/tc_iot_log.h" alt="" coords="653,87,795,114"/>
+<area shape="rect" id="node10" href="tc__iot__const_8h.html" title="common/tc_iot_const.h" alt="" coords="819,87,978,114"/>
+<area shape="rect" id="node11" href="tc__iot__bit_8h.html" title="common/tc_iot_bit.h" alt="" coords="1002,87,1142,114"/>
+<area shape="rect" id="node12" href="tc__iot__safety__check_8h.html" title="common/tc_iot_safety\l_check.h" alt="" coords="1166,80,1317,121"/>
+<area shape="rect" id="node13" href="tc__iot__string__utils_8h.html" title="common/tc_iot_string\l_utils.h" alt="" coords="1341,80,1488,121"/>
+<area shape="rect" id="node14" href="tc__iot__md5_8h.html" title="common/tc_iot_md5.h" alt="" coords="1513,87,1663,114"/>
+<area shape="rect" id="node15" href="tc__iot__hmac_8h.html" title="common/tc_iot_hmac.h" alt="" coords="1687,87,1846,114"/>
+<area shape="rect" id="node16" href="tc__iot__hal__os_8h.html" title="platform/tc_iot_hal_os.h" alt="" coords="1870,87,2031,114"/>
+<area shape="rect" id="node17" href="tc__iot__hal__timer_8h.html" title="platform/tc_iot_hal\l_timer.h" alt="" coords="2055,80,2185,121"/>
+<area shape="rect" id="node18" href="tc__iot__hal__network_8h.html" title="platform/tc_iot_hal\l_network.h" alt="" coords="2209,80,2338,121"/>
+<area shape="rect" id="node19" href="tc__iot__ya__buffer_8h.html" title="common/tc_iot_ya_buffer.h" alt="" coords="2362,87,2542,114"/>
+<area shape="rect" id="node20" href="tc__iot__http__utils_8h.html" title="common/tc_iot_http\l_utils.h" alt="" coords="2566,80,2703,121"/>
+<area shape="rect" id="node21" href="tc__iot__base64_8h.html" title="common/tc_iot_base64.h" alt="" coords="2728,87,2896,114"/>
+<area shape="rect" id="node22" href="tc__iot__json_8h.html" title="common/tc_iot_json.h" alt="" coords="2921,87,3071,114"/>
+<area shape="rect" id="node23" href="tc__iot__url_8h.html" title="common/tc_iot_url.h" alt="" coords="3095,87,3235,114"/>
+<area shape="rect" id="node24" href="tc__iot__certs_8h.html" title="common/tc_iot_certs.h" alt="" coords="3260,87,3415,114"/>
+<area shape="rect" id="node25" href="tc__iot__mqtt_8h.html" title="mqtt/tc_iot_mqtt.h" alt="" coords="3439,87,3567,114"/>
+<area shape="rect" id="node26" href="tc__iot__client_8h.html" title="mqtt/tc_iot_client.h" alt="" coords="3591,87,3724,114"/>
+<area shape="rect" id="node27" href="tc__iot__shadow_8h.html" title="iotsuite/tc_iot_shadow.h" alt="" coords="3748,87,3911,114"/>
+<area shape="rect" id="node28" href="tc__iot__token_8h.html" title="http/tc_iot_token.h" alt="" coords="3935,87,4065,114"/>
+<area shape="rect" id="node29" href="tc__iot__coap_8h.html" title="coap/tc_iot_coap.h" alt="" coords="4090,87,4222,114"/>
+<area shape="rect" id="node30" href="tc__iot__ota__mqtt_8h.html" title="ota/tc_iot_ota_mqtt.h" alt="" coords="4246,87,4391,114"/>
+<area shape="rect" id="node31" href="tc__iot__ota__download_8h.html" title="ota/tc_iot_ota_download.h" alt="" coords="4415,87,4590,114"/>
+<area shape="rect" id="node3" href="tc__iot__compile__flags_8h.html" title="tc_iot_compile_flags.h" alt="" coords="5,177,157,203"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -141,12 +158,12 @@ tc_iot_inc.h 的引用(Include)关系图:</div>
 <area shape="rect" id="node3" href="tc__iot__http__utils_8h.html" title="include/common/tc_iot\l_http_utils.h" alt="" coords="159,80,313,121"/>
 <area shape="rect" id="node4" href="tc__iot__json_8h.html" title="include/common/tc_iot\l_json.h" alt="" coords="337,80,490,121"/>
 <area shape="rect" id="node5" href="tc__iot__log_8h.html" title="include/common/tc_iot\l_log.h" alt="" coords="514,80,667,121"/>
-<area shape="rect" id="node6" href="tc__iot__client_8h.html" title="include/iotsuite/tc\l_iot_client.h" alt="" coords="691,80,815,121"/>
-<area shape="rect" id="node7" href="tc__iot__mqtt_8h.html" title="include/iotsuite/tc\l_iot_mqtt.h" alt="" coords="839,80,963,121"/>
-<area shape="rect" id="node8" href="tc__iot__hal__network_8h.html" title="include/platform/tc\l_iot_hal_network.h" alt="" coords="987,80,1117,121"/>
-<area shape="rect" id="node9" href="tc__iot__hal__os_8h.html" title="include/platform/tc\l_iot_hal_os.h" alt="" coords="1141,80,1270,121"/>
-<area shape="rect" id="node10" href="tc__iot__hal__timer_8h.html" title="include/platform/tc\l_iot_hal_timer.h" alt="" coords="1294,80,1423,121"/>
-<area shape="rect" id="node11" href="tc__iot__export_8h.html" title="include/tc_iot_export.h" alt="" coords="1447,87,1601,114"/>
+<area shape="rect" id="node6" href="tc__iot__client_8h.html" title="include/mqtt/tc_iot\l_client.h" alt="" coords="691,80,821,121"/>
+<area shape="rect" id="node7" href="tc__iot__mqtt_8h.html" title="include/mqtt/tc_iot\l_mqtt.h" alt="" coords="845,80,974,121"/>
+<area shape="rect" id="node8" href="tc__iot__hal__network_8h.html" title="include/platform/tc\l_iot_hal_network.h" alt="" coords="997,80,1128,121"/>
+<area shape="rect" id="node9" href="tc__iot__hal__os_8h.html" title="include/platform/tc\l_iot_hal_os.h" alt="" coords="1151,80,1281,121"/>
+<area shape="rect" id="node10" href="tc__iot__hal__timer_8h.html" title="include/platform/tc\l_iot_hal_timer.h" alt="" coords="1305,80,1434,121"/>
+<area shape="rect" id="node11" href="tc__iot__export_8h.html" title="include/tc_iot_export.h" alt="" coords="1458,87,1611,114"/>
 </map>
 </div>
 </div>
