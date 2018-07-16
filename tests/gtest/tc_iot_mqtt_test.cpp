@@ -36,9 +36,9 @@ TEST(MQTT, custom_topic)
     tc_iot_mqtt_client_config _client_config = {
         {
             /* device info*/
-            TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
-            TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
-            TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
+            "device_secret", "iot-product-id",
+            "device_name", "product_key@device_name",
+            "", "", 0,
         },
         TC_IOT_CONFIG_SERVER_HOST,
         TC_IOT_CONFIG_SERVER_PORT,
@@ -56,17 +56,33 @@ TEST(MQTT, custom_topic)
         0, MQTTPacket_willOptions_initializer 
     };
     const char * custom_topic = "%s/%s/cmd";
+    const char * product_key = getenv("TC_IOT_MQTT_PRODUCT_KEY");
+    const char * product_id = getenv("TC_IOT_MQTT_PRODUCT_ID");
+    const char * device_name = getenv("TC_IOT_MQTT_DEVICE_NAME");
+    const char * device_secret = getenv("TC_IOT_MQTT_DEVICE_SECRET");
+
+    if (!product_key || !product_id || !device_name || !device_secret) {
+        std::cout << "MQTT test variable not found, please add settings to your .bashrc or .zshrc:" << std::endl;
+        std::cout << 
+        "export TC_IOT_MQTT_PRODUCT_ID=\"iot-PRODUCT-ID\"\n"
+        "export TC_IOT_MQTT_PRODUCT_KEY=\"mqtt-PRODUCT-KEY\"\n"
+        "export TC_IOT_MQTT_DEVICE_NAME=\"gtest001\"\n"
+        "export TC_IOT_MQTT_DEVICE_SECRET=\"gtest001_device_secret\"\n";
+        return;
+    }
 
     p_client_config = &(_client_config);
 
-    strcpy(_client_config.device_info.secret, getenv("TENCENT_CLOUD_GTEST_DEVICE_SECRET"));
+    strcpy(p_client_config->device_info.product_id, product_id);
+    strcpy(p_client_config->device_info.device_name, device_name);
+    strcpy(p_client_config->device_info.secret, device_secret);
+    sprintf(p_client_config->device_info.client_id, "%s@%s", product_key, device_name);
 
 
     snprintf(sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, custom_topic, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
     snprintf(pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN,  custom_topic, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-
 
     ret = http_refresh_auth_token_with_expire(
                                               TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
@@ -76,7 +92,6 @@ TEST(MQTT, custom_topic)
                                               );
 
     ASSERT_EQ(ret, TC_IOT_SUCCESS);
-
 
     ret = tc_iot_mqtt_client_construct(p_client, p_client_config);
     ASSERT_EQ(ret, TC_IOT_SUCCESS);
