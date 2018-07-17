@@ -148,6 +148,22 @@ tc_iot_shadow_session * tc_iot_find_empty_session(tc_iot_shadow_client *c) {
     return NULL;
 }
 
+int tc_iot_shadow_pending_session_count(tc_iot_shadow_client *c) {
+    int i;
+    int total = 0;
+
+    if (!c) {
+        return 0;
+    }
+
+    for (i = 0; i < TC_IOT_MAX_SESSION_COUNT; i++) {
+        if (strlen(c->sessions[i].sid) != 0) {
+            total++;
+        }
+    }
+    return total;
+}
+
 void tc_iot_release_session(tc_iot_shadow_session * p_session) {
     if (!p_session) {
         return ;
