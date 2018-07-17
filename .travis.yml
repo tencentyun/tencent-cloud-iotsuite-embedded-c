@@ -6,10 +6,10 @@ env:
     - LINUX_DIST=trusty
     - DEPS_DIR=${TRAVIS_BUILD_DIR}/deps
     # Global build options and C++ flags
-    - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow"
+    #- CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow"
     # Misc
-    - RUN_TESTS=true
-    - COVERAGE=false
+    # - RUN_TESTS=true
+    # - COVERAGE=false
 
 matrix:
   include:
@@ -65,6 +65,18 @@ script:
      - make
      - make test
 
-
 after_success:
+    # Creating report
+  # - cd ${TRAVIS_BUILD_DIR}
+  # - lcov --directory . --capture --output-file coverage.info # capture coverage info
+  # - lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter out system
+  # - lcov --list coverage.info #debug info
+  # Uploading report to CodeCov
+  # - bash <(curl -s https://codecov.io/bash) -t ${CODECOV-UUID-REPO-TOKEN} || echo "Codecov did not collect coverage reports"
+
+notifications:
+  email:
+    - huxinbang@gmail.com
+
+# after_success:
   # - codecov -t c376990f-2ad6-4f7b-bbdb-5378a52e295c -X gcov

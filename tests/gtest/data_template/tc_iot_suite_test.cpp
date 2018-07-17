@@ -49,12 +49,15 @@ TEST(IOTSUITE, basic)
     if (!product_key || !product_id || !device_name || !device_secret) {
         std::cout << "MQTT test variable not found, please add settings to your .bashrc or .zshrc:" << std::endl;
         std::cout << 
-        "export TC_IOT_DATATEMPLATE_PRODUCT_ID=\"iot-PRODUCT-ID\"\n"
-        "export TC_IOT_DATATEMPLATE_PRODUCT_KEY=\"mqtt-PRODUCT-KEY\"\n"
-        "export TC_IOT_DATATEMPLATE_DEVICE_NAME=\"gtest001\"\n"
-        "export TC_IOT_DATATEMPLATE_DEVICE_SECRET=\"gtest001_device_secret\"\n";
-        return;
+          "export TC_IOT_DATATEMPLATE_PRODUCT_ID=\"Your-PRODUCT-ID\"\n"
+          "export TC_IOT_DATATEMPLATE_PRODUCT_KEY=\"Your-PRODUCT-KEY\"\n"
+          "export TC_IOT_DATATEMPLATE_DEVICE_NAME=\"Your-DEVICE-NAME\"\n"
+          "export TC_IOT_DATATEMPLATE_DEVICE_SECRET=\"Your-DEVICE-SECRET\"\n";
     }
+    ASSERT_STRNE(product_key,NULL);
+    ASSERT_STRNE(product_id,NULL);
+    ASSERT_STRNE(device_name,NULL);
+    ASSERT_STRNE(device_secret,NULL);
 
     p_client_config = &(g_tc_iot_shadow_config.mqtt_client_config);
 

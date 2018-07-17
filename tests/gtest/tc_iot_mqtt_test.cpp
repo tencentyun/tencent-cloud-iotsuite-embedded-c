@@ -40,7 +40,7 @@ TEST(MQTT, custom_topic)
             "device_name", "product_key@device_name",
             "", "", 0,
         },
-        TC_IOT_CONFIG_SERVER_HOST,
+        (char *)TC_IOT_CONFIG_SERVER_HOST,
         TC_IOT_CONFIG_SERVER_PORT,
         TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
         TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
@@ -53,7 +53,6 @@ TEST(MQTT, custom_topic)
         TC_IOT_CONFIG_CLIENT_KEY,
         NULL,
         my_default_msg_handler,
-        0, MQTTPacket_willOptions_initializer 
     };
     const char * custom_topic = "%s/%s/cmd";
     const char * product_key = getenv("TC_IOT_MQTT_PRODUCT_KEY");
@@ -61,15 +60,19 @@ TEST(MQTT, custom_topic)
     const char * device_name = getenv("TC_IOT_MQTT_DEVICE_NAME");
     const char * device_secret = getenv("TC_IOT_MQTT_DEVICE_SECRET");
 
+
     if (!product_key || !product_id || !device_name || !device_secret) {
         std::cout << "MQTT test variable not found, please add settings to your .bashrc or .zshrc:" << std::endl;
         std::cout << 
-        "export TC_IOT_MQTT_PRODUCT_ID=\"iot-PRODUCT-ID\"\n"
-        "export TC_IOT_MQTT_PRODUCT_KEY=\"mqtt-PRODUCT-KEY\"\n"
-        "export TC_IOT_MQTT_DEVICE_NAME=\"gtest001\"\n"
-        "export TC_IOT_MQTT_DEVICE_SECRET=\"gtest001_device_secret\"\n";
-        return;
+        "export TC_IOT_MQTT_PRODUCT_ID=\"Your-PRODUCT-ID\"\n"
+        "export TC_IOT_MQTT_PRODUCT_KEY=\"Your-PRODUCT-KEY\"\n"
+        "export TC_IOT_MQTT_DEVICE_NAME=\"Your-DEVICE-NAME\"\n"
+        "export TC_IOT_MQTT_DEVICE_SECRET=\"Your-DEVICE-SECRET\"\n";
     }
+    ASSERT_STRNE(product_key,NULL);
+    ASSERT_STRNE(product_id,NULL);
+    ASSERT_STRNE(device_name,NULL);
+    ASSERT_STRNE(device_secret,NULL);
 
     p_client_config = &(_client_config);
 
