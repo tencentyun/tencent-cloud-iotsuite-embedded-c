@@ -16,14 +16,14 @@ matrix:
     - os: linux
       dist: trusty
       sudo: true
-      compiler: g++
+      compiler: gcc
       addons:
        apt:
          packages: &precise_latest_boost_packages
            - gcc-4.8
            - g++-4.8
            #- gcov-4.9
-           # - clang-3.7
+           - clang-3.7
            # - valgrind
            # Misc
            # - python-yaml
@@ -39,7 +39,7 @@ before_install:
     - export CXX_FLAGS=${CXX_FLAGS}" "${ENV_CXX_FLAGS}
 
 install:
-    # - if [ "$CXX" = "clang++" ] && [ "$TRAVIS_OS_NAME" = "linux" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
+    - if [ "$CXX" = "clang++" ] && [ "$TRAVIS_OS_NAME" = "linux" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
     - echo ${PATH}
     - echo ${CXX}
     - ${CXX} --version
