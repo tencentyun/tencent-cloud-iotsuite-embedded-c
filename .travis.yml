@@ -24,10 +24,10 @@ matrix:
            - g++-4.8
            #- gcov-4.9
            # - clang-3.7
-           - valgrind
+           # - valgrind
            # Misc
-           - python-yaml
-           - lcov
+           # - python-yaml
+           # - lcov
            # - libopencv-dev
          sources: &precise_latest_boost_sources
            - ubuntu-toolchain-r-test
@@ -44,7 +44,7 @@ install:
     - echo ${CXX}
     - ${CXX} --version
     - ${CXX} -v
-    - sudo pip install codecov
+    # - sudo pip install codecov
     
     # Download and install recent cmake
     - |
@@ -78,5 +78,3 @@ notifications:
   email:
     - huxinbang@gmail.com
 
-# after_success:
-  # - codecov -t c376990f-2ad6-4f7b-bbdb-5378a52e295c -X gcov
