@@ -1,6 +1,6 @@
 #include "tc_iot_inc.h"
 
-const char * tc_iot_util_byte_to_hex( const unsigned char * bytes, int bytes_len, char * output, int max_output_len)
+char * tc_iot_util_byte_to_hex( const unsigned char * bytes, int bytes_len, char * output, int max_output_len)
 {
     int i = 0;
     unsigned char temp;
@@ -11,16 +11,21 @@ const char * tc_iot_util_byte_to_hex( const unsigned char * bytes, int bytes_len
         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     };
 
-    if (bytes == NULL) {
-        return "bytes is NULL";
+    if (output == NULL) {
+        TC_IOT_LOG_ERROR("output is NULL");
+        return NULL;
     }
 
-    if (output == NULL) {
-        return "output is NULL";
+    output[0] = '\0';
+
+    if (bytes == NULL) {
+        TC_IOT_LOG_ERROR("bytes is NULL");
+        return output;
     }
 
     if ((max_output_len-1) < (bytes_len*2)) {
-        return "max_output_len not enough";
+        TC_IOT_LOG_ERROR("max_output_len=%d not enought (bytes_len=%d)", max_output_len, bytes_len);
+        return output;
     }
 
     for (i = 0; i < bytes_len; i++) {
@@ -32,5 +37,64 @@ const char * tc_iot_util_byte_to_hex( const unsigned char * bytes, int bytes_len
     }
     output[2*bytes_len] = '\0';
     return output;
+}
+
+static int _tc_iot_get_char_value(char chr) {
+    if (chr >= '0' && chr <= '9') {
+        return chr - '0';
+    }
+
+    if (chr >= 'A' && chr <= 'F') {
+        return chr - 'A';
+    }
+
+    if (chr >= 'a' && chr <= 'f') {
+        return chr - 'a';
+    }
+    
+    TC_IOT_LOG_ERROR("invalid char:%c", chr);
+    return -1;
+}
+
+int tc_iot_util_hex_to_byte( const char * bytes, char * output, int max_output_len)
+{
+    int i = 0;
+    int bytes_len = 0;
+    unsigned char high;
+    unsigned char low;
+
+    if (output == NULL) {
+        TC_IOT_LOG_ERROR("output is NULL");
+        return 0;
+    }
+
+    output[0] = '\0';
+
+    if (bytes == NULL) {
+        TC_IOT_LOG_ERROR("bytes is NULL");
+        return 0;
+    }
+
+    bytes_len = strlen(bytes);
+    if ((bytes_len%2) != 0) {
+        TC_IOT_LOG_ERROR("bytes_len=%d is invalid.", bytes_len);
+        return 0;
+    }
+
+    if ((max_output_len-1) < (bytes_len/2)) {
+        TC_IOT_LOG_ERROR("max_output_len=%d not enought (bytes_len=%d)", max_output_len, bytes_len);
+        return 0;
+    }
+
+    for (i = 0; i < bytes_len/2; i++) {
+        high = _tc_iot_get_char_value(bytes[2*i]);
+        low  = _tc_iot_get_char_value(bytes[2*i+1]);
+        if (high < 0 || low < 0) {
+            return 0;
+        }
+        output[i] = ((high&0xF) << 4) | (low & 0xF);
+    }
+    output[bytes_len/2] = '\0';
+    return bytes_len/2;
 }
 
