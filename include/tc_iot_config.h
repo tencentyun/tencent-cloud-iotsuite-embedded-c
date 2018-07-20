@@ -20,6 +20,9 @@
 /* 最大等待时间 */
 #define TC_IOT_MAX_RECONNECT_WAIT_INTERVAL 60000
 
+/* 接收到 MQTT 包头以后，接收剩余长度及剩余包，最大延迟等待时延 */
+#define TC_IOT_MQTT_MAX_REMAIN_WAIT_MS     2000
+
 /* 设备名称长度 */
 #define TC_IOT_MAX_DEVICE_NAME_LEN 20
 
