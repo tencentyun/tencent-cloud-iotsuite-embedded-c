@@ -7,7 +7,7 @@
 
 #define ENABLE_COAP
 
-/* #undef ENABLE_TLS */
+#define ENABLE_TLS
 /* #undef ENABLE_DTLS */
 
 #define ENABLE_STACK_TRACE_LOG
