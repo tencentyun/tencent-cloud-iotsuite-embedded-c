@@ -292,6 +292,8 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     if (timer_left_ms <= 0) {
         timer_left_ms = 1;
     }
+    timer_left_ms += TC_IOT_MQTT_MAX_REMAIN_WAIT_MS;
+
     decodePacket(c, &rem_len, timer_left_ms);
     len += MQTTPacket_encode(
         c->readbuf + 1,
@@ -314,6 +316,8 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         if (timer_left_ms <= 0) {
             timer_left_ms = 1;
         }
+        timer_left_ms += TC_IOT_MQTT_MAX_REMAIN_WAIT_MS;
+
         rc = c->ipstack.do_read(&(c->ipstack), c->readbuf + len, rem_len,
                 timer_left_ms);
         if (rc != rem_len) {
