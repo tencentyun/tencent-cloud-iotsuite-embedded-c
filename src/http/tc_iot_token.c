@@ -97,7 +97,7 @@ parse_url:
     ret = http_post_urlencoded(&network, &request, api_url, sign_out, http_buffer,
                                sizeof(http_buffer), 2000);
 
-    tc_iot_mem_usage_log("http_buffer[TC_IOT_HTTP_TOKEN_REQUEST_LEN]", sizeof(http_buffer), strlen(http_buffer));
+    tc_iot_mem_usage_log("http_buffer[TC_IOT_HTTP_TOKEN_RESPONSE_LEN]", sizeof(http_buffer), strlen(http_buffer));
 
     ret = tc_iot_parse_http_response_code(http_buffer);
     if (ret != 200) {

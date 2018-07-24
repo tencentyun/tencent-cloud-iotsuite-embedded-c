@@ -548,8 +548,12 @@ static int http_post_data(tc_iot_network_t* network,
     read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
     if (resp_max_len > read_len) {
         resp[read_len] = '\0';
+        TC_IOT_LOG_TRACE("response with:\n%s", resp);
+    } else {
+        resp[resp_max_len-1] = '\0';
+        TC_IOT_LOG_ERROR("response with(max=%d > read=%d):\n%s...", resp_max_len, read_len, resp);
+        return TC_IOT_BUFFER_OVERFLOW;
     }
-    TC_IOT_LOG_TRACE("response with:\n%s", resp);
 
     network->do_disconnect(network);
 

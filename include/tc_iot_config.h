@@ -99,8 +99,6 @@
 
 // 请求 Token 接口表单长度
 #define TC_IOT_HTTP_TOKEN_REQUEST_FORM_LEN  256
-// 请求 Token 接口总长度
-#define TC_IOT_HTTP_TOKEN_REQUEST_LEN       1024
 // 请求 Token 接口响应数据
 #define TC_IOT_HTTP_TOKEN_RESPONSE_LEN      512  
 
