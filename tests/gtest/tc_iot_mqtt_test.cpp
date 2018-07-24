@@ -115,7 +115,7 @@ TEST(MQTT, custom_topic)
     pubmsg.retained = 0;
     pubmsg.dup = 0;
     ret = tc_iot_mqtt_client_publish(p_client, pub_topic, &pubmsg);
-    ASSERT_EQ(ret, TC_IOT_SUCCESS);
+    ASSERT_GE(ret, TC_IOT_SUCCESS);
 
     while ((strlen(_resp_data) <= 0) && (delay_ms > 0)) {
         ret = tc_iot_mqtt_client_yield(p_client, delay_interval);
