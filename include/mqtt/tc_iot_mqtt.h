@@ -164,8 +164,9 @@ struct _tc_iot_mqtt_client {
 
 typedef enum _tc_iot_device_auth_mode_e {
     TC_IOT_MQTT_AUTH_NONE,
-    TC_IOT_MQTT_AUTH_STATIC_PASS,
-    TC_IOT_MQTT_AUTH_DYNAMIC_TOKEN,
+    TC_IOT_MQTT_AUTH_STATIC_PASS, // 静态直连 deprecated
+    TC_IOT_MQTT_AUTH_DYNAMIC_TOKEN, // 动态 Token
+    TC_IOT_MQTT_AUTH_DYNAMIC_SIGN, // 动态签名
 } tc_iot_device_auth_mode_e;
 
 /**

@@ -30,6 +30,20 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
 
 #if defined(ENABLE_MQTT)
 /**
+ * @brief tc_iot_mqtt_refresh_dynamic_sign 刷新签名直连 
+ * username 和 password 数据。
+ *
+ * @param timestamp 时间戳
+ * @param nonce 随机值
+ * @param p_device_info 设备信息，请求成功后，会自动更新该对象的 username 和
+ *  password 成员数据
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_mqtt_refresh_dynamic_sign(long timestamp, long nonce, tc_iot_device_info* p_device_info);
+
+/**
  * @brief tc_iot_mqtt_client_construct 构造 MQTT client，并连接MQ服务器
  *
  * @param p_mqtt_client MQTT client 对象，出参。

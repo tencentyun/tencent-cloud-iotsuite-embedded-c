@@ -1144,3 +1144,42 @@ void tc_iot_mqtt_destroy(tc_iot_mqtt_client* c) {
         }
     }
 }
+
+int tc_iot_mqtt_refresh_dynamic_sign(long timestamp, long nonce, tc_iot_device_info* p_device_info) {
+    char * password = p_device_info->password;
+    char * product_id = p_device_info->product_id;
+    char * client_id = p_device_info->client_id;
+    char * secret = p_device_info->secret;
+    char * device_name = p_device_info->device_name;
+
+    int password_len = 0;
+    int password_left_len = 0;
+    int ret = 0;
+
+    strcpy(p_device_info->username, p_device_info->device_name);
+
+    tc_iot_hal_snprintf(password,
+                        sizeof(p_device_info->password),
+                        "productId=%s&nonce=%ld&timestamp=%ld&signature=",
+                        product_id,
+                        nonce,
+                        timestamp
+                        );
+
+    password_len = strlen(password);
+    password_left_len = sizeof(p_device_info->password) - password_len;
+    password = password + password_len;
+
+    ret = tc_iot_calc_mqtt_dynamic_sign(password,
+                                   password_left_len,
+                                   secret, 
+                                   client_id,
+                                   device_name,
+                                   nonce,
+                                   product_id,
+                                   timestamp);
+
+    TC_IOT_LOG_TRACE("usename[%s] password[%s]", p_device_info->username, p_device_info->password);
+
+    return ret;
+}
