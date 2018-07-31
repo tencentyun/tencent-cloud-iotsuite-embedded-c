@@ -32,7 +32,7 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
 
 
     if (expire > TC_IOT_TOKEN_MAX_EXPIRE_SECOND) {
-        TC_IOT_LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
+        TC_IOT_LOG_WARN("expire=%d to large, setting to max value = %d", (int)expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
         expire = TC_IOT_TOKEN_MAX_EXPIRE_SECOND;
     }
 

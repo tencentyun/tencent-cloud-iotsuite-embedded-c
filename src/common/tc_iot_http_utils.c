@@ -186,7 +186,7 @@ static int add_url_long_field(tc_iot_yabuffer_t* buffer, const char* prefix,
     current = tc_iot_yabuffer_current(buffer);
     buffer_left = tc_iot_yabuffer_left(buffer);
 
-    ret = tc_iot_hal_snprintf(current, buffer_left, "%ld", val);
+    ret = tc_iot_hal_snprintf(current, buffer_left, "%d", (int)val);
 
     if (ret > 0) {
         tc_iot_yabuffer_forward(buffer, ret);
@@ -517,7 +517,7 @@ int tc_iot_create_mqapi_rpc_json(char* form, int max_form_len,
     ret = tc_iot_calc_sign(
             sha256_digest, sizeof(sha256_digest),
             secret,
-            "deviceName=%s&message=%s&nonce=%ld&productId=%s&timestamp=%ld",
+            "deviceName=%s&message=%s&nonce=%d&productId=%s&timestamp=%d",
              device_name,message,nonce,product_id,timestamp
         );
 

@@ -210,8 +210,8 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     c->command_timeout_ms = p_client_config->command_timeout_ms;
     c->buf_size = TC_IOT_CLIENT_SEND_BUF_SIZE;
     c->readbuf_size = TC_IOT_CLIENT_READ_BUF_SIZE;
-    TC_IOT_LOG_TRACE("mqtt client buf_size=%ld,readbuf_size=%ld,", c->buf_size,
-              c->readbuf_size);
+    TC_IOT_LOG_TRACE("mqtt client buf_size=%d,readbuf_size=%d,", (int)c->buf_size,
+              (int)c->readbuf_size);
     c->auto_reconnect = p_client_config->auto_reconnect;
     c->clean_session = p_client_config->clean_session;
     c->default_msg_handler = p_client_config->default_msg_handler;
@@ -423,10 +423,10 @@ int keepalive(tc_iot_mqtt_client* c) {
     if (tc_iot_hal_timer_is_expired(&c->last_sent) ||
         tc_iot_hal_timer_is_expired(&c->last_received)) {
         if (c->ping_outstanding) {
-            /* TC_IOT_LOG_TRACE("keep alive heartbeat failed, ts=%ld", tc_iot_hal_timestamp(NULL)); */
+            /* TC_IOT_LOG_TRACE("keep alive heartbeat failed, ts=%d", tc_iot_hal_timestamp(NULL)); */
             rc = TC_IOT_FAILURE;
         } else {
-            /* TC_IOT_LOG_TRACE("keep alive heartbeat sending, ts=%ld", tc_iot_hal_timestamp(NULL)); */
+            /* TC_IOT_LOG_TRACE("keep alive heartbeat sending, ts=%d", tc_iot_hal_timestamp(NULL)); */
             tc_iot_hal_timer_countdown_second(&c->ping_timer, c->keep_alive_interval);
             len = MQTTSerialize_pingreq(c->buf, c->buf_size);
             if (len > 0 &&
@@ -1160,10 +1160,10 @@ int tc_iot_mqtt_refresh_dynamic_sign(long timestamp, long nonce, tc_iot_device_i
 
     tc_iot_hal_snprintf(password,
                         sizeof(p_device_info->password),
-                        "productId=%s&nonce=%ld&timestamp=%ld&signature=",
+                        "productId=%s&nonce=%d&timestamp=%d&signature=",
                         product_id,
-                        nonce,
-                        timestamp
+                        (int)nonce,
+                        (int)timestamp
                         );
 
     password_len = strlen(password);
