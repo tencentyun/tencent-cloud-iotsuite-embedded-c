@@ -226,5 +226,5 @@ int tc_iot_calc_mqtt_dynamic_sign(char* sign_out, int max_sign_len,
             client_id, device_name, (int)nonce,product_id, (int)timestamp,
             secret, sign_out);
 
-    return ret;
+    return TC_IOT_SUCCESS;
 }

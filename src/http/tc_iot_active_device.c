@@ -1,6 +1,6 @@
 #include "tc_iot_inc.h"
 
-int http_get_device_secret(const char* api_url, char* root_ca_path, long timestamp, long nonce,
+int tc_iot_get_device_secret(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info) {
 
     char sign_out[TC_IOT_HTTP_ACTIVE_REQUEST_FORM_LEN];
