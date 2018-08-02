@@ -1,5 +1,5 @@
 extern "C" {
-#include "tc_iot_inc.h"
+#include "tc_iot_export.h"
 #include "tc_iot_device_config.h"
 }
 
