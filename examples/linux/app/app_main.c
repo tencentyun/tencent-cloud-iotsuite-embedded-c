@@ -40,6 +40,34 @@ void operate_device(tc_iot_shadow_local_data * p_device_data) {
             tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 }
 
+
+/**
+ * @brief 本函数演示，当设备端状态发生变化时，如何更新设备端数据，并上报给服务端。
+ */
+void do_sim_data_change(void) {
+    TC_IOT_LOG_TRACE("simulate data change.");
+    int i = 0;
+
+    g_tc_iot_device_local_data.param_bool = !g_tc_iot_device_local_data.param_bool;
+
+    g_tc_iot_device_local_data.param_enum += 1;
+    g_tc_iot_device_local_data.param_enum %= 3;
+
+    g_tc_iot_device_local_data.param_number += 1;
+    g_tc_iot_device_local_data.param_number = g_tc_iot_device_local_data.param_number > 4095?0:g_tc_iot_device_local_data.param_number;
+
+    for (i = 0; i < 0+1;i++) {
+        g_tc_iot_device_local_data.param_string[i] += 1;
+        g_tc_iot_device_local_data.param_string[i] = g_tc_iot_device_local_data.param_string[0] > 'Z'?'A':g_tc_iot_device_local_data.param_string[0];
+        g_tc_iot_device_local_data.param_string[i] = g_tc_iot_device_local_data.param_string[0] < 'A'?'A':g_tc_iot_device_local_data.param_string[0];
+    }
+    g_tc_iot_device_local_data.param_string[0+2] = 0;
+
+
+    /* 上报数据最新状态 */
+    tc_iot_report_device_data(tc_iot_get_shadow_client());
+}
+
 int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;
     bool use_static_token;
@@ -88,7 +116,6 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    TC_IOT_LOG_TRACE("Loop waiting for server response and command.");
     while (!stop) {
         tc_iot_server_loop(tc_iot_get_shadow_client(), 200);
     }
