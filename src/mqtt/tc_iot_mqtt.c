@@ -631,7 +631,7 @@ int waitfor(tc_iot_mqtt_client* c, int packet_type, tc_iot_timer* timer) {
 int tc_iot_mqtt_reconnect(tc_iot_mqtt_client* c) {
     tc_iot_timer connect_timer;
     int len;
-    int rc;
+    int rc = TC_IOT_SUCCESS;
     int ret;
     tc_iot_mqtt_connack_data temp;
     tc_iot_mqtt_connack_data* data = &temp;
@@ -928,7 +928,7 @@ exit:
             TC_IOT_LOG_TRACE("disconnecting for rc=%d.", rc);
             tc_iot_mqtt_disconnect(c);
         }
-        return _handle_reconnect(c);
+        _handle_reconnect(c);
     }
 
     return rc;
@@ -996,7 +996,7 @@ exit:
             TC_IOT_LOG_TRACE("disconnecting for rc=%d.", rc);
             tc_iot_mqtt_disconnect(c);
         }
-        return _handle_reconnect(c);
+        _handle_reconnect(c);
     }
     return rc;
 }
@@ -1075,7 +1075,7 @@ exit:
             TC_IOT_LOG_TRACE("disconnecting for rc=%d.", rc);
             tc_iot_mqtt_disconnect(c);
         }
-        return _handle_reconnect(c);
+        _handle_reconnect(c);
     }
     return rc;
 }
