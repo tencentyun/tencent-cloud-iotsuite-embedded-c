@@ -21,7 +21,7 @@
 
 
 /* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
-#define TC_IOT_CONFIG_COAP_SERVER_HOST "localhost"
+#define TC_IOT_CONFIG_COAP_SERVER_HOST "gz.coap.tencentcloudapi.com"
 /* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-7hjcfc6k"
 /* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
