@@ -1,6 +1,0 @@
-<map id="_tc_iot_coap_client_config" name="_tc_iot_coap_client_config">
-<area shape="rect" id="node2" href="$struct__tc__iot__coap__message.html" title="_tc_iot_coap_message" alt="" coords="81,95,237,121"/>
-<area shape="rect" id="node3" href="$union__tc__iot__coap__header.html" title="_tc_iot_coap_header" alt="" coords="5,5,148,32"/>
-<area shape="rect" id="node4" href="$struct__tc__iot__coap__option.html" title="_tc_iot_coap_option" alt="" coords="173,5,311,32"/>
-<area shape="rect" id="node5" href="$struct__tc__iot__coap__device__info.html" title="CoAP设备信息 " alt="" coords="261,95,431,121"/>
-</map>

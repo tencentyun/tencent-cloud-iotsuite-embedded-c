@@ -144,7 +144,7 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                     field_buf[val_len] = '\0';
                 }
 
-                if (strncmp(TC_IOT_JSON_NULL, field_buf, val_len) == 0) {
+                if ((val_len > 0) && strncmp(TC_IOT_JSON_NULL, field_buf, val_len) == 0) {
                     TC_IOT_LOG_WARN("%s recevied null value.", p_prop->name);
                     continue;
                 }
@@ -160,7 +160,7 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_ENUM) {
                     new_enum = atoi(field_buf);
                     ptr = &new_enum;
-                    TC_IOT_LOG_TRACE("state change:[%s|%d]", p_prop->name, (*(tc_iot_shadow_enum *) ptr));
+                    TC_IOT_LOG_TRACE("state change:[%s=%d]", p_prop->name, (*(tc_iot_shadow_enum *) ptr));
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_INT) {
                     new_int = atoi(field_buf);
                     ptr = &new_int;
@@ -187,8 +187,7 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
             }
         }
     }
-    tc_iot_confirm_devcie_data(p_shadow_client);
-    return 0;
+    return tc_iot_confirm_devcie_data(p_shadow_client);
 }
 
 
@@ -272,12 +271,16 @@ int tc_iot_shadow_doc_parse(tc_iot_shadow_client * p_shadow_client,
         }
 
         TC_IOT_LOG_TRACE("---synchronizing desired status---");
-        _tc_iot_sync_shadow_property(
+        ret = _tc_iot_sync_shadow_property(
                 p_shadow_client,
                 p_shadow_client->p_shadow_config->property_total,
                 p_shadow_client->p_shadow_config->properties, false,
                 desired_start, json_token, ret);
-        TC_IOT_LOG_TRACE("---synchronizing desired status success---");
+        if (ret == TC_IOT_SUCCESS)  {
+            TC_IOT_LOG_TRACE("---synchronizing desired status success---");
+        } else {
+            TC_IOT_LOG_ERROR("---synchronizing desired status failed, ret=%d---", ret);
+        }
     }
     return TC_IOT_SUCCESS;
 }
@@ -291,6 +294,8 @@ int tc_iot_report_device_data(tc_iot_shadow_client* p_shadow_client) {
             _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, false);
     if (TC_IOT_BUFFER_OVERFLOW == ret) {
         TC_IOT_LOG_ERROR("buffer overflow, please check TC_IOT_REPORT_UPDATE_MSG_LEN");
+    } else if (TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE == ret) {
+        ret = TC_IOT_SUCCESS;
     }
     tc_iot_mem_usage_log("buffer[TC_IOT_REPORT_UPDATE_MSG_LEN]", sizeof(buffer), strlen(buffer));
     return ret;
@@ -304,7 +309,7 @@ int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client) {
     ret = tc_iot_shadow_check_and_report(p_shadow_client, buffer, buffer_len,
             _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, false);
     tc_iot_mem_usage_log("buffer[TC_IOT_UPDATE_DESIRED_MSG_LEN]", sizeof(buffer), strlen(buffer));
-    if (ret != TC_IOT_SUCCESS) {
+    if ((ret != TC_IOT_SUCCESS) && (ret != TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE)) {
         if (TC_IOT_BUFFER_OVERFLOW == ret) {
             TC_IOT_LOG_ERROR("buffer overflow, please check TC_IOT_UPDATE_DESIRED_MSG_LEN");
         }
@@ -314,6 +319,8 @@ int tc_iot_confirm_devcie_data(tc_iot_shadow_client* p_shadow_client) {
             _tc_iot_report_message_ack_callback, p_shadow_client->mqtt_client.command_timeout_ms, NULL, true);
     if (TC_IOT_BUFFER_OVERFLOW == ret) {
         TC_IOT_LOG_ERROR("buffer overflow, please check TC_IOT_UPDATE_DESIRED_MSG_LEN");
+    } else if (TC_IOT_REPORT_SKIPPED_FOR_NO_CHANGE == ret) {
+        ret = TC_IOT_SUCCESS;
     }
     return ret;
 }

@@ -166,7 +166,7 @@ int main(int argc, char** argv) {
     if (!use_static_token) {
         /* 获取动态 token */
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
-        ret = http_refresh_auth_token_with_expire(
+        ret = tc_iot_refresh_auth_token(
                 TC_IOT_CONFIG_AUTH_API_URL, NULL,
                 timestamp, nonce,
                 &p_client_config->device_info, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);

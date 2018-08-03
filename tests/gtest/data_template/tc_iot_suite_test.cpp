@@ -1,5 +1,5 @@
 extern "C" {
-#include "tc_iot_inc.h"
+#include "tc_iot_export.h"
 #include "tc_iot_device_config.h"
 }
 
@@ -56,7 +56,7 @@ TEST(IOTSUITE, data_template)
     snprintf(g_tc_iot_shadow_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT,
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
-    ret = http_refresh_auth_token_with_expire(
+    ret = tc_iot_refresh_auth_token(
             TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
             timestamp, nonce,
             &p_client_config->device_info,
