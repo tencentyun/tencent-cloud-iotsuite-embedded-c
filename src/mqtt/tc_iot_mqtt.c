@@ -599,6 +599,10 @@ int tc_iot_mqtt_yield(tc_iot_mqtt_client* c, int timeout_ms) {
             TC_IOT_LOG_TRACE("cycle failed rc=%d", rc);
             rc = TC_IOT_FAILURE;
             break;
+        } else if (rc > 0) {
+            TC_IOT_LOG_TRACE("cycle success with rc=%d", rc);
+            rc = TC_IOT_SUCCESS;
+            /* break; */
         }
 
     } while (!tc_iot_hal_timer_is_expired(&timer));
