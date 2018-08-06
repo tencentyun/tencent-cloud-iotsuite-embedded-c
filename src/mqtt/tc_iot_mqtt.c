@@ -427,6 +427,7 @@ int keepalive(tc_iot_mqtt_client* c) {
             rc = TC_IOT_FAILURE;
         } else {
             /* TC_IOT_LOG_TRACE("keep alive heartbeat sending, ts=%ld", tc_iot_hal_timestamp(NULL)); */
+            tc_iot_hal_timer_init(&c->ping_timer);
             tc_iot_hal_timer_countdown_second(&c->ping_timer, c->keep_alive_interval);
             len = MQTTSerialize_pingreq(c->buf, c->buf_size);
             if (len > 0 &&
