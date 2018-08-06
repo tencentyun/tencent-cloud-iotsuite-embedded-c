@@ -1,4 +1,4 @@
-#include "../tc_iot_device_config.h"
+#include "tc_iot_device_config.h"
 #include <sys/stat.h>
 #include "tc_iot_ota_logic.h"
 #include "tc_iot_export.h"

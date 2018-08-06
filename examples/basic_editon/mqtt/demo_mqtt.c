@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
         {
             /*假如没有 secrect 那么要走激活流程来获取 device_secrect*/
             tc_iot_hal_printf("requesting device_secrect for http token api\n");
-            ret = http_get_device_secret(
+            ret = tc_iot_get_device_secret(
                 TC_IOT_CONFIG_ACTIVE_API_URL, //TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG
                 TC_IOT_CONFIG_ROOT_CA,
                 timestamp, nonce, 
@@ -86,19 +86,18 @@ int main(int argc, char** argv) {
             //return 0;
 
         }
-        tc_iot_hal_printf("requesting username and password for mqtt by token interface.\n");
-        ret = http_refresh_auth_token_with_expire(
-                TC_IOT_CONFIG_AUTH_API_URL, //TC_IOT_CONFIG_AUTH_API_URL_DEBUG
-                TC_IOT_CONFIG_ROOT_CA,
+        ret = tc_iot_refresh_auth_token(
+                TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
                 timestamp, nonce,
                 &p_client_config->device_info,
                 TC_IOT_TOKEN_MAX_EXPIRE_SECOND
                 );
-        if (ret != TC_IOT_SUCCESS) {
-            tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
+        if (ret == TC_IOT_SUCCESS) {
+            tc_iot_hal_printf("request username and password for mqtt success.\n");
+        } else {
+            tc_iot_hal_printf("request username and password for mqtt failed,ret=%d.\n", ret);
             return 0;
         }
-        tc_iot_hal_printf("request username and password for mqtt success.\n");
     } else {
         tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
     }
