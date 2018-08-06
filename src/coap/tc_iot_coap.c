@@ -689,12 +689,16 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
                 } else {
                     TC_IOT_LOG_ERROR("no handler for message id=%d", message.message_id);
                 }
+                break;
             }
             break;
         }
 
     } while (!tc_iot_hal_timer_is_expired(&timer));
 
+    if (rc > 0) {
+        rc = TC_IOT_SUCCESS;
+    }
     return rc;
 }
 

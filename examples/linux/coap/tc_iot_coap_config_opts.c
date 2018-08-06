@@ -2,7 +2,7 @@
 #include "tc_iot_coap_device_config.h"
 #include <getopt.h>
 
-static int _log_level = TC_IOT_LOG_LEVEL_TRACE;
+static int _log_level = TC_IOT_LOG_LEVEL_INFO;
 static int show_version = 0;
 
 static struct option long_options[] =
