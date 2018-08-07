@@ -40,7 +40,7 @@
             "name": "param_string",
             "range": [
                 0,
-                50
+                64
             ],
             "type": "string"
         }

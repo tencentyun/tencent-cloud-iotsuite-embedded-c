@@ -1,24 +1,33 @@
 # 操作指南
 ## 准备工作
-1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，注意事项：创建产品时，“数据协议”选择“数据模板”；
-2. 通过【基本信息】页的【数据模板】功能，为产品定义数据模板；
-3. 点击导出按钮，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/linux/app 目录下覆盖 iot-product.json 文件。
-4. 通过脚本自动生成 iotsuite_app 设备的逻辑框架及业务数据配置代码。
+1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ；
+2. 创建产品，“数据协议”选择“数据模板”，进入【数据模板】页，为产品定义数据模板；
+
+| 名称         | 类型       | 读写       | 取值范围             |
+| ----------   | ---------- | ---------- | ----------           |
+| param_bool   | 布尔       | 可写       | 无需填写             |
+| param_enum   | 枚举       | 可写       | enum_a,enum_b,enum_c |
+| param_number | 数值       | 可写       | 0,4095               |
+| param_string | 字符串     | 可写       | 64                   |
+
+3. 进入【基本信息】也，点击【导出】，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/advanced_edition/mqtt 目录下覆盖 iot-product.json 文件。
+4. 通过脚本自动生成 advaneced_mqtt 设备的逻辑框架及业务数据配置代码。
 
 ```shell
 # 进入工具脚本目录
 cd tools
-python tc_iot_code_generator.py -c ../examples/linux/app/iot-product.json code_templates/*
+python tc_iot_code_generator.py -c ../examples/advanced_edition/mqtt/iot-product.json code_templates/*
 ```
 
 执行成功后会看到有如下提示信息：
 ```shell
-加载 ../examples/linux/app/iot-product.json 文件成功
-文件 ../examples/linux/app/tc_iot_device_config.h 生成成功
-文件 ../examples/linux/app/tc_iot_device_logic.c 生成成功
-文件 ../examples/linux/app/tc_iot_device_logic.h 生成成功
-```
+加载 ../examples/advanced_edition/mqtt/iot-product.json 文件成功
+文件 ../examples/advanced_edition/mqtt/app_main.c 生成成功
+文件 ../examples/advanced_edition/mqtt/tc_iot_device_config.h 生成成功
+文件 ../examples/advanced_edition/mqtt/tc_iot_device_logic.c 生成成功
+文件 ../examples/advanced_edition/mqtt/tc_iot_device_logic.h 生成成功
 
+```
 
 ## 自定义设备数据和设备属性上报逻辑
 ### 设备数据
@@ -38,9 +47,6 @@ SDK 为设备定义了以下3个本地全局变量：
        可在函数处理结束时，返回 TC_IOT_FAILURE 。
     2. 其他情况，例如，自定义的循环检测、中断处理等过程，检测到数据变化时，将最新数据同步写入 local 数据后，需调用 tc_iot_report_device_data 来主动将数据上报服务端。
 - 所有属性的回调 _tc_iot_property_change 处理完成后，SDK 会调用 tc_iot_confirm_devcie_data 检测 local 数据的变化情况，将状态上报给服务端。例如：在回调用户逻辑后，SDK 会比较 desired 和 local 的差异。如果数据一致，则判定服务端下发的控制指令处理成功，SDK 会自动上报到服务端，通知服务端清除对应的指令；SDK 同时会比较 reported 和 local 的差异，如果数据不一致，则将最新的状态，从 local 数据同步到 reported 数据中，并上报到服务端。
-
-### 设备属性
-tc_iot_device_logic.c 中 tc_iot_report_firm 函数负责上报设备属性信息，可以根据业务实际需要，修改为实际所需上报的字段和取值，最多允许上报5个属性，属性取值必须为字符串类型；
 
 
 ## 编译程序

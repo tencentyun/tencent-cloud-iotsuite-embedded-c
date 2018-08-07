@@ -1,16 +1,16 @@
 # 操作指南
 ## 准备工作 & 编译本示例
-1. 参考 [准备工作](../README.md) 。
+1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md)； 
 2. 配置固件版本号 tc_iot_ota_logic.h ：
 ```shell
 #define TC_IOT_FIRM_VERSION "LINUXV1.0"
 ```
 
 ## 运行程序
-编译完成后，在 build/bin/ 目录下，会产生一个 demo_ota 程序。
+编译完成后，在 build/bin/ 目录下，会产生一个 scn_ota 程序。
 
 ```shell
-# 运行 demo_ota 设备端应用，
+# 运行 scn_ota 设备端应用，
 # 此种方式运行，可以有效查看日志及抓包定位问题
 # 备注：
 # -d device_xxxx 参数是指定当前连接使用的设备名
@@ -20,13 +20,13 @@
 # -s 指定Device Secret
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
-# ./demo_ota --trace -p 1883
+# ./scn_ota --trace -p 1883
 
-./demo_ota -d device_xxxx -s secret_abc --trace -p 1883
+./scn_ota -d device_xxxx -s secret_abc --trace -p 1883
 
-# 如 demo_ota 运行正常未见异常
+# 如 scn_ota 运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
-./demo_ota -d device_xxxx
+./scn_ota -d device_xxxx
 
 ```
 

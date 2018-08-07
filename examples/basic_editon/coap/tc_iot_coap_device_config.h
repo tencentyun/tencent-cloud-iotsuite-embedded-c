@@ -31,10 +31,7 @@
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_NAME "device_name"
 
-#define  TC_IOT_PUB_TOPIC_PARM_FMT   "tp=shadow/get/%s/%s"
-
-#define  TC_IOT_RPC_SUB_TOPIC_PARM_FMT   "st=shadow/get/%s/%s"
-#define  TC_IOT_RPC_PUB_TOPIC_PARM_FMT   "pt=shadow/update/%s/%s"
+#define  TC_IOT_PUB_TOPIC_PARM_FMT   "tp=/%s/%s/update"
 
 /* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
 #define TC_IOT_CONFIG_DEVICE_CLIENT_ID TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "@" TC_IOT_CONFIG_DEVICE_NAME

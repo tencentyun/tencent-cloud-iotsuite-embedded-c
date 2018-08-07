@@ -210,7 +210,7 @@ int tc_iot_mqtt_init(tc_iot_mqtt_client* c,
     c->command_timeout_ms = p_client_config->command_timeout_ms;
     c->buf_size = TC_IOT_CLIENT_SEND_BUF_SIZE;
     c->readbuf_size = TC_IOT_CLIENT_READ_BUF_SIZE;
-    TC_IOT_LOG_TRACE("mqtt client buf_size=%d,readbuf_size=%d,", (int)c->buf_size,
+    TC_IOT_LOG_TRACE("mqtt client buf_size=%d,readbuf_size=%d", (int)c->buf_size,
               (int)c->readbuf_size);
     c->auto_reconnect = p_client_config->auto_reconnect;
     c->clean_session = p_client_config->clean_session;

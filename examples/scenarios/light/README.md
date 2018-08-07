@@ -3,13 +3,13 @@
 1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，
 2. 创建产品和设备，为产品定义以下数据模板：
 
-| 名称    | 类型     | 读写 | 取值范围   |
-| ---------- | ---------- | ---------- | ---------- |
-| device_switch | 布尔 | 可写 | 无需填写 |
-| color | 枚举 | 可写 | red,green,blue |
-| brightness | 数值 | 可写 | 0,100 |
-| power | 数值 | 只读 | 1,100 |
-| name | 字符串 | 读写 | 16 |
+| 名称          | 类型       | 读写       | 取值范围       |
+| ----------    | ---------- | ---------- | ----------     |
+| device_switch | 布尔       | 可写       | 无需填写       |
+| color         | 枚举       | 可写       | red,green,blue |
+| brightness    | 数值       | 可写       | 0,100          |
+| power         | 数值       | 只读       | 1,100          |
+| name          | 字符串     | 可写       | 16             |
 
 
 3. 点击导出按钮，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/linux/light 目录下覆盖 iot-product.json 文件。
@@ -18,15 +18,15 @@
 ```shell
 # 进入工具脚本目录
 cd tools
-python tc_iot_code_generator.py -c ../examples/linux/light/iot-product.json code_templates/tc_iot_device_*
+python tc_iot_code_generator.py -c ../examples/scenarios/light/iot-product.json code_templates/tc_iot_device_*
 ```
 
 执行成功后会看到有如下提示信息：
 ```shell
-加载 ../examples/linux/light/iot-product.json 文件成功
-文件 ../examples/linux/light/tc_iot_device_config.h 生成成功
-文件 ../examples/linux/light/tc_iot_device_logic.c 生成成功
-文件 ../examples/linux/light/tc_iot_device_logic.h 生成成功
+加载 ../examples/scenarios/light/iot-product.json 文件成功
+文件 ../examples/scenarios/light/tc_iot_device_config.h 生成成功
+文件 ../examples/scenarios/light/tc_iot_device_logic.c 生成成功
+文件 ../examples/scenarios/light/tc_iot_device_logic.h 生成成功
 ```
 
 5. 代码及配置生成成功后，进入 build 目录，开始编译。
@@ -38,7 +38,7 @@ make
 
 
 ## 运行程序
-编译完成后，在 build/bin/ 目录下，会产生一个 light 程序。
+编译完成后，在 build/bin/ 目录下，会产生一个 scn_light 程序。
 
 ```shell
 # MQTT 直连并开启详细日志模式，运行 light 设备端应用，
@@ -55,7 +55,7 @@ make
 
 ./scn_light -d device_xxxx -s secret_abc --trace -p 1883
 
-# 如 light_device 运行正常未见异常
+# 运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
 ./scn_light -d device_xxxx
 

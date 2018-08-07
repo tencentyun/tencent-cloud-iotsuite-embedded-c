@@ -1,14 +1,14 @@
 # 操作指南
 ## 准备工作
-1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，注意事项：创建产品时，“数据协议”选择“数据模板”；
-2. 通过【基本信息】页的【数据模板】功能，为产品定义数据模板；
+1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ；
+2. 创建产品，“数据协议”选择“数据模板”，进入【数据模板】页，为产品定义数据模板；
 
-| 名称    | 类型     | 读写 | 取值范围   |
-| ---------- | ---------- | ---------- | ---------- |
-| param_bool | 布尔 | 可写 | 无需填写 |
-| param_enum | 枚举 | 可写 | enum_a,enum_b,enum_c |
-| param_number | 数值 | 可写 | 0,4095 |
-| param_string | 字符串 | 可写 | 256 |
+| 名称         | 类型       | 读写       | 取值范围             |
+| ----------   | ---------- | ---------- | ----------           |
+| param_bool   | 布尔       | 可写       | 无需填写             |
+| param_enum   | 枚举       | 可写       | enum_a,enum_b,enum_c |
+| param_number | 数值       | 可写       | 0,4095               |
+| param_string | 字符串     | 可写       | 64                   |
 
 3. 打开 tc_iot_http_config.h ，可以看到生成的如下产品相关信息：
 ```c

@@ -8,7 +8,7 @@ typedef struct _tc_iot_shadow_local_data {
     tc_iot_shadow_bool param_bool;
     tc_iot_shadow_enum param_enum;
     tc_iot_shadow_number param_number;
-    char param_string[50+1];
+    char param_string[64+1];
 }tc_iot_shadow_local_data;
 
 

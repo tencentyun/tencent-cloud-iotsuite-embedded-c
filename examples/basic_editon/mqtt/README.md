@@ -1,22 +1,23 @@
 # 操作指南
 ## 准备工作
-1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，注意事项：创建产品时，“数据协议”选择“自定义”；
-2. 点击导出按钮，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/linux/ 目录下覆盖 iot-product.json 文件。
-3. 创建如下自定义Topic：
-    - ${product_id}/${device_name}/cmd ，用于 demo_custom_topic ，演示收发二进制指令。
+1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md)； 
+2. 创建产品，“数据协议”选择“自定义”，创建如下自定义Topic：
+    - ${product_id}/${device_name}/cmd ，用于设备端接收指令。
+    - ${product_id}/${device_name}/update ，用于设备端上报数据。
 
+3. 进入【基本信息】也，点击【导出】，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/basic_edition/mqtt 目录下覆盖 iot-product.json 文件。
 4. 通过脚本自动生成演示配置文件。
 
 ```shell
 # 进入工具脚本目录
 cd tools
-python tc_iot_code_generator.py -c ../examples/linux/iot-product.json code_templates/tc_iot_device_config.h
+python tc_iot_code_generator.py -c ../examples/basic_edition/mqtt/iot-product.json code_templates/tc_iot_device_config.h
 ```
 
 执行成功后会看到有如下提示信息：
 ```shell
-加载 ../examples/linux/iot-product.json 文件成功
-文件 ../examples/linux/tc_iot_device_config.h 生成成功
+加载 ../examples/basic_editon/mqtt/iot-product.json 文件成功
+文件 ../examples/basic_editon/mqtt/tc_iot_device_config.h 生成成功
 ```
 
 打开 tc_iot_device_config.h ，可以看到生成的如下产品相关信息：
@@ -65,10 +66,10 @@ make
 
 ## 运行程序
 ### 基于 JSON 协议的 MQTT 示例
-编译完成后，在 build/bin/ 目录下，会产生一个 demo_mqtt 程序。
+编译完成后，在 build/bin/ 目录下，会产生一个 basic_mqtt 程序。
 
 ```shell
-# 运行 demo_mqtt 设备端应用，
+# 运行 basic_mqtt 设备端应用，
 # 此种方式运行，可以有效查看日志及抓包定位问题
 # 备注：
 # -d device_xxxx 参数是指定当前连接使用的设备名
@@ -78,13 +79,13 @@ make
 # -s 指定Device Secret
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
-# ./demo_mqtt --trace -p 1883
+# ./basic_mqtt --trace -p 1883
 
-./demo_mqtt -d device_xxxx -s secret_abc --trace -p 1883
+./basic_mqtt -d device_xxxx -s secret_abc --trace -p 1883
 
-# 如 demo_mqtt 运行正常未见异常
+# 如 basic_mqtt 运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
-./demo_mqtt -d device_xxxx
+./basic_mqtt -d device_xxxx
 
 ```
 
@@ -92,10 +93,10 @@ make
 收发 MQTT 消息，参见 demo_mqtt.c 中tc_iot_mqtt_client_publish(发送消息) & tc_iot_mqtt_client_subscribe(订阅 Topic) 。
 
 ### 基于自定义二进制协议的 MQTT 示例
-编译完成后，在 build/bin/ 目录下，会产生一个 demo_custom_topic 程序。
+编译完成后，在 build/bin/ 目录下，会产生一个 basic_mqtt_binary 程序。
 
 ```shell
-# 运行 demo_custom_topic 设备端应用，
+# 运行 basic_mqtt_binary 设备端应用，
 # 此种方式运行，可以有效查看日志及抓包定位问题
 # 备注：
 # -d device_xxxx 参数是指定当前连接使用的设备名
@@ -105,13 +106,13 @@ make
 # -s 指定Device Secret
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
-# ./demo_custom_topic --trace -p 1883
+# ./basic_mqtt_binary --trace -p 1883
 
-./demo_custom_topic -d device_xxxx -s secret_abc --trace -p 1883
+./basic_mqtt_binary -d device_xxxx -s secret_abc --trace -p 1883
 
-# 如 demo_custom_topic 运行正常未见异常
+# 如 basic_mqtt_binary 运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
-./demo_custom_topic -d device_xxxx
+./basic_mqtt_binary -d device_xxxx
 
 ```
 
@@ -328,5 +329,3 @@ tc_iot_mqtt_client_destroy 释放相关资源。
  */
 void tc_iot_mqtt_client_destroy(tc_iot_mqtt_client* p_mqtt_client);
 ```
-
-

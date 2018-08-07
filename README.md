@@ -2,7 +2,7 @@
 
 ### SDK 获取
 
-腾讯云 iotsuite C语言版 SDK的下载地址： [tencent-cloud-iotsuite-embedded-c.git](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git)
+腾讯云 IoT Suite C SDK 的下载地址： [tencent-cloud-iotsuite-embedded-c.git](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git)
 
 ```shell
 git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
@@ -11,12 +11,14 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 
 ### 开发环境
 1. SDK 在 Linux 环境下的测试和验证，主要基于 Ubuntu 16.04 版本，gcc-5.4 (建议至少 gcc-4.7+)，Python 2.7.12+(代码生成及控制台命令行脚本)，cmake 2.8+。
+
 ```shell
 sudo apt install cmake gcc python2.7
 ```
+
 2. 配置并运行示例：
-- [mqtt](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/linux/)
-- [iotsuite_app](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/linux/app)
+- [基础版 MQTT 示例](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/basic_edition/mqtt)
+- [高级版 MQTT 示例](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/advanced_edition/mqtt)
 
 ### 编译及运行
 1. 执行下面的命令，编译示例程序：
@@ -33,27 +35,41 @@ make
 
 ```shell
 bin
-|-- demo_mqtt               # MQTT 连接云服务演示程序
-|-- demo_shadow             # Shadow 影子设备操作演示程序
-|-- iotsuite_app            # 通用数据模板演示程序
-|-- light                   # 基于数据模板的 RGB LED Light 演示程序
-|-- demo_coap_client        # CoAP 连接云服务演示程序
+|-- basic_mqtt               # 基础版 MQTT 连接云服务演示程序
+|-- basic_coap               # 基础版 CoAP 连接云服务演示程序
+|-- advaned_mqtt             # 高级版 MQTT 连接云服务演示程序
+|-- advaned_coap             # 高级版 CoAP 连接云服务演示程序
+|-- scn_ota                  # OTA 功能演示程序
+|-- scn_smartbox             # 基于基础版 MQTT 协议开发的智能货柜演示程序
+|-- scn_light                # 基于高级版 MQTT 协议开发的智能灯演示程序
 lib
-|-- libtc_iot_suite.a       # SDK 的核心层, libtc_iot_hal、libtc_iot_common 提供连接云服务的能力
-|-- libtc_iot_coap.a        # SDK CoAP 协议封装
 |-- libtc_iot_common.a      # SDK 基础工具库，负责http、json、base64等解析和编解码功能
 |-- libtc_iot_hal.a         # SDK 的硬件及操作系统抽象，负责内存、定时器、网络交互等功能
+|-- libtc_iot_mqtt_client.a # SDK 基础版 MQTT 协议库，负责 MQTT 协议解析及连接管理
+|-- libtc_iot_suite.a       # SDK 高级版功能库，基于 MQTT 封装了高级版数据模板功能。
+|-- libtc_iot_coap.a        # SDK CoAP 协议封装，用于资源受限设备，通过 CoAP 协议使用基础版消息上行及高级版数据模板功能。
+|-- libtc_iot_http_mqapi.a  # SDK HTTP RPC 协议封装，用于资源受限设备，通过 HTTP 协议使用高级版数据模板功能。
+|-- libtc_iot_ota.a         # SDK OTA 功能库，提供了 OTA 协议收发处理及固件下载功能
+|-- libMQTTPacketClient.a   # 第三方库，用于 MQTT 协议解析
+|-- libmbedtls.a            # 第三方库，用于 TLS 及 DTLS 协议处理
+|-- libjsmn.a               # 第三方库，用于 JSON 协议解析
+
 ```
 
 3. 执行示例程序：
 
 ```shell
+# 注意：在运行前，每个示例程序都需要预先配置对应的产品 ID、设备名称、设备密钥等信息，
+# 请注意参考 examples 目录下对应示例程序的 README，进行预先配置。
+
 cd bin
 
 # 运行demo程序
-./demo_mqtt
+./basic_mqtt
 # or
-./iotsuite_app
+./advanced_app
+
+...
 
 ```
 
