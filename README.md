@@ -13,7 +13,7 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 1. SDK 在 Linux 环境下的测试和验证，主要基于 Ubuntu 16.04 版本，gcc-5.4 (建议至少 gcc-4.7+)，Python 2.7.12+(代码生成及控制台命令行脚本)，cmake 2.8+。
 
 ```shell
-sudo apt install cmake gcc python2.7
+sudo apt install cmake python2.7 git build-essential
 ```
 
 2. 配置并运行示例：
