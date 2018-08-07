@@ -23,9 +23,9 @@
 /* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
 #define TC_IOT_CONFIG_COAP_SERVER_HOST "gz.coap.tencentcloudapi.com"
 /* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-9fi4gnz8"
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-dlz9ojsy"
 /* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-1doou8fjk"
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-1e8vngcm2"
 /* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
