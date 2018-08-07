@@ -386,8 +386,8 @@ def main():
         device_config.Region = device_config.region
         device_config.AuthType = device_config.auth_type
         device_config.Domain = device_config.domain
-        device_config.Username = device_config.username
-        device_config.Password = device_config.password
+        device_config.Username = ""
+        device_config.Password = ""
         if 'data_template' not in device_config:
             device_config.data_template = []
         device_config.DataTemplate = device_config.data_template

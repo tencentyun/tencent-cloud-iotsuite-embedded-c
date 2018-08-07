@@ -9,7 +9,7 @@ MQTT_CLIENT_ID=${TENCENT_CLOUD_DEMO_MQTT_CID}
 
 echo ${#MQTT_CLIENT_ID}
  
-MQTT_CMD="../build/bin/demo_mqtt --trace -t ${PRODUCT_ID} -d ${DEVICE_NAME} -h ${MQTT_HOST} "
+MQTT_CMD="../build/bin/basic_mqtt --trace -t ${PRODUCT_ID} -d ${DEVICE_NAME} -h ${MQTT_HOST} "
 
 if [ ${#DEVICE_SECRET} -gt 0 ];then
 	MQTT_CMD="$MQTT_CMD -s ${DEVICE_SECRET}"

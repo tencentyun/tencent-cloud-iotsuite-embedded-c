@@ -19,6 +19,7 @@ tc_iot_shadow_property_def g_tc_iot_shadow_property_defs[] = {
     { "color", TC_IOT_PROP_color, TC_IOT_SHADOW_TYPE_ENUM, offsetof(tc_iot_shadow_local_data, color),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,color) },
     { "brightness", TC_IOT_PROP_brightness, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, brightness),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,brightness) },
     { "power", TC_IOT_PROP_power, TC_IOT_SHADOW_TYPE_NUMBER, offsetof(tc_iot_shadow_local_data, power),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,power) },
+    { "name", TC_IOT_PROP_name, TC_IOT_SHADOW_TYPE_STRING, offsetof(tc_iot_shadow_local_data, name),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,name) },
 };
 
 
@@ -28,6 +29,7 @@ tc_iot_shadow_local_data g_tc_iot_device_local_data = {
     TC_IOT_PROP_color_red,
     0,
     1,
+    {'\0'},
 };
 
 /* 设备状态控制数据 */
@@ -36,6 +38,7 @@ static tc_iot_shadow_local_data g_tc_iot_device_desired_data = {
     TC_IOT_PROP_color_red,
     0,
     1,
+    {'\0'},
 };
 
 /* 设备已上报状态数据 */
@@ -44,6 +47,7 @@ tc_iot_shadow_local_data g_tc_iot_device_reported_data = {
     TC_IOT_PROP_color_red,
     0,
     1,
+    {'\0'},
 };
 
 /* 设备初始配置 */
@@ -90,6 +94,7 @@ static int _tc_iot_property_change( int property_id, void * data) {
     tc_iot_shadow_enum color;
     tc_iot_shadow_number brightness;
     tc_iot_shadow_number power;
+    tc_iot_shadow_string name;
     switch (property_id) {
         case TC_IOT_PROP_device_switch:
             device_switch = *(tc_iot_shadow_bool *)data;
@@ -129,6 +134,11 @@ static int _tc_iot_property_change( int property_id, void * data) {
             power = *(tc_iot_shadow_number *)data;
             g_tc_iot_device_local_data.power = power;
             TC_IOT_LOG_TRACE("do something for power=%f", power);
+            break;
+        case TC_IOT_PROP_name:
+            name = (char *)data;
+            strcpy(g_tc_iot_device_local_data.name, name);
+            TC_IOT_LOG_TRACE("do something for name=%s", name);
             break;
         default:
             TC_IOT_LOG_WARN("unkown property id = %d", property_id);

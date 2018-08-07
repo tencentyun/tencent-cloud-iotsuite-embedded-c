@@ -1,7 +1,7 @@
 # 操作指南
 ## 准备工作
-1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，创建产品和设备，注意事项：创建产品时，“鉴权模式”建议选择“临时token模式”；
-2. 为产品定义以下数据模板：
+1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md) ，
+2. 创建产品和设备，为产品定义以下数据模板：
 
 | 名称    | 类型     | 读写 | 取值范围   |
 | ---------- | ---------- | ---------- | ---------- |
@@ -9,6 +9,7 @@
 | color | 枚举 | 可写 | red,green,blue |
 | brightness | 数值 | 可写 | 0,100 |
 | power | 数值 | 只读 | 1,100 |
+| name | 字符串 | 读写 | 16 |
 
 
 3. 点击导出按钮，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/linux/light 目录下覆盖 iot-product.json 文件。
@@ -22,7 +23,7 @@ python tc_iot_code_generator.py -c ../examples/linux/light/iot-product.json code
 
 执行成功后会看到有如下提示信息：
 ```shell
-加载 ../examples/linux/light/iot-xxxxx.json 文件成功
+加载 ../examples/linux/light/iot-product.json 文件成功
 文件 ../examples/linux/light/tc_iot_device_config.h 生成成功
 文件 ../examples/linux/light/tc_iot_device_logic.c 生成成功
 文件 ../examples/linux/light/tc_iot_device_logic.h 生成成功
@@ -50,13 +51,13 @@ make
 # -s secret_abc  认证模式为Token模式时，-s 指定Device Secret
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
-# ./light --trace -p 1883
+# ./scn_light --trace -p 1883
 
-./light -d device_xxxx -s secret_abc --trace -p 1883
+./scn_light -d device_xxxx -s secret_abc --trace -p 1883
 
 # 如 light_device 运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
-./light -d device_xxxx
+./scn_light -d device_xxxx
 
 ```
 

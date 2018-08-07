@@ -9,6 +9,7 @@ typedef struct _tc_iot_shadow_local_data {
     tc_iot_shadow_enum color;
     tc_iot_shadow_number brightness;
     tc_iot_shadow_number power;
+    char name[16+1];
 }tc_iot_shadow_local_data;
 
 
@@ -17,8 +18,9 @@ typedef struct _tc_iot_shadow_local_data {
 #define TC_IOT_PROP_color 1
 #define TC_IOT_PROP_brightness 2
 #define TC_IOT_PROP_power 3
+#define TC_IOT_PROP_name 4
 
-#define TC_IOT_PROPTOTAL 4
+#define TC_IOT_PROPTOTAL 5
 
 
 /* enum macro definitions */
