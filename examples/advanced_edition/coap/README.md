@@ -50,7 +50,7 @@ make
 
 ./advanced_coap -d device_xxxx -s secret_abc --trace -p 5683
 
-# 如 advanced_coap_device 运行正常未见异常
+# 如运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
 ./advanced_coap -d device_xxxx -p 5683
 

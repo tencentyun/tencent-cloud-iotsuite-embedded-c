@@ -50,10 +50,10 @@ make
 在控制台的【设备管理】中，点击【下发指令】，即可修改控制参数，下发推送给设备。
 
 ## 运行程序
-编译完成后，在 build/bin/ 目录下，会产生一个 demo_http_rpc 程序。
+编译完成后，在 build/bin/ 目录下，会产生一个 advanced_http 程序。
 
 ```shell
-# 运行 demo_http_rpc 设备端应用，
+# 运行 advanced_http 设备端应用，
 # 此种方式运行，可以有效查看日志及抓包定位问题
 # 备注：
 # -d device_xxxx 参数是指定当前连接使用的设备名
@@ -63,13 +63,13 @@ make
 # -s 指定Device Secret
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
-# ./demo_http_rpc --trace -p 1883
+# ./advanced_http --trace -p 1883
 
-./demo_http_rpc -d device_xxxx -s secret_abc --trace
+./advanced_http -d device_xxxx -s secret_abc --trace
 
-# 如 demo_http_rpc_device 运行正常未见异常
+# 如运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
-./demo_http_rpc
+./advanced_http
 
 ```
 

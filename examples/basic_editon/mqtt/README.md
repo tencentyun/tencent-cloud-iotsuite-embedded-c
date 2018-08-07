@@ -83,7 +83,7 @@ make
 
 ./basic_mqtt -d device_xxxx -s secret_abc --trace -p 1883
 
-# 如 basic_mqtt 运行正常未见异常
+# 如运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
 ./basic_mqtt -d device_xxxx
 
@@ -110,7 +110,7 @@ make
 
 ./basic_mqtt_binary -d device_xxxx -s secret_abc --trace -p 1883
 
-# 如 basic_mqtt_binary 运行正常未见异常
+# 如运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
 ./basic_mqtt_binary -d device_xxxx
 

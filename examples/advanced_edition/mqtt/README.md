@@ -59,10 +59,10 @@ make
 
 ## 运行程序
 
-编译完成后，在 build/bin/ 目录下，会产生一个 iotsuite_app 程序。
+编译完成后，在 build/bin/ 目录下，会产生一个 advanced_mqtt 程序。
 
 ```shell
-# 运行 iotsuite_app 设备端应用，
+# 运行 advanced_mqtt 设备端应用，
 # 此种方式运行，可以有效查看日志及抓包定位问题
 # 备注：
 # -d device_xxxx 参数是指定当前连接使用的设备名
@@ -72,13 +72,13 @@ make
 # -s 指定Device Secret
 # 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
-# ./iotsuite_app --trace -p 1883
+# ./advanced_mqtt --trace -p 1883
 
-./iotsuite_app -d device_xxxx -s secret_abc --trace -p 1883
+./advanced_mqtt -d device_xxxx -s secret_abc --trace -p 1883
 
-# 如 iotsuite_app_device 运行正常未见异常
+# 如运行正常未见异常
 # 也可用默认模式来执行，避免日志干扰
-./iotsuite_app -d device_xxxx
+./advanced_mqtt -d device_xxxx
 
 ```
 
