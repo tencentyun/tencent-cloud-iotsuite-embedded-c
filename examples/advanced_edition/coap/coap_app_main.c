@@ -13,6 +13,13 @@ typedef struct _tc_iot_shadow_local_data {
     char param_string[50+1];
 }tc_iot_shadow_local_data;
 
+tc_iot_shadow_local_data g_local_data = {
+    false,
+    0,
+    0,
+    ""
+};
+
 // 数据模板字段，变量名最大长度
 #define MAX_TEMPLATE_KEY_LEN   20
 // 数据模板字段取值最大长度
@@ -25,12 +32,6 @@ static void _coap_con_rpc_handler(tc_iot_coap_client * client, tc_iot_coap_con_s
                                   tc_iot_coap_message * message , void * session_context);
 void _coap_con_default_handler(void * client, tc_iot_coap_message * message );
 
-tc_iot_shadow_local_data g_local_data = {
-    false,
-    0,
-    0,
-    ""
-};
 
 tc_iot_coap_client g_coap_client;
 tc_iot_coap_client_config g_coap_config = {
