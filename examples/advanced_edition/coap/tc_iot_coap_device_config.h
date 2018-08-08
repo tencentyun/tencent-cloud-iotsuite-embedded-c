@@ -1,8 +1,34 @@
 #ifndef TC_IOT_COAP_DEVICE_CONFIG_H
 #define TC_IOT_COAP_DEVICE_CONFIG_H
 
-/************************************************************************/
 /**********************************必填项********************************/
+#define TC_IOT_SERVER_REGION "gz"
+
+/* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
+#define TC_IOT_CONFIG_COAP_SERVER_HOST TC_IOT_SERVER_REGION ".coap.tencentcloudapi.com"
+
+/* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-9fi4gnz8"
+
+/* 产品id，可以在产品“基本信息页”->“产品key”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-1doou8fjk"
+
+/* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
+
+/* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
+
+/************************************************************************/
+
+#define  TC_IOT_RPC_SUB_TOPIC_PARM_FMT   "st=shadow/get/%s/%s"
+#define  TC_IOT_RPC_PUB_TOPIC_PARM_FMT   "pt=shadow/update/%s/%s"
+
+/* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
+#define TC_IOT_CONFIG_DEVICE_CLIENT_ID TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "@" TC_IOT_CONFIG_DEVICE_NAME
+
+#define TC_IOT_COAP_DTLS_PSK "secretPSK"
+#define TC_IOT_COAP_DTLS_PSK_ID TC_IOT_CONFIG_DEVICE_NAME
 
 #ifdef ENABLE_DTLS
 /* 是否启用DTLS用于CoAP请求*/
@@ -19,27 +45,6 @@
 #define TC_IOT_CONFIG_COAP_SERVER_PORT 5683
 #endif
 
-
-/* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
-#define TC_IOT_CONFIG_COAP_SERVER_HOST "gz.coap.tencentcloudapi.com"
-/* 产品id，可以在产品“基本信息页”->“产品 id”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-9fi4gnz8"
-/* 产品id，可以在产品“基本信息页”->“产品 key”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-1doou8fjk"
-/* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
-/* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
-
-#define  TC_IOT_RPC_SUB_TOPIC_PARM_FMT   "st=shadow/get/%s/%s"
-#define  TC_IOT_RPC_PUB_TOPIC_PARM_FMT   "pt=shadow/update/%s/%s"
-
-/* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
-#define TC_IOT_CONFIG_DEVICE_CLIENT_ID TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "@" TC_IOT_CONFIG_DEVICE_NAME
-
-
-#define TC_IOT_COAP_DTLS_PSK "secretPSK"
-#define TC_IOT_COAP_DTLS_PSK_ID TC_IOT_CONFIG_DEVICE_NAME
 
 /* TLS 握手执行超时时长，单位是毫秒*/
 #define TC_IOT_CONFIG_DTLS_HANDSHAKE_TIMEOUT_MS  10000

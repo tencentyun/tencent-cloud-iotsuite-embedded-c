@@ -3,6 +3,7 @@
 
 #include "tc_iot_config.h"
 
+/**********************************必填项********************************/
 /* 设备激活及获取 secret 接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/secret */
 /* Token接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
 /* 机房标识：
@@ -10,42 +11,15 @@
     北京机房=bj
     ...
 */
-#ifdef ENABLE_TLS
-#define TC_IOT_CONFIG_AUTH_API_URL "https:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/token"
-#define TC_IOT_CONFIG_ACTIVE_API_URL "https:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/secret"
-#else
-#define TC_IOT_CONFIG_AUTH_API_URL "http:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/token"
-#define TC_IOT_CONFIG_ACTIVE_API_URL "http:///*${template_config.Region}*/.auth-device-iot.tencentcloudapi.com/secret"
-#endif
-
-#define TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG   "http:///*${template_config.Region}*/.auth.iot.cloud.tencent.com/secret"
-#define TC_IOT_CONFIG_AUTH_API_URL_DEBUG	 "http:///*${template_config.Region}*/.auth.iot.cloud.tencent.com/token"
-
-/************************************************************************/
-/**********************************必填项********************************/
-
-#ifdef ENABLE_TLS
-/* 是否启用TLS用于MQTT请求*/
-#define TC_IOT_CONFIG_USE_TLS 1
-#else
-#define TC_IOT_CONFIG_USE_TLS 0
-#endif
-
-#if TC_IOT_CONFIG_USE_TLS
-/* MQ服务的TLS端口一般为8883*/
-#define TC_IOT_CONFIG_SERVER_PORT 8883
-#else
-/* MQ服务的默认端口一般为1883*/
-#define TC_IOT_CONFIG_SERVER_PORT 1883
-#endif
-
+#define TC_IOT_SERVER_REGION "/*${template_config.Region}*/"
 
 /* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
 /* MQ服务地址，可以在产品“基本信息页”->“mqtt链接地址”位置找到。*/
 #define TC_IOT_CONFIG_SERVER_HOST "/*${template_config.Domain}*/"
-/*#define TC_IOT_CONFIG_SERVER_HOST "localhost"*/
+
 /* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "/*${template_config.ProductId}*/"
+
 /* 产品id，可以在产品“基本信息页”->“产品key”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "/*${template_config.ProductKey}*/"
 
@@ -55,10 +29,11 @@
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_NAME "device_name"
 
+/************************************************************************/
+
 /* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
 #define TC_IOT_CONFIG_DEVICE_CLIENT_ID TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "@" TC_IOT_CONFIG_DEVICE_NAME
 
-/************************************************************************/
 /**********************************选填项********************************/
 /* 关于username和password：*/
 /* 1)如果是通过TC_IOT_CONFIG_AUTH_API_URL接口，动态获取的，以下两个参数可不用填写*/
@@ -74,6 +49,32 @@
 #endif
 /************************************************************************/
 
+#ifdef ENABLE_TLS
+#define TC_IOT_CONFIG_AUTH_API_URL "https://" TC_IOT_SERVER_REGION ".auth-device-iot.tencentcloudapi.com/token"
+#define TC_IOT_CONFIG_ACTIVE_API_URL "https://" TC_IOT_SERVER_REGION ".auth-device-iot.tencentcloudapi.com/secret"
+#else
+#define TC_IOT_CONFIG_AUTH_API_URL "http://" TC_IOT_SERVER_REGION ".auth-device-iot.tencentcloudapi.com/token"
+#define TC_IOT_CONFIG_ACTIVE_API_URL "http://" TC_IOT_SERVER_REGION ".auth-device-iot.tencentcloudapi.com/secret"
+#endif
+
+#define TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG   "http://" TC_IOT_SERVER_REGION ".auth.iot.cloud.tencent.com/secret"
+#define TC_IOT_CONFIG_AUTH_API_URL_DEBUG	 "http://" TC_IOT_SERVER_REGION ".auth.iot.cloud.tencent.com/token"
+
+
+#ifdef ENABLE_TLS
+/* 是否启用TLS用于MQTT请求*/
+#define TC_IOT_CONFIG_USE_TLS 1
+#else
+#define TC_IOT_CONFIG_USE_TLS 0
+#endif
+
+#if TC_IOT_CONFIG_USE_TLS
+/* MQ服务的TLS端口一般为8883*/
+#define TC_IOT_CONFIG_SERVER_PORT 8883
+#else
+/* MQ服务的默认端口一般为1883*/
+#define TC_IOT_CONFIG_SERVER_PORT 1883
+#endif
 
 /* connect、publish、subscribe、unsubscribe */
 /* 等命令执行超时时长，单位是毫秒*/
@@ -94,6 +95,7 @@
 #define TC_IOT_SUB_TOPIC_PREFIX "shadow/get/"
 #define TC_IOT_SUB_TOPIC_FMT TC_IOT_SUB_TOPIC_PREFIX "%s/%s"
 #define TC_IOT_SUB_TOPIC_DEF TC_IOT_SUB_TOPIC_PREFIX TC_IOT_CONFIG_DEVICE_PRODUCT_ID "/" TC_IOT_CONFIG_DEVICE_NAME
+
 /* shadow上行消息topic，客户端请求服务端的消息，发到到这个topic即可*/
 /* topic格式"shadow/update/<product id>/<device name>"*/
 #define TC_IOT_PUB_TOPIC_PREFIX "shadow/update/"

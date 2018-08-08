@@ -405,6 +405,8 @@ def main():
         data_template = iot_struct(device_config.DataTemplate)
         for template_files in args.files:
             for template_file in glob.glob(template_files):
+                if os.path.isdir(template_file):
+                    continue
                 input_file_name = template_file
                 input_file = open(input_file_name, "r")
                 input_str = input_file.read()

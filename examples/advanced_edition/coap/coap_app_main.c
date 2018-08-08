@@ -1,23 +1,13 @@
 #include "tc_iot_coap_device_config.h"
+#include "tc_iot_device_logic.h"
 #include "tc_iot_export.h"
 
-#define TC_IOT_PROP_param_bool 0
-#define TC_IOT_PROP_param_enum 1
-#define TC_IOT_PROP_param_number 2
-#define TC_IOT_PROP_param_string 3
-
-typedef struct _tc_iot_shadow_local_data {
-    tc_iot_shadow_bool param_bool;
-    tc_iot_shadow_enum param_enum;
-    tc_iot_shadow_number param_number;
-    char param_string[50+1];
-}tc_iot_shadow_local_data;
-
-tc_iot_shadow_local_data g_local_data = {
+/* 设备当前状态数据 */
+tc_iot_shadow_local_data g_tc_iot_device_local_data = {
     false,
+    TC_IOT_PROP_param_enum_enum_a,
     0,
-    0,
-    ""
+    {'\0'},
 };
 
 // 数据模板字段，变量名最大长度
@@ -391,10 +381,10 @@ static void _coap_con_get_rpc_handler(tc_iot_coap_client * client, tc_iot_coap_c
         tc_iot_hal_printf("[s->c]:%s\n", payload);
 
         memset(desired_bits, 0, sizeof(desired_bits));
-        ret = check_and_process_desired(desired_bits, &g_local_data, (char *)payload);
+        ret = check_and_process_desired(desired_bits, &g_tc_iot_device_local_data, (char *)payload);
         if (desired_bits[0]) {
             step_log("rpc update: report latest device state", true);
-            ret = do_coap_update( &g_coap_client, desired_bits, &g_local_data);
+            ret = do_coap_update( &g_coap_client, desired_bits, &g_tc_iot_device_local_data);
             if (ret < 0) {
                 return ;
             }
