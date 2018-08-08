@@ -80,6 +80,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_FIRM_INFO_VALUE_TOO_LONG = -1012, /**< 上报的设备信息字段取值太长*/
     TC_IOT_HTTP_RESPONSE_NO_CONTENT_LENGTH = -1013, /**< HTTP 响应中未包含Content-Length字段*/
     TC_IOT_JSON_PARSE_TOKEN_NO_MEM = -1014, /**< json 解析Token数不足*/
+    TC_IOT_HTTP_RPC_FAILED = -1015, /**< HTTP rpc 接口请求失败*/
 
     TC_IOT_HTTP_INVALID_STATUS_CODE = -1201, /** 返回码错误，不是 1xx ~ 5xx 返回码 */
     TC_IOT_HTTP_BODY_START_FOUND = -1204, /** 发现 HTTP 包体 */
@@ -120,39 +121,38 @@ typedef struct _tc_iot_event_message {
 */
 typedef int (*tc_iot_event_handler)(tc_iot_event_message *msg, void * client,  void * context);
 
-#define TC_IOT_CONTAINER_OF(ptr, type, member) ({\
-        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
-        (type *)( (char *)__mptr - offsetof(type,member) );})
+#define TC_IOT_CONTAINER_OF(ptr, type, member)		\
+				(type *)((char *)ptr - offsetof(type, member))
 
 #define tc_iot_const_str_len(a)  (sizeof(a)-1)
 
 #define tc_iot_str2_equal(m, c0, c1) \
-m[0] == c0 && m[1] == c1
+(m[0] == c0 && m[1] == c1)
 
 #define tc_iot_str3_equal(m, c0, c1, c2) \
-m[0] == c0 && m[1] == c1 && m[2] == c2
+(m[0] == c0 && m[1] == c1 && m[2] == c2)
 
 #define tc_iot_str4equal(m, c0, c1, c2, c3) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3)
 
 #define tc_iot_str5equal(m, c0, c1, c2, c3, c4) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 && m[4] == c4
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 && m[4] == c4)
 
 #define tc_iot_str6equal(m, c0, c1, c2, c3, c4, c5) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 \
-    && m[4] == c4 && m[5] == c5
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 \
+    && m[4] == c4 && m[5] == c5)
 
 #define tc_iot_str7equal(m, c0, c1, c2, c3, c4, c5, c6) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 \
-    && m[4] == c4 && m[5] == c5 && m[6] == c6
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3 \
+    && m[4] == c4 && m[5] == c5 && m[6] == c6)
 
 #define tc_iot_str8equal(m, c0, c1, c2, c3, c4, c5, c6, c7) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3       \
-    && m[4] == c4 && m[5] == c5 && m[6] == c6 && m[7] == c7
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3       \
+    && m[4] == c4 && m[5] == c5 && m[6] == c6 && m[7] == c7)
 
 #define tc_iot_str9equal(m, c0, c1, c2, c3, c4, c5, c6, c7, c8) \
-m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3            \
-    && m[4] == c4 && m[5] == c5 && m[6] == c6 && m[7] == c7 && m[8] == c8
+(m[0] == c0 && m[1] == c1 && m[2] == c2 && m[3] == c3            \
+    && m[4] == c4 && m[5] == c5 && m[6] == c6 && m[7] == c7 && m[8] == c8)
 #define TC_IOT_MEMBER_SIZE(type, member) sizeof(((type *)0)->member)
 
 #endif /* end of include guard */

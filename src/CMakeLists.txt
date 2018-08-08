@@ -1,9 +1,14 @@
 
 ADD_SUBDIRECTORY(common)
 ADD_SUBDIRECTORY(platform)
+ADD_SUBDIRECTORY(http)
+
+if (ENABLE_DATA_TEMPLATE)
+    ADD_SUBDIRECTORY(iotsuite)
+endif()
 
 if (ENABLE_MQTT)
-    ADD_SUBDIRECTORY(iotsuite)
+    ADD_SUBDIRECTORY(mqtt)
 endif()
 
 if (ENABLE_COAP)

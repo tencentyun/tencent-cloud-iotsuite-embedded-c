@@ -1,7 +1,9 @@
 #include "tc_iot_device_config.h"
 #include <sys/stat.h>
 #include "tc_iot_device_logic.h"
+#if defined(ENABLE_OTA)
 #include "../ota/tc_iot_ota_logic.h"
+#endif
 #include "tc_iot_export.h"
 
 
@@ -101,20 +103,34 @@ void operate_device(tc_iot_shadow_local_data * light) {
 }
 
 int power_usage_inited = false;
+#define REPORT_DURATION  20
+int previous_left_seconds = REPORT_DURATION;
 tc_iot_timer power_usage_timer;
 
 void light_power_usage_calc(tc_iot_shadow_client * c) {
+    int left_seconds = 0;
     if (!power_usage_inited) {
         power_usage_inited = true;
         tc_iot_hal_timer_init(&power_usage_timer);
-        tc_iot_hal_timer_countdown_second(&power_usage_timer, 3);
+        tc_iot_hal_timer_countdown_second(&power_usage_timer, REPORT_DURATION);
+        previous_left_seconds = REPORT_DURATION;
         return;
     }
 
     if (tc_iot_hal_timer_is_expired(&power_usage_timer)) {
         g_tc_iot_device_local_data.power += 0.00001;
         tc_iot_report_device_data(c);
-        tc_iot_hal_timer_countdown_second(&power_usage_timer, 3);
+        tc_iot_hal_timer_countdown_second(&power_usage_timer, REPORT_DURATION);
+        previous_left_seconds = REPORT_DURATION;
+    } else {
+        left_seconds = tc_iot_hal_timer_left_ms(&power_usage_timer)/1000;
+        if (left_seconds != previous_left_seconds) {
+            tc_iot_hal_printf("|%d...", left_seconds+1);
+            if (left_seconds == 0) {
+                tc_iot_hal_printf("\n");
+            }
+            previous_left_seconds = left_seconds;
+        }
     }
 }
 
@@ -125,7 +141,9 @@ int main(int argc, char** argv) {
     long timestamp = tc_iot_hal_timestamp(NULL);
     tc_iot_hal_srandom(timestamp);
     long nonce = tc_iot_hal_random();
+#if defined(ENABLE_OTA)
     tc_iot_ota_handler * ota_handler = &handler;
+#endif
 
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
@@ -167,6 +185,7 @@ int main(int argc, char** argv) {
         return 0;
     }
 
+#if defined(ENABLE_OTA)
     tc_iot_hal_snprintf(ota_sub_topic, sizeof(ota_sub_topic), "ota/get/%s/%s", 
             p_client_config->device_info.product_id, 
             p_client_config->device_info.device_name);
@@ -189,6 +208,7 @@ int main(int argc, char** argv) {
             "firm-ver",TC_IOT_FIRM_VERSION,  // 上报固件信息，OTA 升级版本号判断依据
             NULL); // 最后一个参数固定填写 NULL，作为变参结束判断
 
+#endif
     while (!stop) {
         tc_iot_server_loop(tc_iot_get_shadow_client(), 200);
         light_power_usage_calc(tc_iot_get_shadow_client());

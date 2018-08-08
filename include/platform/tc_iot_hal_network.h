@@ -38,7 +38,7 @@ typedef struct tc_iot_tls_data_t {
     mbedtls_pk_context pkey;
     mbedtls_net_context ssl_fd;
 	mbedtls_timing_delay_context delay_timer;
-	mbedtls_ssl_cookie_ctx cookie_ctx;;
+	mbedtls_ssl_cookie_ctx cookie_ctx;
 } tc_iot_tls_data_t;
 
 #endif

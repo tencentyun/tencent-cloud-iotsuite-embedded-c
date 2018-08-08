@@ -18,5 +18,6 @@ int tc_iot_copy_net_context(tc_iot_net_context_t * net_context, tc_iot_net_conte
 #ifdef ENABLE_DTLS
     net_context->tls_config = init->tls_config;
 #endif
+    return 0;
 }
 

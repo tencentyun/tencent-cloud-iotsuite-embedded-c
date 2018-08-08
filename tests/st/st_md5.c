@@ -1,14 +1,13 @@
 #include "tc_iot_inc.h"
 
 void test(const char * data, const char * expected) {
-    int i = 0;
     int len = 0;
     unsigned char md5sum[TC_IOT_MD5_DIGEST_SIZE];
     char md5sum_hexstr[2*TC_IOT_MD5_DIGEST_SIZE + 1];
     if (data) {
         len = strlen(data);
     }
-    tc_iot_md5_digest(data, len, md5sum);
+    tc_iot_md5_digest((const unsigned char *)data, len, md5sum);
     if (0 == strcmp(expected, tc_iot_util_byte_to_hex(md5sum, sizeof(md5sum), md5sum_hexstr, sizeof(md5sum_hexstr)))) {
         tc_iot_hal_printf("%s == %s\n", expected,  md5sum_hexstr);
     } else {

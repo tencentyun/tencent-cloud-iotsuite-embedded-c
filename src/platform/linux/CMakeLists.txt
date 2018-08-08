@@ -20,3 +20,9 @@ endif()
 
 
 add_library(tc_iot_hal STATIC ${tc_iot_hal_srcs})
+
+if(ENABLE_TLS OR ENABLE_DTLS)
+    target_link_libraries(tc_iot_hal mbedtls)
+endif()
+
+

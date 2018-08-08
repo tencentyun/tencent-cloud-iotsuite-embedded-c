@@ -40,7 +40,7 @@ extern tc_unit_test_state_t g_tc_unit_test_state;
 tc_iot_hal_printf("%d\t%d\t%d\tTOTAL\n", state.success+state.failed, state.success, state.failed)
 
 /* STUB */
-#define TEST_GROUP(tg)  int tg( void )
-#define TEST(tg, tc) int tc ( void )
+#define TEST_GROUP(tg)  void tg( void )
+#define TEST(tg, tc) void tc ( void )
 
 #endif /* end of include guard */

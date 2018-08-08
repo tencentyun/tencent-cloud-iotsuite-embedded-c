@@ -20,7 +20,6 @@ tc_iot_ota_state_item * tc_iot_ota_get_state_item(tc_iot_ota_state_e state) {
 }
 
 int tc_iot_ota_set_ota_id(tc_iot_ota_handler * ota_handler, const char * ota_id) {
-    int ota_id_len = 0;
 
     if (!ota_handler) {
         TC_IOT_LOG_ERROR("ota_handler is null");
@@ -65,7 +64,6 @@ int tc_iot_ota_construct(tc_iot_ota_handler * ota_handler, tc_iot_mqtt_client * 
 }
 
 void tc_iot_ota_destroy(tc_iot_ota_handler * ota_handler) {
-    int ret = 0;
 
     if (!ota_handler) {
         TC_IOT_LOG_ERROR("ota_handler is null");
@@ -207,7 +205,6 @@ static int tc_iot_ota_report_firm_info(tc_iot_ota_handler * ota_handler, char * 
 
     int ret = 0;
     int i = 0;
-    int pos = 0;
     const char * info_name = NULL;
     const char * info_value = NULL;
     tc_iot_json_writer writer;
@@ -305,8 +302,6 @@ double tc_iot_ota_find_version_number(const char * version) {
 }
 
 bool tc_iot_ota_version_larger(const char * mine_version, const char * their_version) {
-    const char * mine_pos = NULL;
-    const char * their_pos = NULL;
     double mine_no = 0;
     double their_no = 0;
 

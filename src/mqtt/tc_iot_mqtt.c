@@ -94,7 +94,7 @@ static int _handle_reconnect(tc_iot_mqtt_client* c) {
     }
 
     if (TC_IOT_MAX_RECONNECT_WAIT_INTERVAL < c->reconnect_timeout_ms) {
-#ifdef TC_IOT_MQTT_RECONNECT_FOREVER
+#ifdef ENABLE_MQTT_RECONNECT_FOREVER
         c->reconnect_timeout_ms = TC_IOT_MAX_RECONNECT_WAIT_INTERVAL;
         TC_IOT_LOG_TRACE("mqtt reconnect timer reset to %dms.", c->reconnect_timeout_ms);
 #else
@@ -292,6 +292,8 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     if (timer_left_ms <= 0) {
         timer_left_ms = 1;
     }
+    timer_left_ms += TC_IOT_MQTT_MAX_REMAIN_WAIT_MS;
+
     decodePacket(c, &rem_len, timer_left_ms);
     len += MQTTPacket_encode(
         c->readbuf + 1,
@@ -314,6 +316,8 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         if (timer_left_ms <= 0) {
             timer_left_ms = 1;
         }
+        timer_left_ms += TC_IOT_MQTT_MAX_REMAIN_WAIT_MS;
+
         rc = c->ipstack.do_read(&(c->ipstack), c->readbuf + len, rem_len,
                 timer_left_ms);
         if (rc != rem_len) {
@@ -423,6 +427,7 @@ int keepalive(tc_iot_mqtt_client* c) {
             rc = TC_IOT_FAILURE;
         } else {
             /* TC_IOT_LOG_TRACE("keep alive heartbeat sending, ts=%ld", tc_iot_hal_timestamp(NULL)); */
+            tc_iot_hal_timer_init(&c->ping_timer);
             tc_iot_hal_timer_countdown_second(&c->ping_timer, c->keep_alive_interval);
             len = MQTTSerialize_pingreq(c->buf, c->buf_size);
             if (len > 0 &&

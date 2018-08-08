@@ -131,10 +131,10 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
 int tc_iot_create_post_request(tc_iot_http_request* request,
                                const char* abs_path, int abs_path_len,
                                const char* host, int host_len,
-                               const char* body) {
+                               const char* body, const char * content_type) {
     return tc_iot_create_http_request(request, host, host_len, HTTP_POST, abs_path,
                                abs_path_len, HTTP_VER_1_0,TC_IOT_USER_AGENT,
-                               HTTP_CONTENT_FORM_URLENCODED, body);
+                               content_type, body);
 }
 
 int tc_iot_create_get_request(tc_iot_http_request* request,
@@ -153,21 +153,13 @@ int tc_iot_create_head_request(tc_iot_http_request* request,
                                NULL, NULL);
 }
 
-int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
-                          int secret_len, const char* client_id,
-                          int client_id_len, const char* device_name,
-                          int device_name_len, long expire, long nonce,
-                          const char* product_id, int product_id_len,
+int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret, const char* client_id, const char* device_name,
+                          long expire, long nonce,
+                          const char* product_id,
                           long timestamp) {
-#define SIGN_FORMAT "clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&timestamp=%ld"
-    // SIGN_FORMAT + 3个数字类型字段(expire,nonce,timestamp)值的长度+producut
-    // id+product key+ deviceName(clientId 也有deviceName，所以乘以2)
-    char buf[sizeof(SIGN_FORMAT) + TC_IOT_MAX_DEVICE_NAME_LEN *2 + 20*3 + TC_IOT_MAX_PRODUCT_ID_LEN + TC_IOT_MAX_PRODUCT_KEY_LEN];
-    int buf_len = sizeof(buf);
-    char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
+    unsigned char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
     int ret;
     char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)];
-    int data_len;
     int url_ret;
 
     IF_NULL_RETURN(sign_out, TC_IOT_NULL_POINTER);
@@ -177,30 +169,12 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
     IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
     IF_EQUAL_RETURN(max_sign_len, 0, TC_IOT_INVALID_PARAMETER);
 
-    memset(buf, 0, buf_len);
-    if (client_id_len == strlen(client_id)
-            && device_name_len == strlen(device_name)
-            && product_id_len == strlen(product_id)) {
-        data_len = tc_iot_hal_snprintf(
-            buf, buf_len,
-            SIGN_FORMAT,
-            client_id, device_name, expire, nonce,
-            product_id, timestamp);
-    } else {
-        data_len = tc_iot_hal_snprintf(
-                buf, buf_len,
-                "deviceName=%.*s&nonce=%ld&productId=%.*s&timestamp=%ld",
-                device_name_len, device_name, nonce,
-                product_id_len, product_id, timestamp);
-    }
-
-    if (data_len >= buf_len) {
-        TC_IOT_LOG_ERROR("generate_auth_sign buffer overflow.");
-        return TC_IOT_BUFFER_OVERFLOW;
-    }
-
-    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)secret, secret_len, (unsigned char *)sha256_digest);
-    tc_iot_mem_usage_log("buf", sizeof(buf), data_len);
+    ret = tc_iot_calc_sign(
+        sha256_digest, sizeof(sha256_digest),
+        secret,
+        "clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&timestamp=%ld",
+        client_id, device_name, expire, nonce,
+        product_id, timestamp);
 
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
@@ -209,7 +183,10 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
        tc_iot_mem_usage_log("b64_buf", sizeof(b64_buf), ret);
     }
 
-    TC_IOT_LOG_TRACE("tc_iot_calc_auth_sign source %s sec %s sig %s\n", buf, secret, b64_buf);
+    TC_IOT_LOG_TRACE("tc_iot_calc_auth_sign source clientId=%s&deviceName=%s&expire=%ld&nonce=%ld&productId=%s&timestamp=%ld sec %s sig %s\n", 
+            client_id, device_name, expire, nonce,product_id, timestamp,
+            secret, b64_buf);
+
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
     if (url_ret < max_sign_len) {
         sign_out[url_ret] = '\0';
@@ -263,12 +240,13 @@ static int add_url_long_field(tc_iot_yabuffer_t* buffer, const char* prefix,
 }
 
 int tc_iot_create_auth_request_form(char* form, int max_form_len,
-                                    const char* secret, int secret_len,
-                                    const char* client_id, int client_id_len,
+                                    const char* secret,
+                                    const char* client_id,
                                     const char* device_name,
-                                    int device_name_len, long expire,
-                                    long nonce, const char* product_id,
-                                    int product_id_len, long timestamp) {
+                                    long expire,
+                                    long nonce,
+                                    const char* product_id,
+                                    long timestamp) {
     tc_iot_yabuffer_t form_buf;
     int total = 0;
 
@@ -280,36 +258,32 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
 
     tc_iot_yabuffer_init(&form_buf, form, max_form_len);
     total += add_tc_iot_url_encoded_field(&form_buf, "clientId=", client_id,
-                                          client_id_len);
+                                          strlen(client_id));
     total += add_tc_iot_url_encoded_field(&form_buf, "&deviceName=",
-                                          device_name, device_name_len);
+                                          device_name, strlen(device_name));
     total += add_url_long_field(&form_buf, "&expire=", expire);
     total += add_url_long_field(&form_buf, "&nonce=", nonce);
     total += add_tc_iot_url_encoded_field(&form_buf, "&productId=", product_id,
-                                          product_id_len);
+                                          strlen(product_id));
     total += add_url_long_field(&form_buf, "&timestamp=", timestamp);
     total += add_tc_iot_url_encoded_field(&form_buf, "&signature=", "", 0);
 
     total += tc_iot_calc_auth_sign(
         tc_iot_yabuffer_current(&form_buf), tc_iot_yabuffer_left(&form_buf),
-        secret, secret_len, client_id, client_id_len, device_name,
-        device_name_len, expire, nonce, product_id, product_id_len, timestamp);
+        secret, client_id, device_name,
+        expire, nonce, product_id, timestamp);
     return total;
 }
 
 static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len, 
-                            const char* product_secret, int secret_len,
-                            const char* device_name, int device_name_len, 
-                            const char* product_id,int product_id_len,
+                            const char* product_secret,
+                            const char* device_name,  
+                            const char* product_id,
                             long nonce, 
                             long timestamp    ) {
-#define ACTIVE_FORM_FORMAT "deviceName=%.*s&nonce=%ld&productId=%.*s&timestamp=%ld"
-    char buf[sizeof(ACTIVE_FORM_FORMAT) + TC_IOT_MAX_DEVICE_NAME_LEN + TC_IOT_MAX_PRODUCT_ID_LEN + 20*2];
-    int buf_len = sizeof(buf);
-    char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
+    unsigned char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
     int ret;
     char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)];
-    int data_len;
     int url_ret;
 
     IF_NULL_RETURN(sign_out, TC_IOT_NULL_POINTER);
@@ -318,22 +292,13 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
     IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
     IF_EQUAL_RETURN(max_sign_len, 0, TC_IOT_INVALID_PARAMETER);
 
-    data_len = tc_iot_hal_snprintf(
-        buf, buf_len,
-        ACTIVE_FORM_FORMAT,
-        device_name_len, device_name, nonce,
-        product_id_len, product_id, timestamp);
-    
-    
-    if (data_len >= buf_len) {
-        TC_IOT_LOG_ERROR("generate_active_device_sign buffer overflow.");
-        return TC_IOT_BUFFER_OVERFLOW;
-    }
+    ret = tc_iot_calc_sign(
+        sha256_digest, sizeof(sha256_digest),
+        product_secret,
+        "deviceName=%s&nonce=%ld&productId=%s&timestamp=%ld",
+        device_name, nonce,
+        product_id, timestamp);
 
-    tc_iot_hmac_sha256((unsigned char *)buf, data_len, (const unsigned char *)product_secret, secret_len, (unsigned char *)sha256_digest);
-    
-    tc_iot_mem_usage_log("buf", sizeof(buf), data_len);
-    
     ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
                                sizeof(b64_buf));
 
@@ -345,14 +310,15 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
     if (url_ret < max_sign_len) {
         sign_out[url_ret] = '\0';
     }
-    TC_IOT_LOG_DEBUG(" tc_iot_calc_active_device_sign  source:%s sign:%s", buf , sign_out);
+    TC_IOT_LOG_DEBUG(" tc_iot_calc_active_device_sign deviceName=%s&nonce=%ld&productId=%s&timestamp=%ld sign:%s", 
+            device_name, nonce,product_id, timestamp , sign_out);
     return url_ret;
 }
 
 int tc_iot_create_active_device_form(char* form, int max_form_len,
-                                    const char* product_secret, int secret_len,
-                                    const char* device_name, int device_name_len, 
-                                    const char* product_id,int product_id_len,
+                                    const char* product_secret, 
+                                    const char* device_name,  
+                                    const char* product_id,
                                     long nonce, long timestamp) {
     tc_iot_yabuffer_t form_buf;
     int total = 0;
@@ -366,9 +332,9 @@ int tc_iot_create_active_device_form(char* form, int max_form_len,
     tc_iot_yabuffer_init(&form_buf, form, max_form_len);
     
     total += add_tc_iot_url_encoded_field(&form_buf, "productId=", product_id,
-                                      product_id_len);
+                                      strlen(product_id));
     total += add_tc_iot_url_encoded_field(&form_buf, "&deviceName=",
-                                          device_name, device_name_len);
+                                          device_name, strlen(device_name));
     
     total += add_url_long_field(&form_buf, "&nonce=", nonce);
 
@@ -377,8 +343,8 @@ int tc_iot_create_active_device_form(char* form, int max_form_len,
 
     total += tc_iot_calc_active_device_sign(
         tc_iot_yabuffer_current(&form_buf), tc_iot_yabuffer_left(&form_buf),
-        product_secret, secret_len, 
-        device_name, device_name_len, product_id, product_id_len,
+        product_secret,  
+        device_name, product_id, 
         nonce, timestamp);
     return total;
 }
@@ -424,8 +390,6 @@ int tc_iot_http_get(tc_iot_network_t* network,
     tc_iot_url_parse_result_t result;
     char temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH];
     int written_len;
-    int read_len;
-    int i = 0;
     int ret = tc_iot_url_parse(url, strlen(url), &result);
 
     if (ret < 0) {
@@ -490,8 +454,6 @@ int tc_iot_http_head(tc_iot_network_t* network,
     tc_iot_url_parse_result_t result;
     char temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH];
     int written_len;
-    int read_len;
-    int i = 0;
     int ret = tc_iot_url_parse(url, strlen(url), &result);
 
     if (ret < 0) {
@@ -535,5 +497,241 @@ int tc_iot_http_head(tc_iot_network_t* network,
     } else {
         return TC_IOT_FAILURE;
     }
+}
+
+static int http_post_data(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* encoded_body, char* resp, int resp_max_len,
+                         int timeout_ms, const char * content_type) {
+    tc_iot_url_parse_result_t result;
+    char temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH];
+    int read_len;
+    int written_len;
+    int ret = tc_iot_url_parse(url, strlen(url), &result);
+
+    if (ret < 0) {
+        return ret;
+    }
+
+    if (result.path_len) {
+        ret = tc_iot_create_post_request(
+            request, url + result.path_start, result.path_len,
+            url + result.host_start, result.host_len, encoded_body, content_type);
+    } else {
+        ret =
+            tc_iot_create_post_request(request, "/", 1, url + result.host_start,
+                                       result.host_len, encoded_body, content_type);
+    }
+
+    if (result.host_len >= sizeof(temp_host)) {
+        TC_IOT_LOG_ERROR("host address too long.");
+        return -1;
+    }
+
+    if (result.over_tls != network->net_context.use_tls) {
+        TC_IOT_LOG_WARN("network type not match: url tls=%d, context tls=%d",
+                 (int)result.over_tls, (int)network->net_context.use_tls);
+        return -1;
+    }
+
+    strncpy(temp_host, url + result.host_start, result.host_len);
+    temp_host[result.host_len] = '\0';
+    tc_iot_mem_usage_log("temp_host[TC_IOT_HTTP_MAX_HOST_LENGTH]", sizeof(temp_host), result.host_len);
+
+    TC_IOT_LOG_TRACE("remote=%s:%d", temp_host, result.port);
+
+    network->do_connect(network, temp_host, result.port);
+    written_len = network->do_write(network, (unsigned char *)request->buf.data,
+                                    request->buf.pos, timeout_ms);
+
+    TC_IOT_LOG_TRACE("request with,len=%d:\n%s", written_len, request->buf.data);
+    read_len = network->do_read(network, (unsigned char *)resp, resp_max_len, timeout_ms);
+    if (resp_max_len > read_len) {
+        resp[read_len] = '\0';
+        TC_IOT_LOG_TRACE("response with:\n%s", resp);
+    } else {
+        resp[resp_max_len-1] = '\0';
+        TC_IOT_LOG_ERROR("response with(max=%d > read=%d):\n%s...", resp_max_len, read_len, resp);
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    network->do_disconnect(network);
+
+    return read_len;
+}
+
+int http_post_urlencoded(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* encoded_body, char* resp, int resp_max_len,
+                         int timeout_ms) {
+    return http_post_data(network, request, url, encoded_body, resp, resp_max_len, timeout_ms, HTTP_CONTENT_FORM_URLENCODED);
+}
+
+int http_post_json(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* json_body, char* resp, int resp_max_len,
+                         int timeout_ms) {
+    return http_post_data(network, request, url, json_body, resp, resp_max_len, timeout_ms, HTTP_CONTENT_JSON);
+}
+
+int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret, const char * format, ...) {
+    va_list ap;
+    const unsigned char * pos  = (const unsigned char *)format;
+    const unsigned char * prev = (const unsigned char *)format;
+    char num_buf[20];
+    char format_str[4];
+    const char * var_str;
+
+    tc_iot_hmac_sha256_t hmac;
+    tc_iot_hmac_sha256_init(&hmac, (unsigned char *)secret, strlen(secret));
+    TC_IOT_LOG_TRACE("secret=%s,format=%s",secret, format);
+
+    if (output_len < TC_IOT_SHA256_DIGEST_SIZE) {
+        return TC_IOT_BUFFER_OVERFLOW;
+    }
+
+    va_start(ap, format);
+    
+    while(*pos) {
+        if ('%' == *pos) {
+            pos++;
+            if ((pos-1) > prev) {
+                tc_iot_sha256_update(&(hmac.sha), prev, pos-1-prev);
+                prev = pos;
+            }
+            switch(*pos) {
+                case 'c':
+                case 'd':
+                case 'i':
+                    tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%%c", *pos);
+                    tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, int));
+                    tc_iot_sha256_update(&(hmac.sha), (const unsigned char *)num_buf, strlen(num_buf));
+                    break;
+                case 'u':
+                case 'o':
+                case 'x':
+                case 'X':
+                    tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%%c", *pos);
+                    tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, unsigned int));
+                    tc_iot_sha256_update(&(hmac.sha), (const unsigned char *)num_buf, strlen(num_buf));
+                    break;
+                case 'f':
+                case 'F':
+                case 'e':
+                case 'E':
+                case 'g':
+                case 'G':
+                case 'a':
+                    tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%%c", *pos);
+                    tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, double));
+                    tc_iot_sha256_update(&(hmac.sha), (const unsigned char *)num_buf, strlen(num_buf));
+                    break;
+                case 's':
+                    var_str = va_arg(ap, const char *);
+                    tc_iot_sha256_update(&(hmac.sha), (const unsigned char *)var_str, strlen(var_str));
+                    break;
+
+                case 'l':
+                    pos++;
+                    switch(*pos) {
+                        case 'd':
+                        case 'i':
+                            tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%l%c", *pos);
+                            tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, long int));
+                            tc_iot_sha256_update(&(hmac.sha), (const unsigned char *)num_buf, strlen(num_buf));
+                            break;
+                        case 'u':
+                        case 'o':
+                        case 'x':
+                        case 'X':
+                            tc_iot_hal_snprintf(format_str, sizeof(format_str), "%%l%c", *pos);
+                            tc_iot_hal_snprintf(num_buf, sizeof(num_buf), format_str, va_arg(ap, unsigned long int));
+                            tc_iot_sha256_update(&(hmac.sha), (const unsigned char *)num_buf, strlen(num_buf));
+                            break;
+                        default:
+                            TC_IOT_LOG_ERROR("unkown *pos=%c", *pos);
+                            va_end(ap);
+                            return TC_IOT_INVALID_PARAMETER;
+                    }
+                    break;
+                case '%':
+                    pos++;
+                    continue;
+                default:
+                    TC_IOT_LOG_ERROR("unkown *pos=%c", *pos);
+                    va_end(ap);
+                    return TC_IOT_INVALID_PARAMETER;
+            }
+            pos++;
+            prev = pos;
+        } else {
+            pos++;
+        }
+    }
+
+    if ((pos-1) > prev) {
+        tc_iot_sha256_update(&(hmac.sha), prev, pos-1-prev);
+    }
+
+    tc_iot_hmac_sha256_finish(&hmac, NULL, 0);
+
+    memcpy(output, hmac.digest, TC_IOT_SHA256_DIGEST_SIZE);
+
+    va_end(ap);
+
+    return TC_IOT_SHA256_DIGEST_SIZE;    
+}
+
+int tc_iot_create_mqapi_rpc_json(char* form, int max_form_len,
+                                    const char* secret,
+                                    const char* device_name,
+                                    const char* message,
+                                    long nonce,
+                                    const char* product_id,
+                                    long timestamp
+                                    ) {
+    unsigned char sha256_digest[TC_IOT_SHA256_DIGEST_SIZE];
+    int ret;
+    char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)];
+    tc_iot_json_writer writer;
+    tc_iot_json_writer * w = &writer;
+
+    IF_NULL_RETURN(form, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(secret, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(device_name, TC_IOT_NULL_POINTER);
+    IF_NULL_RETURN(product_id, TC_IOT_NULL_POINTER);
+
+    ret = tc_iot_calc_sign(
+            sha256_digest, sizeof(sha256_digest),
+            secret,
+            "deviceName=%s&message=%s&nonce=%ld&productId=%s&timestamp=%ld",
+             device_name,message,nonce,product_id,timestamp
+        );
+
+    ret = tc_iot_base64_encode((unsigned char *)sha256_digest, sizeof(sha256_digest), b64_buf,
+                               sizeof(b64_buf));
+    if (ret < sizeof(b64_buf) && ret > 0) {
+       b64_buf[ret] = '\0'; 
+       tc_iot_mem_usage_log("b64_buf", sizeof(b64_buf), ret);
+    } else {
+        TC_IOT_LOG_ERROR("b64_buf for sha256 digest overflow, ret=%d.", ret);
+        if (ret < 0) {
+            return ret;
+        } else {
+            return TC_IOT_BUFFER_OVERFLOW;
+        }
+    }
+
+    tc_iot_json_writer_open(w, form, max_form_len);
+    tc_iot_json_writer_string(w ,"productId", product_id);
+    tc_iot_json_writer_string(w ,"deviceName", device_name);
+    tc_iot_json_writer_int(w ,"nonce", nonce);
+    tc_iot_json_writer_int(w ,"timestamp", timestamp);
+    tc_iot_json_writer_string(w ,"message", message);
+    tc_iot_json_writer_string(w ,"signature", b64_buf);
+    ret = tc_iot_json_writer_close(w);
+
+    return ret;
 }
 

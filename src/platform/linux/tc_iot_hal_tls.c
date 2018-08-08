@@ -65,7 +65,6 @@ int tc_iot_hal_tls_read(tc_iot_network_t* network, unsigned char* buffer,
 int tc_iot_hal_tls_write(tc_iot_network_t* network, const unsigned char* buffer,
                          int len, int timeout_ms) {
     int written_len = 0;
-    bool is_write_failed = false;
     int ret = 0;
     tc_iot_tls_data_t* tls_data = &(network->net_context.tls_data);
     tc_iot_timer timer;
@@ -322,6 +321,7 @@ int tc_iot_hal_tls_destroy(tc_iot_network_t* network) {
     mbedtls_x509_crt_free(&(tls_data->cacert));
     mbedtls_pk_free(&(tls_data->pkey));
     TC_IOT_LOG_TRACE("network destroied...");
+    return TC_IOT_SUCCESS;
 }
 
 int tc_iot_hal_tls_init(tc_iot_network_t* network,
@@ -354,7 +354,7 @@ int tc_iot_hal_tls_init(tc_iot_network_t* network,
     if (tls_config->root_ca_in_mem) {
         TC_IOT_LOG_TRACE("Loading preset root CA cert...");
         ret = mbedtls_x509_crt_parse(&(tls_data->cacert),
-                                     tls_config->root_ca_in_mem,
+                                     (unsigned char *)tls_config->root_ca_in_mem,
                                      strlen(tls_config->root_ca_in_mem) + 1);
         if (ret < 0) {
             TC_IOT_LOG_ERROR(

@@ -38,7 +38,6 @@ tc_iot_mqtt_client_config g_client_config = {
 };
 
 int main(int argc, char** argv) {
-    int ret = 0;
     tc_iot_mqtt_client_config * p_client_config;
 
     if (argc == 2 && strcmp(argv[1],"--firm-version") == 0) {
@@ -121,7 +120,6 @@ void sig_handler(int sig) {
 
 int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     int ret;
-    char * action_get;
     int timeout = 200;
     tc_iot_ota_handler * ota_handler = &handler;
 
@@ -170,5 +168,6 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
 
     tc_iot_mqtt_client_disconnect(p_client);
     tc_iot_mqtt_client_destroy(p_client);
+    return 0;
 }
 

@@ -57,4 +57,9 @@
 | 5 | tc_iot_ota_request_content_length | 向固件下载服务器，发起 HTTP HEAD 请求，获取固件长度。|
 | 6 | tc_iot_ota_download | 根据指定的固件 URL 地址，下载固件 |
 
+## 5. HTTP 接口
+| 序号        | 函数名      | 说明        |
+| ---------- | ---------- | ---------- |
+| 1 | tc_iot_http_mqapi_rpc | 通过 HTTP 接口 调用数据模板数据服务。|
+
 

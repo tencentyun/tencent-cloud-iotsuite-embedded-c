@@ -3,24 +3,6 @@
 
 void parse_command(tc_iot_coap_client_config * config, int argc, char ** argv) ;
 
-static void _tc_iot_coap_con_get_time_handler(tc_iot_coap_client * client, tc_iot_coap_con_status_e ack_status, 
-        tc_iot_coap_message * message , void * session_context) {
-    unsigned char * payload = NULL;
-    int payload_len;
-
-    if (ack_status == TC_IOT_COAP_CON_TIMEOUT) {
-        TC_IOT_LOG_ERROR("message timeout");
-        return;
-    }
-
-    tc_iot_coap_get_message_payload(message, &payload_len, &payload);
-    if (message && payload) {
-        TC_IOT_LOG_TRACE("len=%d,payload=%s", payload_len, payload);
-    } else {
-        TC_IOT_LOG_TRACE("[no payload]");
-    }
-}
-
 void _coap_con_default_handler(void * client, tc_iot_coap_message * message ) {
     unsigned char * payload = NULL;
     int payload_len;
@@ -30,7 +12,7 @@ void _coap_con_default_handler(void * client, tc_iot_coap_message * message ) {
 
     tc_iot_coap_get_message_payload(message, &payload_len, &payload);
     if (payload == NULL) {
-        payload = "";
+        payload = (unsigned char *)"";
     }
 
     TC_IOT_LOG_TRACE("response coap code=%s,payload_len=%d,message=%s",
@@ -58,6 +40,27 @@ void sig_handler(int sig) {
         exit(0);
     }
 }
+
+#if 0
+
+static void _tc_iot_coap_con_get_time_handler(tc_iot_coap_client * client, tc_iot_coap_con_status_e ack_status, 
+        tc_iot_coap_message * message , void * session_context) {
+    unsigned char * payload = NULL;
+    int payload_len;
+
+    if (ack_status == TC_IOT_COAP_CON_TIMEOUT) {
+        TC_IOT_LOG_ERROR("message timeout");
+        return;
+    }
+
+    tc_iot_coap_get_message_payload(message, &payload_len, &payload);
+    if (message && payload) {
+        TC_IOT_LOG_TRACE("len=%d,payload=%s", payload_len, payload);
+    } else {
+        TC_IOT_LOG_TRACE("[no payload]");
+    }
+}
+
 
 static void _tc_iot_coap_get_time( tc_iot_coap_client * c) {
     const char * uri_path = "time";
@@ -99,6 +102,8 @@ static void _tc_iot_coap_get_wellknown( tc_iot_coap_client * c) {
     }
 }
 
+#endif
+
 static void _coap_con_rpc_handler(tc_iot_coap_client * client, tc_iot_coap_con_status_e ack_status, 
         tc_iot_coap_message * message , void * session_context) {
     unsigned char * payload = NULL;
@@ -114,7 +119,7 @@ static void _coap_con_rpc_handler(tc_iot_coap_client * client, tc_iot_coap_con_s
     tc_iot_coap_get_message_payload(message, &payload_len, &payload);
     if (message_code != COAP_CODE_201_CREATED) {
         if (payload == NULL) {
-            payload = "";
+            payload = (unsigned char *)"";
         }
         TC_IOT_LOG_ERROR("publish failed, response coap code=%s,message=%s",
                 tc_iot_coap_get_message_code_str(message_code),

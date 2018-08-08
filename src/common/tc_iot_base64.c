@@ -1,12 +1,12 @@
 #include "tc_iot_inc.h"
 
-const static char encoding_table[] = {
+const static unsigned char encoding_table[] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
-const static char decoding_table[256] = {
+const static unsigned char decoding_table[256] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  62, 63, 62, 62, 63, 52, 53, 54, 55, 56, 57,
@@ -77,10 +77,10 @@ int tc_iot_base64_decode(const char *data, int input_length,
     IF_LESS_RETURN(max_output_len, output_length, TC_IOT_INVALID_PARAMETER);
 
     for (i = 0, j = 0; i < input_length;) {
-        extet_a = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        extet_b = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        extet_c = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
-        extet_d = data[i] == '=' ? 0 & i++ : decoding_table[data[i++]];
+        extet_a = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
+        extet_b = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
+        extet_c = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
+        extet_d = data[i] == '=' ? 0 & i++ : decoding_table[(unsigned char)data[i++]];
 
         triple = (extet_a << 3 * 6) + (extet_b << 2 * 6) +
                           (extet_c << 1 * 6) + (extet_d << 0 * 6);

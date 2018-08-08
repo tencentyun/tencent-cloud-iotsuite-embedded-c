@@ -1,0 +1,24 @@
+#ifndef TC_IOT_COMPILE_FLAGS_H
+#define TC_IOT_COMPILE_FLAGS_H
+
+#cmakedefine ENABLE_MQTT
+#cmakedefine ENABLE_OTA
+#cmakedefine ENABLE_DATA_TEMPLATE
+
+#cmakedefine ENABLE_COAP
+
+#cmakedefine ENABLE_TLS
+#cmakedefine ENABLE_DTLS
+
+#cmakedefine ENABLE_STACK_TRACE_LOG
+#cmakedefine ENABLE_MQTT_RECONNECT_FOREVER
+
+// Enabled Log Levels
+#cmakedefine ENABLE_TC_IOT_LOG_TRACE
+#cmakedefine ENABLE_TC_IOT_LOG_DEBUG
+#cmakedefine ENABLE_TC_IOT_LOG_INFO
+#cmakedefine ENABLE_TC_IOT_LOG_WARN
+#cmakedefine ENABLE_TC_IOT_LOG_ERROR
+#cmakedefine ENABLE_TC_IOT_LOG_FATAL
+
+#endif /* end of include guard */

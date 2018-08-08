@@ -30,16 +30,12 @@ static const uint32_t k[64] = {
 };
 
 static void tc_iot_sha256_init(tc_iot_sha256_t *p_sha) {
-    if (!p_sha) {
-        return;
-    }
-
     memset(p_sha, 0, sizeof(tc_iot_sha256_t));
     memcpy(p_sha->state, &sha256_initial_state[0],
            TC_IOT_SHA256_STATE_SIZE * sizeof(uint32_t));
 }
 
-static void tc_iot_sha256_update(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
+void tc_iot_sha256_update(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
                                  uint32_t len) {
     int i, j, t;
     int index;
@@ -47,10 +43,6 @@ static void tc_iot_sha256_update(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
     uint32_t w[64], a, b, c, d, e, f, g, h;
     uint32_t is0, is1, ms0, ms1;
     uint32_t ch, temp1, temp2, maj;
-
-    if ((!p_sha) || (!buffer)) {
-        return;
-    }
 
     for (i = 7; i >= 0; --i) {
         if (i == 7) {
@@ -125,14 +117,6 @@ static void tc_iot_sha256_finish(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
                                  uint32_t len) {
     int i;
     uint8_t terminator[64 + 8] = {0x80};
-    if (!p_sha) {
-        return;
-    }
-
-    if (!buffer) {
-        return;
-    }
-
     if (len > 0) {
         tc_iot_sha256_update(p_sha, buffer, len);
     }
@@ -149,7 +133,7 @@ static void tc_iot_sha256_finish(tc_iot_sha256_t *p_sha, const uint8_t *buffer,
     }
 }
 
-static void tc_iot_hmac_sha256_init(tc_iot_hmac_sha256_t *hmac,
+void tc_iot_hmac_sha256_init(tc_iot_hmac_sha256_t *hmac,
                                     const uint8_t *key, int len) {
     int i;
     if (len <= TC_IOT_SHA256_KEY_SIZE) {
@@ -176,7 +160,7 @@ static void tc_iot_hmac_sha256_init(tc_iot_hmac_sha256_t *hmac,
 }
 
 
-static void tc_iot_hmac_sha256_finish(tc_iot_hmac_sha256_t *hmac,
+void tc_iot_hmac_sha256_finish(tc_iot_hmac_sha256_t *hmac,
                                       const uint8_t *buffer, int len) {
     int i;
     tc_iot_sha256_finish(&(hmac->sha), buffer, len);

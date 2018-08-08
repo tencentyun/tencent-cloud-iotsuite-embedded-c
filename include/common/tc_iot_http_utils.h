@@ -140,6 +140,7 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
  * @param host 服务器地址
  * @param host_len 服务器地址长度
  * @param body HTTP 请求Body
+ * @param content_type HTTP 请求Body 格式
  *
  * @return 返回码
  * @see tc_iot_sys_code_e
@@ -147,7 +148,7 @@ int tc_iot_create_http_request(tc_iot_http_request* request, const char* host,
 int tc_iot_create_post_request(tc_iot_http_request* request,
                                const char* abs_path, int abs_path_len,
                                const char* host, int host_len,
-                               const char* body);
+                               const char* body, const char * content_type);
 
 /**
  * @brief tc_iot_create_get_request 创建 HTTP GET 请求
@@ -171,25 +172,21 @@ int tc_iot_create_get_request(tc_iot_http_request* request,
  * @param sign_out 签名( Base64 编码)结果
  * @param max_sign_len 签名( Bsse64 编码)结果区长度
  * @param secret 签名密钥
- * @param secret_len 签名密钥长度
  * @param client_id Client Id
- * @param client_id_len Client Id 长度
  * @param device_name Device Name
- * @param device_name_len Device Name 长度
  * @param expire Token有效期
  * @param nonce 随机数
  * @param product_id Product Id
- * @param product_id_len Product Id 长度
  * @param timestamp 时间戳
  *
  * @return >=0 签名结果实际长度，<0 错误码
  * @see tc_iot_sys_code_e
  */
 int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
-                          int secret_len, const char* client_id,
-                          int client_id_len, const char* device_name,
-                          int device_name_len, long expire, long nonce,
-                          const char* product_id, int product_id_len,
+                          const char* client_id,
+                          const char* device_name,
+                          long expire, long nonce,
+                          const char* product_id, 
                           long timestamp);
 
 
@@ -199,27 +196,24 @@ int tc_iot_calc_auth_sign(char* sign_out, int max_sign_len, const char* secret,
  * @param form 结果缓存区
  * @param max_form_len 结果缓存区最大大小
  * @param secret 签名密钥
- * @param secret_len 签名密钥长度
  * @param client_id Client Id
- * @param client_id_len Client Id 长度
  * @param device_name Device Name
- * @param device_name_len Device Name 长度
  * @param expire Token有效期
  * @param nonce 随机数
  * @param product_id Product Id
- * @param product_id_len Product Id 长度
  * @param timestamp 时间戳
  *
  * @return >=0 签名结果实际长度，<0 错误码
  * @see tc_iot_sys_code_e
  */
-int tc_iot_create_auth_request_form(char* form, int max_form_len,
-                                    const char* secret, int secret_len,
-                                    const char* client_id, int client_id_len,
+int tc_iot_create_auth_request_form(char* form,  int max_form_len,
+                                    const char* secret, 
+                                    const char* client_id, 
                                     const char* device_name,
-                                    int device_name_len, long expire,
-                                    long nonce, const char* product_id,
-                                    int product_id_len, long timestamp);
+                                    long expire,
+                                    long nonce,
+                                    const char* product_id,
+                                    long timestamp);
 
 /**
  * @brief tc_iot_create_active_device_form 构造 get device 设备激活 HTTP 签名请求 form
@@ -227,20 +221,17 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
  * @param form 结果缓存区
  * @param max_form_len 结果缓存区最大大小
  * @param secret 签名密钥, 请使用控制台的 product password
- * @param secret_len 签名密钥长度
  * @param device_name Device Name
- * @param device_name_len Device Name 长度
  * @param product_id Product Id , 例子 : "iot-dalqbv1g"	
- * @param product_id_len Product Id 长度
  * @param nonce 随机数
  * @param timestamp 时间戳 *
  * @return >=0 签名结果实际长度，<0 错误码
  * @see tc_iot_sys_code_e
  */
 int tc_iot_create_active_device_form(char* form, int max_form_len,
-									const char* product_secret, int secret_len,
-                                    const char* device_name, int device_name_len, 
-									const char* product_id,int product_id_len,
+									const char* product_secret, 
+                                    const char* device_name,  
+									const char* product_id,
                                     long nonce, long timestamp);
 
 /**
@@ -260,5 +251,24 @@ int tc_iot_http_get(tc_iot_network_t* network,
 int tc_iot_http_head(tc_iot_network_t* network,
                          tc_iot_http_request* request, const char* url,
                          int timeout_ms);
+int http_post_urlencoded(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* encoded_body, char* resp, int resp_max_len,
+                         int timeout_ms);
+int http_post_json(tc_iot_network_t* network,
+                         tc_iot_http_request* request, const char* url,
+                         const char* json_body, char* resp, int resp_max_len,
+                         int timeout_ms);
+
+int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret, const char * format, ...) ;
+
+int tc_iot_create_mqapi_rpc_json(char* form, int max_form_len,
+                                    const char* secret,
+                                    const char* device_name,
+                                    const char* message,
+                                    long nonce,
+                                    const char* product_id,
+                                    long timestamp
+                                    );
 
 #endif /* end of include guard */

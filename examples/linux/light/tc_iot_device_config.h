@@ -1,6 +1,8 @@
 #ifndef TC_IOT_DEVICE_CONFIG_H
 #define TC_IOT_DEVICE_CONFIG_H
 
+#include "tc_iot_config.h"
+
 /* 设备激活及获取 secret 接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/secret */
 /* Token接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
 /* 机房标识：
