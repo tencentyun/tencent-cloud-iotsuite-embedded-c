@@ -10,27 +10,30 @@
 | param_number | 数值       | 可写       | 0,4095               |
 | param_string | 字符串     | 可写       | 64                   |
 
-3. 修改 tc_iot_coap_device_config.h 编译配置文件，配置产品信息相关参数，详见注释：
+3. 进入【基本信息】页，点击【导出】，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/advanced_edition/coap 目录下覆盖 iot-product.json 文件。
+4. 通过脚本自动生成 advaneced_mqtt 设备的逻辑框架及业务数据配置代码。
+
 ```shell
-/* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
-/* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-7hjcfc6k"
-/* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-5ns8xh714"
-/* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
-/* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
+# 进入工具脚本目录
+cd tools
+python tc_iot_code_generator.py -c ../examples/advanced_edition/coap/iot-product.json code_templates/coap/*
+```
+
+执行成功后会看到有如下提示信息：
+```shell
+加载 ../examples/advanced_edition/coap/iot-product.json 文件成功
+文件 ../examples/advanced_edition/coap/coap_app_main.c 生成成功
+文件 ../examples/advanced_edition/coap/tc_iot_coap_device_config.h 生成成功
+文件 ../examples/advanced_edition/coap/tc_iot_device_logic.h 生成成功
 
 ```
 
-4. 代码及配置生成成功后，进入 build 目录，开始编译。
+5. 代码及配置生成成功后，进入 build 目录，开始编译。
 
 ```shell
 cd build
 make
 ```
-
 
 ## 运行程序
 编译完成后，在 build/bin/ 目录下，会产生一个 advanced_coap 程序。
