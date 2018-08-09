@@ -4,7 +4,7 @@
 
 /* 设备当前状态数据 */
 tc_iot_shadow_local_data g_tc_iot_device_local_data = {
-    false,
+        false,
     TC_IOT_PROP_param_enum_enum_a,
     0,
     {'\0'},
@@ -99,16 +99,17 @@ int do_coap_update(tc_iot_coap_client * p_coap_client,
     tc_iot_json_writer_string(w ,"method", "update");
     tc_iot_json_writer_object_begin(w ,"state");
     tc_iot_json_writer_object_begin(w ,"reported");
+
     if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_param_bool)) {
         tc_iot_json_writer_bool(w ,"param_bool", p_local_data->param_bool);
     }
 
-    if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_param_number)) {
-        tc_iot_json_writer_int(w ,"param_number", p_local_data->param_bool);
-    }
-
     if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_param_enum)) {
         tc_iot_json_writer_int(w ,"param_enum", p_local_data->param_enum);
+    }
+
+    if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_param_number)) {
+        tc_iot_json_writer_decimal(w ,"param_number", p_local_data->param_number);
     }
 
     if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_param_string)) {
@@ -151,16 +152,17 @@ int do_coap_delete(tc_iot_coap_client * p_coap_client,
     tc_iot_json_writer_string(w ,"method", "delete");
     tc_iot_json_writer_object_begin(w ,"state");
     tc_iot_json_writer_object_begin(w ,"desired");
+
     if (TC_IOT_BIT_GET(desired_bits, TC_IOT_PROP_param_bool)) {
         tc_iot_json_writer_null(w ,"param_bool");
     }
 
-    if (TC_IOT_BIT_GET(desired_bits, TC_IOT_PROP_param_number)) {
-        tc_iot_json_writer_null(w ,"param_number");
-    }
-
     if (TC_IOT_BIT_GET(desired_bits, TC_IOT_PROP_param_enum)) {
         tc_iot_json_writer_null(w ,"param_enum");
+    }
+
+    if (TC_IOT_BIT_GET(desired_bits, TC_IOT_PROP_param_number)) {
+        tc_iot_json_writer_null(w ,"param_number");
     }
 
     if (TC_IOT_BIT_GET(desired_bits, TC_IOT_PROP_param_string)) {
@@ -249,26 +251,38 @@ int _process_desired( const char * doc_start, jsmntok_t * json_token, int tok_co
         memcpy(val_buf, val_start, val_len);
         val_buf[val_len] = '\0';
         
+
         if (strcmp("param_bool", key_buf) == 0 ) {
             TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_param_bool);
             TC_IOT_LOG_TRACE("desired field: %s=%s->%s", key_buf, p_local_data->param_bool?"true":"false", val_buf);
             p_local_data->param_bool = (0 == strcmp(val_buf, "true"));
-        } else if (strcmp("param_enum", key_buf) == 0 ) {
+            continue;
+        }
+
+        if (strcmp("param_enum", key_buf) == 0 ) {
             TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_param_enum);
             TC_IOT_LOG_TRACE("desired field: %s=%d->%s", key_buf, p_local_data->param_enum, val_buf);
             p_local_data->param_enum = atoi(val_buf);
-        } else if (strcmp("param_number", key_buf) == 0 ) {
+            continue;
+        }
+
+        if (strcmp("param_number", key_buf) == 0 ) {
             TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_param_number);
             TC_IOT_LOG_TRACE("desired field: %s=%f->%s", key_buf, p_local_data->param_number, val_buf);
             p_local_data->param_number = atof(val_buf);
-        } else if (strcmp("param_string", key_buf) == 0 ) {
+            continue;
+        } 
+
+        if (strcmp("param_string", key_buf) == 0 ) {
             TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_param_string);
             TC_IOT_LOG_TRACE("desired field: %s=%s->%s", key_buf, p_local_data->param_string, val_buf);
             strcpy(p_local_data->param_string, val_buf);
-        } else {
-            TC_IOT_LOG_ERROR("unknown desired field: %s=%s", key_buf, val_buf);
             continue;
-        }
+        } 
+
+
+        TC_IOT_LOG_ERROR("unknown desired field: %s=%s", key_buf, val_buf);
+        continue;
     }
     return TC_IOT_SUCCESS;
 }
