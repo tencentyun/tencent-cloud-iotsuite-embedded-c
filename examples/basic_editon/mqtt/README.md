@@ -92,34 +92,6 @@ make
 #### MQTT 收发消息
 收发 MQTT 消息，参见 demo_mqtt.c 中tc_iot_mqtt_client_publish(发送消息) & tc_iot_mqtt_client_subscribe(订阅 Topic) 。
 
-### 基于自定义二进制协议的 MQTT 示例
-编译完成后，在 build/bin/ 目录下，会产生一个 basic_mqtt_binary 程序。
-
-```shell
-# 运行 basic_mqtt_binary 设备端应用，
-# 此种方式运行，可以有效查看日志及抓包定位问题
-# 备注：
-# -d device_xxxx 参数是指定当前连接使用的设备名
-# 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_NAME 指定了
-# 正确的设备名称，则命令行执行时，可以不用指定 -d device_xxx 参数。
-#
-# -s 指定Device Secret
-# 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
-# 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
-# ./basic_mqtt_binary --trace -p 1883
-
-./basic_mqtt_binary -d device_xxxx -s secret_abc --trace -p 1883
-
-# 如运行正常未见异常
-# 也可用默认模式来执行，避免日志干扰
-./basic_mqtt_binary -d device_xxxx
-
-```
-
-#### MQTT 收发消息
-1. 收发 MQTT 消息，参见 demo_custom_topic.c 中tc_iot_mqtt_client_publish(发送消息) & tc_iot_mqtt_client_subscribe(订阅 Topic) 。
-2. 本示例仅定义了的 ${product_id}/${device_name}/cmd 1个Topic，同时用于上行和下行消息收发，仅为演示使用。实际使用时，应该至少定义2个Topic，分别作为上行和下行用。
-
 ## SDK MQTT API 样例及说明
 
 ### 1. 初始化 SDK

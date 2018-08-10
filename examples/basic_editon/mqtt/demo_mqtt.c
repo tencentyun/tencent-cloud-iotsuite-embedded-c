@@ -102,9 +102,9 @@ int main(int argc, char** argv) {
         tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
     }
 
-    snprintf(sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT,
+    snprintf(sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, "%s/%s/cmd",
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-    snprintf(pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT,
+    snprintf(pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, "%s/%s/update",
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
     tc_iot_hal_printf("sub topic: %s\n", sub_topic);
@@ -112,9 +112,47 @@ int main(int argc, char** argv) {
     run_mqtt(&g_client_config);
 }
 
+void dump_payload(const char * prefix, const char * payload, int payload_len) {
+    int i = 0;
+    if (strlen(payload) == payload_len) {
+        tc_iot_hal_printf("%s %s", prefix , payload);
+    }
+
+    for (i = 0; i < payload_len; i++) {
+        if ((i % 16) == 0) {
+            tc_iot_hal_printf("\n%s", prefix);
+        }
+        tc_iot_hal_printf(" %X",payload[i]);
+    }
+    tc_iot_hal_printf("\n");
+}
+
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
-    tc_iot_hal_printf("[s->c] %s\n", (char*)message->payload);
+    int ret = 0;
+    dump_payload("[s->c]", (char*)message->payload, message->payloadlen);
+
+    tc_iot_mqtt_message pubmsg;
+    memset(&pubmsg, '\0', sizeof(pubmsg));
+    pubmsg.payload = message->payload;
+    pubmsg.payloadlen = message->payloadlen;
+    pubmsg.qos = TC_IOT_QOS1;
+    pubmsg.retained = 0;
+    pubmsg.dup = 0;
+
+    dump_payload("[c->s]", (char*)pubmsg.payload, pubmsg.payloadlen);
+
+    ret = tc_iot_mqtt_client_publish(md->mqtt_client, pub_topic, &pubmsg);
+    if (TC_IOT_SUCCESS != ret) {
+        if (ret != TC_IOT_MQTT_RECONNECT_IN_PROGRESS) {
+            tc_iot_hal_printf("publish to topic %s failed, trouble shooting guide: " "%s#%d\n", pub_topic, TC_IOT_TROUBLE_SHOOTING_URL, ret);
+            return;
+        } else {
+            tc_iot_hal_printf("publish to topic %s failed, try reconnecting, "
+                    "or visit trouble shooting guide: " "%s#%d\n", pub_topic, TC_IOT_TROUBLE_SHOOTING_URL, ret);
+        }
+    }
+
 }
 
 static volatile int stop = 0;
@@ -137,7 +175,6 @@ void sig_handler(int sig) {
 
 int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
     int ret;
-    char * action_get;
     int timeout = 2000;
 
     signal(SIGINT, sig_handler);
@@ -160,30 +197,7 @@ int run_mqtt(tc_iot_mqtt_client_config* p_client_config) {
         return TC_IOT_FAILURE;
     }
 
-    tc_iot_mqtt_client_yield(p_client, timeout);
-
     while (!stop) {
-        action_get = "{\"method\":\"get\"}";
-
-        tc_iot_mqtt_message pubmsg;
-        memset(&pubmsg, '\0', sizeof(pubmsg));
-        pubmsg.payload = action_get;
-        pubmsg.payloadlen = strlen(pubmsg.payload);
-        pubmsg.qos = TC_IOT_QOS1;
-        pubmsg.retained = 0;
-        pubmsg.dup = 0;
-        tc_iot_hal_printf("[c->s] shadow_get\n");
-        ret = tc_iot_mqtt_client_publish(p_client, pub_topic, &pubmsg);
-        if (TC_IOT_SUCCESS != ret) {
-            if (ret != TC_IOT_MQTT_RECONNECT_IN_PROGRESS) {
-                tc_iot_hal_printf("publish to topic %s failed, trouble shooting guide: " "%s#%d\n", pub_topic, TC_IOT_TROUBLE_SHOOTING_URL, ret);
-                break;
-            } else {
-                tc_iot_hal_printf("publish to topic %s failed, try reconnecting, "
-                        "or visit trouble shooting guide: " "%s#%d\n", pub_topic, TC_IOT_TROUBLE_SHOOTING_URL, ret);
-            }
-        }
-
         tc_iot_mqtt_client_yield(p_client, timeout);
     }
 
