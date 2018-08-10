@@ -150,9 +150,10 @@ int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
                 }
 
                 if (p_prop->type == TC_IOT_SHADOW_TYPE_BOOL) {
-                    new_bool = (strncmp(TC_IOT_JSON_TRUE, field_buf, val_len) == 0);
+                    new_bool = (field_buf[0] != 'f') && (field_buf[0] != '0');
                     ptr = &new_bool;
-                    TC_IOT_LOG_TRACE("state change:[%s=%s]", p_prop->name, (*(tc_iot_shadow_bool *) ptr)?"true":"false");
+                    TC_IOT_LOG_TRACE("state change:[%s=%s]", p_prop->name, 
+                            (*(tc_iot_shadow_bool *) ptr)? TC_IOT_SHADOW_JSON_TRUE:TC_IOT_SHADOW_JSON_FALSE);
                 } else if (p_prop->type == TC_IOT_SHADOW_TYPE_NUMBER) {
                     new_number = atof(field_buf);
                     ptr = &new_number;

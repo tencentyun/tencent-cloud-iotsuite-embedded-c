@@ -4,10 +4,13 @@
 #define TC_IOT_MAX_PROPERTY_COUNT   128
 #define TC_IOT_MAX_FIRM_INFO_COUNT  5
 
+#define TC_IOT_SHADOW_JSON_TRUE   "true"
+#define TC_IOT_SHADOW_JSON_FALSE   "false"
+
 typedef double tc_iot_shadow_number;
 typedef int tc_iot_shadow_int;
 typedef int tc_iot_shadow_enum;
-typedef bool tc_iot_shadow_bool;
+typedef char tc_iot_shadow_bool;
 typedef char * tc_iot_shadow_string;
 
 typedef enum _tc_iot_shadow_data_type_e {
