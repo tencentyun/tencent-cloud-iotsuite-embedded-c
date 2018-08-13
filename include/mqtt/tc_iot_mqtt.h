@@ -163,10 +163,10 @@ struct _tc_iot_mqtt_client {
 } ;
 
 typedef enum _tc_iot_device_auth_mode_e {
-    TC_IOT_MQTT_AUTH_NONE,
-    TC_IOT_MQTT_AUTH_STATIC_PASS, // 静态直连 deprecated
-    TC_IOT_MQTT_AUTH_DYNAMIC_TOKEN, // 动态 Token
-    TC_IOT_MQTT_AUTH_DYNAMIC_SIGN, // 动态签名
+    TC_IOT_MQTT_AUTH_NONE = 0,
+    TC_IOT_MQTT_AUTH_STATIC_PASS = 1, // 静态直连 deprecated
+    TC_IOT_MQTT_AUTH_DYNAMIC_TOKEN = 2, // 动态 Token
+    TC_IOT_MQTT_AUTH_DYNAMIC_SIGN = 3, // 动态签名
 } tc_iot_device_auth_mode_e;
 
 /**
@@ -181,6 +181,9 @@ typedef struct _tc_iot_device_info {
     char username[TC_IOT_MAX_USER_NAME_LEN]; /**< 连接 MQ 服务端的 Username*/
     char password[TC_IOT_MAX_PASSWORD_LEN]; /**< 连接 MQ 服务端的 Password*/
     long token_expire_time;  /**< username & password 超时时间*/
+
+    char auth_mode;   /** MQ 服务鉴权类型，参见 tc_iot_device_auth_mode_e */
+    const char * region; /** 区域标识 */
 } tc_iot_device_info;
 
 
