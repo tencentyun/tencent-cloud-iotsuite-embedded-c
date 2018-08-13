@@ -54,8 +54,9 @@ def gen_cmd( _client_id) :
     auth_url = 'http://gz.auth-device-iot.tencentcloudapi.com/device' 
     if mqtt_host.find("beijing")>=0 :
         auth_url = 'http://bj.auth-device-iot.tencentcloudapi.com/device' 
-
-
+    if mqtt_host.find("shanghai")>=0 :
+        auth_url = 'http://sh.auth-device-iot.tencentcloudapi.com/token' 
+        
     print "======================================================================="
     print "POST BODY:" , urllib.urlencode(params)
 
@@ -66,13 +67,41 @@ def gen_cmd( _client_id) :
         rsp = response.read()
         print "RESPONSE:" , code, rsp
         data = json.loads(rsp)['data']
+        code = json.loads(rsp)['returnCode']
 
     print "-------------------------------------------------\n"
+
+    if 0 != code :
+        print  'http token return invalid code , return'
+        return 
 
     print 'examples/coap-client  -m post coap://122.152.224.121/auth -e "%s" \n' %  urllib.urlencode(params)
     print 'mosquitto_sub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d\n'%( mqtt_host, data['id'], data['secret'] , client_id, "%s/%s/#" %(product_id, device_name) )
     print 'mosquitto_pub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d -m "just4test" -q 1\n'%( mqtt_host, data['id'], data['secret'] , client_id, "%s/%s/XXXXX_PLS_MODIFY" %(product_id, device_name) )
 
+
+def mqtt_auth_gen( _client_id) :
+    nonce = 1234561
+    now_ts = int(time.time())
+    params = OrderedDict([
+        ['clientId', _client_id],
+        ['deviceName', device_name],
+        ['nonce', nonce],
+        ['productId', product_id],
+        ['timestamp', now_ts]])
+    params['signature'] = binascii.b2a_base64(hmac.new(device_secret, '&'.join(k + '=' + str(params[k]) for k in params), hashlib.sha256).digest())[:-1]
+
+    #print params
+    sig = urllib.urlencode( {'signature' : params['signature'] } )
+    password = "productId=%s&nonce=%d&timestamp=%d&%s" % (product_id, nonce, now_ts, sig)
+
+    #print password
+    print 'mosquitto_sub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d\n'%( mqtt_host, device_name, password , _client_id, "%s/%s/#" %(product_id, device_
+name) )
+    print 'mosquitto_pub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d -m "just4test" -q 1\n'%( mqtt_host, device_name, password, _client_id, "%s/%s/XXXXX_PLS_MODIFY" %(product_id, device_name) )
+
+
+mqtt_auth_gen( client_id )
 
 gen_cmd( client_id )
 
