@@ -34,8 +34,7 @@ int tc_iot_http_request_append_header(tc_iot_http_request* request,
 
     current = tc_iot_yabuffer_current(&(request->buf));
     buffer_left = tc_iot_yabuffer_left(&(request->buf));
-    ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_HEADER_FMT, header,
-                              (int)strlen(val), val);
+    ret = tc_iot_hal_snprintf(current, buffer_left, "%s: %s\r\n", header, val);
     if (ret > 0) {
         tc_iot_yabuffer_forward(&(request->buf), ret);
     }
@@ -55,10 +54,20 @@ int tc_iot_http_request_n_append_header(tc_iot_http_request* request,
 
     current = tc_iot_yabuffer_current(&(request->buf));
     buffer_left = tc_iot_yabuffer_left(&(request->buf));
-    ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_HEADER_FMT, header,
-                              val_len, val);
+    ret = tc_iot_hal_snprintf(current, buffer_left, "%s: ", header);
     if (ret > 0) {
         tc_iot_yabuffer_forward(&(request->buf), ret);
+    }
+
+    current = tc_iot_yabuffer_current(&(request->buf));
+    buffer_left = tc_iot_yabuffer_left(&(request->buf));
+    if (buffer_left > val_len  + 2) {
+        memcpy(current, val, val_len);
+        memcpy(current + val_len, "\r\n", 2);
+        tc_iot_yabuffer_forward(&(request->buf), val_len + 2);
+        ret += val_len + 2;
+    } else {
+        return TC_IOT_BUFFER_OVERFLOW;
     }
 
     return ret;
@@ -306,9 +315,11 @@ static int tc_iot_calc_active_device_sign(char* sign_out, int max_sign_len,
 
     url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len);
     
-    /* TC_IOT_LOG_DEBUG(" tc_iot_url_encoded sign\n %.*s\n, url_ret=%d", url_ret, sign_out, url_ret);  */
     if (url_ret < max_sign_len) {
         sign_out[url_ret] = '\0';
+    } else {
+        TC_IOT_LOG_ERROR("buffer used = %d overflow.", url_ret);
+        return TC_IOT_BUFFER_OVERFLOW;
     }
     TC_IOT_LOG_DEBUG(" tc_iot_calc_active_device_sign deviceName=%s&nonce=%ld&productId=%s&timestamp=%ld sign:%s", 
             device_name, nonce,product_id, timestamp , sign_out);

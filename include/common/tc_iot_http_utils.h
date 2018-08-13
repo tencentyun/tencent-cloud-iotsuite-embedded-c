@@ -15,7 +15,7 @@
 
 #define HTTP_SPLIT_STR "\r\n"
 #define HTTP_REQUEST_LINE_FMT ("%s %s HTTP/%s" HTTP_SPLIT_STR)
-#define HTTP_HEADER_FMT "%s: %.*s\r\n"
+#define HTTP_HEADER_FMT "%s: %s\r\n"
 #define HTTP_HEADER_HOST "Host"
 #define HTTP_HEADER_ACCEPT "Accept"
 #define HTTP_HEADER_ACCEPT_ENCODING "Accept-Encoding"
