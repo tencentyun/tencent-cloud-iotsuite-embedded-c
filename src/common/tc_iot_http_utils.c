@@ -34,8 +34,7 @@ int tc_iot_http_request_append_header(tc_iot_http_request* request,
 
     current = tc_iot_yabuffer_current(&(request->buf));
     buffer_left = tc_iot_yabuffer_left(&(request->buf));
-    ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_HEADER_FMT, header,
-                              (int)strlen(val), val);
+    ret = tc_iot_hal_snprintf(current, buffer_left, "%s: %s\r\n", header, val);
     if (ret > 0) {
         tc_iot_yabuffer_forward(&(request->buf), ret);
     }
@@ -55,10 +54,20 @@ int tc_iot_http_request_n_append_header(tc_iot_http_request* request,
 
     current = tc_iot_yabuffer_current(&(request->buf));
     buffer_left = tc_iot_yabuffer_left(&(request->buf));
-    ret = tc_iot_hal_snprintf(current, buffer_left, HTTP_HEADER_FMT, header,
-                              val_len, val);
+    ret = tc_iot_hal_snprintf(current, buffer_left, "%s: ", header);
     if (ret > 0) {
         tc_iot_yabuffer_forward(&(request->buf), ret);
+    }
+
+    current = tc_iot_yabuffer_current(&(request->buf));
+    buffer_left = tc_iot_yabuffer_left(&(request->buf));
+    if (buffer_left > val_len  + 2) {
+        memcpy(current, val, val_len);
+        memcpy(current + val_len, "\r\n", 2);
+        tc_iot_yabuffer_forward(&(request->buf), val_len + 2);
+        ret += val_len + 2;
+    } else {
+        return TC_IOT_BUFFER_OVERFLOW;
     }
 
     return ret;
@@ -232,7 +241,6 @@ int tc_iot_create_auth_request_form(char* form, int max_form_len,
         expire, nonce, product_id, timestamp);
     return total;
 }
-
 
 int tc_iot_create_active_device_form(char* form, int max_form_len,
                                     const char* product_secret, 
