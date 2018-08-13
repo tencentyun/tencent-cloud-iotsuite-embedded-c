@@ -71,6 +71,9 @@ int main(int argc, char * argv[])
     int ret = 0;
     int i = 0;
     char pub_topic_query_param[128];
+    char buffer[1024];
+    int temperature = 35;
+    int step = 1;
 
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
@@ -92,8 +95,19 @@ int main(int argc, char * argv[])
             coap_config.device_info.device_name);
 
     while (!stop) {
+        if (temperature >= 40 ) {
+            step = -1;
+        } else if (temperature <= -10) {
+            step = 1;
+        }
+        temperature += step;
+
+        tc_iot_hal_snprintf(buffer,sizeof(buffer), "{\"temperature\":%d}", temperature);
+
+        TC_IOT_LOG_TRACE("[c->s] %s", buffer);
+
         // 基于 CoAP 协议上报数据
-        tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, pub_topic_query_param, "{\"method\":\"get\"}", NULL);
+        tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, pub_topic_query_param, buffer, NULL);
         tc_iot_hal_printf("Publish yielding ...\n");
         tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
 
