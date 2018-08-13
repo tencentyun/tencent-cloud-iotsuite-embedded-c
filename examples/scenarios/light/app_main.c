@@ -82,19 +82,21 @@ void operate_device(tc_iot_shadow_local_data * light) {
                 ansi_color,
                 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         tc_iot_hal_printf(
-                "%s[  lighting  ]|[color:%s]|[brightness:%s]\n" ANSI_COLOR_RESET,
+                "%s[  lighting  ]|[color:%s]|[brightness:%s]|[%s]\n" ANSI_COLOR_RESET,
                 ansi_color,
                 ansi_color_name,
-                brightness_bar
+                brightness_bar,
+                light->name
                 );
     } else {
         /* 灯处于关闭状态时的展示 */
         tc_iot_hal_printf( ANSI_COLOR_YELLOW "%04d-%02d-%02d %02d:%02d:%02d " ANSI_COLOR_RESET,
                 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         tc_iot_hal_printf(
-                ANSI_COLOR_YELLOW "[" "light is off" "]|[color:%s]|[brightness:%s]\n" ANSI_COLOR_RESET ,
+                ANSI_COLOR_YELLOW "[" "light is off" "]|[color:%s]|[brightness:%s]|[%s]\n" ANSI_COLOR_RESET ,
                 ansi_color_name,
-                brightness_bar
+                brightness_bar,
+                light->name
                 );
     }
 }
