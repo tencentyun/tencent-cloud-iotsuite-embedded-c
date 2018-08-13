@@ -20,34 +20,7 @@ python tc_iot_code_generator.py -c ../examples/basic_edition/mqtt/iot-product.js
 文件 ../examples/basic_editon/mqtt/tc_iot_device_config.h 生成成功
 ```
 
-打开 tc_iot_device_config.h ，可以看到生成的如下产品相关信息：
-```c
-...
-/* 设备激活及获取 secret 接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/secret */
-/* Token接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
-/* 机房标识：
-    广州机房=gz
-    北京机房=bj
-    ...
-*/
-#ifdef ENABLE_TLS
-#define TC_IOT_CONFIG_AUTH_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/token"
-#define TC_IOT_CONFIG_ACTIVE_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/secret"
-#else
-#define TC_IOT_CONFIG_AUTH_API_URL "http://gz.auth-device-iot.tencentcloudapi.com/token"
-#define TC_IOT_CONFIG_ACTIVE_API_URL "http://gz.auth-device-iot.tencentcloudapi.com/secret"
-#endif
-
-#define TC_IOT_CONFIG_ACTIVE_API_URL_DEBUG   "http://gz.auth.iot.cloud.tencent.com/secret"
-#define TC_IOT_CONFIG_AUTH_API_URL_DEBUG	 "http://gz.auth.iot.cloud.tencent.com/token"
-...
-#define TC_IOT_CONFIG_SERVER_HOST "mqtt-xxxx.ap-guangzhou.mqtt.tencentcloudmq.com"
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-yyyy"
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-zzzz"
-...
-```
-
-4. 修改 tc_iot_device_config.h 配置，设置 Device Name 和 Device Secret：
+5. 修改 tc_iot_device_config.h 配置，设置 Device Name 和 Device Secret：
 ```c
 /* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
@@ -56,7 +29,7 @@ python tc_iot_code_generator.py -c ../examples/basic_edition/mqtt/iot-product.js
 #define TC_IOT_CONFIG_DEVICE_NAME "device_name"
 ```
 
-5. 代码及配置生成成功后，进入 build 目录，开始编译。
+6. 代码及配置生成成功后，进入 build 目录，开始编译。
 
 ```shell
 cd ../build

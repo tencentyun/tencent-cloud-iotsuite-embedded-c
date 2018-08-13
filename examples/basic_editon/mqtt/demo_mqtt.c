@@ -13,9 +13,10 @@ tc_iot_mqtt_client_config g_client_config = {
         TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
         TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
         TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
+        TC_IOT_CONFIG_AUTH_MODE, TC_IOT_CONFIG_REGION,
     },
-    TC_IOT_CONFIG_SERVER_HOST,
-    TC_IOT_CONFIG_SERVER_PORT,
+    TC_IOT_CONFIG_MQ_SERVER_HOST,
+    TC_IOT_CONFIG_MQ_SERVER_PORT,
     TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
     TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
     TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
@@ -27,8 +28,8 @@ tc_iot_mqtt_client_config g_client_config = {
     TC_IOT_CONFIG_CLIENT_KEY,
 };
 
-char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_SUB_TOPIC_DEF;
-char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_PUB_TOPIC_DEF;
+char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_MQTT_SUB_TOPIC_DEF;
+char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_MQTT_PUB_TOPIC_DEF;
 
 const char* tc_iot_hal_get_device_name(char *device_name, size_t len)
 {
@@ -102,9 +103,9 @@ int main(int argc, char** argv) {
         tc_iot_hal_printf("username & password using: %s %s\n", p_client_config->device_info.username, p_client_config->device_info.password);
     }
 
-    snprintf(sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, "%s/%s/cmd",
+    snprintf(sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_MQTT_SUB_TOPIC_FMT,
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-    snprintf(pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, "%s/%s/update",
+    snprintf(pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_MQTT_PUB_TOPIC_FMT,
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
     tc_iot_hal_printf("sub topic: %s\n", sub_topic);

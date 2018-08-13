@@ -139,11 +139,14 @@
 
 /*------------------COAP begin---------------------*/
 
+// COAP 上报地址，tp= 为固定参数名称前缀，/xxxx/yyyy/update 为实际 Topic
+#define  TC_IOT_COAP_PUB_TOPIC_PARM_FMT   "tp=/%s/%s/update"
+
 // COAP RPC 订阅下行地址，st= 为固定参数名称前缀，shadow/get/xxx 为实际 Topic
-#define  TC_IOT_RPC_SUB_TOPIC_PARM_FMT   "st=shadow/get/%s/%s"
+#define  TC_IOT_COAP_RPC_SUB_TOPIC_PARM_FMT   "st=shadow/get/%s/%s"
 
 // COAP RPC 发送请求的上行地址，pt= 为固定参数名称前缀，shadow/get/xxx 为实际 Topic
-#define  TC_IOT_RPC_PUB_TOPIC_PARM_FMT   "pt=shadow/update/%s/%s"
+#define  TC_IOT_COAP_RPC_PUB_TOPIC_PARM_FMT   "pt=shadow/update/%s/%s"
 
 #define TC_IOT_COAP_DTLS_PSK "secretPSK"
 #define TC_IOT_COAP_DTLS_PSK_ID TC_IOT_CONFIG_DEVICE_NAME
