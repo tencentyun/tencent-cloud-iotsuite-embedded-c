@@ -1,5 +1,5 @@
 #include "tc_iot_export.h"
-#include "tc_iot_http_config.h"
+#include "tc_iot_device_config.h"
 #include <getopt.h>
 
 static int _log_level = TC_IOT_LOG_LEVEL_DEBUG;

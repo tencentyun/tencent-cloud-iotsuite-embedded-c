@@ -11,7 +11,7 @@
 | param_string | 字符串     | 可写       | 64                   |
 
 3. 进入【基本信息】页，点击【导出】，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/advanced_edition/coap 目录下覆盖 iot-product.json 文件。
-4. 通过脚本自动生成 advaneced_mqtt 设备的逻辑框架及业务数据配置代码。
+4. 通过脚本自动生成设备的逻辑框架及业务数据配置代码。
 
 ```shell
 # 进入工具脚本目录
@@ -23,7 +23,7 @@ python tc_iot_code_generator.py -c ../examples/advanced_edition/coap/iot-product
 ```shell
 加载 ../examples/advanced_edition/coap/iot-product.json 文件成功
 文件 ../examples/advanced_edition/coap/coap_app_main.c 生成成功
-文件 ../examples/advanced_edition/coap/tc_iot_coap_device_config.h 生成成功
+文件 ../examples/advanced_edition/coap/tc_iot_device_config.h 生成成功
 文件 ../examples/advanced_edition/coap/tc_iot_device_logic.h 生成成功
 
 ```
@@ -43,11 +43,11 @@ make
 # 此种方式运行，可以有效查看日志及抓包定位问题
 # 备注：
 # -d device_xxxx 参数是指定当前连接使用的设备名
-# 如果已经在 tc_iot_coap_device_config.h 中，为TC_IOT_CONFIG_DEVICE_NAME 指定了
+# 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_NAME 指定了
 # 正确的设备名称，则命令行执行时，可以不用指定 -d device_xxx 参数。
 #
 # -s secret_abc  认证模式为Token模式时，-s 指定Device Secret
-# 如果已经在 tc_iot_coap_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
+# 如果已经在 tc_iot_device_config.h 中，为TC_IOT_CONFIG_DEVICE_SECRET 指定了
 # 正确的Device Secret，则命令行执行时，可以不用指定 -s secret_abc 参数。
 # ./advanced_coap --trace -p 5683
 

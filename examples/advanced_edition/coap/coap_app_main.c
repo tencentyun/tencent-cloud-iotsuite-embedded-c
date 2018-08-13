@@ -1,4 +1,4 @@
-#include "tc_iot_coap_device_config.h"
+#include "tc_iot_device_config.h"
 #include "tc_iot_device_logic.h"
 #include "tc_iot_export.h"
 

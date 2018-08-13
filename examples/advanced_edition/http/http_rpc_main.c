@@ -1,5 +1,5 @@
 #include "tc_iot_export.h"
-#include "tc_iot_http_config.h"
+#include "tc_iot_device_config.h"
 
 
 #define TC_IOT_PROP_param_bool 0
