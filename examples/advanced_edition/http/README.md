@@ -10,32 +10,27 @@
 | param_number | 数值       | 可写       | 0,4095               |
 | param_string | 字符串     | 可写       | 64                   |
 
-3. 打开 tc_iot_device_config.h ，可以看到生成的如下产品相关信息：
-```c
-...
-/* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
-/* MQ服务地址，可以在产品“基本信息页”->“产品 key”位置找到。*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-1doou8fjk"
+3. 进入【基本信息】，点击【导出】，导出 iot-xxxxx.json 文档，将 iot-xxxxx.json 文档放到 examples/advanced_edition/http 目录下，覆盖 iot-product.json 文件。
+4. 通过脚本自动生成设备的逻辑框架及业务数据配置代码。
 
-/* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-9fi4gnz8"
-/* 产品id，可以在产品“基本信息页”->“产品key”位置找到*/
+```shell
+# 进入工具脚本目录
+cd tools
+python tc_iot_code_generator.py -c ../examples/advanced_edition/http/iot-product.json code_templates/tc_iot_device_config.h
+```
 
-/* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
+执行成功后会看到有如下提示信息：
+```shell
+加载 ../examples/advanced_edition/http/iot-product.json 文件成功
+文件 ../examples/advanced_edition/http/tc_iot_device_config.h 生成成功
 
-/* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
+```
 
-/* 设备激活及获取 secret 接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/secret */
-/* Token接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
-/* 机房标识：
-    广州机房=gz
-    北京机房=bj
-    ...
-*/
-#define TC_IOT_CONFIG_API_REGION  "gz"
+5. 代码及配置生成成功后，进入 build 目录，开始编译。
 
+```shell
+cd build
+make
 ```
 
 ## 编译程序

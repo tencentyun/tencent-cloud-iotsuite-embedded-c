@@ -3,28 +3,36 @@
 1. 参见 [开发准备](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/README.md)； 
 2. 创建产品，“数据协议”选择“自定义”，创建如下自定义Topic：
     - ${product_id}/${device_name}/update ，用于设备端上报数据。
-3. 修改 tc_iot_coap_device_config.h 编译配置文件，配置产品信息相关参数，详见注释：
+3. 进入【基本信息】，点击【导出】，导出 iot-xxxxx.json 文档，将 iot-xxxxx.json 文档放到 examples/basic_edition/mqtt 目录下，覆盖 iot-product.json 文件。
+4. 通过脚本自动生成演示配置文件。
 
 ```shell
-/* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
-/* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-7hjcfc6k"
-/* client id 由两部分组成，组成形式为“ProductKey@DeviceName” */
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-5ns8xh714"
+# 进入工具脚本目录
+cd tools
+python tc_iot_code_generator.py -c ../examples/basic_edition/coap/iot-product.json code_templates/tc_iot_device_config.h
+```
+
+执行成功后会看到有如下提示信息：
+```shell
+加载 ../examples/basic_edition/coap/iot-product.json 文件成功
+文件 ../examples/basic_edition/coap/tc_iot_device_config.h 生成成功
+```
+
+5. 修改 tc_iot_device_config.h 配置，设置 Device Name 和 Device Secret：
+```c
 /* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
+
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_NAME "device_name"
-
 ```
 
-4. 代码及配置生成成功后，进入 build 目录，开始编译。
+6. 代码及配置生成成功后，进入 build 目录，开始编译。
 
 ```shell
-cd build
+cd ../build
 make
 ```
-
 
 ## 运行程序
 编译完成后，在 build/bin/ 目录下，会产生一个 basic_coap 程序。
@@ -176,3 +184,4 @@ int tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path,
  */
 int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms);
 ```
+

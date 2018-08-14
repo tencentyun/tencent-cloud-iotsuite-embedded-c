@@ -5,7 +5,7 @@
     - ${product_id}/${device_name}/cmd ，用于设备端接收指令。
     - ${product_id}/${device_name}/update ，用于设备端上报数据。
 
-3. 进入【基本信息】也，点击【导出】，导出 iot-xxxxx.json 数据模板描述文档，将 iot-xxxxx.json 文档放到 examples/basic_edition/mqtt 目录下覆盖 iot-product.json 文件。
+3. 进入【基本信息】，点击【导出】，导出 iot-xxxxx.json 文档，将 iot-xxxxx.json 文档放到 examples/basic_edition/mqtt 目录下，覆盖 iot-product.json 文件。
 4. 通过脚本自动生成演示配置文件。
 
 ```shell
