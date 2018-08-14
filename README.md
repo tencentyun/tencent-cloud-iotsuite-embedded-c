@@ -17,8 +17,8 @@ sudo apt install cmake python2.7 git build-essential
 ```
 
 2. 配置并运行示例：
-- [基础版 MQTT 示例](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/basic_edition/mqtt)
-- [高级版 MQTT 示例](https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c/blob/master/examples/advanced_edition/mqtt)
+- [基础版 MQTT 示例](examples/basic_edition/mqtt/README.md)
+- [高级版 MQTT 示例](examples/advanced_edition/mqtt/README.md)
 
 ### 编译及运行
 1. 执行下面的命令，编译示例程序：
