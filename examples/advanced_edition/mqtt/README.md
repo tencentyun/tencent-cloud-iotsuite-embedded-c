@@ -88,11 +88,11 @@ make
 ## 数据及函数执行流程
 - 下图展示的流程为：设备离线时，控制端下发指令；设备上线后，读取指令数据并上报及清除指令的流程。
 
-![图例](https://user-images.githubusercontent.com/990858/44080513-d6be34fa-9fde-11e8-87af-aac4e4448556.png)
+![图例](https://user-images.githubusercontent.com/990858/44080712-72266098-9fdf-11e8-826d-588298f3dcb4.png)
 
 - 下图展示的流程为：设备在线时，控制端下发指令；服务端直接推送指令。
 
-![图例](https://user-images.githubusercontent.com/990858/44080544-ee57b686-9fde-11e8-879e-5f543859af47.png)
+![图例](https://user-images.githubusercontent.com/990858/44080708-703c45ea-9fdf-11e8-9bdc-7d7763addead.png)
 
 ## SDK API 样例及说明
 
