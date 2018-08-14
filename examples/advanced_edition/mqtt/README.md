@@ -88,7 +88,7 @@ make
 ## 数据及函数执行流程
 - 下图展示的流程为：设备离线时，控制端下发指令；设备上线后，读取指令数据并上报及清除指令的流程。
 
-![图例](https://user-images.githubusercontent.com/990858/44081630-c16b06ac-9fe1-11e8-8bcf-a943ccd264d9.png)
+![图例](https://user-images.githubusercontent.com/990858/44081769-1cf0833a-9fe2-11e8-90ff-13b6fb62c7f6.png)
 
 - 下图展示的流程为：设备在线时，控制端下发指令；服务端直接推送指令。
 
