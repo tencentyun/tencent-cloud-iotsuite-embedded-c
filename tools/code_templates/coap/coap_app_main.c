@@ -411,10 +411,10 @@ int main(int argc, char * argv[])
     /* 解析命令行参数 */
     parse_command(p_coap_config, argc, argv);
 
-    tc_iot_hal_snprintf(rpc_pub_topic_query_param, sizeof(rpc_pub_topic_query_param), TC_IOT_RPC_PUB_TOPIC_PARM_FMT,
+    tc_iot_hal_snprintf(rpc_pub_topic_query_param, sizeof(rpc_pub_topic_query_param), TC_IOT_COAP_RPC_PUB_TOPIC_PARM_FMT,
                         p_coap_config->device_info.product_id, 
                         p_coap_config->device_info.device_name);
-    tc_iot_hal_snprintf(rpc_sub_topic_query_param, sizeof(rpc_sub_topic_query_param), TC_IOT_RPC_SUB_TOPIC_PARM_FMT,
+    tc_iot_hal_snprintf(rpc_sub_topic_query_param, sizeof(rpc_sub_topic_query_param), TC_IOT_COAP_RPC_SUB_TOPIC_PARM_FMT,
                         p_coap_config->device_info.product_id, 
                         p_coap_config->device_info.device_name);
 
