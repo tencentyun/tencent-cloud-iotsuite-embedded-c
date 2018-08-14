@@ -49,3 +49,130 @@ make
 ./basic_coap -d device_xxxx -p 5683
 
 ```
+
+## 数据及函数执行流程
+- 下图展示的流程为：设备定时上报数据的流程。
+
+![图例](https://user-images.githubusercontent.com/990858/44085055-05d1da92-9feb-11e8-9221-163bc9a5fe23.png)
+
+## SDK API 样例及说明
+
+### 1. 初始化
+tc_iot_coap_construct 初始化 CoAP 客户端数据。
+
+#### 样例
+
+```c
+    tc_iot_coap_construct(p_coap_client, p_coap_config);
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ * @brief tc_iot_coap_construct 初始化 CoAP 客户端数据
+ *
+ * @param c 待初始化的 CoAP 客户端数据结构。
+ * @param p_client_config 初始化相关参数，包括
+ * CoAP 服务地址及端口、是否使用 DTLS及DTLS PSK、
+ * 产品信息、设备名称、设备密钥、回调函数等。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
+```
+
+### 2. 主循环 
+tc_iot_coap_auth 发起认证，获取后续服务所需的设备 Token。
+
+#### 样例
+
+```c
+    ret = tc_iot_coap_auth(p_coap_client);
+    if (ret != TC_IOT_SUCCESS) {
+        tc_iot_hal_printf("CoAP auth failed, ret=%d.\n", ret);
+        return 0;
+    }
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ * @brief tc_iot_coap_auth 发起认证，获取后续服务所需的设备 Token。
+ *
+ * @param c 已初始化好的 CoAP 客户端。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_auth(tc_iot_coap_client* c);
+```
+
+### 3. 发起上报请求 
+调用 tc_iot_coap_publish 发送请求，获得响应数据。
+
+#### 样例
+
+```c
+    int temperature = 35;
+    while (!stop) {
+        if (temperature >= 40 ) {
+            step = -1;
+        } else if (temperature <= -10) {
+            step = 1;
+        }
+        temperature += step;
+
+        tc_iot_hal_snprintf(buffer,sizeof(buffer), "{\"temperature\":%d}", temperature);
+
+        // 基于 CoAP 协议上报数据
+        tc_iot_coap_publish(&coap_client, TC_IOT_COAP_SERVICE_PUBLISH_PATH, pub_topic_query_param, buffer, NULL);
+        tc_iot_hal_printf("Publish yielding ...\n");
+        tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
+
+        for (i = 20; i > 0; i--) {
+            tc_iot_hal_printf("%d ...", i);
+            tc_iot_hal_sleep_ms(1000);
+        }
+        tc_iot_hal_printf("\n");
+    }
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ * @brief tc_iot_coap_publish 为基于 tc_iot_coap_send_message
+ * 的上层逻辑封装，用来单向发送上报消息。
+ *
+ * @param c 已成功获取获取授权 Token 的 CoAP 客户端。
+ * @param uri_path 上报接口 URI Path，当前固定填写
+ * TC_IOT_COAP_SERVICE_PUBLISH_PATH。
+ * @param topic_query_uri 上报消息发送目的 Topic
+ * 参数，参数固定格式为：tp=Topic_Name，即如果上报消息到 TopicA，
+ * 参数应增加 tp= 前缀后，填写为 “tp=TopicA”
+ * @param msg 上报消息 Payload 。
+ * @param callback 上报结果回调。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ *
+ */
+int tc_iot_coap_publish( tc_iot_coap_client * c, const char * uri_path, 
+        const char * topic_query_uri, const char * msg, tc_iot_coap_con_handler callback);
+
+/**
+ *
+ * @brief tc_iot_coap_yield  CoAP client 主循环，包含上行消息响应超时
+ * 检测、服务器下行消息收取等操作。
+ *
+ * @param c CoAP client 对象
+ * @param timeout_ms 等待时延，单位毫秒
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms);
+```

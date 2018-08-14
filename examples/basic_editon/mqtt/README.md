@@ -65,6 +65,15 @@ make
 #### MQTT 收发消息
 收发 MQTT 消息，参见 demo_mqtt.c 中tc_iot_mqtt_client_publish(发送消息) & tc_iot_mqtt_client_subscribe(订阅 Topic) 。
 
+## 数据及函数执行流程
+- 下图展示的流程为：
+    1. 设备上线，并订阅下行消息 Topic ；
+    2. 用户调用 API，通过发送 MQTT 消息到指定 Topic的方式，发送控制指令；
+    3. 服务端推送消息给设备，设备收到服务端推送的消息，进行处理，并上报处理结果;
+    4. 服务端收到设备上报结果后，根据用户在规则引擎配置的地址，转发数据到用户的服务器；
+
+![图例](https://user-images.githubusercontent.com/990858/44084061-504185d0-9fe8-11e8-97a7-b6824530ae87.png)
+
 ## SDK MQTT API 样例及说明
 
 ### 1. 初始化 SDK
