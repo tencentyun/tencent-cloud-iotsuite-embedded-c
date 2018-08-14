@@ -16,8 +16,8 @@ python tc_iot_code_generator.py -c ../examples/basic_edition/mqtt/iot-product.js
 
 执行成功后会看到有如下提示信息：
 ```shell
-加载 ../examples/basic_editon/mqtt/iot-product.json 文件成功
-文件 ../examples/basic_editon/mqtt/tc_iot_device_config.h 生成成功
+加载 ../examples/basic_edition/mqtt/iot-product.json 文件成功
+文件 ../examples/basic_edition/mqtt/tc_iot_device_config.h 生成成功
 ```
 
 5. 修改 tc_iot_device_config.h 配置，设置 Device Name 和 Device Secret：
@@ -38,7 +38,7 @@ make
 
 
 ## 运行程序
-### 基于 JSON 协议的 MQTT 示例
+### MQTT 示例
 编译完成后，在 build/bin/ 目录下，会产生一个 basic_mqtt 程序。
 
 ```shell
