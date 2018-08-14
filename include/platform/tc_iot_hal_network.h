@@ -52,7 +52,7 @@ typedef struct {
     uint16_t port; /**< 服务器端口*/
     int fd; /**< 连接句柄fd */
     int is_connected; /**< 是否网络已连接*/
-    void * extra_context; /**< 平台相关网络数据*/
+    void * extra_context; /**< 预留字段，用户移植其他平台时，可用来指向自定义结构体，存取额外业务数据 */
 
 #if defined(ENABLE_TLS) || defined(ENABLE_DTLS)
     tc_iot_tls_config_t tls_config; /**< TLS 配置*/
@@ -70,7 +70,7 @@ typedef struct {
     int fd; /**< 连接句柄fd */
     int is_connected; /**< 是否网络已连接*/
 
-    void * extra_context; /**< 平台相关网络数据*/
+    void * extra_context; /**< 预留字段，用户移植其他平台时，可用来指向自定义结构体，存取额外业务数据 */
 
 #if defined(ENABLE_TLS) || defined(ENABLE_DTLS)
     tc_iot_tls_config_t tls_config; /**< TLS 配置*/
