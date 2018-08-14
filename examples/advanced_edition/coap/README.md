@@ -59,4 +59,140 @@ make
 
 ```
 
+## 数据及函数执行流程
+- 下图展示的流程为：控制端下发指令；设备定时轮询，读取指令数据并上报及清除指令的流程。
+
+![图例](https://user-images.githubusercontent.com/990858/44081963-98cc9eb2-9fe2-11e8-986b-b09db68ce90c.png)
+
+## SDK API 样例及说明
+
+### 1. 初始化
+tc_iot_coap_construct 初始化 CoAP 客户端数据。
+
+#### 样例
+
+```c
+    tc_iot_coap_construct(p_coap_client, p_coap_config);
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ * @brief tc_iot_coap_construct 初始化 CoAP 客户端数据
+ *
+ * @param c 待初始化的 CoAP 客户端数据结构。
+ * @param p_client_config 初始化相关参数，包括
+ * CoAP 服务地址及端口、是否使用 DTLS及DTLS PSK、
+ * 产品信息、设备名称、设备密钥、回调函数等。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
+```
+
+### 2. 主循环 
+tc_iot_coap_auth 发起认证，获取后续服务所需的设备 Token。
+
+#### 样例
+
+```c
+    ret = tc_iot_coap_auth(p_coap_client);
+    if (ret != TC_IOT_SUCCESS) {
+        tc_iot_hal_printf("CoAP auth failed, ret=%d.\n", ret);
+        return 0;
+    }
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ * @brief tc_iot_coap_auth 发起认证，获取后续服务所需的设备 Token。
+ *
+ * @param c 已初始化好的 CoAP 客户端。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_auth(tc_iot_coap_client* c);
+```
+
+### 3. 发起 RPC 请求 
+调用 tc_iot_coap_rpc 发送请求，获得响应数据。
+
+#### 样例
+
+```c
+    int ret = 0;
+    char request[1024];
+    tc_iot_json_writer writer;
+    tc_iot_json_writer * w = &writer;
+
+    tc_iot_json_writer_open(w, request, sizeof(request));
+    tc_iot_json_writer_string(w ,"method", "get");
+    tc_iot_json_writer_bool(w ,"metadata", metadata);
+    tc_iot_json_writer_bool(w ,"reported", reported);
+    ret = tc_iot_json_writer_close(w);
+
+    if (ret <= 0) {
+        TC_IOT_LOG_INFO("encode json failed ,ret=%d", ret);
+    } else {
+        tc_iot_hal_printf("[c->s]:%s\n", request);
+    }
+
+    // 基于 CoAP 协议的 RPC 调用
+    ret = tc_iot_coap_rpc(p_coap_client, TC_IOT_COAP_SERVICE_RPC_PATH, rpc_pub_topic_query_param, 
+                    rpc_sub_topic_query_param, request, _coap_con_get_rpc_handler);
+    if (ret < 0) {
+        TC_IOT_LOG_ERROR("request failed ,ret=%d", ret);
+    }
+    ret = tc_iot_coap_yield(p_coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
+    if (ret < 0) {
+        TC_IOT_LOG_ERROR("coap yield failed ,ret=%d", ret);
+    }
+    return ret;
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ * @brief tc_iot_coap_rpc 为基于 tc_iot_coap_send_message 
+ * 的上层逻辑封装，用来调用影子服务或基于自定义 Topic 的远程服务。
+ *
+ * @param c 已成功获取获取授权 Token 的 CoAP 客户端。
+ * @param uri_path 上报接口 URI Path，当前固定填写
+ * TC_IOT_COAP_SERVICE_RPC_PATH。
+ * @param topic_query_uri RPC 请求参数发送目的 Topic
+ * 参数，参数固定格式为：pt=Topic_Name，即如果到 TopicUpdate，
+ * 参数应增加 pt= 前缀后，填写为 “pt=TopicUpdate”
+ * @param topic_resp_uri RPC 调用响应 Topic
+ * 参数，参数固定格式为：st=Topic_Name，即如果到 TopicCmd，
+ * 参数应增加 st= 前缀后，填写为 “st=TopicUpdate”
+ * @param msg 上报消息 Payload 。
+ * @param callback RPC 调用结果回调。
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ *
+ */
+int tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path, 
+        const char * topic_query_uri, const char * topic_resp_uri,
+        const char * msg, tc_iot_coap_con_handler callback);
+
+/**
+ *
+ * @brief tc_iot_coap_yield  CoAP client 主循环，包含上行消息响应超时
+ * 检测、服务器下行消息收取等操作。
+ *
+ * @param c CoAP client 对象
+ * @param timeout_ms 等待时延，单位毫秒
+ *
+ * @return 结果返回码
+ * @see tc_iot_sys_code_e
+ */
+int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms);
+```
 
