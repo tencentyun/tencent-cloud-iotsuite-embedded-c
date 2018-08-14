@@ -88,8 +88,89 @@ make
 ## 数据及函数执行流程
 - 下图展示的流程为：设备离线时，控制端下发指令；设备上线后，读取指令数据并上报及清除指令的流程。
 
-![图例](https://raw.githubusercontent.com/tencentyun/tencent-cloud-iotsuite-embedded-c/master/docs/iot-control-process.svg?sanitize=true)
+![图例](https://user-images.githubusercontent.com/990858/44080513-d6be34fa-9fde-11e8-87af-aac4e4448556.png)
 
 - 下图展示的流程为：设备在线时，控制端下发指令；服务端直接推送指令。
 
-![图例](https://raw.githubusercontent.com/tencentyun/tencent-cloud-iotsuite-embedded-c/master/docs/iot-control-process-online.svg?sanitize=true)
+![图例](https://user-images.githubusercontent.com/990858/44080544-ee57b686-9fde-11e8-879e-5f543859af47.png)
+
+## SDK API 样例及说明
+
+### 1. 初始化 
+tc_iot_server_init 根据设备配置参数，初始化服务。此函数调用后：
+1. 初始化相关结构变量，和服务端建立 MQTT 连接；
+2. 默认订阅数据模板相关 Topic；
+3. 发起 get 请求，从服务端同步最新数据；
+
+#### 样例
+
+```c
+    int ret = 0;
+    ret = tc_iot_server_init(tc_iot_get_shadow_client(), &g_tc_iot_shadow_config);
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ *  @brief tc_iot_server_init
+ * 根据设备配置参数，初始化服务。
+ *  @param  p_shadow_client 设备服务对象
+ *  @param  p_client_config 服务配置参数。
+ *  @return 结果返回码
+ *  @see tc_iot_sys_code_e
+ */
+int tc_iot_server_init(tc_iot_shadow_client* p_shadow_client, tc_iot_shadow_config * p_client_config);
+```
+
+### 2. 主循环 
+tc_iot_server_loop 服务任务主循环函数，接收服务推送及响应数据。 此函数调用后：
+1. 接收服务端下发的控制指令或响应消息，并调用业务回调函数处理；
+2. 定时触发心跳逻辑，保持连接；
+3. 检测网络连接状态，异常时自动重连；
+
+#### 样例
+
+```c
+    while (!stop) {
+        tc_iot_server_loop(tc_iot_get_shadow_client(), 200);
+    }
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ *  @brief tc_iot_server_loop
+ *  服务任务主循环函数，接收服务推送及响应数据。
+ *  @param  p_shadow_client 设备服务对象
+ *  @param yield_timeout 循环等待时间，单位毫秒
+ *  @return 结果返回码
+ *  @see tc_iot_sys_code_e
+ */
+
+int tc_iot_server_loop(tc_iot_shadow_client* p_shadow_client, int yield_timeout);
+```
+
+### 3. 主循环 
+ tc_iot_server_destroy 数据模板服务析构处理，释放资源。
+
+#### 样例
+
+```c
+    tc_iot_server_destroy(tc_iot_get_shadow_client());
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ *  @brief tc_iot_server_destroy
+ * 数据模板服务析构处理，释放资源。
+ *  @param  p_shadow_client 设备影子对象
+ *  @return 结果返回码
+ *  @see tc_iot_sys_code_e
+ */
+
+int tc_iot_server_destroy(tc_iot_shadow_client* p_shadow_client);
+```
