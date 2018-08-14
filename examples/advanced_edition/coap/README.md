@@ -92,7 +92,7 @@ tc_iot_coap_construct 初始化 CoAP 客户端数据。
 int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_client_config);
 ```
 
-### 2. 主循环 
+### 2. 认证获取 Token 
 tc_iot_coap_auth 发起认证，获取后续服务所需的设备 Token。
 
 #### 样例
