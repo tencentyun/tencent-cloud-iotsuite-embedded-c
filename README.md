@@ -125,7 +125,7 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 sudo apt install cmake python2.7 git build-essential
 ```
 
-2. 配置[示例](examples)：
+2. 配置[示例](examples)。
 
 ### 编译及运行
 1. 执行下面的命令，编译示例程序：
