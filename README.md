@@ -1,3 +1,111 @@
+##
+### 项目简介
+[加速物联网套件](https://cloud.tencent.com/document/product/568)开发平台为用户提供快速进行设备物联网化的开发平台。提供“两端一云”的开发支持，包括设备端的嵌入式固件 SDK，云端开放式 API 接口，以及用户应用端的集成式 SDK 等；支持设备端-云-应用端的双向安全通信。
+
+本项目提供基于 Linux 平台开发验证的 C SDK，方便用户参考移植到其他 RTOS 系统，让用户可基于不同硬件平台轻松接入。
+
+### 架构图
+![sdk-architecture](https://user-images.githubusercontent.com/990858/44149475-d66f836e-a0ce-11e8-86cd-9916195e4ca1.png)
+
+### SDK 源码结构及说明：
+```shell
+include # 头文件根目录
+├── coap # CoAP Client及协议相关
+│   └── tc_iot_coap.h # CoAP 协议头文件
+├── common # 通用基础库
+│   ├── tc_iot_base64.h # base64 编解码
+│   ├── tc_iot_bit.h # bit 位操作相关宏及函数
+│   ├── tc_iot_certs.h # 内置 HTTPS 和 MQTT over TLS CA 证书
+│   ├── tc_iot_const.h # 错误码及通用结构、函数定义
+│   ├── tc_iot_hmac.h  # sha256 算法头文件
+│   ├── tc_iot_http_utils.h # HTTP 协议打包解包定义
+│   ├── tc_iot_json.h # JSON 解析定义
+│   ├── tc_iot_log.h # 日志函数定义
+│   ├── tc_iot_md5.h # md5 哈希算法头文件
+│   ├── tc_iot_safety_check.h # Assert 宏定义
+│   ├── tc_iot_sign_utils.h # HTTPS接口及MQTT连接鉴权签名逻辑
+│   ├── tc_iot_string_utils.h # 二进制与HEX格式字符串互转
+│   ├── tc_iot_url.h # URL 解析及编解码
+│   └── tc_iot_ya_buffer.h # Buffer 操作
+├── http # HTTP 请求接口封装
+│   └── tc_iot_token.h # 动态令牌接口及设备激活接口定义
+├── mqtt # MQTT 接口
+│   ├── tc_iot_client.h # MQTT Client 定义
+│   └── tc_iot_mqtt.h # MQTT 协议定义
+├── iotsuite # IoT Suite 相关接口
+│   └── tc_iot_shadow.h # 影子及数据模板定义
+├── ota # OTA 接口
+│   ├── tc_iot_ota_download.h # OTA 固件下载定义
+│   └── tc_iot_ota_mqtt.h # OTA 指令收发定义
+├── platform # 平台适配，移植接口
+│   ├── generic # 通用基础模板
+│   │   └── tc_iot_platform.h # 平台相关定义
+│   ├── linux # Linux 平台定义
+│   │   └── tc_iot_platform.h # Linux 平台接口定义及头文件包含 
+│   ├── tc_iot_hal_network.h # Network 通用网络结构及接口申明
+│   ├── tc_iot_hal_os.h # 操作系统相关：时间戳、内存、字符串格式化、随机数等。
+│   └── tc_iot_hal_timer.h # 定时器
+├── tc_iot_compile_flags.h.in # 编译宏定义文件，本文件会被 cmake 引用并用来生成 tc_iot_compile_flags.h 。
+├── tc_iot_compile_flags.h # 基于 cmake 编译参数生成的编译宏定义文件。
+├── tc_iot_config.h # 基础配置宏定义
+├── tc_iot_export.h # 对外提供的 API 接口，引用 SDK 时，只需要直接包含本文件即可，其他头文件都会通过本文件，间接包含引入。
+├── tc_iot_external.h # 引用的第三方外部库 Paho MQTT, JSMN 等外部头文件
+└── tc_iot_inc.h # 内部总体包含头文件
+
+src # 源码根目录
+├── CMakeLists.txt 
+├── coap # CoAP 源码
+│   ├── CMakeLists.txt
+│   ├── tc_iot_coap.c # CoAP 实现
+│   └── tc_iot_coap_code_map.c # CoAP 返回码及错误码消息映射
+├── common # 通用基础库实现
+│   ├── CMakeLists.txt
+│   ├── tc_iot_base64.c # base64 编解码
+│   ├── tc_iot_certs.c # 内置根证书
+│   ├── tc_iot_hmac.c # sha256 算法
+│   ├── tc_iot_http_utils.c # http 请求解析
+│   ├── tc_iot_json.c # JSON 解析
+│   ├── tc_iot_log.c # 日志实现
+│   ├── tc_iot_md5.c # md5 算法
+│   ├── tc_iot_sign_utils.c # HTTPS接口及MQTT连接鉴权签名逻辑
+│   ├── tc_iot_string_utils.c # # 二进制与HEX格式字符串互转
+│   ├── tc_iot_url.c # URL 解析及编解码
+│   └── tc_iot_ya_buffer.c # Buffer 实现
+├── http # HTTP 请求接口封装
+│   ├── CMakeLists.txt
+│   ├── tc_iot_active_device.c # 设备动态激活接口调用逻辑
+│   ├── tc_iot_http_mqapi.c # HTTP rpc 接口调用逻辑 
+│   └── tc_iot_token.c # HTTP 动态令牌获取
+├── iotsuite # Iot Suite 实现
+│   ├── CMakeLists.txt
+│   ├── tc_iot_shadow.c # 影子服务
+│   └── tc_iot_shadow_property.c # 数据模板
+├── mqtt # MQTT 接口实现
+│   ├── CMakeLists.txt
+│   ├── tc_iot_client.c # MQTT Client 实现
+│   └── tc_iot_mqtt.c# MQTT 协议处理
+├── ota # OTA 实现
+│   ├── CMakeLists.txt
+│   ├── tc_iot_ota_download.c # OTA 下载逻辑
+│   └── tc_iot_ota_mqtt.c # OTA 指令收发
+├──external #  依赖的外部第三方库
+│    ├── jsmn # JSON 解析
+│    ├── mbedtls # TLS & DTLS 实现
+│    └── paho.mqtt.embedded-c # MQTT 打包及解包
+└── platform # 不同平台移植实现
+    ├── CMakeLists.txt
+    ├── generic # 略
+    └── linux # Linux 平台移植实现
+        ├── CMakeLists.txt 
+		├── tc_iot_hal_util.c # 工具函数
+        ├── tc_iot_hal_os.c # 时钟、内存、随机数等接口实现
+        ├── tc_iot_hal_timer.c # 定时器实现
+        ├── tc_iot_hal_net.c # TCP 实现
+        ├── tc_iot_hal_tls.c # TLS 实现
+        ├── tc_iot_hal_dtls.c # DTLS 实现
+        └── tc_iot_hal_udp.c # UDP接口实现
+
+```
 ##  开发准备
 
 ### SDK 获取
@@ -13,12 +121,11 @@ git clone https://github.com/tencentyun/tencent-cloud-iotsuite-embedded-c.git
 1. SDK 在 Linux 环境下的测试和验证，主要基于 Ubuntu 16.04 版本，gcc-5.4 (建议至少 gcc-4.7+)，Python 2.7.12+(代码生成及控制台命令行脚本)，cmake 2.8+。
 
 ```shell
+# 安装相关必备软件
 sudo apt install cmake python2.7 git build-essential
 ```
 
-2. 配置并运行示例：
-- [基础版 MQTT 示例](examples/basic_edition/mqtt/README.md)
-- [高级版 MQTT 示例](examples/advanced_edition/mqtt/README.md)
+2. 配置[示例](examples)：
 
 ### 编译及运行
 1. 执行下面的命令，编译示例程序：
@@ -143,6 +250,10 @@ cd bin
 
 
 ## 移植说明
+C-SDK 中提供的 HAL 层是基于 Linux 等 POSIX 体系系统的参考实现，但并不强耦合要求实现按照 POSIX 接口方式，移植时可根据目标系统的情况，灵活调整。
+
+所有 HAL 层函数都在 include/platform/tc_iot_hal*.h 中进行声明，函数都以 tc_iot_hal为前缀。
+
 ### 硬件及操作系统平台抽象层（HAL 层）
 SDK 抽象定义了硬件及操作系统平台抽象层（HAL 层），将所依赖的内存、定时器、网络传输交互等功能，
 都封装在 HAL 层（对应库libtc_iot_hal）中，进行跨平台移植时，首先都需要根据对应平台的硬件及操作系统情况，
@@ -167,111 +278,6 @@ src/platform/
     |-- tc_iot_hal_udp.c    # UDP 接口实现
     |-- tc_iot_hal_dtls.c    # DTLS 加密网络接口实现
 ```
-
-SDK 源码结构及说明：
-```shell
-include # 头文件根目录
-├── coap # CoAP Client及协议相关
-│   └── tc_iot_coap.h # CoAP 协议头文件
-├── common # 通用基础库
-│   ├── tc_iot_base64.h # base64 编解码
-│   ├── tc_iot_bit.h # bit 位操作相关宏及函数
-│   ├── tc_iot_certs.h # 内置 HTTPS 和 MQTT over TLS CA 证书
-│   ├── tc_iot_const.h # 错误码及通用结构、函数定义
-│   ├── tc_iot_hmac.h  # sha256 算法头文件
-│   ├── tc_iot_http_utils.h # HTTP 协议打包解包定义
-│   ├── tc_iot_json.h # JSON 解析定义
-│   ├── tc_iot_log.h # 日志函数定义
-│   ├── tc_iot_md5.h # md5 哈希算法头文件
-│   ├── tc_iot_safety_check.h # Assert 宏定义
-│   ├── tc_iot_sign_utils.h # HTTPS接口及MQTT连接鉴权签名逻辑
-│   ├── tc_iot_string_utils.h # 二进制与HEX格式字符串互转
-│   ├── tc_iot_url.h # URL 解析及编解码
-│   └── tc_iot_ya_buffer.h # Buffer 操作
-├── http # HTTP 请求接口封装
-│   └── tc_iot_token.h # 动态令牌接口及设备激活接口定义
-├── mqtt # MQTT 接口
-│   ├── tc_iot_client.h # MQTT Client 定义
-│   └── tc_iot_mqtt.h # MQTT 协议定义
-├── iotsuite # IoT Suite 相关接口
-│   └── tc_iot_shadow.h # 影子及数据模板定义
-├── ota # OTA 接口
-│   ├── tc_iot_ota_download.h # OTA 固件下载定义
-│   └── tc_iot_ota_mqtt.h # OTA 指令收发定义
-├── platform # 平台适配，移植接口
-│   ├── generic # 通用基础模板
-│   │   └── tc_iot_platform.h # 平台相关定义
-│   ├── linux # Linux 平台定义
-│   │   └── tc_iot_platform.h # Linux 平台接口定义及头文件包含 
-│   ├── tc_iot_hal_network.h # Network 通用网络结构及接口申明
-│   ├── tc_iot_hal_os.h # 操作系统相关：时间戳、内存、字符串格式化、随机数等。
-│   └── tc_iot_hal_timer.h # 定时器
-├── tc_iot_compile_flags.h.in # 编译宏定义文件，本文件会被 cmake 引用并用来生成 tc_iot_compile_flags.h 。
-├── tc_iot_compile_flags.h # 基于 cmake 编译参数生成的编译宏定义文件。
-├── tc_iot_config.h # 基础配置宏定义
-├── tc_iot_export.h # 对外提供的 API 接口，引用 SDK 时，只需要直接包含本文件即可，其他头文件都会通过本文件，间接包含引入。
-├── tc_iot_external.h # 引用的第三方外部库 Paho MQTT, JSMN 等外部头文件
-└── tc_iot_inc.h # 内部总体包含头文件
-
-src # 源码根目录
-├── CMakeLists.txt 
-├── coap # CoAP 源码
-│   ├── CMakeLists.txt
-│   ├── tc_iot_coap.c # CoAP 实现
-│   └── tc_iot_coap_code_map.c # CoAP 返回码及错误码消息映射
-├── common # 通用基础库实现
-│   ├── CMakeLists.txt
-│   ├── tc_iot_base64.c # base64 编解码
-│   ├── tc_iot_certs.c # 内置根证书
-│   ├── tc_iot_hmac.c # sha256 算法
-│   ├── tc_iot_http_utils.c # http 请求解析
-│   ├── tc_iot_json.c # JSON 解析
-│   ├── tc_iot_log.c # 日志实现
-│   ├── tc_iot_md5.c # md5 算法
-│   ├── tc_iot_sign_utils.c # HTTPS接口及MQTT连接鉴权签名逻辑
-│   ├── tc_iot_string_utils.c # # 二进制与HEX格式字符串互转
-│   ├── tc_iot_url.c # URL 解析及编解码
-│   └── tc_iot_ya_buffer.c # Buffer 实现
-├── http # HTTP 请求接口封装
-│   ├── CMakeLists.txt
-│   ├── tc_iot_active_device.c # 设备动态激活接口调用逻辑
-│   ├── tc_iot_http_mqapi.c # HTTP rpc 接口调用逻辑 
-│   └── tc_iot_token.c # HTTP 动态令牌获取
-├── iotsuite # Iot Suite 实现
-│   ├── CMakeLists.txt
-│   ├── tc_iot_shadow.c # 影子服务
-│   └── tc_iot_shadow_property.c # 数据模板
-├── mqtt # MQTT 接口实现
-│   ├── CMakeLists.txt
-│   ├── tc_iot_client.c # MQTT Client 实现
-│   └── tc_iot_mqtt.c# MQTT 协议处理
-├── ota # OTA 实现
-│   ├── CMakeLists.txt
-│   ├── tc_iot_ota_download.c # OTA 下载逻辑
-│   └── tc_iot_ota_mqtt.c # OTA 指令收发
-├──external #  依赖的外部第三方库
-│    ├── jsmn # JSON 解析
-│    ├── mbedtls # TLS & DTLS 实现
-│    └── paho.mqtt.embedded-c # MQTT 打包及解包
-└── platform # 不同平台移植实现
-    ├── CMakeLists.txt
-    ├── generic # 略
-    └── linux # Linux 平台移植实现
-        ├── CMakeLists.txt 
-		├── tc_iot_hal_util.c # 工具函数
-        ├── tc_iot_hal_os.c # 时钟、内存、随机数等接口实现
-        ├── tc_iot_hal_timer.c # 定时器实现
-        ├── tc_iot_hal_net.c # TCP 实现
-        ├── tc_iot_hal_tls.c # TLS 实现
-        ├── tc_iot_hal_dtls.c # DTLS 实现
-        └── tc_iot_hal_udp.c # UDP接口实现
-
-```
-
-
-C-SDK 中提供的 HAL 层是基于 Linux 等 POSIX 体系系统的参考实现，但并不强耦合要求实现按照 POSIX 接口方式，移植时可根据目标系统的情况，灵活调整。
-
-所有 HAL 层函数都在 include/platform/tc_iot_hal*.h 中进行声明，函数都以 tc_iot_hal为前缀。
 
 以下是需要实现的 HAL 层接口，详细信息可以参考注释。
 
