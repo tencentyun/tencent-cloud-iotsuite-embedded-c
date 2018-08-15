@@ -13,7 +13,7 @@ tc_iot_mqtt_client_config g_client_config = {
         TC_IOT_CONFIG_DEVICE_SECRET, TC_IOT_CONFIG_DEVICE_PRODUCT_ID,
         TC_IOT_CONFIG_DEVICE_NAME, TC_IOT_CONFIG_DEVICE_CLIENT_ID,
         TC_IOT_CONFIG_DEVICE_USER_NAME, TC_IOT_CONFIG_DEVICE_PASSWORD, 0,
-        TC_IOT_CONFIG_AUTH_MODE, TC_IOT_CONFIG_REGION,
+        TC_IOT_CONFIG_AUTH_MODE, TC_IOT_CONFIG_REGION, TC_IOT_CONFIG_AUTH_API_URL,
     },
     TC_IOT_CONFIG_MQ_SERVER_HOST,
     TC_IOT_CONFIG_MQ_SERVER_PORT,
@@ -87,12 +87,7 @@ int main(int argc, char** argv) {
             //return 0;
 
         }
-        ret = tc_iot_refresh_auth_token(
-                TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
-                timestamp, nonce,
-                &p_client_config->device_info,
-                TC_IOT_TOKEN_MAX_EXPIRE_SECOND
-                );
+        ret = TC_IOT_AUTH_FUNC( timestamp, nonce, &p_client_config->device_info, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
         if (ret == TC_IOT_SUCCESS) {
             tc_iot_hal_printf("request username and password for mqtt success.\n");
         } else {

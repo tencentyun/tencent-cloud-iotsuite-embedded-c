@@ -31,6 +31,7 @@
 
 /* 鉴权模式，可以在产品的“基本信息”->“鉴权模式”位置找到
  * 1:动态令牌模式
+ * 2:签名认证模式
  * */
 #define TC_IOT_CONFIG_AUTH_MODE   /*${template_config.AuthType}*/
 
@@ -69,15 +70,19 @@
 /* 关于username和password：*/
 /* 1)如果是通过TC_IOT_CONFIG_AUTH_API_URL接口，动态获取的，以下两个参数可不用填写*/
 /* 2)如果有预先申请好的固定username和password，可以把获取到的固定参数填写到如下位置*/
-#if TC_IOT_CONFIG_AUTH_MODE == TC_IOT_MQTT_AUTH_DYNAMIC_TOKEN
-/* Token 模式 */
+#if TC_IOT_CONFIG_AUTH_MODE == 1
+/* 动态令牌模式 */
 #define TC_IOT_CONFIG_DEVICE_USER_NAME ""
 #define TC_IOT_CONFIG_DEVICE_PASSWORD ""
-#elif TC_IOT_CONFIG_AUTH_MODE == TC_IOT_MQTT_AUTH_DYNAMIC_SIGN
+#define TC_IOT_AUTH_FUNC   tc_iot_refresh_auth_token
+#elif TC_IOT_CONFIG_AUTH_MODE == 2
+/*签名认证模式*/
+#define TC_IOT_AUTH_FUNC   tc_iot_mqtt_refresh_dynamic_sign
 #define TC_IOT_CONFIG_DEVICE_USER_NAME ""
 #define TC_IOT_CONFIG_DEVICE_PASSWORD ""
 #else
 /* 直连模式 */
+#define TC_IOT_AUTH_FUNC(a,b,c,d)   
 #define TC_IOT_CONFIG_DEVICE_USER_NAME "/*${template_config.Username}*/"
 #define TC_IOT_CONFIG_DEVICE_PASSWORD "/*${template_config.Password}*/"
 #endif

@@ -37,11 +37,12 @@ char tc_iot_log_level_enabled(tc_iot_log_level_e log_level);
  * @param nonce 随机值
  * @param p_device_info 设备信息，请求成功后，会自动更新该对象的 username 和
  *  password 成员数据
+ * @param reserved 保留参数，填 0 即可
  *
  * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
-int tc_iot_mqtt_refresh_dynamic_sign(long timestamp, long nonce, tc_iot_device_info* p_device_info);
+int tc_iot_mqtt_refresh_dynamic_sign(long timestamp, long nonce, tc_iot_device_info* p_device_info, long reserved);
 
 /**
  * @brief tc_iot_mqtt_client_construct 构造 MQTT client，并连接MQ服务器
@@ -453,8 +454,6 @@ int tc_iot_http_mqapi_rpc( char * result, int result_len,
   * @brief tc_iot_refresh_auth_token 鉴权模式为动态令牌模式时，通过
   * 本接口获取访问 MQTT 服务端动态用户名和密码，本接口支持自定义令牌过期时间。
  *
- * @param api_url 请求接口的地址
- * @param root_ca_path 额外加载证书地址，一般填 NULL 即可
  * @param timestamp 时间戳
  * @param nonce 随机值
  * @param p_device_info 设备信息，请求成功后，会自动更新该对象的 username 和
@@ -464,7 +463,6 @@ int tc_iot_http_mqapi_rpc( char * result, int result_len,
  * @return 结果返回码
  * @see tc_iot_sys_code_e
  */
-int tc_iot_refresh_auth_token(const char* api_url, char* root_ca_path, long timestamp, long nonce,
-        tc_iot_device_info* p_device_info, long expire);
+int tc_iot_refresh_auth_token(long timestamp, long nonce, tc_iot_device_info* p_device_info, long expire);
 
 #endif /* end of include guard */

@@ -184,6 +184,7 @@ typedef struct _tc_iot_device_info {
 
     char auth_mode;   /** MQ 服务鉴权类型，参见 tc_iot_device_auth_mode_e */
     const char * region; /** 区域标识 */
+    const char * token_url; /** 动态令牌模式服务端接口地址 */
 } tc_iot_device_info;
 
 

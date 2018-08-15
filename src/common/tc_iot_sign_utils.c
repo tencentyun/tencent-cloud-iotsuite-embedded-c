@@ -226,5 +226,15 @@ int tc_iot_calc_mqtt_dynamic_sign(char* sign_out, int max_sign_len,
             client_id, device_name, (int)nonce,product_id, (int)timestamp,
             secret, sign_out);
 
+    /* char b64_buf[TC_IOT_BASE64_ENCODE_OUT_LEN(TC_IOT_SHA256_DIGEST_SIZE)]; */
+    /* int url_ret = 0; */
+    /* strcpy(b64_buf, sign_out); */
+    /* url_ret = tc_iot_url_encode(b64_buf, ret, sign_out, max_sign_len); */
+    /* if (url_ret < max_sign_len) { */
+    /*     sign_out[url_ret] = '\0'; */
+    /* } */
+
+    /* return url_ret; */
+
     return TC_IOT_SUCCESS;
 }
