@@ -32,7 +32,7 @@
 
 ## 控制台操作
 控制台上传固件，配置升级任务，下发给当前设备，即可体验 OTA 流程。
-
+![图例](https://user-images.githubusercontent.com/990858/44129418-c946d2f4-a07a-11e8-8867-9f379303f802.png)
 
 ## OTA 功能开发指引
 1. 初始化 OTA 服务：
@@ -62,8 +62,6 @@ tc_iot_ota_handler handler;
 ```c
     // 上报设备信息及当前版本号
     tc_iot_ota_report_firm(&handler,
-            "product", g_client_config.device_info.product_id, // 上报产品ID
-            "device", g_client_config.device_info.device_name, // 上报设备名
             "sdk-ver", TC_IOT_SDK_VERSION,  // 上报 SDK 版本
             "firm-ver",TC_IOT_FIRM_VERSION,  // 上报固件信息，OTA 升级版本号判断依据
             NULL); // 最后一个参数固定填写 NULL，作为变参结束判断
@@ -76,7 +74,10 @@ tc_iot_ota_handler handler;
     tc_iot_ota_report_upgrade(ota_handler, OTA_COMMAND_RECEIVED, NULL, 0);
     ...
     if (tc_iot_ota_version_larger(ota_handler->version, TC_IOT_FIRM_VERSION)) {
-        // 上报准备开始下载
+        // 上报版本检查结果
+        tc_iot_ota_report_upgrade(ota_handler, OTA_VERSION_CHECK, TC_IOT_OTA_MESSAGE_SUCCESS, 0);
+
+        // 上报下载进度，最后一个参数表示当前下载进度百分比
         tc_iot_ota_report_upgrade(ota_handler, OTA_DOWNLOAD, NULL, 0);
         
         // 开始下载固件

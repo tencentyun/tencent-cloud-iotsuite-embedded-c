@@ -218,7 +218,7 @@ void _on_ota_message_received(tc_iot_message_data* md) {
             // 上报版本检查结果
             tc_iot_ota_report_upgrade(ota_handler, OTA_VERSION_CHECK, TC_IOT_OTA_MESSAGE_SUCCESS, 0);
 
-            // 上报准备开始下载
+            // 上报下载进度，最后一个参数表示当前下载进度百分比
             tc_iot_ota_report_upgrade(ota_handler, OTA_DOWNLOAD, NULL, 0);
             
             // 开始下载固件
