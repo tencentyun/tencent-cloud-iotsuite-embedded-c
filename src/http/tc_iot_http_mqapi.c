@@ -59,7 +59,7 @@ parse_url:
         }
         config->timeout_ms = TC_IOT_DEFAULT_TLS_HANSHAKE_TIMEOUT_MS;
         if (netcontext.use_tls) {
-            config->verify_server = 1;
+            config->verify_server = TC_IOT_HTTPS_CERT_STRICT_CHECK;
         }
 
         tc_iot_hal_tls_init(&network, &netcontext);

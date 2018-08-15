@@ -88,6 +88,9 @@
 /* TLS 握手超时时长 */
 #define TC_IOT_DEFAULT_TLS_HANSHAKE_TIMEOUT_MS  10000
 
+// HTTPS 请求时，是否严格检查服务端证书
+#define TC_IOT_HTTPS_CERT_STRICT_CHECK       0
+
 // 请求 激活设备 Active 接口表单长度
 #define TC_IOT_HTTP_ACTIVE_REQUEST_FORM_LEN  256
 // 请求 激活设备 Active 接口总长度
