@@ -51,17 +51,12 @@ TEST(IOTSUITE, data_template)
     sprintf(p_client_config->device_info.client_id, "%s@%s", product_key, device_name);
 
     /* 根据 product id 和device name 定义，生成发布和订阅的 Topic 名称。 */
-    snprintf(g_tc_iot_shadow_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT,
+    snprintf(g_tc_iot_shadow_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SHADOW_SUB_TOPIC_FMT,
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-    snprintf(g_tc_iot_shadow_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT,
+    snprintf(g_tc_iot_shadow_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SHADOW_PUB_TOPIC_FMT,
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
-    ret = tc_iot_refresh_auth_token(
-            TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
-            timestamp, nonce,
-            &p_client_config->device_info,
-            TC_IOT_TOKEN_MAX_EXPIRE_SECOND
-            );
+    ret = tc_iot_refresh_auth_token( timestamp, nonce, &p_client_config->device_info, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
 
     ASSERT_EQ(ret, TC_IOT_SUCCESS);
 

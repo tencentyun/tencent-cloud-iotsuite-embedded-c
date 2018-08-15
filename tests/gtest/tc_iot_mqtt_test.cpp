@@ -19,8 +19,8 @@ void _on_message_received(tc_iot_message_data* md) {
 
 TEST(MQTT, custom_topic)
 {
-    char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_SUB_TOPIC_DEF;
-    char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_PUB_TOPIC_DEF;
+    char sub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_SHADOW_SUB_TOPIC_DEF;
+    char pub_topic[TC_IOT_MAX_MQTT_TOPIC_LEN+1] = TC_IOT_SHADOW_PUB_TOPIC_DEF;
 
     static char _req_data[1024];
     static char _resp_data[1024];
@@ -39,9 +39,10 @@ TEST(MQTT, custom_topic)
             "device_secret", "iot-product-id",
             "device_name", "product_key@device_name",
             "", "", 0,
+            TC_IOT_CONFIG_AUTH_MODE, TC_IOT_CONFIG_REGION, TC_IOT_CONFIG_AUTH_API_URL,
         },
-        (char *)TC_IOT_CONFIG_SERVER_HOST,
-        TC_IOT_CONFIG_SERVER_PORT,
+        (char *)TC_IOT_CONFIG_MQ_SERVER_HOST,
+        TC_IOT_CONFIG_MQ_SERVER_PORT,
         TC_IOT_CONFIG_COMMAND_TIMEOUT_MS,
         TC_IOT_CONFIG_TLS_HANDSHAKE_TIMEOUT_MS,
         TC_IOT_CONFIG_KEEP_ALIVE_INTERVAL_SEC,
@@ -87,12 +88,7 @@ TEST(MQTT, custom_topic)
     snprintf(pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN,  custom_topic, 
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
-    ret = tc_iot_refresh_auth_token(
-                                              TC_IOT_CONFIG_AUTH_API_URL, TC_IOT_CONFIG_ROOT_CA,
-                                              timestamp, nonce,
-                                              &p_client_config->device_info,
-                                              TC_IOT_TOKEN_MAX_EXPIRE_SECOND
-                                              );
+    ret = tc_iot_refresh_auth_token( timestamp, nonce, &p_client_config->device_info, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
 
     ASSERT_EQ(ret, TC_IOT_SUCCESS);
 

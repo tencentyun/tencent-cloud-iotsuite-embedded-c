@@ -5,20 +5,6 @@ extern "C" {
 }
 #include "gtest/gtest.h"
 
-#define TC_IOT_CONFIG_API_REGION  "gz"
-
-
-#ifdef ENABLE_TLS
-#define TC_IOT_CONFIG_API_HTTP_PROTOCOL "https"
-#else
-#define TC_IOT_CONFIG_API_HTTP_PROTOCOL "http"
-#endif
-
-#define TC_IOT_CONFIG_API_DOMAIN_ROOT TC_IOT_CONFIG_API_HTTP_PROTOCOL "://" TC_IOT_CONFIG_API_REGION ".auth-device-iot.tencentcloudapi.com"
-
-#define TC_IOT_CONFIG_RPC_API_URL  TC_IOT_CONFIG_API_DOMAIN_ROOT "/rpc"
-
-
 // 数据模板字段，变量名最大长度
 #define MAX_TEMPLATE_KEY_LEN   20
 // 数据模板字段取值最大长度
