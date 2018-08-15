@@ -6,7 +6,7 @@
 
 /* 兼容老版本 */
 #define http_refresh_auth_token(a,r,t,n,d) tc_iot_refresh_auth_token(t,n,d, TC_IOT_TOKEN_DEFAULT_EXPIRE_SECOND)
-#define http_refresh_auth_token_with_expire (a,r,t,n,d,x) tc_iot_refresh_auth_token(t,n,d,x)
+#define http_refresh_auth_token_with_expire(a,r,t,n,d,x) tc_iot_refresh_auth_token(t,n,d,x)
 #define http_get_device_secret tc_iot_get_device_secret
 
 /**
