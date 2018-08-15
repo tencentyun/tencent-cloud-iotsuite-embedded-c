@@ -5,43 +5,34 @@
     - ${product_id}/${device_name}/cmd ，用于设备端接收指令。
     - ${product_id}/${device_name}/update ，用于设备端上报数据。
 
-3. 修改 tc_iot_device_config.h 编译配置文件，配置产品信息相关参数，详见注释：
+3. 进入【基本信息】，点击【导出】，导出 iot-xxxxx.json 文档，将 iot-xxxxx.json 文档放到 examples/scenarios/smartbox 目录下，覆盖 iot-product.json 文件。
+4. 通过脚本自动生成演示配置文件。
+
 ```shell
-/* 设备激活及获取 secret 接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/secret */
-/* Token接口，地址格式为：<机房标识>.auth-device-iot.tencentcloudapi.com/token */
-/* 机房标识：
-    广州机房=gz
-    北京机房=bj
-    ...
-*/
-#ifdef ENABLE_TLS
-#define TC_IOT_CONFIG_AUTH_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/token"
-#define TC_IOT_CONFIG_ACTIVE_API_URL "https://gz.auth-device-iot.tencentcloudapi.com/secret"
-#else
-#define TC_IOT_CONFIG_AUTH_API_URL "http://gz.auth-device-iot.tencentcloudapi.com/token"
-#define TC_IOT_CONFIG_ACTIVE_API_URL "http://gz.auth-device-iot.tencentcloudapi.com/secret"
-#endif
+# 进入工具脚本目录
+cd tools
+python tc_iot_code_generator.py -c ../examples/scenarios/smartbox/iot-product.json code_templates/tc_iot_device_config.h
+```
 
-/* 以下配置需要先在官网创建产品和设备，然后获取相关信息更新*/
-/* MQ服务地址，可以在产品“基本信息页”->“mqtt链接地址”位置找到。*/
-#define TC_IOT_CONFIG_SERVER_HOST "mqtt-5ns8xh714.ap-guangzhou.mqtt.tencentcloudmq.com"
-/*#define TC_IOT_CONFIG_SERVER_HOST "localhost"*/
-/* 产品id，可以在产品“基本信息页”->“产品id”位置找到*/
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_ID "iot-7hjcfc6k"
-#define TC_IOT_CONFIG_DEVICE_PRODUCT_KEY "mqtt-5ns8xh714"
+执行成功后会看到有如下提示信息：
+```shell
+加载 ../examples/scenarios/smartbox/iot-product.json 文件成功
+文件 ../examples/scenarios/smartbox/tc_iot_device_config.h 生成成功
+```
 
+5. 修改 tc_iot_device_config.h 配置，设置 Device Name 和 Device Secret：
+```c
 /* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
 
 /* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
 #define TC_IOT_CONFIG_DEVICE_NAME "device_name"
-
 ```
 
-4. 代码及配置生成成功后，进入 build 目录，开始编译。
+6. 代码及配置生成成功后，进入 build 目录，开始编译。
 
 ```shell
-cd build
+cd ../build
 make
 ```
 

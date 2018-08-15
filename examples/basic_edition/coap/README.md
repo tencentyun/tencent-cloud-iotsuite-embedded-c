@@ -58,7 +58,7 @@ make
 
 ```
 
-## 数据及函数执行流程
+## 数据交互流程
 - 下图展示的流程为：设备定时上报数据的流程。
 
 ![图例](https://user-images.githubusercontent.com/990858/44085055-05d1da92-9feb-11e8-9221-163bc9a5fe23.png)

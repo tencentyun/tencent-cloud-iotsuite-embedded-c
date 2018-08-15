@@ -5,6 +5,36 @@
 ```shell
 #define TC_IOT_FIRM_VERSION "LINUXV1.0"
 ```
+3. 进入【基本信息】，点击【导出】，导出 iot-xxxxx.json 文档，将 iot-xxxxx.json 文档放到 examples/scenarios/ota 目录下，覆盖 iot-product.json 文件。
+4. 通过脚本自动生成演示配置文件。
+
+```shell
+# 进入工具脚本目录
+cd tools
+python tc_iot_code_generator.py -c ../examples/scenarios/ota/iot-product.json code_templates/tc_iot_device_config.h
+```
+
+执行成功后会看到有如下提示信息：
+```shell
+加载 ../examples/scenarios/ota/iot-product.json 文件成功
+文件 ../examples/scenarios/ota/tc_iot_device_config.h 生成成功
+```
+
+5. 修改 tc_iot_device_config.h 配置，设置 Device Name 和 Device Secret：
+```c
+/* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
+
+/* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
+```
+
+6. 代码及配置生成成功后，进入 build 目录，开始编译。
+
+```shell
+cd ../build
+make
+```
 
 ## 运行程序
 编译完成后，在 build/bin/ 目录下，会产生一个 scn_ota 程序。
@@ -32,6 +62,8 @@
 
 ## 控制台操作
 控制台上传固件，配置升级任务，下发给当前设备，即可体验 OTA 流程。
+
+## 数据交互流程
 ![图例](https://user-images.githubusercontent.com/990858/44129418-c946d2f4-a07a-11e8-8867-9f379303f802.png)
 
 ## OTA 功能开发指引

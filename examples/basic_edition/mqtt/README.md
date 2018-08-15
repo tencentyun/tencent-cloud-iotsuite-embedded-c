@@ -36,7 +36,6 @@ cd ../build
 make
 ```
 
-
 ## 运行程序
 ### MQTT 示例
 编译完成后，在 build/bin/ 目录下，会产生一个 basic_mqtt 程序。
@@ -65,7 +64,7 @@ make
 #### MQTT 收发消息
 收发 MQTT 消息，参见 demo_mqtt.c 中tc_iot_mqtt_client_publish(发送消息) & tc_iot_mqtt_client_subscribe(订阅 Topic) 。
 
-## 数据及函数执行流程
+## 数据交互流程
 - 下图展示的流程为：
     1. 设备上线，并订阅下行消息 Topic ；
     2. 用户调用 API，通过发送 MQTT 消息到指定 Topic的方式，发送控制指令；
