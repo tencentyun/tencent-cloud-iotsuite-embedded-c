@@ -181,7 +181,11 @@ cd bin
 ```
 
 ## SDK接口说明
-以下是C SDK 提供的功能和对应 API，用于设备端编写业务逻辑，API 接口暂不支持多线程调用，在多线程环境下，请勿跨线程调用。 更加详细的接口功能说明请查看 [include/tc_iot_export.h](include/tc_iot_export.h) 中的注释。
+以下是C SDK 提供的功能和对应 API，用于设备端编写业务逻辑，API 接口暂不支持多线程调用，在多线程环境下，请勿跨线程调用。 
+
+详细的接口功能说明，参见： [include/tc_iot_export.h](include/tc_iot_export.h)。
+
+SDK 常见错误码定义，参见：[tc_iot_const.h](include/common/tc_iot_const.h)。
 
 ### 1. 日志接口
 
