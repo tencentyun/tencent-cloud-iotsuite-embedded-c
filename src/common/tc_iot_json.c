@@ -307,6 +307,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
     IF_NULL_RETURN(json, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(root_token, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(path, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(count, 1, TC_IOT_INVALID_PARAMETER);
 
     for (tok_index = 0; tok_index < count;) {
         pos = strstr(name_start, ".");
