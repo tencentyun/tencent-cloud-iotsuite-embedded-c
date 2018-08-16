@@ -199,6 +199,7 @@ SDK 常见错误码定义，参见：[tc_iot_const.h](include/common/tc_iot_cons
 | 序号        | 函数名      | 说明        |
 | ---------- | ---------- | ---------- |
 | 1          | tc_iot_refresh_auth_token | 鉴权模式为动态令牌模式时，通过本接口获取访问 MQTT 服务端动态用户名和密码|
+| 2          | tc_iot_mqtt_refresh_dynamic_sign | 鉴权模式为签名认证模式时，通过本接口生成访问 MQTT 服务端动态用户名和密码|
 
 ### 3. MQTT 接口
 

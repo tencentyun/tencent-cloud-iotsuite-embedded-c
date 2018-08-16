@@ -7,7 +7,7 @@
 /* buffer 长度的倍数因子, 当属性太多json太长的时候, 一些buffer长度需要增加, 可以设置成 2 , 4 ,8 等数值 */
 #define BUF_MULTIPLE 			(1)
 
-#define TC_IOT_SDK_VERSION     "2.6"
+#define TC_IOT_SDK_VERSION     "2.7"
 
 /* mqtt消息接收缓冲区长度 */
 #define TC_IOT_CLIENT_READ_BUF_SIZE (1024*BUF_MULTIPLE)
