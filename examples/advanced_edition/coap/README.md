@@ -196,3 +196,22 @@ int tc_iot_coap_rpc( tc_iot_coap_client * c, const char * uri_path,
 int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms);
 ```
 
+### 4. 析构资源
+ tc_iot_coap_destroy 释放 CoAP client 对象相关资源。
+
+#### 样例
+
+```c
+    tc_iot_coap_destroy(p_coap_client);
+```
+
+#### 函数原型及说明
+
+```c
+/**
+ * @brief tc_iot_coap_destroy 释放 CoAP client 对象相关资源。
+ *
+ * @param c CoAP client 对象
+ */
+void tc_iot_coap_destroy(tc_iot_coap_client* c);
+```
