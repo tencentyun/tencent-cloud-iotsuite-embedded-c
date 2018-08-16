@@ -152,7 +152,7 @@ tc_iot_server_loop 服务任务主循环函数，接收服务推送及响应数�
 int tc_iot_server_loop(tc_iot_shadow_client* p_shadow_client, int yield_timeout);
 ```
 
-### 3. 主循环 
+### 3. 析构资源
  tc_iot_server_destroy 数据模板服务析构处理，释放资源。
 
 #### 样例
