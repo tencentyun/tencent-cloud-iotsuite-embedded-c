@@ -111,7 +111,7 @@ int main(int argc, char * argv[])
         tc_iot_hal_printf("Publish yielding ...\n");
         tc_iot_coap_yield(&coap_client, TC_IOT_COAP_MESSAGE_ACK_TIMEOUT_MS);
 
-        for (i = 20; i > 0; i--) {
+        for (i = 20; i > 0 && !stop; i--) {
             tc_iot_hal_printf("%d ...", i);
             tc_iot_hal_sleep_ms(1000);
         }
