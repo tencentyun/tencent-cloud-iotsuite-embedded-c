@@ -3,7 +3,7 @@ project (tencent-cloud-iotsuite-embedded-c C)
 
 set(CMAKE_BUILD_TYPE Debug)
 # sdk use c compiler, use this to disable find cxx compiler.
-set(CMAKE_CXX_COMPILER ${CMAKE_C_COMPILER})
+# set(CMAKE_CXX_COMPILER ${CMAKE_C_COMPILER})
 
 if(TC_IOT_PLATFORM_NAME)
 else()
