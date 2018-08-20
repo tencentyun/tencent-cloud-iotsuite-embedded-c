@@ -15,10 +15,9 @@ sudo apt install gcc-arm-linux-gnueabihf gcc-arm-linux-gnueabi
 # 根据对应平台指令架构提供，选择选择对应的前缀
 # 例如，如果用的编译器是 arm-linux-gnueabi-gcc ，
 # 则设置 TOOLCHAIN_PREFIX 为 arm-linux-gnueabi- 即可
-arm-linux-gnueabi-
 set(TOOLCHAIN_PREFIX arm-linux-gnueabi-)
 # or 
-set(TOOLCHAIN_PREFIX arm-linux-gnueabihf-)
+# set(TOOLCHAIN_PREFIX arm-linux-gnueabihf-)
 ```
 
 - b. 如果是自行指定的编译器，则修改 CMAKE_C_COMPILER 变量的值，设置为编译器程序绝对路径即可。
