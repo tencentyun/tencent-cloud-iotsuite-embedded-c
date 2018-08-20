@@ -27,7 +27,7 @@ set(TOOLCHAIN_PREFIX arm-linux-gnueabihf-)
 # 将
 # set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}gcc)
 # 修改为编译器的绝对路径
-set(CMAKE_C_COMPILER "/path/to/your/c/compler")
+set(CMAKE_C_COMPILER "/path/to/your/c/compiler")
 ```
 
 #### 3. 编译程序文件
