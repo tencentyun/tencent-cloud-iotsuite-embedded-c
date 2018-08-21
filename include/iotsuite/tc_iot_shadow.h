@@ -75,6 +75,7 @@ typedef struct _tc_iot_shadow_client {
     tc_iot_shadow_session sessions[TC_IOT_MAX_SESSION_COUNT];
     char desired_bits[(TC_IOT_MAX_PROPERTY_COUNT/8)+1];
     char reported_bits[(TC_IOT_MAX_PROPERTY_COUNT/8)+1];
+    unsigned int desired_version;
 } tc_iot_shadow_client;
 
 
@@ -269,7 +270,8 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         message_ack_handler callback, int timeout_ms, void * session_context);
 int tc_iot_shadow_doc_pack_for_get_with_sid(char *buffer, int buffer_len,
                                     char * session_id, int session_id_len,
-                                    tc_iot_shadow_client *c);
+                                    bool metadata, bool reported,
+                                    tc_iot_shadow_client *c) ;
 int tc_iot_shadow_doc_pack_for_update_with_sid(char *buffer, int buffer_len,
                                     char * session_id, int session_id_len,
                                     const char * reported, const char * desired,
@@ -284,9 +286,8 @@ int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
                                  const char * method,
                                  tc_iot_shadow_client *c);
 
-int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len,
-        const char * reported,
-        const char * desired);
+int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len, const char * reported,
+        const char * desired, tc_iot_shadow_client *c);
 int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_client *c);
 
 int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len,
@@ -316,7 +317,7 @@ int tc_iot_shadow_cmp_local_with_desired(tc_iot_shadow_client * c, int property_
 void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, void * p_cache);
 void * tc_iot_shadow_save_string_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, int len, void * p_cache);
 
-int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, char * buffer, int buffer_len);
+int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, tc_iot_json_writer * w);
 int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         message_ack_handler callback, int timeout_ms, void * session_context, bool do_confirm);
 

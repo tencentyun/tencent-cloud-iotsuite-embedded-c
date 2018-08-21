@@ -243,6 +243,8 @@ int tc_iot_shadow_doc_parse(tc_iot_shadow_client * p_shadow_client,
     int desired_len = 0;
     int field_index = 0;
     int ret = 0;
+    unsigned int version = 0;
+    const char * pos = NULL;
 
     /* 检查 reported 字段是否存在 */
     field_index = tc_iot_json_find_token(payload, json_token, token_count, "payload.state.reported", NULL, 0);
@@ -262,6 +264,25 @@ int tc_iot_shadow_doc_parse(tc_iot_shadow_client * p_shadow_client,
         desired_start = payload + json_token[field_index].start;
         desired_len = json_token[field_index].end - json_token[field_index].start;
         TC_IOT_LOG_TRACE("payload.state.desired found:%s", tc_iot_log_summary_string(desired_start, desired_len));
+
+        field_index = tc_iot_json_find_token(payload, json_token, token_count, "version", NULL, 0);
+        if (field_index > 0) {
+            pos = payload + json_token[field_index].start;
+            version = 0;
+            while (*pos >= '0' && *pos <= '9') {
+                version = 10*version + (*pos - '0');
+                TC_IOT_LOG_TRACE("pos=%c", *pos);
+                pos++;
+            }
+            if (version > 0) {
+                if (p_shadow_client->desired_version > version ) {
+                    TC_IOT_LOG_WARN("version reversed: old=%u,new=%u ", p_shadow_client->desired_version , version);
+                }
+                p_shadow_client->desired_version = version;
+            }
+        } else {
+            TC_IOT_LOG_TRACE("no version field.");
+        }
     }
 
     /* 根据控制台或者 APP 端的指令，设定设备状态 */
