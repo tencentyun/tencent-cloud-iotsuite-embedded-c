@@ -134,7 +134,7 @@ sudo apt install cmake python2.7 git build-essential
 cd tencent-cloud-iotsuite-embedded-c
 mkdir -p build
 cd build
-cmake -DCMAKE_TOOLCHAIN_FILE=../tools/cross-compile/arm-gcc-toolchain.cmake ../
+cmake ../
 make
 ```
 
