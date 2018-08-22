@@ -29,6 +29,15 @@ python tc_iot_code_generator.py -c ../examples/advanced_edition/mqtt/iot-product
 
 ```
 
+5. 修改 tc_iot_device_config.h 配置，设置 Device Name 和 Device Secret：
+```c
+/* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
+
+/* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
+```
+
 ## 自定义设备数据和设备属性上报逻辑
 ### 设备数据
 #### 关键变量
