@@ -29,7 +29,17 @@ python tc_iot_code_generator.py -c ../examples/scenarios/light/iot-product.json 
 文件 ../examples/scenarios/light/tc_iot_device_logic.h 生成成功
 ```
 
-5. 代码及配置生成成功后，进入 build 目录，开始编译。
+5. 修改 tc_iot_device_config.h 配置，设置 Device Name 和 Device Secret：
+```c
+/* 设备密钥，可以在产品“设备管理”->“设备证书”->“Device Secret”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_SECRET "00000000000000000000000000000000"
+
+/* 设备名称，可以在产品“设备管理”->“设备名称”位置找到*/
+#define TC_IOT_CONFIG_DEVICE_NAME "device_name"
+```
+
+## 编译程序
+代码及配置生成成功后，进入 build 目录，开始编译。
 
 ```shell
 cd ../build

@@ -27,7 +27,8 @@ python tc_iot_code_generator.py -c ../examples/basic_edition/coap/iot-product.js
 #define TC_IOT_CONFIG_DEVICE_NAME "device_name"
 ```
 
-6. 代码及配置生成成功后，进入 build 目录，开始编译。
+## 编译程序
+代码及配置生成成功后，进入 build 目录，开始编译。
 
 ```shell
 cd ../build
