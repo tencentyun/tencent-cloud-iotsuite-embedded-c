@@ -96,8 +96,7 @@ def mqtt_auth_gen( _client_id) :
     password = "productId=%s&nonce=%d&timestamp=%d&%s" % (product_id, nonce, now_ts, sig)
 
     #print password
-    print 'mosquitto_sub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d\n'%( mqtt_host, device_name, password , _client_id, "%s/%s/#" %(product_id, device_
-name) )
+    print 'mosquitto_sub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d\n'%( mqtt_host, device_name, password , _client_id, "%s/%s/#" %(product_id, device_name) )
     print 'mosquitto_pub  -h %s -p 1883 -u %s -P "%s" -i %s  -V mqttv311 -t "%s" -d -m "just4test" -q 1\n'%( mqtt_host, device_name, password, _client_id, "%s/%s/XXXXX_PLS_MODIFY" %(product_id, device_name) )
 
 
