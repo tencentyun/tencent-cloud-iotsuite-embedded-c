@@ -6,6 +6,7 @@ import sys
 import os
 import argparse
 import glob
+import cStringIO
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -120,6 +121,103 @@ class iot_field:
     def get_meta_define_str(self):
         return '{{ "{}", {}, {}, offsetof(tc_iot_shadow_local_data, {}),TC_IOT_MEMBER_SIZE(tc_iot_shadow_local_data,{}) }},' \
                     .format(self.name, self.get_id_c_macro_name(), self.type_id, self.name, self.name)
+
+    def get_sample_process_code_snippet(self, indent):
+        sample_code = ""
+        if self.type_name == "bool":
+            sample_code = """
+<indent><indent>if (strcmp("field_name", key_buf) == 0 ) {
+<indent><indent><indent>TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_field_name);
+<indent><indent><indent>TC_IOT_LOG_TRACE("desired field: %s=%s->%s", key_buf, p_local_data->field_name?"true":"false", val_buf);
+<indent><indent><indent>p_local_data->field_name = (0 == strcmp(val_buf, "true"));
+<indent><indent><indent>continue;
+<indent><indent>}
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+
+        elif self.type_name == "enum":
+            sample_code = """
+<indent><indent>if (strcmp("field_name", key_buf) == 0 ) {
+<indent><indent><indent>TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_field_name);
+<indent><indent><indent>TC_IOT_LOG_TRACE("desired field: %s=%d->%s", key_buf, p_local_data->field_name, val_buf);
+<indent><indent><indent>p_local_data->field_name = atoi(val_buf);
+<indent><indent><indent>continue;
+<indent><indent>}
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        elif self.type_name == "number":
+            sample_code = """
+<indent><indent>if (strcmp("field_name", key_buf) == 0 ) {
+<indent><indent><indent>TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_field_name);
+<indent><indent><indent>TC_IOT_LOG_TRACE("desired field: %s=%f->%s", key_buf, p_local_data->field_name, val_buf);
+<indent><indent><indent>p_local_data->field_name = atof(val_buf);
+<indent><indent><indent>continue;
+<indent><indent>} 
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        elif self.type_name == "int":
+            sample_code = """
+<indent><indent>if (strcmp("field_name", key_buf) == 0 ) {
+<indent><indent><indent>TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_field_name);
+<indent><indent><indent>TC_IOT_LOG_TRACE("desired field: %s=%d->%s", key_buf, p_local_data->field_name, val_buf);
+<indent><indent><indent>p_local_data->field_name = atoi(val_buf);
+<indent><indent><indent>continue;
+<indent><indent>} 
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        elif self.type_name == "string":
+            sample_code = """
+<indent><indent>if (strcmp("field_name", key_buf) == 0 ) {
+<indent><indent><indent>TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_field_name);
+<indent><indent><indent>TC_IOT_LOG_TRACE("desired field: %s=%s->%s", key_buf, p_local_data->field_name, val_buf);
+<indent><indent><indent>strcpy(p_local_data->field_name, val_buf);
+<indent><indent><indent>continue;
+<indent><indent>} 
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        else:
+            raise Exception("invalid data type")
+        return sample_code
+
+    def get_sample_update_code_snippet(self, indent):
+        sample_code = ""
+        if self.type_name == "bool":
+            sample_code = """
+<indent>if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_field_name)) {
+<indent><indent>tc_iot_json_writer_bool(w ,"field_name", p_local_data->field_name);
+<indent>}
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+
+        elif self.type_name == "enum":
+            sample_code = """
+<indent>if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_field_name)) {
+<indent><indent>tc_iot_json_writer_int(w ,"field_name", p_local_data->field_name);
+<indent>}
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        elif self.type_name == "number":
+            sample_code = """
+<indent>if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_field_name)) {
+<indent><indent>tc_iot_json_writer_decimal(w ,"field_name", p_local_data->field_name);
+<indent>}
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        elif self.type_name == "int":
+            sample_code = """
+<indent>if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_field_name)) {
+<indent><indent>tc_iot_json_writer_int(w ,"field_name", p_local_data->field_name);
+<indent>}
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        elif self.type_name == "string":
+            sample_code = """
+<indent>if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_field_name)) {
+<indent><indent>tc_iot_json_writer_string(w ,"field_name", p_local_data->field_name);
+<indent>}
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        else:
+            raise Exception("invalid data type")
+        return sample_code
+
+    def get_sample_delete_code_snippet(self, indent):
+        sample_code = """
+<indent>if (TC_IOT_BIT_GET(desired_bits, TC_IOT_PROP_field_name)) {
+<indent><indent>tc_iot_json_writer_null(w ,"field_name");
+<indent>}
+""".replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
+        return sample_code
 
     def get_sample_code_snippet(self, indent, data_pointer):
         sample_code = ""
@@ -250,6 +348,30 @@ class iot_struct:
         sample_code += (indent * 1) + 'return TC_IOT_SUCCESS;\n'
         return declare_code + sample_code;
 
+    def generate_coap_delete_code(self):
+        declare_code = ""
+        sample_code = ""
+        indent = "    "
+        for field in self.fields:
+            sample_code += field.get_sample_delete_code_snippet(indent)
+        return declare_code + sample_code;
+
+    def generate_coap_update_code(self):
+        declare_code = ""
+        sample_code = ""
+        indent = "    "
+        for field in self.fields:
+            sample_code += field.get_sample_update_code_snippet(indent)
+        return declare_code + sample_code;
+
+    def generate_coap_process_code(self):
+        declare_code = ""
+        sample_code = ""
+        indent = "    "
+        for field in self.fields:
+            sample_code += field.get_sample_process_code_snippet(indent)
+        return declare_code + sample_code;
+
     def generate_sim_data_change(self):
         declare_code = "    int i = 0;\n"
         sample_code = ""
@@ -359,6 +481,58 @@ def smart_parser(source_str, template_config, data_template, script_open_mark="/
     result += source_str[start:]
     return result
 
+def smart_parser_v2(source_str, env_vars, script_open_mark="{%",
+                        script_close_mark="%}"):
+    start = 0
+    code_start = 0
+    code_end = 0
+    open_mark_len = len(script_open_mark)
+    close_mark_len = len(script_close_mark)
+    output = cStringIO.StringIO()
+
+    code_start = source_str.find(script_open_mark, start)
+    while(code_start >= 0):
+        code_end = source_str.find(script_close_mark, code_start)
+        if (code_end <= code_start):
+            print(u"ERROR: " + script_open_mark + " has no match " + script_close_mark + "\n")
+            break
+        output.write(source_str[start:code_start])
+        if source_str[code_start+open_mark_len] != '?':
+            code_snip = source_str[code_start+open_mark_len:code_end]
+            try:
+                temp = eval(code_snip,{"output": output}, env_vars)
+            except:
+                print("ERROR parsing:" + code_snip)
+                raise
+
+            if (isinstance(temp, int)):
+                output.write(str(temp))
+            else:
+                output.write(temp)
+
+            start = code_end + close_mark_len
+            code_start = source_str.find(script_open_mark, start)
+        else:
+            code_block = source_str[code_start+open_mark_len+1:code_end]
+            try:
+                exec(code_block, {"output": output}, env_vars)
+            except:
+                print("ERROR parsing:" + code_block)
+                raise
+            start = code_end + len(script_close_mark)
+            
+            # skip newline following the close brace '%}'
+            if source_str[start] == '\r':
+                start += 1
+            if source_str[start] == '\n':
+                start += 1
+            code_start = source_str.find(script_open_mark, start)
+
+    output.write( source_str[start:])
+    result = output.getvalue()
+    output.close()
+    return result
+
 
 def main():
     parser = argparse.ArgumentParser(description='Iotsuite device data code generator.')
@@ -386,8 +560,8 @@ def main():
         device_config.Region = device_config.region
         device_config.AuthType = device_config.auth_type
         device_config.Domain = device_config.domain
-        device_config.Username = device_config.username
-        device_config.Password = device_config.password
+        device_config.Username = ""
+        device_config.Password = ""
         if 'data_template' not in device_config:
             device_config.data_template = []
         device_config.DataTemplate = device_config.data_template
@@ -405,13 +579,20 @@ def main():
         data_template = iot_struct(device_config.DataTemplate)
         for template_files in args.files:
             for template_file in glob.glob(template_files):
+                if os.path.isdir(template_file):
+                    continue
                 input_file_name = template_file
                 input_file = open(input_file_name, "r")
                 input_str = input_file.read()
 
                 output_file_name = config_dir + os.path.basename(template_file)
                 output_file = open(output_file_name, "w")
-                output_file.write(smart_parser(input_str, device_config, data_template))
+                output_file.write(
+                    smart_parser_v2(input_str, 
+                                    {"template_config":device_config, "data_template":data_template},
+                                    "/*${", "}*/"
+                                    )
+                )
                 print(u"文件 {} 生成成功".format(output_file_name))
 
 

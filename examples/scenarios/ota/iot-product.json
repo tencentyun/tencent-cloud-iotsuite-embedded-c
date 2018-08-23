@@ -1,0 +1,17 @@
+{
+    "app_id": 1251416838,
+    "auth_type": 1,
+    "create_time": "2018-08-06 21:07:42",
+    "data_protocol": "native",
+    "data_template": [],
+    "deleted": 0,
+    "description": "C SDK MQTT \u81ea\u5b9a\u4e49\u534f\u8bae\u6a21\u5f0f\u6f14\u793a\u3002",
+    "domain": "mqtt-1e8vngcm2.ap-guangzhou.mqtt.tencentcloudmq.com",
+    "message": "",
+    "name": "sdk-demo-raw-mqtt",
+    "product_id": "iot-dlz9ojsy",
+    "product_key": "mqtt-1e8vngcm2",
+    "region": "gz",
+    "standard": 3,
+    "update_time": "2018-08-06 21:07:43"
+}

@@ -15,7 +15,7 @@
 
 #define HTTP_SPLIT_STR "\r\n"
 #define HTTP_REQUEST_LINE_FMT ("%s %s HTTP/%s" HTTP_SPLIT_STR)
-#define HTTP_HEADER_FMT "%s: %.*s\r\n"
+#define HTTP_HEADER_FMT "%s: %s\r\n"
 #define HTTP_HEADER_HOST "Host"
 #define HTTP_HEADER_ACCEPT "Accept"
 #define HTTP_HEADER_ACCEPT_ENCODING "Accept-Encoding"
@@ -260,7 +260,6 @@ int http_post_json(tc_iot_network_t* network,
                          const char* json_body, char* resp, int resp_max_len,
                          int timeout_ms);
 
-int tc_iot_calc_sign(unsigned char * output, int output_len, const char * secret, const char * format, ...) ;
 
 int tc_iot_create_mqapi_rpc_json(char* form, int max_form_len,
                                     const char* secret,
@@ -270,5 +269,6 @@ int tc_iot_create_mqapi_rpc_json(char* form, int max_form_len,
                                     const char* product_id,
                                     long timestamp
                                     );
+
 
 #endif /* end of include guard */

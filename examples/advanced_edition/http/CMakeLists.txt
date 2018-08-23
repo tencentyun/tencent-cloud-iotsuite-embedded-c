@@ -1,0 +1,4 @@
+
+add_executable(advanced_http http_rpc_main.c tc_iot_http_client_config_opts.c)
+target_link_libraries(advanced_http tc_iot_http_mqapi)
+

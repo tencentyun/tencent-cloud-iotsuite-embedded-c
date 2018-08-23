@@ -3,7 +3,7 @@ project (tencent-cloud-iotsuite-embedded-c C)
 
 set(CMAKE_BUILD_TYPE Debug)
 # sdk use c compiler, use this to disable find cxx compiler.
-set(CMAKE_CXX_COMPILER ${CMAKE_C_COMPILER})
+# set(CMAKE_CXX_COMPILER ${CMAKE_C_COMPILER})
 
 if(TC_IOT_PLATFORM_NAME)
 else()
@@ -35,7 +35,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-file(COPY tools/tc_iot_shadow_cli.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 file(COPY tools/tc_iot_code_generator.py DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 option(ENABLE_MQTT "use MQTT" ON)

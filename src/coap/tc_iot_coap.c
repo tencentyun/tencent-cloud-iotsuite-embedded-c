@@ -479,8 +479,8 @@ int tc_iot_coap_construct(tc_iot_coap_client* c, tc_iot_coap_client_config* p_cl
 
     c->buf_size = TC_IOT_COAP_SEND_BUF_SIZE;
     c->readbuf_size = TC_IOT_COAP_RECV_BUF_SIZE;
-    TC_IOT_LOG_TRACE("mqtt client buf_size=%ld,readbuf_size=%ld,", c->buf_size,
-              c->readbuf_size);
+    TC_IOT_LOG_TRACE("mqtt client buf_size=%d,readbuf_size=%d,", (int)c->buf_size,
+              (int)c->readbuf_size);
     c->next_packetid = 0;
 
     ret = c->ipstack.do_connect(&(c->ipstack), NULL, 0);
@@ -689,12 +689,16 @@ int tc_iot_coap_yield(tc_iot_coap_client * c, int timeout_ms) {
                 } else {
                     TC_IOT_LOG_ERROR("no handler for message id=%d", message.message_id);
                 }
+                break;
             }
             break;
         }
 
     } while (!tc_iot_hal_timer_is_expired(&timer));
 
+    if (rc > 0) {
+        rc = TC_IOT_SUCCESS;
+    }
     return rc;
 }
 

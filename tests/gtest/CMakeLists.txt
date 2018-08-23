@@ -20,3 +20,8 @@ add_executable(test_iotsuite gtest.cpp data_template/tc_iot_suite_test.cpp
 target_link_libraries(test_iotsuite stdc++ pthread gtest gtest_main tc_iot_suite tc_iot_common tc_iot_token )
 add_test(NAME test_iotsuite COMMAND test_iotsuite)
 
+add_executable(test_mqapi gtest.cpp data_template/tc_iot_mqapi_test.cpp)
+target_link_libraries(test_mqapi stdc++ pthread gtest gtest_main tc_iot_suite
+    tc_iot_common tc_iot_token tc_iot_http_mqapi)
+add_test(NAME test_mqapi COMMAND test_mqapi)
+

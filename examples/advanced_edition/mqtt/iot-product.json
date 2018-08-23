@@ -1,0 +1,60 @@
+{
+    "app_id": 0,
+    "auth_type": 1,
+    "create_time": "2018-04-19 18:02:26",
+    "data_template": [
+        {
+            "desc": "bool type param",
+            "mode": "rw",
+            "name": "param_bool",
+            "range": [
+                true,
+                false
+            ],
+            "type": "bool"
+        },
+        {
+            "desc": "enum type param",
+            "mode": "rw",
+            "name": "param_enum",
+            "range": [
+                "enum_a",
+                "enum_b",
+                "enum_c"
+            ],
+            "type": "enum"
+        },
+        {
+            "desc": "number type param",
+            "mode": "rw",
+            "name": "param_number",
+            "range": [
+                0,
+                4095
+            ],
+            "type": "number"
+        },
+        {
+            "desc": "string type param",
+            "mode": "rw",
+            "name": "param_string",
+            "range": [
+                0,
+                64
+            ],
+            "type": "string"
+        }
+    ],
+    "deleted": 0,
+    "description": "sdk app use token.",
+    "domain": "mqtt-1doou8fjk.ap-guangzhou.mqtt.tencentcloudmq.com",
+    "message": "",
+    "name": "sdk-demo-app-token",
+    "password": "",
+    "product_id": "iot-9fi4gnz8",
+    "product_key": "mqtt-1doou8fjk",
+    "region": "gz",
+    "standard": 3,
+    "update_time": "2018-04-19 18:04:06",
+    "username": ""
+}

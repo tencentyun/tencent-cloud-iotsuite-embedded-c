@@ -1,4 +1,0 @@
-
-add_executable(demo_http_rpc http_rpc_main.c tc_iot_http_client_config_opts.c)
-target_link_libraries(demo_http_rpc tc_iot_http_mqapi)
-

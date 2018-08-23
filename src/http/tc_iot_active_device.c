@@ -1,6 +1,6 @@
 #include "tc_iot_inc.h"
 
-int http_get_device_secret(const char* api_url, char* root_ca_path, long timestamp, long nonce,
+int tc_iot_get_device_secret(const char* api_url, char* root_ca_path, long timestamp, long nonce,
         tc_iot_device_info* p_device_info) {
 
     char sign_out[TC_IOT_HTTP_ACTIVE_REQUEST_FORM_LEN];
@@ -61,7 +61,7 @@ parse_url:
         }
         config->timeout_ms = TC_IOT_DEFAULT_TLS_HANSHAKE_TIMEOUT_MS;
         if (netcontext.use_tls) {
-            config->verify_server = 1;
+            config->verify_server = TC_IOT_HTTPS_CERT_STRICT_CHECK;
         }
 
         tc_iot_hal_tls_init(&network, &netcontext);

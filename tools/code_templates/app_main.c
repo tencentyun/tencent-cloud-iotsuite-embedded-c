@@ -36,10 +36,14 @@ void operate_device(tc_iot_shadow_local_data * p_device_data) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
 
-    tc_iot_hal_printf( "%04d-%02d-%02d %02d:%02d:%02d do something for data change." ,
+    tc_iot_hal_printf( "%04d-%02d-%02d %02d:%02d:%02d do something for data change.\n" ,
             tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 }
 
+
+/**
+ * @brief 本函数演示，当设备端状态发生变化时，如何更新设备端数据，并上报给服务端。
+ */
 void do_sim_data_change(void) {
     TC_IOT_LOG_TRACE("simulate data change.");
 /*${data_template.generate_sim_data_change()}*/
@@ -52,7 +56,6 @@ int main(int argc, char** argv) {
     tc_iot_mqtt_client_config * p_client_config;
     bool use_static_token;
     int ret;
-    int i = 0;
     long timestamp = tc_iot_hal_timestamp(NULL);
     tc_iot_hal_srandom(timestamp);
     long nonce = tc_iot_hal_random();
@@ -67,9 +70,9 @@ int main(int argc, char** argv) {
     parse_command(p_client_config, argc, argv);
 
     /* 根据 product id 和device name 定义，生成发布和订阅的 Topic 名称。 */
-    snprintf(g_tc_iot_shadow_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SUB_TOPIC_FMT,
+    snprintf(g_tc_iot_shadow_config.sub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SHADOW_SUB_TOPIC_FMT,
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
-    snprintf(g_tc_iot_shadow_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_PUB_TOPIC_FMT,
+    snprintf(g_tc_iot_shadow_config.pub_topic,TC_IOT_MAX_MQTT_TOPIC_LEN, TC_IOT_SHADOW_PUB_TOPIC_FMT,
             p_client_config->device_info.product_id,p_client_config->device_info.device_name);
 
     /* 判断是否需要获取动态 token */
@@ -78,10 +81,7 @@ int main(int argc, char** argv) {
     if (!use_static_token) {
         /* 获取动态 token */
         tc_iot_hal_printf("requesting username and password for mqtt.\n");
-        ret = http_refresh_auth_token_with_expire(
-                TC_IOT_CONFIG_AUTH_API_URL, NULL,
-                timestamp, nonce,
-                &p_client_config->device_info, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
+        ret = TC_IOT_AUTH_FUNC( timestamp, nonce, &p_client_config->device_info, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
         if (ret != TC_IOT_SUCCESS) {
             tc_iot_hal_printf("refresh token failed, trouble shooting guide: " "%s#%d\n", TC_IOT_TROUBLE_SHOOTING_URL, ret);
             return 0;
@@ -99,11 +99,6 @@ int main(int argc, char** argv) {
 
     while (!stop) {
         tc_iot_server_loop(tc_iot_get_shadow_client(), 200);
-        for (i = 5; i > 0; i--) {
-            tc_iot_hal_printf("%d ...\n", i);
-            tc_iot_hal_sleep_ms(1000);
-        }
-        do_sim_data_change();
     }
 
     tc_iot_server_destroy(tc_iot_get_shadow_client());

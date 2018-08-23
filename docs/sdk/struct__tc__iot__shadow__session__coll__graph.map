@@ -1,5 +1,0 @@
-<map id="_tc_iot_shadow_session" name="_tc_iot_shadow_session">
-<area shape="rect" id="node2" href="$struct__tc__iot__timer.html" title="_tc_iot_timer" alt="" coords="5,95,103,121"/>
-<area shape="rect" id="node3" href="$struct__tc__iot__message__data.html" title="接收到的订阅消息 " alt="" coords="127,95,280,121"/>
-<area shape="rect" id="node4" href="$struct__tc__iot__mqtt__message.html" title="MQTT Publis请求消息，头部参数定义(非协议头)，关键参数说明 " alt="" coords="126,5,281,32"/>
-</map>

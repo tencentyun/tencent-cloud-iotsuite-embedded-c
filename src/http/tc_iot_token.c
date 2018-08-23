@@ -1,7 +1,6 @@
 #include "tc_iot_inc.h"
 
-int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path, long timestamp, long nonce,
-        tc_iot_device_info* p_device_info, long expire) {
+int tc_iot_refresh_auth_token(long timestamp, long nonce, tc_iot_device_info* p_device_info, long expire) {
 
     char sign_out[TC_IOT_HTTP_TOKEN_REQUEST_FORM_LEN];
     char http_buffer[TC_IOT_HTTP_TOKEN_RESPONSE_LEN];
@@ -29,17 +28,20 @@ int http_refresh_auth_token_with_expire(const char* api_url, char* root_ca_path,
     int temp_len;
     int username_index;
     int redirect_count = 0;
+    const char* api_url = NULL;
 
 
     if (expire > TC_IOT_TOKEN_MAX_EXPIRE_SECOND) {
-        TC_IOT_LOG_WARN("expire=%ld to large, setting to max value = %d", expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
+        TC_IOT_LOG_WARN("expire=%d to large, setting to max value = %d", (int)expire, TC_IOT_TOKEN_MAX_EXPIRE_SECOND);
         expire = TC_IOT_TOKEN_MAX_EXPIRE_SECOND;
     }
 
     memset(&netcontext, 0, sizeof(netcontext));
 
-    IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(p_device_info, TC_IOT_NULL_POINTER);
+
+    api_url = p_device_info->token_url;
+    IF_NULL_RETURN(api_url, TC_IOT_NULL_POINTER);
 
     sign_len = tc_iot_create_auth_request_form(
         sign_out, sizeof(sign_out), p_device_info->secret,
@@ -65,12 +67,9 @@ parse_url:
 
         config = &(netcontext.tls_config);
         config->root_ca_in_mem = g_tc_iot_https_root_ca_certs;
-        if (root_ca_path) {
-            config->root_ca_location = root_ca_path;
-        }
         config->timeout_ms = TC_IOT_DEFAULT_TLS_HANSHAKE_TIMEOUT_MS;
         if (netcontext.use_tls) {
-            config->verify_server = 1;
+            config->verify_server = TC_IOT_HTTPS_CERT_STRICT_CHECK;
         }
 
         tc_iot_hal_tls_init(&network, &netcontext);
@@ -200,10 +199,5 @@ parse_url:
     }
 }
 
-int http_refresh_auth_token(const char* api_url, char* root_ca_path, long timestamp, long nonce,
-        tc_iot_device_info* p_device_info) {
-    return http_refresh_auth_token_with_expire(api_url, root_ca_path, 
-            timestamp, nonce, p_device_info, TC_IOT_TOKEN_DEFAULT_EXPIRE_SECOND);
-}
 
 

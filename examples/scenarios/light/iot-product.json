@@ -1,0 +1,69 @@
+{
+    "app_id": 1251416838,
+    "auth_type": 1,
+    "create_time": "2018-08-07 10:21:23",
+    "data_protocol": "template",
+    "data_template": [
+        {
+            "desc": "light on or off",
+            "mode": "rw",
+            "name": "device_switch",
+            "range": [
+                true,
+                false
+            ],
+            "type": "bool"
+        },
+        {
+            "desc": "color of light",
+            "mode": "rw",
+            "name": "color",
+            "range": [
+                "red",
+                "green",
+                "blue"
+            ],
+            "type": "enum"
+        },
+        {
+            "desc": "brighness of light",
+            "mode": "rw",
+            "name": "brightness",
+            "range": [
+                0,
+                100
+            ],
+            "type": "number"
+        },
+        {
+            "desc": "power usage",
+            "mode": "rw",
+            "name": "power",
+            "range": [
+                1,
+                100
+            ],
+            "type": "number"
+        },
+        {
+            "desc": "name or flag for the light",
+            "mode": "rw",
+            "name": "name",
+            "range": [
+                0,
+                16
+            ],
+            "type": "string"
+        }
+    ],
+    "deleted": 0,
+    "description": "\u667a\u80fd\u706f\u6f14\u793a\u3002",
+    "domain": "mqtt-ify9tmhk.ap-guangzhou.mqtt.tencentcloudmq.com",
+    "message": "",
+    "name": "sdk-demo-light",
+    "product_id": "iot-gohk1kbq",
+    "product_key": "mqtt-ify9tmhk",
+    "region": "gz",
+    "standard": 3,
+    "update_time": "2018-08-07 10:39:14"
+}

@@ -1,8 +1,0 @@
-<map id="_tc_iot_mqtt_client" name="_tc_iot_mqtt_client">
-<area shape="rect" id="node2" href="$structtc__iot__network__t.html" title="网络连接对象，包括相关参数及回调函数 " alt="" coords="548,7,667,33"/>
-<area shape="rect" id="node3" href="$structtc__iot__net__context__t.html" title="网络连接参数及过程会话数据 " alt="" coords="272,7,412,33"/>
-<area shape="rect" id="node4" href="$struct__tc__iot__mqtt__client_1_1MessageHandlers.html" title="_tc_iot_mqtt_client\l::MessageHandlers" alt="" coords="540,121,675,162"/>
-<area shape="rect" id="node5" href="$struct__tc__iot__message__data.html" title="接收到的订阅消息 " alt="" coords="265,84,419,111"/>
-<area shape="rect" id="node6" href="$struct__tc__iot__mqtt__message.html" title="MQTT Publis请求消息，头部参数定义(非协议头)，关键参数说明 " alt="" coords="5,84,160,111"/>
-<area shape="rect" id="node7" href="$struct__tc__iot__timer.html" title="_tc_iot_timer" alt="" coords="559,187,656,213"/>
-</map>

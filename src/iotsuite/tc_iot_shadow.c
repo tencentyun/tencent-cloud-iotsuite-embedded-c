@@ -562,7 +562,7 @@ int tc_iot_shadow_add_properties(char * buffer, int buffer_len, int property_tot
             /* TC_IOT_LOG_TRACE("buffer=%s", buffer); */
         } else if (current->type == TC_IOT_SHADOW_TYPE_BOOL) {
             ret = tc_iot_hal_snprintf(buffer + pos, buffer_len-pos,"\"%s\":%s",
-                    current->name, *(tc_iot_shadow_bool *)p_prop ? TC_IOT_JSON_TRUE:TC_IOT_JSON_FALSE);
+                    current->name, *(tc_iot_shadow_bool *)p_prop ? "1":"0");
             if(ret <= 0) {
                 return TC_IOT_BUFFER_OVERFLOW;
             }
@@ -678,8 +678,8 @@ int tc_iot_shadow_cmp_local(tc_iot_shadow_client * c, int property_id, void * sr
             ret = memcmp( p_dest_offset, p_src_offset, sizeof(tc_iot_shadow_bool));
             if (0 != ret) {
                 TC_IOT_LOG_TRACE("%s differ %s -> %s", p_prop->name,
-                        *(tc_iot_shadow_bool*)p_src_offset ? "true":"false",
-                        *(tc_iot_shadow_bool*)p_dest_offset ? "true":"false"
+                        *(tc_iot_shadow_bool*)p_src_offset ? TC_IOT_SHADOW_JSON_TRUE:TC_IOT_SHADOW_JSON_FALSE,
+                        *(tc_iot_shadow_bool*)p_dest_offset ? TC_IOT_SHADOW_JSON_TRUE:TC_IOT_SHADOW_JSON_FALSE
                         );
             }
             break;
@@ -852,9 +852,9 @@ int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, cha
         case TC_IOT_SHADOW_TYPE_BOOL:
             tc_iot_shadow_copy_local_to_reported(c, property_id);
             if (*(tc_iot_shadow_bool *)p_current) {
-                return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":true", p_prop->name);
+                return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":" TC_IOT_SHADOW_JSON_TRUE, p_prop->name);
             } else {
-                return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":false", p_prop->name);
+                return tc_iot_hal_snprintf(buffer, buffer_len, "\"%s\":" TC_IOT_SHADOW_JSON_FALSE, p_prop->name);
             }
         case TC_IOT_SHADOW_TYPE_NUMBER:
             tc_iot_shadow_copy_local_to_reported(c, property_id);

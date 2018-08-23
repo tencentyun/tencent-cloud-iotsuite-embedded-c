@@ -209,9 +209,9 @@ int tc_iot_json_unescape(char *dest, int dest_len, const char *src,
                             if (ret <= 0) {
                                 valid_escaped = false;
                                 TC_IOT_LOG_WARN(
-                                    "unicode %ld transform to utf8 failed: "
+                                    "unicode %d transform to utf8 failed: "
                                     "ret=%d",
-                                    temp_unicode, ret);
+                                    (int)temp_unicode, ret);
                                 break;
                             }
                             dest_index += ret;
@@ -307,6 +307,7 @@ int tc_iot_json_find_token(const char *json, const jsmntok_t *root_token,
     IF_NULL_RETURN(json, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(root_token, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(path, TC_IOT_NULL_POINTER);
+    IF_LESS_RETURN(count, 1, TC_IOT_INVALID_PARAMETER);
 
     for (tok_index = 0; tok_index < count;) {
         pos = strstr(name_start, ".");
@@ -566,7 +567,7 @@ int tc_iot_json_writer_int(tc_iot_json_writer * w, const char * name, long value
         return TC_IOT_BUFFER_OVERFLOW;
     }
 
-    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":%ld", value);
+    ret = tc_iot_hal_snprintf(&w->buffer[w->pos], w->buffer_len-w->pos, "\":%d", (int)value);
     w->pos += ret;
     if (w->pos == w->buffer_len) {
         TC_IOT_LOG_ERROR("buffer overflow processing:%s", name);
