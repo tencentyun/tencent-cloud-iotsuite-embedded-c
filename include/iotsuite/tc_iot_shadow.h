@@ -4,8 +4,8 @@
 #define TC_IOT_MAX_PROPERTY_COUNT   128
 #define TC_IOT_MAX_FIRM_INFO_COUNT  5
 
-#define TC_IOT_SHADOW_JSON_TRUE   "true"
-#define TC_IOT_SHADOW_JSON_FALSE   "false"
+#define TC_IOT_SHADOW_JSON_TRUE   "1"
+#define TC_IOT_SHADOW_JSON_FALSE   "0"
 
 typedef double tc_iot_shadow_number;
 typedef int tc_iot_shadow_int;
@@ -75,46 +75,8 @@ typedef struct _tc_iot_shadow_client {
     tc_iot_shadow_session sessions[TC_IOT_MAX_SESSION_COUNT];
     char desired_bits[(TC_IOT_MAX_PROPERTY_COUNT/8)+1];
     char reported_bits[(TC_IOT_MAX_PROPERTY_COUNT/8)+1];
+    unsigned int desired_version;
 } tc_iot_shadow_client;
-
-
-/**
- * @brief tc_iot_shadow_doc_pack_for_get 构造 get 请求包，用于读取影子设备服务端数据。
- *
- * @param buffer 输出结果缓存区
- * @param buffer_len 输出结果缓存区大小
- * @param c 影子设备客户端
- *
- * @return 输出结果长度
- */
-int tc_iot_shadow_doc_pack_for_get(char * buffer, int buffer_len, tc_iot_shadow_client *c);
-
-
-/**
- * @brief tc_iot_shadow_doc_pack_for_update 生成影子设备文档或属性上报请求包
- *
- * @param buffer 输出结果缓存区
- * @param buffer_len 输出结果缓存区大小
- * @param c 影子设备客户端
- * @param reported Reported 文档上报数据
- * @param desired  Desired 文档上报数据
- *
- * @return 输出结果长度
- */
-int tc_iot_shadow_doc_pack_for_update(char * buffer, int buffer_len, tc_iot_shadow_client *c, const char * reported, const char * desired);
-
-/**
- * @brief tc_iot_shadow_doc_pack_for_delete 生成影子设备删除文档或属性请求包
- *
- * @param buffer 输出结果缓存区
- * @param buffer_len 输出结果缓存区大小
- * @param c 影子设备客户端
- * @param reported Reported 属性数据删除指令
- * @param desired  Desired 属性数据删除指令
- *
- * @return 输出结果长度
- */
-int tc_iot_shadow_doc_pack_for_delete(char * buffer, int buffer_len, tc_iot_shadow_client *c, const char * reported, const char * desired);
 
 
 /*--- begin 影子设备请求响应包 method 字段取值----*/
@@ -269,7 +231,8 @@ int tc_iot_shadow_delete(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         message_ack_handler callback, int timeout_ms, void * session_context);
 int tc_iot_shadow_doc_pack_for_get_with_sid(char *buffer, int buffer_len,
                                     char * session_id, int session_id_len,
-                                    tc_iot_shadow_client *c);
+                                    bool metadata, bool reported,
+                                    tc_iot_shadow_client *c) ;
 int tc_iot_shadow_doc_pack_for_update_with_sid(char *buffer, int buffer_len,
                                     char * session_id, int session_id_len,
                                     const char * reported, const char * desired,
@@ -279,28 +242,9 @@ int tc_iot_shadow_doc_pack_for_delete_with_sid(char *buffer, int buffer_len,
                                     const char * reported, const char * desired,
                                     tc_iot_shadow_client *c) ;
 
-int tc_iot_shadow_doc_pack_start(char *buffer, int buffer_len,
-                                 char * session_id, int session_id_len,
-                                 const char * method,
-                                 tc_iot_shadow_client *c);
-
-int tc_iot_shadow_doc_pack_format(char *buffer, int buffer_len,
-        const char * reported,
-        const char * desired);
-int tc_iot_shadow_doc_pack_end(char *buffer, int buffer_len, tc_iot_shadow_client *c);
-
-int tc_iot_shadow_update_state(tc_iot_shadow_client *c, char * buffer, int buffer_len,
-        message_ack_handler callback, int timeout_ms, void * session_context,
-         const char * state_name, int count, va_list p_args);
-
-int tc_iot_shadow_update_firm_info(tc_iot_shadow_client *c, char * buffer, int buffer_len,
-        message_ack_handler callback, int timeout_ms, void * session_context,
-         va_list p_args);
 tc_iot_shadow_session * tc_iot_find_empty_session(tc_iot_shadow_client *c);
 void tc_iot_release_session(tc_iot_shadow_session * p_session);
-
 void tc_iot_device_on_message_received(tc_iot_message_data* md);
-void _device_on_message_received(tc_iot_message_data* md);
 int _tc_iot_sync_shadow_property(tc_iot_shadow_client * p_shadow_client,
         int property_total, tc_iot_shadow_property_def * properties, bool reported,
         const char * doc_start, jsmntok_t * json_token, int tok_count);
@@ -316,7 +260,7 @@ int tc_iot_shadow_cmp_local_with_desired(tc_iot_shadow_client * c, int property_
 void * tc_iot_shadow_save_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, void * p_cache);
 void * tc_iot_shadow_save_string_to_cached(tc_iot_shadow_client * c, int property_id, const void * p_data, int len, void * p_cache);
 
-int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, char * buffer, int buffer_len);
+int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, tc_iot_json_writer * w);
 int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int buffer_len,
         message_ack_handler callback, int timeout_ms, void * session_context, bool do_confirm);
 
