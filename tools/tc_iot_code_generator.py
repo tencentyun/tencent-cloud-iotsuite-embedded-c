@@ -129,7 +129,7 @@ class iot_field:
 <indent><indent>if (strcmp("field_name", key_buf) == 0 ) {
 <indent><indent><indent>TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_field_name);
 <indent><indent><indent>TC_IOT_LOG_TRACE("desired field: %s=%s->%s", key_buf, p_local_data->field_name?"true":"false", val_buf);
-<indent><indent><indent>p_local_data->field_name = (0 == strcmp(val_buf, "true"));
+<indent><indent><indent>p_local_data->field_name = (val_buf[0] != 'f') && (val_buf[0] != '0');
 <indent><indent><indent>continue;
 <indent><indent>}
 """.replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
@@ -179,7 +179,7 @@ class iot_field:
         if self.type_name == "bool":
             sample_code = """
 <indent>if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_field_name)) {
-<indent><indent>tc_iot_json_writer_bool(w ,"field_name", p_local_data->field_name);
+<indent><indent>tc_iot_json_writer_raw_data(w ,"field_name", p_local_data->field_name ? TC_IOT_SHADOW_JSON_TRUE:TC_IOT_SHADOW_JSON_FALSE);
 <indent>}
 """.replace("<indent>", indent).replace("field_name", self.name).replace("field_define", self.type_define)
 

@@ -94,7 +94,7 @@ int _process_desired( const char * doc_start, jsmntok_t * json_token, int tok_co
         if (strcmp("param_bool", key_buf) == 0 ) {
             TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_param_bool);
             TC_IOT_LOG_TRACE("desired field: %s=%s->%s", key_buf, p_local_data->param_bool?"true":"false", val_buf);
-            p_local_data->param_bool = (0 == strcmp(val_buf, "true"));
+            p_local_data->param_bool = (val_buf[0] != 'f') && (val_buf[0] != '0');
         } else if (strcmp("param_enum", key_buf) == 0 ) {
             TC_IOT_BIT_SET(p_desired_bits, TC_IOT_PROP_param_enum);
             TC_IOT_LOG_TRACE("desired field: %s=%d->%s", key_buf, p_local_data->param_enum, val_buf);
@@ -205,11 +205,11 @@ int do_rpc_update(char * result, int result_len, tc_iot_device_info * p_device_i
     tc_iot_json_writer_object_begin(w ,"state");
     tc_iot_json_writer_object_begin(w ,"reported");
     if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_param_bool)) {
-        tc_iot_json_writer_bool(w ,"param_bool", p_local_data->param_bool);
+        tc_iot_json_writer_raw_data(w ,"param_bool", p_local_data->param_bool ? TC_IOT_SHADOW_JSON_TRUE:TC_IOT_SHADOW_JSON_FALSE);
     }
 
     if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_param_number)) {
-        tc_iot_json_writer_int(w ,"param_number", p_local_data->param_bool);
+        tc_iot_json_writer_int(w ,"param_number", p_local_data->param_number);
     }
 
     if (TC_IOT_BIT_GET(report_bits, TC_IOT_PROP_param_enum)) {
