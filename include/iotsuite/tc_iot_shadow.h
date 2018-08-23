@@ -4,8 +4,8 @@
 #define TC_IOT_MAX_PROPERTY_COUNT   128
 #define TC_IOT_MAX_FIRM_INFO_COUNT  5
 
-#define TC_IOT_SHADOW_JSON_TRUE   "true"
-#define TC_IOT_SHADOW_JSON_FALSE   "false"
+#define TC_IOT_SHADOW_JSON_TRUE   "1"
+#define TC_IOT_SHADOW_JSON_FALSE   "0"
 
 typedef double tc_iot_shadow_number;
 typedef int tc_iot_shadow_int;

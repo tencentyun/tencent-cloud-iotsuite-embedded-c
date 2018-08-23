@@ -654,7 +654,8 @@ int tc_iot_shadow_report_property(tc_iot_shadow_client * c, int property_id, tc_
     switch (p_prop->type) {
         case TC_IOT_SHADOW_TYPE_BOOL:
             tc_iot_shadow_copy_local_to_reported(c, property_id);
-            return tc_iot_json_writer_bool(w, p_prop->name, *(tc_iot_shadow_bool *)p_current);
+            /* bool 类型数据，在数据模板中实际是以0/1表示。*/
+            return tc_iot_json_writer_raw_data(w, p_prop->name, *(tc_iot_shadow_bool *)p_current?TC_IOT_SHADOW_JSON_TRUE:TC_IOT_SHADOW_JSON_FALSE);
         case TC_IOT_SHADOW_TYPE_NUMBER:
             tc_iot_shadow_copy_local_to_reported(c, property_id);
             return tc_iot_json_writer_decimal(w, p_prop->name, *(tc_iot_shadow_number *)p_current);
