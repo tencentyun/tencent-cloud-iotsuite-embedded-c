@@ -7,6 +7,8 @@
 #define TC_IOT_SHADOW_JSON_TRUE   "1"
 #define TC_IOT_SHADOW_JSON_FALSE   "0"
 
+#define TC_IOT_SHADOW_SEQUENCE_FIELD  "sequence"
+
 typedef double tc_iot_shadow_number;
 typedef int tc_iot_shadow_int;
 typedef int tc_iot_shadow_enum;
@@ -75,7 +77,7 @@ typedef struct _tc_iot_shadow_client {
     tc_iot_shadow_session sessions[TC_IOT_MAX_SESSION_COUNT];
     char desired_bits[(TC_IOT_MAX_PROPERTY_COUNT/8)+1];
     char reported_bits[(TC_IOT_MAX_PROPERTY_COUNT/8)+1];
-    unsigned int desired_version;
+    unsigned int shadow_seq;
 } tc_iot_shadow_client;
 
 

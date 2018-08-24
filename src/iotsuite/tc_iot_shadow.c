@@ -741,7 +741,7 @@ int tc_iot_shadow_check_and_report(tc_iot_shadow_client *c, char * buffer, int b
     }
 
     if (do_confirm) {
-        tc_iot_json_writer_uint(w ,"version", c->desired_version);
+        tc_iot_json_writer_uint(w ,TC_IOT_SHADOW_SEQUENCE_FIELD, c->shadow_seq);
     } else {
         // reported with no version
         // tc_iot_json_writer_uint(w ,"version", c->desired_version);
