@@ -73,6 +73,7 @@ typedef struct _tc_iot_message_data {
     MQTTString* topicName; /**< 所属 Topic*/
     void * mqtt_client;
     void * context;
+    int    error_code;
 } tc_iot_message_data;
 
 

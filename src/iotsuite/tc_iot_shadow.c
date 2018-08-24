@@ -11,6 +11,12 @@ static void _tc_iot_shadow_on_message_received(tc_iot_message_data *md) {
     int i;
     int ret;
 
+    if (md->error_code != TC_IOT_SUCCESS) {
+        if (c && c->p_shadow_config && c->p_shadow_config->on_receive_msg) {
+            c->p_shadow_config->on_receive_msg(md);
+        }
+        return;
+    }
 
     ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));
     if (ret <= 0) {

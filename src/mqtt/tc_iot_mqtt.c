@@ -21,7 +21,7 @@ void tc_iot_init_mqtt_conn_data(MQTTPacket_connectData * conn_data)
 }
 
 static void _on_new_message_data(tc_iot_message_data* md, MQTTString* topic,
-                                 tc_iot_mqtt_message* message, void * context, void * mqtt_client) {
+                                 tc_iot_mqtt_message* message, void * context, void * mqtt_client, int error) {
     if (!md) {
         TC_IOT_LOG_ERROR("md is null");
         return;
@@ -41,6 +41,7 @@ static void _on_new_message_data(tc_iot_message_data* md, MQTTString* topic,
     md->message = message;
     md->context = context;
     md->mqtt_client = mqtt_client;
+    md->error_code = error;
 }
 
 static int _handle_reconnect(tc_iot_mqtt_client* c) {
@@ -271,6 +272,7 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
     int len = 0;
     int rem_len = 0;
     int rc = 0;
+    int temp = 0;
     int timer_left_ms = tc_iot_hal_timer_left_ms(timer);
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
@@ -300,12 +302,47 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         rem_len); /* put the original remaining length back into the buffer */
 
     if (rem_len > (c->readbuf_size - len)) {
+        /* if over-sized package found, read and ignore it, to prevent block.*/
         TC_IOT_LOG_ERROR(
-            "buffer not enough: rem_len=%d, readbuf_size=%d, len=%d,"
+            "buffer not enough: rem_len=%d, readbuf_size=%d, len=%d, left=%d"
             " please check TC_IOT_CLIENT_READ_BUF_SIZE",
-            rem_len, (int)c->readbuf_size, len);
-        rc = TC_IOT_BUFFER_OVERFLOW;
-        goto exit;
+            rem_len, (int)c->readbuf_size, len, (int)(c->readbuf_size - len));
+        timer_left_ms = tc_iot_hal_timer_left_ms(timer);
+        if (timer_left_ms <= 0) {
+            timer_left_ms = 1;
+        }
+        timer_left_ms += TC_IOT_MQTT_MAX_REMAIN_WAIT_MS;
+
+        rc = c->ipstack.do_read(&(c->ipstack), c->readbuf + len, (c->readbuf_size - len),
+                timer_left_ms);
+        if (rc <= 0) {
+            /* rc = TC_IOT_BUFFER_OVERFLOW; */
+            goto exit;
+        }
+        rem_len -= rc;
+
+        do {
+            if ((rem_len-temp) > (c->buf_size)) {
+                rc = c->ipstack.do_read(&(c->ipstack), c->buf, c->buf_size,
+                        timer_left_ms);
+            } else {
+                rc = c->ipstack.do_read(&(c->ipstack), c->buf, (rem_len-temp),
+                        timer_left_ms);
+            }
+            if (rc < 0) {
+                goto exit;
+            } else if (rc > 0) {
+                temp += rc;
+                TC_IOT_LOG_TRACE("received: %d/%d/%d", rc, temp,rem_len);
+                if (temp >= rem_len) {
+                    break;
+                }
+            }
+        } while (!tc_iot_hal_timer_is_expired(timer)) ;
+
+        c->readbuf[c->readbuf_size-1] = '\0';
+
+        goto read_over;
     }
 
     /* 3. read the rest of the buffer using a callback to supply the rest of the
@@ -328,6 +365,7 @@ static int readPacket(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
             c->readbuf[len + rc] = '\0';
         }
     }
+read_over:
     header.byte = c->readbuf[0];
     rc = header.bits.type;
     if (c->keep_alive_interval > 0) {
@@ -373,13 +411,21 @@ static char isTopicMatched(char* topicFilter, MQTTString* topicName) {
 
 int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
                    tc_iot_mqtt_message* message) {
-    int i;
+    int i = 0;
     int rc = TC_IOT_FAILURE;
     tc_iot_message_data md;
+    int error_code = TC_IOT_SUCCESS;
+    int left = 0;
 
     IF_NULL_RETURN(c, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(topicName, TC_IOT_NULL_POINTER);
     IF_NULL_RETURN(message, TC_IOT_NULL_POINTER);
+
+    left = ((int)(message->payload - (void *)c->readbuf) + (int)message->payloadlen - (int)c->readbuf_size);
+    if (left > 0) {
+        TC_IOT_LOG_ERROR("%d size overflowed", left);
+        error_code = TC_IOT_MQTT_OVERSIZE_PACKET_RECEIVED;
+    }
 
     /* we have to find the right message handler - indexed by topic */
     for (i = 0; i < TC_IOT_MAX_MESSAGE_HANDLERS; ++i) {
@@ -389,8 +435,7 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
              isTopicMatched((char*)c->message_handlers[i].topicFilter,
                             topicName))) {
             if (c->message_handlers[i].fp != NULL) {
-                tc_iot_message_data md;
-                _on_new_message_data(&md, topicName, message, c->message_handlers[i].context, c);
+                _on_new_message_data(&md, topicName, message, c->message_handlers[i].context, c, error_code);
                 c->message_handlers[i].fp(&md);
                 rc = TC_IOT_SUCCESS;
             }
@@ -398,7 +443,7 @@ int deliverMessage(tc_iot_mqtt_client* c, MQTTString* topicName,
     }
 
     if (rc == TC_IOT_FAILURE && c->default_msg_handler != NULL) {
-        _on_new_message_data(&md, topicName, message, c->message_handlers[i].context,c);
+        _on_new_message_data(&md, topicName, message, NULL, c, error_code);
         c->default_msg_handler(&md);
         rc = TC_IOT_SUCCESS;
     }
@@ -487,13 +532,17 @@ int cycle(tc_iot_mqtt_client* c, tc_iot_timer* timer) {
         case UNSUBACK:
             break;
         case PUBLISH: {
+            msg.id = 0;
+            intQoS = 0;
             msg.payloadlen = 0;
             if (MQTTDeserialize_publish(
                     &msg.dup, &intQoS, &msg.retained, &msg.id, &topicName,
                     (unsigned char**)&msg.payload, (int*)&msg.payloadlen,
                     c->readbuf, c->readbuf_size) != 1) {
+                TC_IOT_LOG_ERROR("MQTTDeserialize_publish failed.");;
                 goto exit;
             }
+
             msg.qos = (tc_iot_mqtt_qos_e)intQoS;
             if (msg.qos != TC_IOT_QOS0) {
                 if (msg.qos == TC_IOT_QOS1) {

@@ -126,6 +126,16 @@ void dump_payload(const char * prefix, const char * payload, int payload_len) {
 void _on_message_received(tc_iot_message_data* md) {
     tc_iot_mqtt_message* message = md->message;
     int ret = 0;
+
+    if (md->error_code != TC_IOT_SUCCESS) {
+        if (md->error_code == TC_IOT_MQTT_OVERSIZE_PACKET_RECEIVED ) {
+            TC_IOT_LOG_ERROR("error 'oversized package received' notified.");
+        } else {
+            TC_IOT_LOG_ERROR("error notified with code: %d", md->error_code);
+        }
+        return;
+    }
+
     dump_payload("[s->c]", (char*)message->payload, message->payloadlen);
 
     tc_iot_mqtt_message pubmsg;

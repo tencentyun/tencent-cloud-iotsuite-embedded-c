@@ -144,6 +144,7 @@ static int _tc_iot_property_change( int property_id, void * data) {
 
 int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * client,  void * context) {
     tc_iot_shadow_property_def * p_property = NULL;
+    tc_iot_message_data * md = NULL;
 
     if (!msg) {
         TC_IOT_LOG_ERROR("msg is null.");
@@ -158,6 +159,13 @@ int _tc_iot_shadow_property_control_callback(tc_iot_event_message *msg, void * c
         }
 
         return _tc_iot_property_change(p_property->id, msg->data);
+    } else if (msg->event == TC_IOT_MQTT_EVENT_ERROR_NOTIFY) {
+        md = (tc_iot_message_data *)msg->data;
+        if (md->error_code == TC_IOT_MQTT_OVERSIZE_PACKET_RECEIVED ) {
+            TC_IOT_LOG_ERROR("error 'oversized package received' notified.");
+        } else {
+            TC_IOT_LOG_ERROR("error notified with code: %d", md->error_code);
+        }
     } else {
         TC_IOT_LOG_TRACE("unkown event received, event=%d", msg->event);
     }

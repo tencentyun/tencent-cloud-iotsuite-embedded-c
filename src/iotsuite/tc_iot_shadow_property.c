@@ -210,6 +210,10 @@ void tc_iot_device_on_message_received(tc_iot_message_data* md) {
 
     tc_iot_mqtt_message* message = md->message;
     TC_IOT_LOG_TRACE("[s->c] %s", (char*)message->payload);
+    if (md->error_code != TC_IOT_SUCCESS) {
+        ret = tc_iot_shadow_event_notify(p_shadow_client, TC_IOT_MQTT_EVENT_ERROR_NOTIFY, md, NULL);
+        return;
+    }
 
     /* 有效性检查 */
     ret = tc_iot_json_parse(message->payload, message->payloadlen, json_token, TC_IOT_ARRAY_LENGTH(json_token));

@@ -30,6 +30,7 @@ typedef enum _tc_iot_sys_code_e {
     TC_IOT_MQTT_RECONNECT_FAILED = -152, /**< 重连失败*/
     TC_IOT_MQTT_NETWORK_UNAVAILABLE = -153,/**< 网络不可用*/
     TC_IOT_MQTT_WAIT_ACT_TIMEOUT = -154, /**< 等待ACK响应操作*/
+    TC_IOT_MQTT_OVERSIZE_PACKET_RECEIVED = -155, /**< 收到超大 Pulish 数据包，导致接收缓存无法处理 */
 
     TC_IOT_MQTT_CONNACK_ERROR = -160, /**< 连接失败，未知错误*/
     TC_IOT_MQTT_CONNACK_PROTOCOL_UNACCEPTABLE = -161, /**< 连接失败，不支持请求的协议版本*/
@@ -94,6 +95,7 @@ typedef enum _tc_iot_event_e {
     TC_IOT_EVENT_UNKNOWN = 0,
     TC_IOT_SYS_EVENT_BASE = 1,
     TC_IOT_MQTT_EVENT_BASE = 50,
+    TC_IOT_MQTT_EVENT_ERROR_NOTIFY = 51,
     TC_IOT_SHADOW_EVENT_BASE = 100,
     TC_IOT_SHADOW_EVENT_SERVER_CONTROL,
     TC_IOT_USER_EVENT_BASE = 200,
